@@ -1,4 +1,4 @@
-package com.anhtu.debt_payoff_manager
+package com.anhtu.debtpayoffmanager
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -3,7 +3,8 @@
     "allow": [
       "Bash(fvm flutter:*)",
       "Bash(gh repo:*)",
-      "mcp__context7__resolve-library-id"
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs"
     ]
   }
 }

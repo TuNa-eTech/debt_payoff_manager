@@ -142,9 +142,9 @@ Payment {
   // Meta
   date: Date (date payment applied — important for interest calc)
   type: PaymentType enum
-    { minimum, extra, lumpSum, fee, refund }
+    { minimum, extra, lumpSum, fee, refund, charge }
   source: PaymentSource enum
-    { scheduled, manual, windfall, checkOff }
+    { scheduled, manual, windfall, checkOff, import }
   note: String? (user note, max 200 chars)
   
   // State
