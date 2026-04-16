@@ -1,0 +1,158 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  FLUTTER_VERSION: '3.38.3'
+
+jobs:
+  analyze:
+    name: Lint & Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - name: Install deps
+        run: flutter pub get
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+      - name: Analyze (lint)
+        run: flutter analyze --no-fatal-infos
+
+  codegen:
+    name: Codegen
+    runs-on: ubuntu-latest
+    needs: analyze
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - name: Run build_runner
+        run: dart run build_runner build --delete-conflicting-outputs
+      - name: Verify generated files committed
+        run: |
+          if [[ -n "$(git status --porcelain '*.g.dart' '*.freezed.dart')" ]]; then
+            echo "Generated files out of date. Run build_runner locally and commit."
+            git status --porcelain '*.g.dart' '*.freezed.dart'
+            exit 1
+          fi
+
+  unit-and-engine:
+    name: Unit + Engine tests
+    runs-on: ubuntu-latest
+    needs: analyze
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
+      - name: Test (engine + unit)
+        run: flutter test --coverage --exclude-tags integration
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: coverage/lcov.info
+          flags: unit
+          fail_ci_if_error: false
+
+  firestore-rules:
+    name: Firestore rules tests
+    runs-on: ubuntu-latest
+    needs: analyze
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Setup Java (for Firebase emulator)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+      - name: Install test deps
+        working-directory: test/firestore-rules
+        run: npm install
+      - name: Run rules tests
+        working-directory: test/firestore-rules
+        run: firebase emulators:exec --only firestore "npm test"
+
+  build-android:
+    name: Build Android (unsigned)
+    runs-on: ubuntu-latest
+    needs: [analyze, unit-and-engine]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
+      - name: Build debug APK
+        run: flutter build apk --debug
+
+  build-ios:
+    name: Build iOS (unsigned)
+    runs-on: macos-latest
+    needs: [analyze, unit-and-engine]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
+      - name: Build iOS (no codesign)
+        run: flutter build ios --debug --no-codesign
+
+  coverage-gate:
+    name: Coverage threshold
+    runs-on: ubuntu-latest
+    needs: unit-and-engine
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
+      - name: Run coverage
+        run: flutter test --coverage
+      - name: Verify engine is 100% covered
+        run: |
+          # Extract engine coverage % from lcov.info
+          # Fail build if < 95% (100% target with 5% generated code tolerance)
+          ENGINE_COV=$(lcov --extract coverage/lcov.info 'lib/engine/*' --rc lcov_branch_coverage=1 2>/dev/null | tail -3 | grep lines | awk '{print $2}' | tr -d '%')
+          echo "Engine coverage: ${ENGINE_COV}%"
+          if (( $(echo "$ENGINE_COV < 95" | bc -l) )); then
+            echo "❌ Engine coverage ${ENGINE_COV}% below 95% threshold"
+            exit 1
+          fi

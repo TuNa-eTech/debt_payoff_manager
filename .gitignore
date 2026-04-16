@@ -44,3 +44,33 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+
+# Firebase config (contains API keys — use .env.example as template)
+lib/firebase_options.dart
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+ios/firebase_app_id_file.json
+macos/Runner/GoogleService-Info.plist
+macos/firebase_app_id_file.json
+.firebaserc
+firebase-debug.log
+firebase-debug.*.log
+.firebase/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Coverage reports
+coverage/
+lcov.info
+
+# Test artifacts
+test/**/failures/
+integration_test/**/failures/
+
+# Generated codegen backups (keep *.g.dart + *.freezed.dart if committed)
+*.g.dart.bak
+*.freezed.dart.bak
+.env

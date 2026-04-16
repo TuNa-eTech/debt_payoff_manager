@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
 
-  # State Management (BLoC / Cubit)
+  # State Management (BLoC / Cubit) — ADR-018 repository pattern
   flutter_bloc: ^9.1.0
   bloc: ^9.0.0
 
@@ -22,13 +22,22 @@ dependencies:
   # Navigation
   go_router: ^15.1.0
 
-  # Database (Local-first)
+  # Database (Local-first) — ADR-002
   drift: ^2.23.0
+  drift_flutter: ^0.2.0
   sqlite3_flutter_libs: ^0.5.0
   path_provider: ^2.1.0
   path: ^1.9.0
 
-  # Financial precision (spec §2)
+  # Firebase (Progressive Trust Level 1+) — ADR-003
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+  cloud_functions: ^5.1.3
+  firebase_crashlytics: ^4.1.3
+  firebase_analytics: ^11.3.3
+
+  # Financial precision — engine-spec §2 (ADR-004)
   decimal: ^3.2.1
 
   # UI
@@ -38,15 +47,37 @@ dependencies:
   flutter_animate: ^4.5.2
   lucide_icons: ^0.257.0
 
+  # Notifications (Feature §2.5)
+  flutter_local_notifications: ^17.2.3
+  timezone: ^0.9.4
+  permission_handler: ^11.3.1
+
+  # Connectivity (sync engine §9)
+  connectivity_plus: ^6.0.5
+
+  # Export & reports (Feature §2.6)
+  pdf: ^3.11.1
+  csv: ^6.0.0
+  share_plus: ^10.0.2
+
+  # Preferences (lightweight — not source of truth)
+  shared_preferences: ^2.3.2
+
+  # Logging (ADR-020 sanitized logging)
+  logger: ^2.4.0
+
   # Utilities
   uuid: ^4.5.1
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
   collection: ^1.19.0
   equatable: ^2.0.7
+  rxdart: ^0.28.0
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
   flutter_lints: ^6.0.0
 
@@ -60,6 +91,11 @@ dev_dependencies:
   # Testing
   mocktail: ^1.0.4
   bloc_test: ^10.0.0
+  glados: ^1.1.6            # Property-based testing (test-strategy §5.2)
+  fake_cloud_firestore: ^3.0.3
+  firebase_auth_mocks: ^0.14.1
+  golden_toolkit: ^0.15.0
+  patrol: ^3.13.2           # Enhanced integration test
 
 flutter:
   uses-material-design: true
