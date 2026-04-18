@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../constants/app_test_keys.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_dimensions.dart';
 
@@ -38,7 +39,11 @@ class ScaffoldWithNav extends StatelessWidget {
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
           destinations: const [
             NavigationDestination(
-              icon: Icon(LucideIcons.calendarCheck, size: AppDimensions.iconMd),
+              icon: Icon(
+                LucideIcons.calendarCheck,
+                key: AppTestKeys.navHomeTab,
+                size: AppDimensions.iconMd,
+              ),
               selectedIcon: Icon(
                 LucideIcons.calendarCheck,
                 size: AppDimensions.iconMd,
@@ -47,7 +52,11 @@ class ScaffoldWithNav extends StatelessWidget {
               label: 'Tổng quan',
             ),
             NavigationDestination(
-              icon: Icon(LucideIcons.creditCard, size: AppDimensions.iconMd),
+              icon: Icon(
+                LucideIcons.creditCard,
+                key: AppTestKeys.navDebtsTab,
+                size: AppDimensions.iconMd,
+              ),
               selectedIcon: Icon(
                 LucideIcons.creditCard,
                 size: AppDimensions.iconMd,

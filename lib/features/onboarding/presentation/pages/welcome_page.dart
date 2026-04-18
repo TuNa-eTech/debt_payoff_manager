@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -88,17 +89,20 @@ class WelcomePage extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  AppButton.filledLg(
-                    label: 'Thêm khoản nợ đầu tiên',
-                    icon: LucideIcons.plus,
-                    fullWidth: true,
-                    onPressed: () async {
-                      await context.read<OnboardingCubit>().goToStep(
-                            OnboardingStep.addDebt,
-                          );
-                      if (!context.mounted) return;
-                      context.go(AppRoutes.debtEntry);
-                    },
+                  SizedBox(
+                    key: AppTestKeys.welcomeAddFirstDebt,
+                    child: AppButton.filledLg(
+                      label: 'Thêm khoản nợ đầu tiên',
+                      icon: LucideIcons.plus,
+                      fullWidth: true,
+                      onPressed: () async {
+                        await context.read<OnboardingCubit>().goToStep(
+                          OnboardingStep.addDebt,
+                        );
+                        if (!context.mounted) return;
+                        context.go(AppRoutes.debtEntry);
+                      },
+                    ),
                   ),
                   const SizedBox(height: 16),
                   // Trust Badges

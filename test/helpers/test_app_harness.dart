@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:debt_payoff_manager/core/di/injection.dart';
@@ -24,9 +25,7 @@ class TestAppHarness {
     required this.paymentRepository,
     required this.planRepository,
     required this.settingsRepository,
-    required this.debtsCubit,
-    required this.onboardingCubit,
-    required this.router,
+    required this.closeDbOnDispose,
   });
 
   final AppDatabase db;
@@ -34,53 +33,118 @@ class TestAppHarness {
   final PaymentRepositoryImpl paymentRepository;
   final PlanRepositoryImpl planRepository;
   final SettingsRepositoryImpl settingsRepository;
-  final DebtsCubit debtsCubit;
-  final OnboardingCubit onboardingCubit;
-  final GoRouter router;
+  final bool closeDbOnDispose;
 
-  static Future<TestAppHarness> create() async {
+  late _TestAppScope _appScope;
+  final List<_TestAppScope> _retiredScopes = [];
+
+  DebtsCubit get debtsCubit => _appScope.debtsCubit;
+
+  OnboardingCubit get onboardingCubit => _appScope.onboardingCubit;
+
+  GoRouter get router => _appScope.router;
+
+  String get currentLocation {
+    final location = router.routeInformationProvider.value.uri.toString();
+    return location.isEmpty ? AppRoutes.welcome : location;
+  }
+
+  static Future<TestAppHarness> create({
+    AppDatabase? db,
+    bool closeDbOnDispose = true,
+  }) async {
     await getIt.reset();
 
-    final db = DatabaseProvider.openTestDatabase();
-    final debtRepository = DebtRepositoryImpl(db: db);
-    final paymentRepository = PaymentRepositoryImpl(db: db);
-    final planRepository = PlanRepositoryImpl(db: db);
-    final settingsRepository = SettingsRepositoryImpl(db: db);
+    final resolvedDb = db ?? DatabaseProvider.openTestDatabase();
+    final debtRepository = DebtRepositoryImpl(db: resolvedDb);
+    final paymentRepository = PaymentRepositoryImpl(db: resolvedDb);
+    final planRepository = PlanRepositoryImpl(db: resolvedDb);
+    final settingsRepository = SettingsRepositoryImpl(db: resolvedDb);
 
-    getIt.registerSingleton<AppDatabase>(db);
+    getIt.registerSingleton<AppDatabase>(resolvedDb);
     getIt.registerSingleton<DebtRepository>(debtRepository);
     getIt.registerSingleton<PaymentRepository>(paymentRepository);
     getIt.registerSingleton<PlanRepository>(planRepository);
     getIt.registerSingleton<SettingsRepository>(settingsRepository);
 
+    final harness = TestAppHarness._(
+      db: resolvedDb,
+      debtRepository: debtRepository,
+      paymentRepository: paymentRepository,
+      planRepository: planRepository,
+      settingsRepository: settingsRepository,
+      closeDbOnDispose: closeDbOnDispose,
+    );
+    await harness._createAppScope();
+    return harness;
+  }
+
+  Future<void> pumpApp(WidgetTester tester) async {
+    await tester.pumpWidget(_buildApp());
+  }
+
+  Future<void> relaunch(WidgetTester tester) async {
+    final retiredScope = _appScope;
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+    await tester.idle();
+    await tester.pump(const Duration(milliseconds: 16));
+    _retiredScopes.add(retiredScope);
+    await _createAppScope();
+    await pumpApp(tester);
+  }
+
+  Future<void> disposeWidgetTest(WidgetTester tester) async {
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+    await tester.idle();
+    await tester.pump(const Duration(milliseconds: 16));
+    await dispose();
+    await tester.idle();
+    await tester.pump();
+    await tester.pumpAndSettle(const Duration(milliseconds: 16));
+  }
+
+  Future<void> dispose() async {
+    await _disposeAppScope(_appScope);
+    for (final retiredScope in _retiredScopes.reversed) {
+      await _disposeAppScope(retiredScope);
+    }
+    _retiredScopes.clear();
+    await getIt.reset();
+    if (closeDbOnDispose) {
+      await db.close();
+    }
+  }
+
+  Future<void> _createAppScope() async {
     final debtsCubit = DebtsCubit(debtRepository: debtRepository);
     await debtsCubit.start();
-    await Future<void>.delayed(Duration.zero);
 
     final onboardingCubit = OnboardingCubit(
       settingsRepository: settingsRepository,
     );
     await onboardingCubit.start();
-    await Future<void>.delayed(Duration.zero);
 
     final router = createRouter(
       settingsRepository: settingsRepository,
       debtRepository: debtRepository,
     );
 
-    return TestAppHarness._(
-      db: db,
-      debtRepository: debtRepository,
-      paymentRepository: paymentRepository,
-      planRepository: planRepository,
-      settingsRepository: settingsRepository,
+    _appScope = _TestAppScope(
       debtsCubit: debtsCubit,
       onboardingCubit: onboardingCubit,
       router: router,
     );
   }
 
-  Widget app() {
+  Future<void> _disposeAppScope(_TestAppScope scope) async {
+    scope.router.dispose();
+    await scope.debtsCubit.close();
+    await scope.onboardingCubit.close();
+  }
+
+  Widget _buildApp() {
     return MultiBlocProvider(
       providers: [
         BlocProvider<DebtsCubit>.value(value: debtsCubit),
@@ -89,12 +153,16 @@ class TestAppHarness {
       child: MaterialApp.router(routerConfig: router),
     );
   }
+}
 
-  Future<void> dispose() async {
-    router.dispose();
-    await debtsCubit.close();
-    await onboardingCubit.close();
-    await getIt.reset();
-    await db.close();
-  }
+class _TestAppScope {
+  const _TestAppScope({
+    required this.debtsCubit,
+    required this.onboardingCubit,
+    required this.router,
+  });
+
+  final DebtsCubit debtsCubit;
+  final OnboardingCubit onboardingCubit;
+  final GoRouter router;
 }

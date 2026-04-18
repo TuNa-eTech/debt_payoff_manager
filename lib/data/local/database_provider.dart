@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 
@@ -15,9 +16,7 @@ class DatabaseProvider {
   /// The database file is stored in the app's documents directory
   /// as `debt_payoff.sqlite`.
   static AppDatabase openDatabase() {
-    return AppDatabase(
-      driftDatabase(name: 'debt_payoff'),
-    );
+    return AppDatabase(driftDatabase(name: 'debt_payoff'));
   }
 
   /// Open an in-memory database for testing.
@@ -26,7 +25,10 @@ class DatabaseProvider {
   /// Per ADR-015: Drift NativeDatabase.memory() for unit tests.
   static AppDatabase openTestDatabase() {
     return AppDatabase(
-      NativeDatabase.memory(),
+      DatabaseConnection(
+        NativeDatabase.memory(),
+        closeStreamsSynchronously: true,
+      ),
     );
   }
 }

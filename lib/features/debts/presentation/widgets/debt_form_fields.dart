@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -109,7 +110,9 @@ class DebtFormFields extends StatelessWidget {
       children: [
         Text(
           'Loại khoản nợ',
-          style: AppTextStyles.labelMedium.copyWith(color: AppColors.mdOnSurfaceVariant),
+          style: AppTextStyles.labelMedium.copyWith(
+            color: AppColors.mdOnSurfaceVariant,
+          ),
         ),
         const SizedBox(height: 12),
         Wrap(
@@ -130,6 +133,7 @@ class DebtFormFields extends StatelessWidget {
         const SizedBox(height: 28),
 
         AppTextField(
+          key: AppTestKeys.debtFormName,
           label: 'Tên khoản nợ',
           controller: nameController,
           hint: 'VD: Chase Sapphire, Vay mua xe...',
@@ -145,6 +149,7 @@ class DebtFormFields extends StatelessWidget {
           children: [
             Expanded(
               child: AppTextField.currency(
+                key: AppTestKeys.debtFormCurrentBalance,
                 label: 'Số dư còn lại',
                 controller: currentBalanceController,
                 errorText: currentBalanceError,
@@ -156,6 +161,7 @@ class DebtFormFields extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: AppTextField.currency(
+                  key: AppTestKeys.debtFormOriginalPrincipal,
                   label: 'Số gốc ban đầu',
                   controller: originalPrincipalController,
                   errorText: originalPrincipalError,
@@ -173,6 +179,7 @@ class DebtFormFields extends StatelessWidget {
           children: [
             Expanded(
               child: AppTextField.percentage(
+                key: AppTestKeys.debtFormApr,
                 label: 'Lãi suất (APR)',
                 controller: aprController,
                 errorText: aprError,
@@ -183,6 +190,7 @@ class DebtFormFields extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: AppTextField.currency(
+                key: AppTestKeys.debtFormMinimumPayment,
                 label: 'Minimum payment',
                 controller: minPaymentController,
                 helperText: 'Theo statement hiện tại',
@@ -197,6 +205,7 @@ class DebtFormFields extends StatelessWidget {
         if (mode != DebtFormMode.onboarding) ...[
           const SizedBox(height: 20),
           AppTextField(
+            key: AppTestKeys.debtFormDueDay,
             label: 'Ngày đến hạn hàng tháng',
             controller: dueDateController,
             hint: 'VD: 15',
@@ -270,6 +279,7 @@ class DebtFormFields extends StatelessWidget {
           const SizedBox(height: 16),
           if (mode == DebtFormMode.onboarding) ...[
             AppTextField.currency(
+              key: AppTestKeys.debtFormOriginalPrincipal,
               label: 'Số gốc ban đầu',
               controller: originalPrincipalController,
               helperText: 'Nếu bỏ trống, app sẽ dùng số dư hiện tại.',
@@ -278,6 +288,7 @@ class DebtFormFields extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             AppTextField(
+              key: AppTestKeys.debtFormDueDay,
               label: 'Ngày đến hạn hàng tháng',
               controller: dueDateController,
               hint: 'VD: 15',

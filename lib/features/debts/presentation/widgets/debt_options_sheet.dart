@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../domain/entities/debt.dart';
@@ -58,6 +59,9 @@ class DebtOptionsSheet extends StatelessWidget {
           ),
           if (canArchive)
             _SheetAction(
+              key: debt.status == DebtStatus.archived
+                  ? AppTestKeys.debtOptionUnarchive
+                  : AppTestKeys.debtOptionArchive,
               icon: debt.status == DebtStatus.archived
                   ? LucideIcons.archiveRestore
                   : LucideIcons.archive,
@@ -70,6 +74,7 @@ class DebtOptionsSheet extends StatelessWidget {
           Container(height: 1, color: AppColors.mdOutlineVariant),
           const SizedBox(height: 8),
           _SheetAction(
+            key: AppTestKeys.debtOptionDelete,
             icon: LucideIcons.trash2,
             iconColor: AppColors.mdError,
             label: 'Xóa khoản nợ',
@@ -116,13 +121,14 @@ class DebtOptionsSheet extends StatelessWidget {
 
 class _SheetAction extends StatelessWidget {
   const _SheetAction({
+    Key? key,
     required this.icon,
     required this.label,
     this.subtitle,
     this.iconColor,
     this.labelColor,
     this.onTap,
-  });
+  }) : _actionKey = key;
 
   final IconData icon;
   final String label;
@@ -130,10 +136,12 @@ class _SheetAction extends StatelessWidget {
   final Color? iconColor;
   final Color? labelColor;
   final VoidCallback? onTap;
+  final Key? _actionKey;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      key: _actionKey,
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),

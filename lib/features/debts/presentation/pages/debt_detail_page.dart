@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -20,10 +21,7 @@ import '../widgets/debt_info_row.dart';
 import '../widgets/debt_options_sheet.dart';
 
 class DebtDetailPage extends StatelessWidget {
-  const DebtDetailPage({
-    super.key,
-    required this.id,
-  });
+  const DebtDetailPage({super.key, required this.id});
 
   final String id;
 
@@ -57,14 +55,17 @@ class DebtDetailPage extends StatelessWidget {
         }
 
         return Scaffold(
+          key: AppTestKeys.debtDetail(debt.id),
           appBar: AppBar(
             title: const Text('Chi tiết khoản nợ'),
             actions: [
               IconButton(
+                key: AppTestKeys.debtDetailEdit,
                 icon: const Icon(LucideIcons.pencil),
                 onPressed: () => context.go(AppRoutes.editDebtPath(debt.id)),
               ),
               IconButton(
+                key: AppTestKeys.debtDetailMore,
                 icon: const Icon(LucideIcons.moreVertical),
                 onPressed: () => _openOptions(context, debt),
               ),
@@ -104,7 +105,9 @@ class DebtDetailPage extends StatelessWidget {
                       DebtInfoRow(
                         icon: LucideIcons.badgeDollarSign,
                         label: 'Số gốc ban đầu',
-                        value: AppFormatters.formatCents(debt.originalPrincipal),
+                        value: AppFormatters.formatCents(
+                          debt.originalPrincipal,
+                        ),
                       ),
                       Container(height: 1, color: AppColors.mdOutlineVariant),
                       DebtInfoRow(
@@ -141,7 +144,9 @@ class DebtDetailPage extends StatelessWidget {
                     padding: const EdgeInsets.all(AppDimensions.md),
                     decoration: BoxDecoration(
                       color: AppColors.mdPrimaryContainer,
-                      borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radiusLg,
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,13 +228,14 @@ class DebtDetailPage extends StatelessWidget {
       onArchiveToggle: debt.status == DebtStatus.paidOff
           ? () => _archiveDebt(context, debt)
           : debt.status == DebtStatus.archived
-              ? () => _unarchiveDebt(context, debt)
-              : null,
+          ? () => _unarchiveDebt(context, debt)
+          : null,
       onDelete: () => _deleteDebt(context, debt),
     );
   }
 
   Future<void> _archiveDebt(BuildContext context, Debt debt) async {
+    final debtsCubit = context.read<DebtsCubit>();
     final confirmed = await _confirmAction(
       context,
       title: 'Lưu trữ khoản nợ?',
@@ -239,19 +245,18 @@ class DebtDetailPage extends StatelessWidget {
     );
     if (!confirmed || !context.mounted) return;
 
-    await context.read<DebtsCubit>().archiveDebt(debt);
+    await debtsCubit.archiveDebt(debt);
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: const Text('Đã lưu trữ khoản nợ.'),
         action: SnackBarAction(
+          key: AppTestKeys.snackbarUndo,
           label: 'Hoàn tác',
           onPressed: () {
-            context.read<DebtsCubit>().updateDebt(
-                  debt.copyWith(
-                    updatedAt: DateTime.now().toUtc(),
-                  ),
-                );
+            debtsCubit.updateDebt(
+              debt.copyWith(updatedAt: DateTime.now().toUtc()),
+            );
           },
         ),
       ),
@@ -262,11 +267,14 @@ class DebtDetailPage extends StatelessWidget {
     await context.read<DebtsCubit>().unarchiveDebt(debt);
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Đã đưa khoản nợ trở lại danh sách đã trả.')),
+      const SnackBar(
+        content: Text('Đã đưa khoản nợ trở lại danh sách đã trả.'),
+      ),
     );
   }
 
   Future<void> _deleteDebt(BuildContext context, Debt debt) async {
+    final debtsCubit = context.read<DebtsCubit>();
     final confirmed = await _confirmAction(
       context,
       title: 'Xóa khoản nợ?',
@@ -278,15 +286,16 @@ class DebtDetailPage extends StatelessWidget {
     if (!confirmed || !context.mounted) return;
 
     final messenger = ScaffoldMessenger.of(context);
-    await context.read<DebtsCubit>().deleteDebt(debt);
+    await debtsCubit.deleteDebt(debt);
     if (!context.mounted) return;
     context.go(AppRoutes.debts);
     messenger.showSnackBar(
       SnackBar(
         content: const Text('Đã xóa khoản nợ.'),
         action: SnackBarAction(
+          key: AppTestKeys.snackbarUndo,
           label: 'Hoàn tác',
-          onPressed: () => context.read<DebtsCubit>().restoreDebt(debt),
+          onPressed: () => debtsCubit.restoreDebt(debt),
         ),
       ),
     );
@@ -311,6 +320,7 @@ class DebtDetailPage extends StatelessWidget {
               child: const Text('Hủy'),
             ),
             FilledButton(
+              key: AppTestKeys.dialogConfirmPrimary,
               onPressed: () => Navigator.pop(context, true),
               style: FilledButton.styleFrom(
                 backgroundColor: isDestructive

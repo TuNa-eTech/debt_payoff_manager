@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
@@ -26,15 +27,13 @@ class DebtsListPage extends StatelessWidget {
       listener: (context, state) {
         final feedback = state.lastActionFeedback;
         if (feedback == null) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(feedback.message)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(feedback.message)));
         context.read<DebtsCubit>().clearActionFeedback();
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Các khoản nợ'),
-        ),
+        appBar: AppBar(title: const Text('Các khoản nợ')),
         body: BlocBuilder<DebtsCubit, DebtsState>(
           builder: (context, state) {
             if (state.isLoading) {
@@ -59,32 +58,35 @@ class DebtsListPage extends StatelessWidget {
                         label: 'Tất cả',
                         count: state.debts.length,
                         selected: state.filter == DebtsFilter.all,
-                        onTap: () =>
-                            context.read<DebtsCubit>().setFilter(DebtsFilter.all),
+                        onTap: () => context.read<DebtsCubit>().setFilter(
+                          DebtsFilter.all,
+                        ),
                       ),
                       _FilterChip(
                         label: 'Đang nợ',
                         count: state.activeCount,
                         selected: state.filter == DebtsFilter.active,
-                        onTap: () => context
-                            .read<DebtsCubit>()
-                            .setFilter(DebtsFilter.active),
+                        onTap: () => context.read<DebtsCubit>().setFilter(
+                          DebtsFilter.active,
+                        ),
                       ),
                       _FilterChip(
+                        chipKey: AppTestKeys.debtsFilterPaidOff,
                         label: 'Đã trả',
                         count: state.paidOffCount,
                         selected: state.filter == DebtsFilter.paidOff,
-                        onTap: () => context
-                            .read<DebtsCubit>()
-                            .setFilter(DebtsFilter.paidOff),
+                        onTap: () => context.read<DebtsCubit>().setFilter(
+                          DebtsFilter.paidOff,
+                        ),
                       ),
                       _FilterChip(
+                        chipKey: AppTestKeys.debtsFilterArchived,
                         label: 'Đã lưu trữ',
                         count: state.archivedCount,
                         selected: state.filter == DebtsFilter.archived,
-                        onTap: () => context
-                            .read<DebtsCubit>()
-                            .setFilter(DebtsFilter.archived),
+                        onTap: () => context.read<DebtsCubit>().setFilter(
+                          DebtsFilter.archived,
+                        ),
                       ),
                     ],
                   ),
@@ -102,18 +104,24 @@ class DebtsListPage extends StatelessWidget {
                   else
                     ...state.visibleDebts.map(
                       (debt) => Padding(
-                        padding: const EdgeInsets.only(bottom: AppDimensions.md),
-                        child: DebtCard(
-                          name: debt.name,
-                          subtitle: debtSubtitle(debt),
-                          balanceText: debtBalanceText(debt),
-                          progress: debtProgress(debt),
-                          icon: debtTypeIcon(debt.type),
-                          iconColor: debtTypeColor(debt.type),
-                          isPaidOff: debt.status == DebtStatus.paidOff ||
-                              debt.status == DebtStatus.archived,
-                          onTap: () =>
-                              context.go(AppRoutes.debtDetailPath(debt.id)),
+                        padding: const EdgeInsets.only(
+                          bottom: AppDimensions.md,
+                        ),
+                        child: SizedBox(
+                          key: AppTestKeys.debtCard(debt.id),
+                          child: DebtCard(
+                            name: debt.name,
+                            subtitle: debtSubtitle(debt),
+                            balanceText: debtBalanceText(debt),
+                            progress: debtProgress(debt),
+                            icon: debtTypeIcon(debt.type),
+                            iconColor: debtTypeColor(debt.type),
+                            isPaidOff:
+                                debt.status == DebtStatus.paidOff ||
+                                debt.status == DebtStatus.archived,
+                            onTap: () =>
+                                context.go(AppRoutes.debtDetailPath(debt.id)),
+                          ),
                         ),
                       ),
                     ),
@@ -124,6 +132,7 @@ class DebtsListPage extends StatelessWidget {
           },
         ),
         floatingActionButton: FloatingActionButton.extended(
+          key: AppTestKeys.debtsAddFab,
           onPressed: () => context.go(AppRoutes.addDebt),
           backgroundColor: AppColors.mdPrimaryContainer,
           foregroundColor: AppColors.mdOnPrimaryContainer,
@@ -178,10 +187,7 @@ class _SummaryCard extends StatelessWidget {
           ),
           Container(width: 1, height: 40, color: AppColors.mdOutlineVariant),
           Expanded(
-            child: _SummaryCol(
-              label: 'Đang nợ',
-              value: '${state.activeCount}',
-            ),
+            child: _SummaryCol(label: 'Đang nợ', value: '${state.activeCount}'),
           ),
           Container(width: 1, height: 40, color: AppColors.mdOutlineVariant),
           Expanded(
@@ -239,16 +245,19 @@ class _FilterChip extends StatelessWidget {
     required this.count,
     required this.selected,
     required this.onTap,
+    this.chipKey,
   });
 
   final String label;
   final int count;
   final bool selected;
   final VoidCallback onTap;
+  final Key? chipKey;
 
   @override
   Widget build(BuildContext context) {
     return AppChip.filter(
+      key: chipKey,
       label: '$label ($count)',
       selected: selected,
       onTap: onTap,
@@ -270,15 +279,13 @@ class _EmptyList extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
         border: Border.all(color: AppColors.mdOutlineVariant),
       ),
-      child: Text(
-        switch (filter) {
-          DebtsFilter.all => 'Bạn chưa có khoản nợ nào. Hãy thêm khoản đầu tiên.',
-          DebtsFilter.active => 'Hiện không có khoản nợ nào đang theo dõi.',
-          DebtsFilter.paidOff => 'Chưa có khoản nợ nào được đánh dấu đã trả xong.',
-          DebtsFilter.archived => 'Chưa có khoản nợ nào được lưu trữ.',
-        },
-        style: AppTextStyles.bodyMedium,
-      ),
+      child: Text(switch (filter) {
+        DebtsFilter.all => 'Bạn chưa có khoản nợ nào. Hãy thêm khoản đầu tiên.',
+        DebtsFilter.active => 'Hiện không có khoản nợ nào đang theo dõi.',
+        DebtsFilter.paidOff =>
+          'Chưa có khoản nợ nào được đánh dấu đã trả xong.',
+        DebtsFilter.archived => 'Chưa có khoản nợ nào được lưu trữ.',
+      }, style: AppTextStyles.bodyMedium),
     );
   }
 }

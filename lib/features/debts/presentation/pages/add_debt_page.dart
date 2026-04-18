@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -14,14 +15,12 @@ import '../widgets/debt_form_fields.dart';
 
 class AddDebtPage extends StatelessWidget {
   const AddDebtPage({super.key})
-      : _mode = DebtFormMode.create,
-        _initialDebt = null;
+    : _mode = DebtFormMode.create,
+      _initialDebt = null;
 
-  const AddDebtPage.edit({
-    super.key,
-    required Debt debt,
-  })  : _mode = DebtFormMode.edit,
-        _initialDebt = debt;
+  const AddDebtPage.edit({super.key, required Debt debt})
+    : _mode = DebtFormMode.edit,
+      _initialDebt = debt;
 
   final DebtFormMode _mode;
   final Debt? _initialDebt;
@@ -31,10 +30,7 @@ class AddDebtPage extends StatelessWidget {
     final debtRepository = getIt.get<DebtRepository>();
     return BlocProvider(
       create: (_) => _initialDebt == null
-          ? DebtFormCubit.create(
-              debtRepository: debtRepository,
-              mode: _mode,
-            )
+          ? DebtFormCubit.create(debtRepository: debtRepository, mode: _mode)
           : DebtFormCubit.edit(
               debtRepository: debtRepository,
               debt: _initialDebt,
@@ -42,7 +38,9 @@ class AddDebtPage extends StatelessWidget {
       child: DebtFormScaffold(
         mode: _mode,
         title: _initialDebt == null ? 'Thêm khoản nợ' : 'Chỉnh sửa khoản nợ',
-        primaryActionLabel: _initialDebt == null ? 'Lưu khoản nợ' : 'Lưu thay đổi',
+        primaryActionLabel: _initialDebt == null
+            ? 'Lưu khoản nợ'
+            : 'Lưu thay đổi',
         onSaved: (context, debt) {
           if (_mode == DebtFormMode.edit) {
             context.go(AppRoutes.debtDetailPath(debt.id));
@@ -66,6 +64,7 @@ class DebtFormScaffold extends StatefulWidget {
     required this.onSaved,
     required this.onCancel,
     this.initialDebt,
+    this.backButtonKey,
     this.progressLabel,
     this.progressValue,
   });
@@ -76,6 +75,7 @@ class DebtFormScaffold extends StatefulWidget {
   final void Function(BuildContext context, Debt debt) onSaved;
   final VoidCallback onCancel;
   final Debt? initialDebt;
+  final Key? backButtonKey;
   final String? progressLabel;
   final double? progressValue;
 
@@ -105,7 +105,9 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
       text: debt == null ? '' : _displayCurrency(debt.currentBalance),
     );
     _aprController = TextEditingController(
-      text: debt == null ? '' : (double.parse(debt.apr.toString()) * 100).toStringAsFixed(2),
+      text: debt == null
+          ? ''
+          : (double.parse(debt.apr.toString()) * 100).toStringAsFixed(2),
     );
     _minimumPaymentController = TextEditingController(
       text: debt == null ? '' : _displayCurrency(debt.minimumPayment),
@@ -117,7 +119,7 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
       text: debt?.minimumPaymentPercent == null
           ? ''
           : (double.parse(debt!.minimumPaymentPercent.toString()) * 100)
-              .toStringAsFixed(2),
+                .toStringAsFixed(2),
     );
     _minimumPaymentFloorController = TextEditingController(
       text: debt?.minimumPaymentFloor == null
@@ -146,6 +148,7 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
       appBar: isOnboarding
           ? AppBar(
               leading: IconButton(
+                key: widget.backButtonKey,
                 icon: const Icon(Icons.arrow_back_ios_new_rounded),
                 onPressed: widget.onCancel,
               ),
@@ -177,7 +180,8 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
                           const SizedBox(height: 8),
                           LinearProgressIndicator(
                             value: widget.progressValue,
-                            backgroundColor: AppColors.mdSurfaceContainerHighest,
+                            backgroundColor:
+                                AppColors.mdSurfaceContainerHighest,
                             color: AppColors.mdPrimary,
                             borderRadius: BorderRadius.circular(4),
                             minHeight: 4,
@@ -190,7 +194,8 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
                           currentBalanceController: _currentBalanceController,
                           aprController: _aprController,
                           minPaymentController: _minimumPaymentController,
-                          originalPrincipalController: _originalPrincipalController,
+                          originalPrincipalController:
+                              _originalPrincipalController,
                           dueDateController: _dueDayController,
                           minimumPaymentPercentController:
                               _minimumPaymentPercentController,
@@ -204,23 +209,27 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
                           excludeFromStrategy: state.excludeFromStrategy,
                           showAdvanced: state.showAdvanced,
                           pausedUntil: state.pausedUntil,
-                          onDebtTypeChanged:
-                              context.read<DebtFormCubit>().setDebtType,
-                          onInterestMethodChanged:
-                              context.read<DebtFormCubit>().setInterestMethod,
+                          onDebtTypeChanged: context
+                              .read<DebtFormCubit>()
+                              .setDebtType,
+                          onInterestMethodChanged: context
+                              .read<DebtFormCubit>()
+                              .setInterestMethod,
                           onMinimumPaymentTypeChanged: context
                               .read<DebtFormCubit>()
                               .setMinimumPaymentType,
                           onPaymentCadenceChanged: context
                               .read<DebtFormCubit>()
                               .setPaymentCadence,
-                          onStatusChanged:
-                              context.read<DebtFormCubit>().setStatus,
+                          onStatusChanged: context
+                              .read<DebtFormCubit>()
+                              .setStatus,
                           onExcludeFromStrategyChanged: context
                               .read<DebtFormCubit>()
                               .setExcludeFromStrategy,
-                          onToggleAdvanced:
-                              context.read<DebtFormCubit>().toggleAdvanced,
+                          onToggleAdvanced: context
+                              .read<DebtFormCubit>()
+                              .toggleAdvanced,
                           onCoreFieldChanged: _refreshWarnings,
                           onSelectPausedUntil: _selectPausedUntil,
                           onClearPausedUntil: () => context
@@ -267,6 +276,7 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
             if (widget.mode != DebtFormMode.onboarding) ...[
               Expanded(
                 child: OutlinedButton(
+                  key: AppTestKeys.debtFormCancel,
                   onPressed: widget.onCancel,
                   child: const Text('Hủy'),
                 ),
@@ -278,7 +288,10 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
               child: BlocBuilder<DebtFormCubit, DebtFormState>(
                 builder: (context, state) {
                   return FilledButton(
-                    onPressed: state.isSubmitting ? null : () => _submit(context),
+                    key: AppTestKeys.debtFormSave,
+                    onPressed: state.isSubmitting
+                        ? null
+                        : () => _submit(context),
                     style: FilledButton.styleFrom(
                       minimumSize: const Size.fromHeight(
                         AppDimensions.buttonHeightLg,
@@ -339,11 +352,11 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
 
   void _refreshWarnings() {
     context.read<DebtFormCubit>().refreshWarnings(
-          originalPrincipalInput: _originalPrincipalController.text,
-          currentBalanceInput: _currentBalanceController.text,
-          aprInput: _aprController.text,
-          minimumPaymentInput: _minimumPaymentController.text,
-        );
+      originalPrincipalInput: _originalPrincipalController.text,
+      currentBalanceInput: _currentBalanceController.text,
+      aprInput: _aprController.text,
+      minimumPaymentInput: _minimumPaymentController.text,
+    );
   }
 
   String _displayCurrency(int cents) => (cents / 100).toStringAsFixed(2);
