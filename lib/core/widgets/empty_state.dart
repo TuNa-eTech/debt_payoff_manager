@@ -4,8 +4,9 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_dimensions.dart';
 import '../theme/app_text_styles.dart';
+import 'app_button.dart';
 
-/// Reusable empty state widget with icon, title, and optional action.
+/// Reusable empty state widget matching the MD3 × Notion design system.
 class EmptyState extends StatelessWidget {
   const EmptyState({
     super.key,
@@ -14,6 +15,8 @@ class EmptyState extends StatelessWidget {
     this.icon = LucideIcons.inbox,
     this.actionLabel,
     this.onAction,
+    this.secondaryActionLabel,
+    this.onSecondaryAction,
   });
 
   final String title;
@@ -21,6 +24,8 @@ class EmptyState extends StatelessWidget {
   final IconData icon;
   final String? actionLabel;
   final VoidCallback? onAction;
+  final String? secondaryActionLabel;
+  final VoidCallback? onSecondaryAction;
 
   @override
   Widget build(BuildContext context) {
@@ -30,26 +35,52 @@ class EmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 56, color: AppColors.textTertiary),
+            // Icon container
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: AppColors.mdSurfaceContainer,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Icon(
+                icon,
+                size: AppDimensions.iconXl,
+                color: AppColors.mdOnSurfaceVariant,
+              ),
+            ),
             const SizedBox(height: AppDimensions.lg),
+
             Text(
               title,
-              style: AppTextStyles.headlineSmall,
+              style: AppTextStyles.titleLarge,
               textAlign: TextAlign.center,
             ),
+
             if (subtitle != null) ...[
               const SizedBox(height: AppDimensions.sm),
               Text(
                 subtitle!,
                 style: AppTextStyles.bodyMedium,
                 textAlign: TextAlign.center,
+                maxLines: 3,
               ),
             ],
+
             if (actionLabel != null && onAction != null) ...[
-              const SizedBox(height: AppDimensions.lg),
-              ElevatedButton(
+              const SizedBox(height: AppDimensions.xl),
+              AppButton.filled(
+                label: actionLabel!,
                 onPressed: onAction,
-                child: Text(actionLabel!),
+                fullWidth: false,
+              ),
+            ],
+
+            if (secondaryActionLabel != null && onSecondaryAction != null) ...[
+              const SizedBox(height: AppDimensions.sm),
+              AppButton.text(
+                label: secondaryActionLabel!,
+                onPressed: onSecondaryAction,
               ),
             ],
           ],

@@ -26,7 +26,8 @@ class DebtPayoffApp extends StatelessWidget {
       child: MaterialApp.router(
         title: 'Debt Payoff Manager',
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.darkTheme,
+        theme: AppTheme.lightTheme,
+        themeMode: ThemeMode.light,
         routerConfig: router,
       ),
     );

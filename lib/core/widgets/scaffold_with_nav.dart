@@ -3,10 +3,13 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../theme/app_colors.dart';
+import '../theme/app_dimensions.dart';
 
-/// Main scaffold with bottom navigation bar.
+/// Main scaffold with MD3 NavigationBar — 80px, Forest Green indicator.
 ///
 /// Used as the shell for [StatefulShellRoute.indexedStack] in GoRouter.
+/// Matches the 5-tab layout defined in the design prototype:
+/// Tổng quan · Khoản nợ · Kế hoạch · Tiến độ · Cài đặt
 class ScaffoldWithNav extends StatelessWidget {
   const ScaffoldWithNav({super.key, required this.child});
 
@@ -16,36 +19,71 @@ class ScaffoldWithNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: child,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: child.currentIndex,
-        onDestinationSelected: (index) => child.goBranch(
-          index,
-          initialLocation: index == child.currentIndex,
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(color: AppColors.mdOutlineVariant, width: 1),
+          ),
         ),
-        backgroundColor: AppColors.surface,
-        indicatorColor: AppColors.primary.withValues(alpha: 0.15),
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(LucideIcons.calendarCheck),
-            selectedIcon: Icon(LucideIcons.calendarCheck, color: AppColors.primary),
-            label: 'This Month',
+        child: NavigationBar(
+          selectedIndex: child.currentIndex,
+          onDestinationSelected: (index) => child.goBranch(
+            index,
+            initialLocation: index == child.currentIndex,
           ),
-          NavigationDestination(
-            icon: Icon(LucideIcons.wallet),
-            selectedIcon: Icon(LucideIcons.wallet, color: AppColors.primary),
-            label: 'Debts',
-          ),
-          NavigationDestination(
-            icon: Icon(LucideIcons.trendingDown),
-            selectedIcon: Icon(LucideIcons.trendingDown, color: AppColors.primary),
-            label: 'Timeline',
-          ),
-          NavigationDestination(
-            icon: Icon(LucideIcons.settings),
-            selectedIcon: Icon(LucideIcons.settings, color: AppColors.primary),
-            label: 'Settings',
-          ),
-        ],
+          backgroundColor: AppColors.mdSurface,
+          surfaceTintColor: Colors.transparent,
+          indicatorColor: AppColors.mdPrimaryContainer,
+          height: AppDimensions.navBarHeight,
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(LucideIcons.calendarCheck, size: AppDimensions.iconMd),
+              selectedIcon: Icon(
+                LucideIcons.calendarCheck,
+                size: AppDimensions.iconMd,
+                color: AppColors.mdOnPrimaryContainer,
+              ),
+              label: 'Tổng quan',
+            ),
+            NavigationDestination(
+              icon: Icon(LucideIcons.creditCard, size: AppDimensions.iconMd),
+              selectedIcon: Icon(
+                LucideIcons.creditCard,
+                size: AppDimensions.iconMd,
+                color: AppColors.mdOnPrimaryContainer,
+              ),
+              label: 'Khoản nợ',
+            ),
+            NavigationDestination(
+              icon: Icon(LucideIcons.trendingDown, size: AppDimensions.iconMd),
+              selectedIcon: Icon(
+                LucideIcons.trendingDown,
+                size: AppDimensions.iconMd,
+                color: AppColors.mdOnPrimaryContainer,
+              ),
+              label: 'Kế hoạch',
+            ),
+            NavigationDestination(
+              icon: Icon(LucideIcons.barChart2, size: AppDimensions.iconMd),
+              selectedIcon: Icon(
+                LucideIcons.barChart2,
+                size: AppDimensions.iconMd,
+                color: AppColors.mdOnPrimaryContainer,
+              ),
+              label: 'Tiến độ',
+            ),
+            NavigationDestination(
+              icon: Icon(LucideIcons.settings, size: AppDimensions.iconMd),
+              selectedIcon: Icon(
+                LucideIcons.settings,
+                size: AppDimensions.iconMd,
+                color: AppColors.mdOnPrimaryContainer,
+              ),
+              label: 'Cài đặt',
+            ),
+          ],
+        ),
       ),
     );
   }
