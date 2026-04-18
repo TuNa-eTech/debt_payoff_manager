@@ -42,17 +42,33 @@ void main() {
       expect(result, 2500); // $25 floor
     });
 
-    test('interestPlusPercent: returns max(interest + balance * pct, floor)', () {
-      // interest $83.29 + $5000 * 1% = $83.29 + $50 = $133.29, floor $25
+    test(
+      'interestPlusPercent: returns max(interest + balance * pct, floor)',
+      () {
+        // interest $83.29 + $5000 * 1% = $83.29 + $50 = $133.29, floor $25
+        final result = MinPaymentCalculator.compute(
+          balanceCents: 500000,
+          interestCents: 8329,
+          type: MinPaymentType.interestPlusPercent,
+          fixedAmountCents: 0,
+          percent: Decimal.parse('0.01'),
+          floorCents: 2500,
+        );
+        expect(result, 13329); // $133.29
+      },
+    );
+
+    test('interestPlusPercent uses floor when formula is smaller', () {
       final result = MinPaymentCalculator.compute(
-        balanceCents: 500000,
-        interestCents: 8329,
+        balanceCents: 10000,
+        interestCents: 50,
         type: MinPaymentType.interestPlusPercent,
         fixedAmountCents: 0,
         percent: Decimal.parse('0.01'),
         floorCents: 2500,
       );
-      expect(result, 13329); // $133.29
+
+      expect(result, 2500);
     });
 
     test('never exceeds balance + interest', () {

@@ -1,288 +1,314 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../../../core/di/injection.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/formatters.dart';
+import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/empty_state.dart';
+import '../../../../domain/entities/debt.dart';
+import '../../../../domain/entities/plan.dart';
+import '../../../../domain/enums/debt_status.dart';
+import '../../../../domain/enums/strategy.dart';
+import '../../../../domain/repositories/plan_repository.dart';
+import '../../../debts/cubit/debts_cubit.dart';
+import '../../../debts/cubit/debts_state.dart';
+import '../../../debts/presentation/debt_ui_utils.dart';
 
 class TimelinePage extends StatelessWidget {
   const TimelinePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final planRepository = getIt.get<PlanRepository>();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lộ trình trả nợ'),
-        actions: [
-          IconButton(
-            icon: const Icon(LucideIcons.info),
-            onPressed: () {},
-          ),
-        ],
+        title: const Text('Kế hoạch'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Debt-Free Banner
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
-              decoration: BoxDecoration(
-                color: AppColors.mdPrimary,
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Ngày hết nợ dự kiến', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12)),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: const Row(
-                          children: [
-                            Icon(LucideIcons.snowflake, size: 12, color: Colors.white),
-                            SizedBox(width: 4),
-                            Text('Snowball', style: TextStyle(color: Colors.white, fontSize: 11)),
-                          ],
+      body: StreamBuilder<Plan?>(
+        stream: planRepository.watchCurrentPlan(),
+        builder: (context, planSnapshot) {
+          return BlocBuilder<DebtsCubit, DebtsState>(
+            builder: (context, debtsState) {
+              if (debtsState.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              final debts = debtsState.debts
+                  .where(
+                    (debt) =>
+                        debt.status != DebtStatus.archived &&
+                        debt.currentBalance > 0,
+                  )
+                  .toList();
+
+              if (debts.isEmpty) {
+                return const EmptyState(
+                  title: 'Chưa có kế hoạch để hiển thị',
+                  subtitle:
+                      'Thêm ít nhất một khoản nợ để app lưu cấu hình chiến lược và dựng thứ tự ưu tiên.',
+                  icon: LucideIcons.map,
+                );
+              }
+
+              final plan = planSnapshot.data;
+              final orderedDebts = _sortDebtsForPlan(
+                debts: debts,
+                plan: plan,
+              );
+              final totalBalance = debts.fold<int>(
+                0,
+                (sum, debt) => sum + debt.currentBalance,
+              );
+              final pausedCount = debts
+                  .where((debt) => debt.status == DebtStatus.paused)
+                  .length;
+
+              return SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.pagePaddingH,
+                  vertical: AppDimensions.pagePaddingV,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    AppHeroCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Chiến lược hiện tại',
+                            style: AppTextStyles.labelMedium.copyWith(
+                              color: AppColors.mdPrimaryContainer,
+                            ),
+                          ),
+                          const SizedBox(height: AppDimensions.xs),
+                          Text(
+                            plan?.strategy.label ?? Strategy.snowball.label,
+                            style: AppTextStyles.displaySmall.copyWith(
+                              color: AppColors.mdOnPrimary,
+                            ),
+                          ),
+                          const SizedBox(height: AppDimensions.md),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _PlanStat(
+                                  label: 'Tổng dư nợ',
+                                  value: AppFormatters.formatCents(
+                                    totalBalance,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: AppDimensions.md),
+                              Expanded(
+                                child: _PlanStat(
+                                  label: 'Extra / tháng',
+                                  value: AppFormatters.formatCents(
+                                    plan?.extraMonthlyAmount ?? 0,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.sectionGap),
+                    AppCard(
+                      color: AppColors.mdSurfaceContainerLow,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(
+                            LucideIcons.info,
+                            size: AppDimensions.iconMd,
+                            color: AppColors.mdPrimary,
+                          ),
+                          const SizedBox(width: AppDimensions.sm),
+                          Expanded(
+                            child: Text(
+                              'Tab này hiện hiển thị cấu hình kế hoạch và thứ tự ưu tiên thật từ dữ liệu của bạn. Timeline theo tháng, debt-free date và phân rã principal/lãi sẽ xuất hiện khi phần mô phỏng được bật.',
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.mdOnSurfaceVariant,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (pausedCount > 0) ...[
+                      const SizedBox(height: AppDimensions.md),
+                      AppCard(
+                        color: AppColors.mdSurface,
+                        child: Text(
+                          '$pausedCount khoản đang ở trạng thái tạm dừng sẽ vẫn nằm trong kế hoạch nhưng không nhận extra payment trong thời gian pause.',
+                          style: AppTextStyles.bodySmall.copyWith(
+                            color: AppColors.mdOnSurfaceVariant,
+                          ),
                         ),
                       ),
                     ],
-                  ),
-                  const SizedBox(height: 8),
-                  const Text('Tháng 8, 2028', style: TextStyle(color: Colors.white, fontSize: 34, fontWeight: FontWeight.w700, fontFamily: 'Geist', letterSpacing: -0.5)),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      const Icon(LucideIcons.trendingDown, size: 14, color: AppColors.mdPrimaryContainer),
-                      const SizedBox(width: 6),
-                      Text('Sớm hơn 3 tháng nhờ chiến lược Snowball', style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdPrimaryContainer, fontSize: 11)),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-                  Divider(color: Colors.white.withOpacity(0.15), height: 1),
-                  const SizedBox(height: 14),
-                  Row(
-                    children: [
-                      Expanded(child: _buildBannerStat('Tổng lãi dự kiến', '\$4,200')),
-                      Container(width: 1, height: 36, color: Colors.white.withOpacity(0.15)),
-                      const SizedBox(width: 16),
-                      Expanded(child: _buildBannerStat('Tiết kiệm được', '\$850', isHighlight: true)),
-                      Container(width: 1, height: 36, color: Colors.white.withOpacity(0.15)),
-                      const SizedBox(width: 16),
-                      Expanded(child: _buildBannerStat('Trả thêm/tháng', '\$250')),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            
-            const SizedBox(height: 24),
-            
-            // Section Header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Lộ trình theo tháng', style: AppTextStyles.labelMedium.copyWith(color: AppColors.mdOnSurfaceVariant, letterSpacing: 0.5)),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: AppColors.mdSurfaceContainerLow,
-                    borderRadius: BorderRadius.circular(100),
-                    border: Border.all(color: AppColors.mdOutlineVariant),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(LucideIcons.list, size: 14, color: AppColors.mdOnSurfaceVariant),
-                      const SizedBox(width: 4),
-                      Text('Theo khoản', style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdOnSurfaceVariant, fontSize: 12)),
-                    ],
-                  ),
+                    const SizedBox(height: AppDimensions.sectionGap),
+                    SectionHeader(
+                      title: 'Thứ tự ưu tiên hiện tại',
+                      subtitle:
+                          'Danh sách này phản ánh đúng strategy đang lưu, chưa phải projection theo thời gian.',
+                    ),
+                    const SizedBox(height: AppDimensions.md),
+                    ...orderedDebts.asMap().entries.map(
+                      (entry) => Padding(
+                        padding: const EdgeInsets.only(bottom: AppDimensions.md),
+                        child: _PriorityCard(
+                          rank: entry.key + 1,
+                          debt: entry.value,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            
-            const SizedBox(height: 16),
-            
-            // Timeline Items
-            _buildTimelineItem(
-              monthName: 'T5/2026',
-              items: [
-                _buildTimelineListTile('Chase Sapphire', '\$125', LucideIcons.creditCard, AppColors.mdPrimary),
-                _buildTimelineListTile('Student Loan', '\$80', LucideIcons.graduationCap, AppColors.mdSecondary),
-                _buildTimelineListTile('Car Loan', '\$320', LucideIcons.car, AppColors.mdTertiary),
-                _buildTimelineListTile('Trả thêm Snowball', '\$250', LucideIcons.snowflake, AppColors.mdPrimary, isAction: true),
-              ],
-            ),
-            
-            const SizedBox(height: 16),
-            
-            _buildTimelineItem(
-              monthName: 'T6/2026',
-              items: [
-                _buildTimelineListTile('Chase Sapphire', '\$125', LucideIcons.creditCard, AppColors.mdPrimary),
-                _buildTimelineListTile('Student Loan', '\$80', LucideIcons.graduationCap, AppColors.mdSecondary),
-                _buildTimelineListTile('Car Loan', '\$320', LucideIcons.car, AppColors.mdTertiary),
-                _buildTimelineListTile('Trả thêm Snowball', '\$250', LucideIcons.snowflake, AppColors.mdPrimary, isAction: true),
-              ],
-            ),
-
-            const SizedBox(height: 16),
-            
-            _buildTimelineMilestone(
-              monthName: 'T8/2026',
-              milestoneTitle: 'Dứt điểm Chase Sapphire!',
-              milestoneSubtitle: 'Tiền trả thêm sẽ được cuộn qua khoản vay Student Loan',
-            ),
-            
-            const SizedBox(height: 100),
-          ],
-        ),
+              );
+            },
+          );
+        },
       ),
     );
   }
 
-  Widget _buildBannerStat(String label, String value, {bool isHighlight = false}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 10)),
-        const SizedBox(height: 4),
-        Text(value, style: TextStyle(color: isHighlight ? AppColors.mdPrimaryContainer : Colors.white, fontSize: 14, fontWeight: FontWeight.w600, fontFamily: 'Roboto Mono')),
-      ],
-    );
-  }
+  List<Debt> _sortDebtsForPlan({
+    required List<Debt> debts,
+    required Plan? plan,
+  }) {
+    final sorted = List<Debt>.from(debts);
+    final strategy = plan?.strategy ?? Strategy.snowball;
 
-  Widget _buildTimelineItem({required String monthName, required List<Widget> items}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Timeline connector
-        Column(
-          children: [
-            Container(
-              width: 12,
-              height: 12,
-              decoration: BoxDecoration(
-                color: AppColors.mdPrimaryContainer,
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.mdPrimary, width: 3),
-              ),
-            ),
-            Container(
-              width: 2,
-              height: 160,
-              color: AppColors.mdOutlineVariant,
-            ),
-          ],
-        ),
-        const SizedBox(width: 16),
-        // Content
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(monthName, style: AppTextStyles.titleSmall),
-              const SizedBox(height: 12),
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.mdSurfaceContainerLowest,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.mdOutlineVariant),
-                ),
-                child: Column(
-                  children: items,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-  
-  Widget _buildTimelineMilestone({required String monthName, required String milestoneTitle, required String milestoneSubtitle}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Timeline connector
-        Column(
-          children: [
-            Container(
-              width: 12,
-              height: 12,
-              decoration: BoxDecoration(
-                color: AppColors.mdTertiaryContainer,
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.mdTertiary, width: 3),
-              ),
-            ),
-            Container(
-              width: 2,
-              height: 80,
-              color: AppColors.mdOutlineVariant,
-            ),
-          ],
-        ),
-        const SizedBox(width: 16),
-        // Content
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-               Text(monthName, style: AppTextStyles.titleSmall.copyWith(color: AppColors.mdTertiary)),
-               const SizedBox(height: 12),
-               Container(
-                 padding: const EdgeInsets.all(16),
-                 decoration: BoxDecoration(
-                   color: AppColors.mdTertiaryContainer,
-                   borderRadius: BorderRadius.circular(12),
-                 ),
-                 child: Row(
-                   children: [
-                     const Icon(LucideIcons.partyPopper, color: AppColors.mdTertiary, size: 24),
-                     const SizedBox(width: 12),
-                     Expanded(
-                       child: Column(
-                         crossAxisAlignment: CrossAxisAlignment.start,
-                         children: [
-                           Text(milestoneTitle, style: AppTextStyles.titleSmall.copyWith(color: AppColors.mdOnTertiaryContainer)),
-                           const SizedBox(height: 4),
-                           Text(milestoneSubtitle, style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdOnTertiaryContainer.withOpacity(0.8))),
-                         ],
-                       ),
-                     ),
-                   ],
-                 ),
-               ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+    switch (strategy) {
+      case Strategy.snowball:
+        sorted.sort((a, b) {
+          final balanceCompare = a.currentBalance.compareTo(b.currentBalance);
+          if (balanceCompare != 0) return balanceCompare;
+          return b.apr.compareTo(a.apr);
+        });
+      case Strategy.avalanche:
+        sorted.sort((a, b) {
+          final aprCompare = b.apr.compareTo(a.apr);
+          if (aprCompare != 0) return aprCompare;
+          return a.currentBalance.compareTo(b.currentBalance);
+        });
+      case Strategy.custom:
+        final order = plan?.customOrder ?? const <String>[];
+        final positions = {
+          for (var index = 0; index < order.length; index++) order[index]: index,
+        };
+        sorted.sort((a, b) {
+          final aIndex = positions[a.id] ?? 1 << 20;
+          final bIndex = positions[b.id] ?? 1 << 20;
+          if (aIndex != bIndex) return aIndex.compareTo(bIndex);
+          return a.currentBalance.compareTo(b.currentBalance);
+        });
+    }
 
-  Widget _buildTimelineListTile(String title, String amount, IconData icon, Color iconColor, {bool isAction = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    return sorted;
+  }
+}
+
+class _PlanStat extends StatelessWidget {
+  const _PlanStat({
+    required this.label,
+    required this.value,
+  });
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(AppDimensions.md),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: AppTextStyles.labelSmall.copyWith(
+              color: AppColors.mdPrimaryContainer,
+            ),
+          ),
+          const SizedBox(height: AppDimensions.xs),
+          Text(
+            value,
+            style: AppTextStyles.titleMedium.copyWith(
+              color: AppColors.mdOnPrimary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PriorityCard extends StatelessWidget {
+  const _PriorityCard({
+    required this.rank,
+    required this.debt,
+  });
+
+  final int rank;
+  final Debt debt;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      color: AppColors.mdSurface,
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(6),
+            width: 40,
+            height: 40,
             decoration: BoxDecoration(
-              color: isAction ? iconColor.withOpacity(0.1) : AppColors.mdSurfaceContainerHigh,
-              shape: BoxShape.circle,
+              color: AppColors.mdPrimaryContainer,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
             ),
-            child: Icon(icon, size: 14, color: isAction ? iconColor : AppColors.mdOnSurfaceVariant),
+            alignment: Alignment.center,
+            child: Text(
+              '$rank',
+              style: AppTextStyles.titleMedium.copyWith(
+                color: AppColors.mdOnPrimaryContainer,
+              ),
+            ),
           ),
-          const SizedBox(width: 12),
-          Expanded(child: Text(title, style: AppTextStyles.bodyMedium)),
-          Text(amount, style: AppTextStyles.titleMedium.copyWith(fontFamily: 'Roboto Mono', fontWeight: FontWeight.w600)),
+          const SizedBox(width: AppDimensions.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  debt.name,
+                  style: AppTextStyles.titleMedium,
+                ),
+                const SizedBox(height: AppDimensions.xs),
+                Text(
+                  debtSubtitle(debt),
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.mdOnSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: AppDimensions.md),
+          Text(
+            AppFormatters.formatCents(debt.currentBalance),
+            style: AppTextStyles.moneyXSmall,
+          ),
         ],
       ),
     );

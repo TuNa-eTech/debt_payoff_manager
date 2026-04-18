@@ -3,7 +3,6 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:debt_payoff_manager/data/local/database.dart';
-import 'package:debt_payoff_manager/data/mappers/debt_mapper.dart';
 import 'package:debt_payoff_manager/data/repositories/debt_repository_impl.dart';
 import 'package:debt_payoff_manager/domain/entities/debt.dart';
 import 'package:debt_payoff_manager/domain/enums/debt_status.dart';
@@ -27,9 +26,12 @@ void main() {
     InterestMethod interestMethod = InterestMethod.simpleMonthly,
     int minimumPayment = 5000, // $50.00
     MinPaymentType minimumPaymentType = MinPaymentType.fixed,
+    Decimal? minimumPaymentPercent,
+    int? minimumPaymentFloor,
     PaymentCadence paymentCadence = PaymentCadence.monthly,
     int dueDayOfMonth = 15,
     DebtStatus status = DebtStatus.active,
+    DateTime? pausedUntil,
   }) {
     final now = DateTime.now().toUtc();
     return Debt(
@@ -42,10 +44,13 @@ void main() {
       interestMethod: interestMethod,
       minimumPayment: minimumPayment,
       minimumPaymentType: minimumPaymentType,
+      minimumPaymentPercent: minimumPaymentPercent,
+      minimumPaymentFloor: minimumPaymentFloor,
       paymentCadence: paymentCadence,
       dueDayOfMonth: dueDayOfMonth,
       firstDueDate: DateTime(2024, 1, 15),
       status: status,
+      pausedUntil: pausedUntil,
       createdAt: now,
       updatedAt: now,
     );
@@ -115,10 +120,9 @@ void main() {
       await repo.addDebt(makeDebt(id: 'upd'));
       final debt = (await repo.getDebtById('upd'))!;
 
-      await repo.updateDebt(debt.copyWith(
-        name: 'Updated Card',
-        currentBalance: 300000,
-      ));
+      await repo.updateDebt(
+        debt.copyWith(name: 'Updated Card', currentBalance: 300000),
+      );
 
       final updated = await repo.getDebtById('upd');
       expect(updated!.name, 'Updated Card');
@@ -129,17 +133,35 @@ void main() {
       final stream = repo.watchAllDebts();
 
       // Initial emission (empty)
-      await expectLater(
-        stream,
-        emits(isEmpty),
-      );
+      await expectLater(stream, emits(isEmpty));
 
       // Add a debt
       await repo.addDebt(makeDebt(id: 'w1'));
 
+      await expectLater(stream, emits(hasLength(1)));
+    });
+
+    test('watchActiveDebts only emits active debts', () async {
+      final stream = repo.watchActiveDebts();
+
+      await expectLater(stream, emits(isEmpty));
+
+      await repo.addDebt(makeDebt(id: 'active', status: DebtStatus.active));
+      await repo.addDebt(
+        makeDebt(
+          id: 'paused',
+          status: DebtStatus.paused,
+          pausedUntil: DateTime(2026, 2, 1),
+        ),
+      );
+
       await expectLater(
         stream,
-        emits(hasLength(1)),
+        emits(
+          predicate<List<Debt>>(
+            (debts) => debts.length == 1 && debts.first.id == 'active',
+          ),
+        ),
       );
     });
 
@@ -149,6 +171,27 @@ void main() {
         throwsA(isA<ArgumentError>()),
       );
     });
+
+    test('validates percentOfBalance requires minimumPaymentPercent', () async {
+      expect(
+        () => repo.addDebt(
+          makeDebt(minimumPaymentType: MinPaymentType.percentOfBalance),
+        ),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test(
+      'validates interestPlusPercent requires minimumPaymentPercent',
+      () async {
+        expect(
+          () => repo.addDebt(
+            makeDebt(minimumPaymentType: MinPaymentType.interestPlusPercent),
+          ),
+          throwsA(isA<ArgumentError>()),
+        );
+      },
+    );
 
     test('validates paused requires pausedUntil', () async {
       expect(

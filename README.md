@@ -59,7 +59,7 @@ lib/
 │   ├── mappers/        # Domain ↔ DB model mappers
 │   └── repositories/   # Repository implementations
 ├── domain/             # Pure Dart domain models & enums
-│   ├── entities/       # Debt, Payment, Plan, Money
+│   ├── entities/       # Debt, Payment, Plan, InterestRateHistory
 │   ├── enums/          # DebtType, Strategy, PaymentStatus, etc.
 │   └── repositories/   # Repository interfaces (contracts)
 ├── engine/             # Financial calculation engine (pure Dart, no DB)
@@ -170,7 +170,7 @@ The heart of the app. A **pure Dart** calculation engine with zero side effects 
 
 ### Test Vectors
 
-The engine ships with golden test vectors (TV-1 through TV-5) covering standard amortization, credit card minimum trap, Snowball vs Avalanche comparison, intra-month rollover, and rate changes. Property-based tests verify:
+Phase 1 acceptance uses golden test vectors TV-1 through TV-4: standard amortization, credit card minimum trap, Snowball vs Avalanche comparison, and intra-month rollover. TV-5 (rate change mid-term) remains documented as a deferred scenario until full `InterestRateHistory` runtime support lands in a later phase. Property-based tests verify:
 
 - **Monotonicity** — More extra payment → earlier (or same) debt-free date
 - **Avalanche Optimality** — `interest(avalanche) ≤ interest(snowball)`
@@ -194,7 +194,8 @@ The engine ships with golden test vectors (TV-1 through TV-5) covering standard 
 ## Roadmap
 
 ```
-Phase 0-1  ✅  Foundation + Core Data & Engine
+Phase 0     ✅  Architecture + Spec Baseline
+Phase 1     ✅  Foundation + Core Data & Engine
 Phase 2-3  🔄  Core UX Design + Debt Management MVP
 Phase 4       Living Plan (strategy, timeline, payments)
 Phase 5       Onboarding & Trust Layer

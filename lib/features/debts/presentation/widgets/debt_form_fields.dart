@@ -1,110 +1,134 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/formatters.dart';
+import '../../../../core/widgets/app_chip.dart';
 import '../../../../core/widgets/app_text_field.dart';
+import '../../cubit/debt_form_cubit.dart';
+import '../../../../domain/enums/debt_status.dart';
+import '../../../../domain/enums/debt_type.dart';
+import '../../../../domain/enums/interest_method.dart';
+import '../../../../domain/enums/min_payment_type.dart';
+import '../../../../domain/enums/payment_cadence.dart';
 
 /// Reusable debt form fields widget for both add and edit flows.
 ///
 /// Encapsulates all input fields needed to define a debt:
-/// name, type, balance, APR, minimum payment, due date.
+/// name, type, balances, APR, minimum payment, due date, and advanced options.
 ///
 /// Used by: [AddDebtPage], [DebtEntryPage] (onboarding).
 class DebtFormFields extends StatelessWidget {
   const DebtFormFields({
     super.key,
+    required this.mode,
     required this.nameController,
-    required this.balanceController,
+    required this.currentBalanceController,
     required this.aprController,
     required this.minPaymentController,
-    this.dueDateController,
-    this.selectedDebtType = 0,
-    this.onDebtTypeChanged,
+    required this.originalPrincipalController,
+    required this.dueDateController,
+    required this.minimumPaymentPercentController,
+    required this.minimumPaymentFloorController,
+    required this.selectedDebtType,
+    required this.interestMethod,
+    required this.minimumPaymentType,
+    required this.paymentCadence,
+    required this.status,
+    required this.excludeFromStrategy,
+    required this.showAdvanced,
+    required this.onDebtTypeChanged,
+    required this.onInterestMethodChanged,
+    required this.onMinimumPaymentTypeChanged,
+    required this.onPaymentCadenceChanged,
+    required this.onStatusChanged,
+    required this.onExcludeFromStrategyChanged,
+    required this.onToggleAdvanced,
+    required this.onCoreFieldChanged,
+    required this.onSelectPausedUntil,
+    required this.onClearPausedUntil,
+    this.pausedUntil,
     this.nameError,
-    this.balanceError,
+    this.originalPrincipalError,
+    this.currentBalanceError,
     this.aprError,
     this.minPaymentError,
-    this.showUsuryWarning = false,
+    this.dueDayError,
+    this.minimumPaymentPercentError,
+    this.minimumPaymentFloorError,
+    this.pausedUntilError,
+    this.inlineError,
+    this.warnings = const [],
   });
 
+  final DebtFormMode mode;
   final TextEditingController nameController;
-  final TextEditingController balanceController;
+  final TextEditingController currentBalanceController;
   final TextEditingController aprController;
   final TextEditingController minPaymentController;
-  final TextEditingController? dueDateController;
-  final int selectedDebtType;
-  final ValueChanged<int>? onDebtTypeChanged;
+  final TextEditingController originalPrincipalController;
+  final TextEditingController dueDateController;
+  final TextEditingController minimumPaymentPercentController;
+  final TextEditingController minimumPaymentFloorController;
+  final DebtType selectedDebtType;
+  final InterestMethod interestMethod;
+  final MinPaymentType minimumPaymentType;
+  final PaymentCadence paymentCadence;
+  final DebtStatus status;
+  final bool excludeFromStrategy;
+  final bool showAdvanced;
+  final ValueChanged<DebtType> onDebtTypeChanged;
+  final ValueChanged<InterestMethod> onInterestMethodChanged;
+  final ValueChanged<MinPaymentType> onMinimumPaymentTypeChanged;
+  final ValueChanged<PaymentCadence> onPaymentCadenceChanged;
+  final ValueChanged<DebtStatus> onStatusChanged;
+  final ValueChanged<bool> onExcludeFromStrategyChanged;
+  final VoidCallback onToggleAdvanced;
+  final VoidCallback onCoreFieldChanged;
+  final VoidCallback onSelectPausedUntil;
+  final VoidCallback onClearPausedUntil;
+  final DateTime? pausedUntil;
   final String? nameError;
-  final String? balanceError;
+  final String? originalPrincipalError;
+  final String? currentBalanceError;
   final String? aprError;
   final String? minPaymentError;
-  final bool showUsuryWarning;
+  final String? dueDayError;
+  final String? minimumPaymentPercentError;
+  final String? minimumPaymentFloorError;
+  final String? pausedUntilError;
+  final String? inlineError;
+  final List<String> warnings;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // ── Debt Type Selector ──
         Text(
           'Loại khoản nợ',
           style: AppTextStyles.labelMedium.copyWith(color: AppColors.mdOnSurfaceVariant),
         ),
         const SizedBox(height: 12),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          clipBehavior: Clip.none,
-          child: Row(
-            children: [
-              _DebtTypeChip(
-                icon: LucideIcons.creditCard,
-                label: 'Thẻ tín dụng',
-                isSelected: selectedDebtType == 0,
-                onTap: () => onDebtTypeChanged?.call(0),
-              ),
-              const SizedBox(width: 8),
-              _DebtTypeChip(
-                icon: LucideIcons.car,
-                label: 'Vay mua xe',
-                isSelected: selectedDebtType == 1,
-                onTap: () => onDebtTypeChanged?.call(1),
-              ),
-              const SizedBox(width: 8),
-              _DebtTypeChip(
-                icon: LucideIcons.graduationCap,
-                label: 'Vay sinh viên',
-                isSelected: selectedDebtType == 2,
-                onTap: () => onDebtTypeChanged?.call(2),
-              ),
-              const SizedBox(width: 8),
-              _DebtTypeChip(
-                icon: LucideIcons.home,
-                label: 'Thế chấp',
-                isSelected: selectedDebtType == 3,
-                onTap: () => onDebtTypeChanged?.call(3),
-              ),
-              const SizedBox(width: 8),
-              _DebtTypeChip(
-                icon: LucideIcons.heartPulse,
-                label: 'Nợ y tế',
-                isSelected: selectedDebtType == 4,
-                onTap: () => onDebtTypeChanged?.call(4),
-              ),
-              const SizedBox(width: 8),
-              _DebtTypeChip(
-                icon: LucideIcons.banknote,
-                label: 'Vay cá nhân',
-                isSelected: selectedDebtType == 5,
-                onTap: () => onDebtTypeChanged?.call(5),
-              ),
-            ],
-          ),
+        Wrap(
+          spacing: AppDimensions.sm,
+          runSpacing: AppDimensions.sm,
+          children: DebtType.values
+              .map(
+                (type) => AppChip.filter(
+                  label: type.label,
+                  selected: selectedDebtType == type,
+                  onTap: () => onDebtTypeChanged(type),
+                  icon: _iconForType(type),
+                ),
+              )
+              .toList(),
         ),
 
         const SizedBox(height: 28),
 
-        // ── Debt Name ──
         AppTextField(
           label: 'Tên khoản nợ',
           controller: nameController,
@@ -112,127 +136,389 @@ class DebtFormFields extends StatelessWidget {
           prefixIcon: LucideIcons.tag,
           errorText: nameError,
           required: true,
+          onChanged: (_) => onCoreFieldChanged(),
         ),
 
         const SizedBox(height: 20),
 
-        // ── Balance + APR Row ──
         Row(
           children: [
             Expanded(
               child: AppTextField.currency(
                 label: 'Số dư còn lại',
-                controller: balanceController,
-                errorText: balanceError,
+                controller: currentBalanceController,
+                errorText: currentBalanceError,
                 required: true,
+                onChanged: (_) => onCoreFieldChanged(),
+              ),
+            ),
+            if (mode != DebtFormMode.onboarding) ...[
+              const SizedBox(width: 12),
+              Expanded(
+                child: AppTextField.currency(
+                  label: 'Số gốc ban đầu',
+                  controller: originalPrincipalController,
+                  errorText: originalPrincipalError,
+                  required: true,
+                  onChanged: (_) => onCoreFieldChanged(),
+                ),
+              ),
+            ],
+          ],
+        ),
+
+        const SizedBox(height: 20),
+
+        Row(
+          children: [
+            Expanded(
+              child: AppTextField.percentage(
+                label: 'Lãi suất (APR)',
+                controller: aprController,
+                errorText: aprError,
+                required: true,
+                onChanged: (_) => onCoreFieldChanged(),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
+              child: AppTextField.currency(
+                label: 'Minimum payment',
+                controller: minPaymentController,
+                helperText: 'Theo statement hiện tại',
+                errorText: minPaymentError,
+                required: true,
+                onChanged: (_) => onCoreFieldChanged(),
+              ),
+            ),
+          ],
+        ),
+
+        if (mode != DebtFormMode.onboarding) ...[
+          const SizedBox(height: 20),
+          AppTextField(
+            label: 'Ngày đến hạn hàng tháng',
+            controller: dueDateController,
+            hint: 'VD: 15',
+            prefixIcon: LucideIcons.calendar,
+            keyboardType: TextInputType.number,
+            errorText: dueDayError,
+          ),
+        ],
+
+        if (warnings.isNotEmpty) ...[
+          const SizedBox(height: 20),
+          ...warnings.map(_buildWarningCard),
+        ],
+
+        if (inlineError != null) ...[
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(AppDimensions.md),
+            decoration: BoxDecoration(
+              color: AppColors.mdErrorContainer,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+            ),
+            child: Text(
+              inlineError!,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.mdOnErrorContainer,
+              ),
+            ),
+          ),
+        ],
+
+        const SizedBox(height: 28),
+
+        InkWell(
+          onTap: onToggleAdvanced,
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+          child: Container(
+            padding: const EdgeInsets.all(AppDimensions.md),
+            decoration: BoxDecoration(
+              color: AppColors.mdSurfaceContainerLow,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+              border: Border.all(color: AppColors.mdOutlineVariant),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const Icon(
+                      LucideIcons.slidersHorizontal,
+                      size: 18,
+                      color: AppColors.mdOnSurfaceVariant,
+                    ),
+                    const SizedBox(width: 10),
+                    Text('Thiết lập nâng cao', style: AppTextStyles.titleSmall),
+                  ],
+                ),
+                Icon(
+                  showAdvanced
+                      ? LucideIcons.chevronUp
+                      : LucideIcons.chevronDown,
+                  size: 18,
+                  color: AppColors.mdOnSurfaceVariant,
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        if (showAdvanced) ...[
+          const SizedBox(height: 16),
+          if (mode == DebtFormMode.onboarding) ...[
+            AppTextField.currency(
+              label: 'Số gốc ban đầu',
+              controller: originalPrincipalController,
+              helperText: 'Nếu bỏ trống, app sẽ dùng số dư hiện tại.',
+              errorText: originalPrincipalError,
+              onChanged: (_) => onCoreFieldChanged(),
+            ),
+            const SizedBox(height: 16),
+            AppTextField(
+              label: 'Ngày đến hạn hàng tháng',
+              controller: dueDateController,
+              hint: 'VD: 15',
+              prefixIcon: LucideIcons.calendar,
+              keyboardType: TextInputType.number,
+              errorText: dueDayError,
+            ),
+            const SizedBox(height: 20),
+          ],
+          _buildEnumSection<InterestMethod>(
+            title: 'Cách tính lãi',
+            values: InterestMethod.values,
+            selected: interestMethod,
+            labelBuilder: (method) => method.label,
+            onSelected: onInterestMethodChanged,
+          ),
+          const SizedBox(height: 20),
+          _buildEnumSection<MinPaymentType>(
+            title: 'Cách tính minimum payment',
+            values: MinPaymentType.values,
+            selected: minimumPaymentType,
+            labelBuilder: (type) => type.label,
+            onSelected: onMinimumPaymentTypeChanged,
+          ),
+          if (minimumPaymentType != MinPaymentType.fixed) ...[
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: AppTextField.percentage(
+                    label: 'Phần trăm tối thiểu',
+                    controller: minimumPaymentPercentController,
+                    errorText: minimumPaymentPercentError,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: AppTextField.currency(
+                    label: 'Mức sàn tối thiểu',
+                    controller: minimumPaymentFloorController,
+                    errorText: minimumPaymentFloorError,
+                  ),
+                ),
+              ],
+            ),
+          ],
+          const SizedBox(height: 20),
+          _buildEnumSection<PaymentCadence>(
+            title: 'Chu kỳ thanh toán',
+            values: PaymentCadence.values,
+            selected: paymentCadence,
+            labelBuilder: (cadence) => cadence.label,
+            onSelected: onPaymentCadenceChanged,
+          ),
+          const SizedBox(height: 20),
+          _buildEnumSection<DebtStatus>(
+            title: 'Trạng thái',
+            values: _statusValues,
+            selected: status,
+            labelBuilder: _statusLabel,
+            onSelected: onStatusChanged,
+          ),
+          if (status == DebtStatus.paused) ...[
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(AppDimensions.md),
+              decoration: BoxDecoration(
+                color: AppColors.mdSurfaceContainerLow,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+                border: Border.all(color: AppColors.mdOutlineVariant),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  AppTextField.percentage(
-                    label: 'Lãi suất (APR)',
-                    controller: aprController,
-                    errorText: aprError,
-                    required: true,
+                  Text(
+                    'Tạm dừng đến',
+                    style: AppTextStyles.labelMedium.copyWith(
+                      color: AppColors.mdOnSurfaceVariant,
+                    ),
                   ),
-                  if (showUsuryWarning) ...[
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        const Icon(LucideIcons.alertTriangle, size: 12, color: AppColors.warning),
-                        const SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            'APR > 36% — lãi suất cao',
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: AppColors.warning,
-                              fontSize: 10,
-                            ),
-                          ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          pausedUntil == null
+                              ? 'Chưa chọn ngày'
+                              : AppFormatters.formatDate(pausedUntil!),
+                          style: AppTextStyles.titleSmall,
+                        ),
+                      ),
+                      AppChip.assist(
+                        label: 'Chọn ngày',
+                        icon: LucideIcons.calendar,
+                        onTap: onSelectPausedUntil,
+                      ),
+                      if (pausedUntil != null) ...[
+                        const SizedBox(width: 8),
+                        AppChip.assist(
+                          label: 'Xóa',
+                          icon: LucideIcons.x,
+                          onTap: onClearPausedUntil,
                         ),
                       ],
+                    ],
+                  ),
+                  if (pausedUntilError != null) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      pausedUntilError!,
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.mdError,
+                      ),
                     ),
                   ],
                 ],
               ),
             ),
           ],
-        ),
-
-        const SizedBox(height: 20),
-
-        // ── Minimum Payment ──
-        AppTextField.currency(
-          label: 'Thanh toán tối thiểu/tháng',
-          controller: minPaymentController,
-          helperText: 'Số tiền tối thiểu bạn phải trả hàng tháng',
-          errorText: minPaymentError,
-          required: true,
-        ),
-
-        const SizedBox(height: 20),
-
-        // ── Due Date (Optional) ──
-        if (dueDateController != null)
-          AppTextField(
-            label: 'Ngày đến hạn hàng tháng',
-            controller: dueDateController!,
-            hint: 'VD: 15',
-            prefixIcon: LucideIcons.calendar,
-            keyboardType: TextInputType.number,
+          const SizedBox(height: 20),
+          SwitchListTile(
+            value: excludeFromStrategy,
+            contentPadding: EdgeInsets.zero,
+            title: Text(
+              'Loại khỏi chiến lược payoff',
+              style: AppTextStyles.bodyLarge,
+            ),
+            subtitle: Text(
+              'Khoản nợ này vẫn được lưu nhưng không được ưu tiên trong plan.',
+              style: AppTextStyles.bodySmall,
+            ),
+            onChanged: onExcludeFromStrategyChanged,
+            activeThumbColor: AppColors.mdPrimary,
+            activeTrackColor: AppColors.mdPrimary.withValues(alpha: 0.24),
           ),
+        ],
       ],
     );
   }
-}
 
-/// Individual debt type chip for the type selector.
-class _DebtTypeChip extends StatelessWidget {
-  const _DebtTypeChip({
-    required this.icon,
-    required this.label,
-    required this.isSelected,
-    this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool isSelected;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+  Widget _buildWarningCard(String warning) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppDimensions.sm),
+      child: Container(
+        padding: const EdgeInsets.all(AppDimensions.md),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.mdSecondaryContainer : AppColors.mdSurfaceContainerLow,
-          borderRadius: BorderRadius.circular(12),
-          border: isSelected ? null : Border.all(color: AppColors.mdOutlineVariant),
+          color: AppColors.mdPrimaryContainer,
+          borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
         ),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(
-              icon,
+            const Icon(
+              LucideIcons.alertTriangle,
               size: 16,
-              color: isSelected ? AppColors.mdOnSecondaryContainer : AppColors.mdOnSurfaceVariant,
+              color: AppColors.mdPrimary,
             ),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: AppTextStyles.labelMedium.copyWith(
-                color: isSelected ? AppColors.mdOnSecondaryContainer : AppColors.mdOnSurfaceVariant,
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                warning,
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.mdOnPrimaryContainer,
+                ),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildEnumSection<T>({
+    required String title,
+    required List<T> values,
+    required T selected,
+    required String Function(T value) labelBuilder,
+    required ValueChanged<T> onSelected,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: AppTextStyles.labelMedium.copyWith(
+            color: AppColors.mdOnSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: AppDimensions.sm,
+          runSpacing: AppDimensions.sm,
+          children: values
+              .map(
+                (value) => AppChip.filter(
+                  label: labelBuilder(value),
+                  selected: selected == value,
+                  onTap: () => onSelected(value),
+                ),
+              )
+              .toList(),
+        ),
+      ],
+    );
+  }
+
+  IconData _iconForType(DebtType type) {
+    switch (type) {
+      case DebtType.creditCard:
+        return LucideIcons.creditCard;
+      case DebtType.studentLoan:
+        return LucideIcons.graduationCap;
+      case DebtType.carLoan:
+        return LucideIcons.car;
+      case DebtType.mortgage:
+        return LucideIcons.home;
+      case DebtType.personal:
+        return LucideIcons.wallet;
+      case DebtType.medical:
+        return LucideIcons.heartPulse;
+      case DebtType.other:
+        return LucideIcons.circleEllipsis;
+    }
+  }
+
+  static const List<DebtStatus> _statusValues = [
+    DebtStatus.active,
+    DebtStatus.paidOff,
+    DebtStatus.paused,
+  ];
+
+  String _statusLabel(DebtStatus value) {
+    switch (value) {
+      case DebtStatus.active:
+        return 'Đang hoạt động';
+      case DebtStatus.paidOff:
+        return 'Đã trả xong';
+      case DebtStatus.paused:
+        return 'Tạm dừng';
+      case DebtStatus.archived:
+        return 'Đã lưu trữ';
+    }
   }
 }

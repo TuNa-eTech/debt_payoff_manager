@@ -12,6 +12,7 @@ import '../../domain/repositories/milestone_repository.dart';
 import '../../domain/repositories/payment_repository.dart';
 import '../../domain/repositories/plan_repository.dart';
 import '../../domain/repositories/settings_repository.dart';
+import '../../features/debts/cubit/debts_cubit.dart';
 
 /// Global service locator instance.
 final getIt = GetIt.instance;
@@ -40,5 +41,10 @@ void configureDependencies() {
   );
   getIt.registerLazySingleton<MilestoneRepository>(
     () => MilestoneRepositoryImpl(db: getIt<AppDatabase>()),
+  );
+
+  // Feature state
+  getIt.registerFactory<DebtsCubit>(
+    () => DebtsCubit(debtRepository: getIt<DebtRepository>()),
   );
 }

@@ -123,11 +123,13 @@
 
 ### Scope
 
-- Pure functions trong `lib/domain/`
+- Pure functions trong `lib/engine/`
 - Mappers giữa Drift row ↔ domain model
-- Money, Decimal wrappers
+- Integer cents + `Decimal` helpers / converters
 - Validators (invariants, business rules)
 - Utility functions
+
+> Note: Repo hiện tại không có `Money` value object. Mọi test thực thi trong codebase dùng `int` cents + `Decimal`. Một số snippet cũ bên dưới vẫn nhắc `Money` như pseudocode minh họa, không phải source of truth cho E1 implementation.
 
 ### Tech stack
 
@@ -977,7 +979,7 @@ void main() {
 
 | Layer | Coverage target | Rationale |
 |---|---|---|
-| `lib/domain/engine/` | **100%** (line + branch) | Financial correctness non-negotiable |
+| `lib/engine/` | **100%** (line + branch) | Financial correctness non-negotiable |
 | `lib/data/repositories/` | **≥ 90%** | Data integrity |
 | `lib/data/` (tables, converters) | ≥ 80% | Framework-generated, less critical |
 | `lib/sync/` | **≥ 90%** | Critical for multi-device users |
@@ -996,7 +998,7 @@ open coverage/html/index.html
 ### Enforcement
 
 - PR check: coverage may not decrease
-- PR check: `lib/domain/engine/` must be 100%
+- PR check: `lib/engine/` must be 100%
 - Quarterly review: identify untested critical paths
 
 ### What NOT to chase

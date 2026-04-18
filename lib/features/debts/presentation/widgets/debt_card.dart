@@ -69,7 +69,7 @@ class DebtCard extends StatelessWidget {
       amountColor = AppColors.mdOnErrorContainer;
     } else {
       containerColor = AppColors.mdSurfaceContainerLow;
-      leadBgColor = (iconColor ?? AppColors.mdPrimary).withOpacity(0.12);
+      leadBgColor = (iconColor ?? AppColors.mdPrimary).withValues(alpha: 0.12);
       leadIconColor = iconColor ?? AppColors.mdPrimary;
       progressColor = AppColors.mdPrimary;
       progressTrackColor = AppColors.mdSurfaceContainerHighest;
@@ -98,7 +98,7 @@ class DebtCard extends StatelessWidget {
                 color: leadBgColor,
                 shape: BoxShape.circle,
               ),
-              child: Icon(this.icon, color: leadIconColor, size: 20),
+              child: Icon(icon, color: leadIconColor, size: 20),
             ),
             const SizedBox(width: 14),
 
@@ -116,7 +116,10 @@ class DebtCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: AppTextStyles.bodySmall.copyWith(color: subtitleColor, fontSize: 12),
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: subtitleColor,
+                      fontSize: 12,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -169,18 +172,20 @@ class DebtCard extends StatelessWidget {
                     color: isPaidOff
                         ? AppColors.paidGreen
                         : isOverdue
-                            ? AppColors.mdError
-                            : AppColors.mdSurfaceContainerHighest,
+                        ? AppColors.mdError
+                        : AppColors.mdSurfaceContainerHighest,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     isPaidOff
                         ? LucideIcons.check
                         : isOverdue
-                            ? LucideIcons.alertCircle
-                            : LucideIcons.chevronRight,
+                        ? LucideIcons.alertCircle
+                        : LucideIcons.chevronRight,
                     size: 16,
-                    color: (isPaidOff || isOverdue) ? Colors.white : AppColors.mdOnSurfaceVariant,
+                    color: (isPaidOff || isOverdue)
+                        ? Colors.white
+                        : AppColors.mdOnSurfaceVariant,
                   ),
                 ),
               ],

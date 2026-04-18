@@ -169,6 +169,7 @@ Các tính năng giải quyết edge case thực tế và tạo giá trị premi
 
 - **Debt pause / forbearance**: đánh dấu khoản nợ tạm dừng (payment = $0 trong giai đoạn forbearance), plan tự adjust
 - **Interest rate change**: khi refinance hoặc promo rate hết hạn, cho phép cập nhật lãi suất → timeline recast
+  - Deferred sau E1; runtime support sẽ đi cùng `InterestRateHistory`
 - **Charge mới trên credit card**: cho phép cập nhật balance tăng (không chỉ giảm) → phản ánh đời thật
 - **Custom payment cadence**: bi-weekly, weekly, hoặc theo payday thay vì chỉ monthly
 

@@ -1,0 +1,1465 @@
+{
+    "_meta": {
+        "description": "This file contains a serialized version of schema entities for drift.",
+        "version": "1.2.0"
+    },
+    "options": {
+        "store_date_time_values_as_text": false
+    },
+    "entities": [
+        {
+            "id": 0,
+            "references": [],
+            "type": "table",
+            "data": {
+                "name": "debts",
+                "was_declared_in_moor": false,
+                "columns": [
+                    {
+                        "name": "id",
+                        "getter_name": "id",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": "() => Uuid().v4()",
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "scenario_id",
+                        "getter_name": "scenarioId",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": "const CustomExpression('\\'main\\'')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "name",
+                        "getter_name": "name",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [
+                            {
+                                "allowed-lengths": {
+                                    "min": 1,
+                                    "max": 60
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "type",
+                        "getter_name": "type",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const DebtTypeConverter()",
+                            "dart_type_name": "DebtType"
+                        }
+                    },
+                    {
+                        "name": "original_principal_cents",
+                        "getter_name": "originalPrincipalCents",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": "NOT NULL CHECK (original_principal_cents > 0)",
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "current_balance_cents",
+                        "getter_name": "currentBalanceCents",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": "NOT NULL CHECK (current_balance_cents >= 0)",
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "apr",
+                        "getter_name": "apr",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const DecimalConverter()",
+                            "dart_type_name": "Decimal"
+                        }
+                    },
+                    {
+                        "name": "interest_method",
+                        "getter_name": "interestMethod",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const InterestMethodConverter()",
+                            "dart_type_name": "InterestMethod"
+                        }
+                    },
+                    {
+                        "name": "minimum_payment_cents",
+                        "getter_name": "minimumPaymentCents",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": "const CustomExpression('0')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "minimum_payment_type",
+                        "getter_name": "minimumPaymentType",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const MinPaymentTypeConverter()",
+                            "dart_type_name": "MinPaymentType"
+                        }
+                    },
+                    {
+                        "name": "minimum_payment_percent",
+                        "getter_name": "minimumPaymentPercent",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const DecimalConverter()",
+                            "dart_type_name": "Decimal"
+                        }
+                    },
+                    {
+                        "name": "minimum_payment_floor_cents",
+                        "getter_name": "minimumPaymentFloorCents",
+                        "moor_type": "int",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "payment_cadence",
+                        "getter_name": "paymentCadence",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const CadenceConverter()",
+                            "dart_type_name": "PaymentCadence"
+                        }
+                    },
+                    {
+                        "name": "due_day_of_month",
+                        "getter_name": "dueDayOfMonth",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": "NOT NULL CHECK (due_day_of_month BETWEEN 1 AND 31)",
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "first_due_date",
+                        "getter_name": "firstDueDate",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const LocalDateConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "getter_name": "status",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const DebtStatusConverter()",
+                            "dart_type_name": "DebtStatus"
+                        }
+                    },
+                    {
+                        "name": "paused_until",
+                        "getter_name": "pausedUntil",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const LocalDateConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "priority",
+                        "getter_name": "priority",
+                        "moor_type": "int",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "exclude_from_strategy",
+                        "getter_name": "excludeFromStrategy",
+                        "moor_type": "bool",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "defaultConstraints": "CHECK (\"exclude_from_strategy\" IN (0, 1))",
+                        "dialectAwareDefaultConstraints": {
+                            "sqlite": "CHECK (\"exclude_from_strategy\" IN (0, 1))"
+                        },
+                        "default_dart": "const CustomExpression('0')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "created_at",
+                        "getter_name": "createdAt",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "updated_at",
+                        "getter_name": "updatedAt",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "paid_off_at",
+                        "getter_name": "paidOffAt",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "deleted_at",
+                        "getter_name": "deletedAt",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    }
+                ],
+                "is_virtual": false,
+                "without_rowid": false,
+                "constraints": [],
+                "explicit_pk": [
+                    "id"
+                ]
+            }
+        },
+        {
+            "id": 1,
+            "references": [
+                0
+            ],
+            "type": "table",
+            "data": {
+                "name": "payments",
+                "was_declared_in_moor": false,
+                "columns": [
+                    {
+                        "name": "id",
+                        "getter_name": "id",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": "() => Uuid().v4()",
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "scenario_id",
+                        "getter_name": "scenarioId",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": "const CustomExpression('\\'main\\'')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "debt_id",
+                        "getter_name": "debtId",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "defaultConstraints": "REFERENCES debts (id)",
+                        "dialectAwareDefaultConstraints": {
+                            "sqlite": "REFERENCES debts (id)"
+                        },
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [
+                            {
+                                "foreign_key": {
+                                    "to": {
+                                        "table": "debts",
+                                        "column": "id"
+                                    },
+                                    "initially_deferred": false,
+                                    "on_update": null,
+                                    "on_delete": null
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "amount_cents",
+                        "getter_name": "amountCents",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": "NOT NULL CHECK (amount_cents > 0)",
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "principal_portion_cents",
+                        "getter_name": "principalPortionCents",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "interest_portion_cents",
+                        "getter_name": "interestPortionCents",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "fee_portion_cents",
+                        "getter_name": "feePortionCents",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": "const CustomExpression('0')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "date",
+                        "getter_name": "date",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const LocalDateConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "getter_name": "type",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const PaymentTypeConverter()",
+                            "dart_type_name": "PaymentType"
+                        }
+                    },
+                    {
+                        "name": "source",
+                        "getter_name": "source",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const PaymentSourceConverter()",
+                            "dart_type_name": "PaymentSource"
+                        }
+                    },
+                    {
+                        "name": "note",
+                        "getter_name": "note",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [
+                            {
+                                "allowed-lengths": {
+                                    "min": null,
+                                    "max": 200
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "status",
+                        "getter_name": "status",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const PaymentStatusConverter()",
+                            "dart_type_name": "PaymentStatus"
+                        }
+                    },
+                    {
+                        "name": "applied_balance_before_cents",
+                        "getter_name": "appliedBalanceBeforeCents",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "applied_balance_after_cents",
+                        "getter_name": "appliedBalanceAfterCents",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "created_at",
+                        "getter_name": "createdAt",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "updated_at",
+                        "getter_name": "updatedAt",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "deleted_at",
+                        "getter_name": "deletedAt",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    }
+                ],
+                "is_virtual": false,
+                "without_rowid": false,
+                "constraints": [],
+                "explicit_pk": [
+                    "id"
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "references": [],
+            "type": "table",
+            "data": {
+                "name": "plans",
+                "was_declared_in_moor": false,
+                "columns": [
+                    {
+                        "name": "id",
+                        "getter_name": "id",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": "() => Uuid().v4()",
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "scenario_id",
+                        "getter_name": "scenarioId",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": "const CustomExpression('\\'main\\'')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "strategy",
+                        "getter_name": "strategy",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const StrategyConverter()",
+                            "dart_type_name": "Strategy"
+                        }
+                    },
+                    {
+                        "name": "extra_monthly_amount_cents",
+                        "getter_name": "extraMonthlyAmountCents",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": "const CustomExpression('0')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "extra_payment_cadence",
+                        "getter_name": "extraPaymentCadence",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const CadenceConverter()",
+                            "dart_type_name": "PaymentCadence"
+                        }
+                    },
+                    {
+                        "name": "custom_order_json",
+                        "getter_name": "customOrderJson",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "last_recast_at",
+                        "getter_name": "lastRecastAt",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "projected_debt_free_date",
+                        "getter_name": "projectedDebtFreeDate",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const LocalDateConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "total_interest_projected_cents",
+                        "getter_name": "totalInterestProjectedCents",
+                        "moor_type": "int",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "total_interest_saved_cents",
+                        "getter_name": "totalInterestSavedCents",
+                        "moor_type": "int",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "created_at",
+                        "getter_name": "createdAt",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "updated_at",
+                        "getter_name": "updatedAt",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "deleted_at",
+                        "getter_name": "deletedAt",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    }
+                ],
+                "is_virtual": false,
+                "without_rowid": false,
+                "constraints": [],
+                "explicit_pk": [
+                    "id"
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "references": [],
+            "type": "table",
+            "data": {
+                "name": "user_settings",
+                "was_declared_in_moor": false,
+                "columns": [
+                    {
+                        "name": "id",
+                        "getter_name": "id",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": "const CustomExpression('\\'singleton\\'')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "trust_level",
+                        "getter_name": "trustLevel",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": "const CustomExpression('0')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "firebase_uid",
+                        "getter_name": "firebaseUid",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "currency_code",
+                        "getter_name": "currencyCode",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": "const CustomExpression('\\'USD\\'')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "locale_code",
+                        "getter_name": "localeCode",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": "const CustomExpression('\\'en-US\\'')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "day_count_convention",
+                        "getter_name": "dayCountConvention",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": "const CustomExpression('\\'actual365\\'')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "notif_payment_reminder",
+                        "getter_name": "notifPaymentReminder",
+                        "moor_type": "bool",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "defaultConstraints": "CHECK (\"notif_payment_reminder\" IN (0, 1))",
+                        "dialectAwareDefaultConstraints": {
+                            "sqlite": "CHECK (\"notif_payment_reminder\" IN (0, 1))"
+                        },
+                        "default_dart": "const CustomExpression('1')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "notif_payment_reminder_days_before",
+                        "getter_name": "notifPaymentReminderDaysBefore",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": "const CustomExpression('3')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "notif_milestone",
+                        "getter_name": "notifMilestone",
+                        "moor_type": "bool",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "defaultConstraints": "CHECK (\"notif_milestone\" IN (0, 1))",
+                        "dialectAwareDefaultConstraints": {
+                            "sqlite": "CHECK (\"notif_milestone\" IN (0, 1))"
+                        },
+                        "default_dart": "const CustomExpression('1')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "notif_monthly_log",
+                        "getter_name": "notifMonthlyLog",
+                        "moor_type": "bool",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "defaultConstraints": "CHECK (\"notif_monthly_log\" IN (0, 1))",
+                        "dialectAwareDefaultConstraints": {
+                            "sqlite": "CHECK (\"notif_monthly_log\" IN (0, 1))"
+                        },
+                        "default_dart": "const CustomExpression('1')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "onboarding_step",
+                        "getter_name": "onboardingStep",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": "const CustomExpression('0')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "onboarding_completed",
+                        "getter_name": "onboardingCompleted",
+                        "moor_type": "bool",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "defaultConstraints": "CHECK (\"onboarding_completed\" IN (0, 1))",
+                        "dialectAwareDefaultConstraints": {
+                            "sqlite": "CHECK (\"onboarding_completed\" IN (0, 1))"
+                        },
+                        "default_dart": "const CustomExpression('0')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "onboarding_completed_at",
+                        "getter_name": "onboardingCompletedAt",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "is_premium",
+                        "getter_name": "isPremium",
+                        "moor_type": "bool",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "defaultConstraints": "CHECK (\"is_premium\" IN (0, 1))",
+                        "dialectAwareDefaultConstraints": {
+                            "sqlite": "CHECK (\"is_premium\" IN (0, 1))"
+                        },
+                        "default_dart": "const CustomExpression('0')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "premium_expires_at",
+                        "getter_name": "premiumExpiresAt",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "created_at",
+                        "getter_name": "createdAt",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "updated_at",
+                        "getter_name": "updatedAt",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    }
+                ],
+                "is_virtual": false,
+                "without_rowid": false,
+                "constraints": [],
+                "explicit_pk": [
+                    "id"
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "references": [
+                0
+            ],
+            "type": "table",
+            "data": {
+                "name": "milestones",
+                "was_declared_in_moor": false,
+                "columns": [
+                    {
+                        "name": "id",
+                        "getter_name": "id",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": "() => Uuid().v4()",
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "scenario_id",
+                        "getter_name": "scenarioId",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": "const CustomExpression('\\'main\\'')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "type",
+                        "getter_name": "type",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const MilestoneTypeConverter()",
+                            "dart_type_name": "MilestoneType"
+                        }
+                    },
+                    {
+                        "name": "debt_id",
+                        "getter_name": "debtId",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "defaultConstraints": "REFERENCES debts (id)",
+                        "dialectAwareDefaultConstraints": {
+                            "sqlite": "REFERENCES debts (id)"
+                        },
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [
+                            {
+                                "foreign_key": {
+                                    "to": {
+                                        "table": "debts",
+                                        "column": "id"
+                                    },
+                                    "initially_deferred": false,
+                                    "on_update": null,
+                                    "on_delete": null
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "achieved_at",
+                        "getter_name": "achievedAt",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "seen",
+                        "getter_name": "seen",
+                        "moor_type": "bool",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "defaultConstraints": "CHECK (\"seen\" IN (0, 1))",
+                        "dialectAwareDefaultConstraints": {
+                            "sqlite": "CHECK (\"seen\" IN (0, 1))"
+                        },
+                        "default_dart": "const CustomExpression('0')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "metadata",
+                        "getter_name": "metadata",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "created_at",
+                        "getter_name": "createdAt",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "deleted_at",
+                        "getter_name": "deletedAt",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    }
+                ],
+                "is_virtual": false,
+                "without_rowid": false,
+                "constraints": [],
+                "explicit_pk": [
+                    "id"
+                ]
+            }
+        },
+        {
+            "id": 5,
+            "references": [
+                0
+            ],
+            "type": "table",
+            "data": {
+                "name": "interest_rate_history",
+                "was_declared_in_moor": false,
+                "columns": [
+                    {
+                        "name": "id",
+                        "getter_name": "id",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": "() => Uuid().v4()",
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "debt_id",
+                        "getter_name": "debtId",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "defaultConstraints": "REFERENCES debts (id)",
+                        "dialectAwareDefaultConstraints": {
+                            "sqlite": "REFERENCES debts (id)"
+                        },
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [
+                            {
+                                "foreign_key": {
+                                    "to": {
+                                        "table": "debts",
+                                        "column": "id"
+                                    },
+                                    "initially_deferred": false,
+                                    "on_update": null,
+                                    "on_delete": null
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "apr",
+                        "getter_name": "apr",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const DecimalConverter()",
+                            "dart_type_name": "Decimal"
+                        }
+                    },
+                    {
+                        "name": "effective_from",
+                        "getter_name": "effectiveFrom",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const LocalDateConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "effective_to",
+                        "getter_name": "effectiveTo",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const LocalDateConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "reason",
+                        "getter_name": "reason",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [
+                            {
+                                "allowed-lengths": {
+                                    "min": null,
+                                    "max": 120
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "created_at",
+                        "getter_name": "createdAt",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "updated_at",
+                        "getter_name": "updatedAt",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "deleted_at",
+                        "getter_name": "deletedAt",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    }
+                ],
+                "is_virtual": false,
+                "without_rowid": false,
+                "constraints": [],
+                "explicit_pk": [
+                    "id"
+                ]
+            }
+        },
+        {
+            "id": 6,
+            "references": [],
+            "type": "table",
+            "data": {
+                "name": "sync_state",
+                "was_declared_in_moor": false,
+                "columns": [
+                    {
+                        "name": "table_sync_name",
+                        "getter_name": "tableSyncName",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "last_pulled_at",
+                        "getter_name": "lastPulledAt",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "last_pushed_at",
+                        "getter_name": "lastPushedAt",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    },
+                    {
+                        "name": "pending_writes",
+                        "getter_name": "pendingWrites",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": "const CustomExpression('0')",
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "last_sync_error",
+                        "getter_name": "lastSyncError",
+                        "moor_type": "string",
+                        "nullable": true,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "updated_at",
+                        "getter_name": "updatedAt",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    }
+                ],
+                "is_virtual": false,
+                "without_rowid": false,
+                "constraints": [],
+                "explicit_pk": [
+                    "table_sync_name"
+                ]
+            }
+        },
+        {
+            "id": 7,
+            "references": [],
+            "type": "table",
+            "data": {
+                "name": "timeline_cache",
+                "was_declared_in_moor": false,
+                "columns": [
+                    {
+                        "name": "plan_id",
+                        "getter_name": "planId",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "month_index",
+                        "getter_name": "monthIndex",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "year_month",
+                        "getter_name": "yearMonth",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "entries_json",
+                        "getter_name": "entriesJson",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "total_payment_cents",
+                        "getter_name": "totalPaymentCents",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "total_interest_cents",
+                        "getter_name": "totalInterestCents",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "total_balance_end_cents",
+                        "getter_name": "totalBalanceEndCents",
+                        "moor_type": "int",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": []
+                    },
+                    {
+                        "name": "generated_at",
+                        "getter_name": "generatedAt",
+                        "moor_type": "string",
+                        "nullable": false,
+                        "customConstraints": null,
+                        "default_dart": null,
+                        "default_client_dart": null,
+                        "dsl_features": [],
+                        "type_converter": {
+                            "dart_expr": "const UtcDateTimeConverter()",
+                            "dart_type_name": "DateTime"
+                        }
+                    }
+                ],
+                "is_virtual": false,
+                "without_rowid": false,
+                "constraints": [],
+                "explicit_pk": [
+                    "plan_id",
+                    "month_index"
+                ]
+            }
+        },
+        {
+            "id": 8,
+            "references": [
+                2
+            ],
+            "type": "index",
+            "data": {
+                "on": 2,
+                "name": "idx_plans_scenario",
+                "sql": "CREATE UNIQUE INDEX idx_plans_scenario ON plans (scenario_id) WHERE deleted_at IS NULL",
+                "unique": true,
+                "columns": []
+            }
+        }
+    ]
+}

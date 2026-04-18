@@ -9,9 +9,7 @@ import '../core/extensions/decimal_extensions.dart';
 /// Reference: financial-engine-spec.md §5.1
 ///
 /// Used for: mortgage, student loan, personal loan (fixed payment).
-class Amortization {
-  Amortization._();
-
+abstract final class Amortization {
   /// Calculate fixed monthly payment (PMT) for standard amortization.
   ///
   /// Per §5.1:
@@ -29,8 +27,9 @@ class Amortization {
   }) {
     if (apr == Decimal.zero) {
       // Zero interest — simple division
-      final payment = (Decimal.fromInt(principalCents) /
-          Decimal.fromInt(termMonths)).toDecimal(scaleOnInfinitePrecision: 10);
+      final payment =
+          (Decimal.fromInt(principalCents) / Decimal.fromInt(termMonths))
+              .toDecimal(scaleOnInfinitePrecision: 10);
       return payment.ceil().toDouble().toInt();
     }
 
@@ -89,7 +88,9 @@ class Amortization {
     }
 
     final balance = DecimalFinancialExtensions.fromCents(balanceCents);
-    final r = (apr / Decimal.fromInt(12)).toDecimal(scaleOnInfinitePrecision: 10);
+    final r = (apr / Decimal.fromInt(12)).toDecimal(
+      scaleOnInfinitePrecision: 10,
+    );
     final interestDecimal = (balance * r).roundMoney();
     final interestCents = interestDecimal.toCents();
 

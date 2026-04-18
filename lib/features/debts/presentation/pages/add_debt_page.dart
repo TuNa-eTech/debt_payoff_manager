@@ -1,232 +1,350 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../../../core/di/injection.dart';
+import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/widgets/app_button.dart';
-import '../../../../core/widgets/app_chip.dart';
-import '../../../../core/widgets/app_text_field.dart';
+import '../../../../domain/entities/debt.dart';
+import '../../../../domain/repositories/debt_repository.dart';
+import '../../cubit/debt_form_cubit.dart';
+import '../widgets/debt_form_fields.dart';
 
-class AddDebtPage extends StatefulWidget {
-  const AddDebtPage({super.key});
+class AddDebtPage extends StatelessWidget {
+  const AddDebtPage({super.key})
+      : _mode = DebtFormMode.create,
+        _initialDebt = null;
+
+  const AddDebtPage.edit({
+    super.key,
+    required Debt debt,
+  })  : _mode = DebtFormMode.edit,
+        _initialDebt = debt;
+
+  final DebtFormMode _mode;
+  final Debt? _initialDebt;
 
   @override
-  State<AddDebtPage> createState() => _AddDebtPageState();
+  Widget build(BuildContext context) {
+    final debtRepository = getIt.get<DebtRepository>();
+    return BlocProvider(
+      create: (_) => _initialDebt == null
+          ? DebtFormCubit.create(
+              debtRepository: debtRepository,
+              mode: _mode,
+            )
+          : DebtFormCubit.edit(
+              debtRepository: debtRepository,
+              debt: _initialDebt,
+            ),
+      child: DebtFormScaffold(
+        mode: _mode,
+        title: _initialDebt == null ? 'Thêm khoản nợ' : 'Chỉnh sửa khoản nợ',
+        primaryActionLabel: _initialDebt == null ? 'Lưu khoản nợ' : 'Lưu thay đổi',
+        onSaved: (context, debt) {
+          if (_mode == DebtFormMode.edit) {
+            context.go(AppRoutes.debtDetailPath(debt.id));
+            return;
+          }
+          context.go(AppRoutes.debts);
+        },
+        onCancel: () => context.pop(),
+        initialDebt: _initialDebt,
+      ),
+    );
+  }
 }
 
-class _AddDebtPageState extends State<AddDebtPage> {
-  String _selectedType = 'credit_card';
-  final _nameController = TextEditingController();
-  final _balanceController = TextEditingController();
-  final _aprController = TextEditingController();
-  final _minPayController = TextEditingController();
-  final _dueDateController = TextEditingController(text: '15');
-  bool _isOptionalExpanded = false;
+class DebtFormScaffold extends StatefulWidget {
+  const DebtFormScaffold({
+    super.key,
+    required this.mode,
+    required this.title,
+    required this.primaryActionLabel,
+    required this.onSaved,
+    required this.onCancel,
+    this.initialDebt,
+    this.progressLabel,
+    this.progressValue,
+  });
+
+  final DebtFormMode mode;
+  final String title;
+  final String primaryActionLabel;
+  final void Function(BuildContext context, Debt debt) onSaved;
+  final VoidCallback onCancel;
+  final Debt? initialDebt;
+  final String? progressLabel;
+  final double? progressValue;
+
+  @override
+  State<DebtFormScaffold> createState() => _DebtEditorScaffoldState();
+}
+
+class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
+  late final TextEditingController _nameController;
+  late final TextEditingController _originalPrincipalController;
+  late final TextEditingController _currentBalanceController;
+  late final TextEditingController _aprController;
+  late final TextEditingController _minimumPaymentController;
+  late final TextEditingController _dueDayController;
+  late final TextEditingController _minimumPaymentPercentController;
+  late final TextEditingController _minimumPaymentFloorController;
+
+  @override
+  void initState() {
+    super.initState();
+    final debt = widget.initialDebt;
+    _nameController = TextEditingController(text: debt?.name ?? '');
+    _originalPrincipalController = TextEditingController(
+      text: debt == null ? '' : _displayCurrency(debt.originalPrincipal),
+    );
+    _currentBalanceController = TextEditingController(
+      text: debt == null ? '' : _displayCurrency(debt.currentBalance),
+    );
+    _aprController = TextEditingController(
+      text: debt == null ? '' : (double.parse(debt.apr.toString()) * 100).toStringAsFixed(2),
+    );
+    _minimumPaymentController = TextEditingController(
+      text: debt == null ? '' : _displayCurrency(debt.minimumPayment),
+    );
+    _dueDayController = TextEditingController(
+      text: debt == null ? '' : debt.dueDayOfMonth.toString(),
+    );
+    _minimumPaymentPercentController = TextEditingController(
+      text: debt?.minimumPaymentPercent == null
+          ? ''
+          : (double.parse(debt!.minimumPaymentPercent.toString()) * 100)
+              .toStringAsFixed(2),
+    );
+    _minimumPaymentFloorController = TextEditingController(
+      text: debt?.minimumPaymentFloor == null
+          ? ''
+          : _displayCurrency(debt!.minimumPaymentFloor!),
+    );
+  }
 
   @override
   void dispose() {
     _nameController.dispose();
-    _balanceController.dispose();
+    _originalPrincipalController.dispose();
+    _currentBalanceController.dispose();
     _aprController.dispose();
-    _minPayController.dispose();
-    _dueDateController.dispose();
+    _minimumPaymentController.dispose();
+    _dueDayController.dispose();
+    _minimumPaymentPercentController.dispose();
+    _minimumPaymentFloorController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final isOnboarding = widget.mode == DebtFormMode.onboarding;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Thêm khoản nợ'),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      appBar: isOnboarding
+          ? AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                onPressed: widget.onCancel,
+              ),
+              title: Text(widget.title),
+            )
+          : AppBar(title: Text(widget.title)),
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Debt Type Section
-            Text('Loại nợ', style: AppTextStyles.titleSmall),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                _buildTypeChip('credit_card', 'Credit Card', LucideIcons.creditCard),
-                _buildTypeChip('student_loan', 'Student Loan', LucideIcons.graduationCap),
-                _buildTypeChip('car_loan', 'Car Loan', LucideIcons.car),
-                _buildTypeChip('mortgage', 'Mortgage', LucideIcons.home),
-                _buildTypeChip('medical', 'Medical', LucideIcons.heartPulse),
-                _buildTypeChip('other', 'Khác', LucideIcons.moreHorizontal),
-              ],
-            ),
-            
-            const SizedBox(height: 32),
-            
-            // Required Fields Header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Thông tin bắt buộc', style: AppTextStyles.titleSmall),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.mdErrorContainer,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: const Text('4 trường', style: TextStyle(color: AppColors.mdOnErrorContainer, fontSize: 11)),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            
-            AppTextField(
-              controller: _nameController,
-              label: 'Tên khoản nợ',
-              hint: 'VD: Chase Sapphire Reserve',
-            ),
-            const SizedBox(height: 16),
-            
-            AppTextField.currency(
-              controller: _balanceController,
-              label: 'Số dư hiện tại',
-            ),
-            const SizedBox(height: 16),
-            
-            Row(
-              children: [
-                Expanded(
-                  child: AppTextField.percentage(
-                    controller: _aprController,
-                    label: 'Lãi suất (APR)',
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: AppTextField.currency(
-                    controller: _minPayController,
-                    label: 'Trả tối thiểu',
-                  ),
-                ),
-              ],
-            ),
-            
-            const SizedBox(height: 16),
-            // APR Tooltip
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: AppColors.mdSurfaceContainerLow,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.mdOutlineVariant),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(LucideIcons.info, size: 16, color: AppColors.mdOnSurfaceVariant),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      'APR là gì? Tìm trên statement hoặc app ngân hàng của bạn, thường ghi là "Annual Percentage Rate".',
-                      style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdOnSurfaceVariant),
+            Expanded(
+              child: BlocBuilder<DebtFormCubit, DebtFormState>(
+                builder: (context, state) {
+                  return SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.pagePaddingH,
+                      vertical: AppDimensions.pagePaddingV,
                     ),
-                  ),
-                ],
-              ),
-            ),
-            
-            const SizedBox(height: 32),
-            
-            // Note: In a real app we'd use a date picker instead of textfield
-            AppTextField(
-              controller: _dueDateController,
-              label: 'Ngày đến hạn hàng tháng',
-              hint: 'Ngày 15 mỗi tháng',
-            ),
-            
-            const SizedBox(height: 32),
-            
-            // Optional Section
-             GestureDetector(
-              onTap: () {
-                setState(() {
-                  _isOptionalExpanded = !_isOptionalExpanded;
-                });
-              },
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.mdSurfaceContainerLow,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.mdOutlineVariant),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const Icon(LucideIcons.slidersHorizontal, size: 18, color: AppColors.mdOnSurfaceVariant),
-                        const SizedBox(width: 10),
-                        Text('Thông tin bổ sung', style: AppTextStyles.titleSmall),
+                        if (widget.progressLabel != null &&
+                            widget.progressValue != null) ...[
+                          Text(
+                            widget.progressLabel!,
+                            style: AppTextStyles.labelMedium.copyWith(
+                              color: AppColors.mdOnSurfaceVariant,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          LinearProgressIndicator(
+                            value: widget.progressValue,
+                            backgroundColor: AppColors.mdSurfaceContainerHighest,
+                            color: AppColors.mdPrimary,
+                            borderRadius: BorderRadius.circular(4),
+                            minHeight: 4,
+                          ),
+                          const SizedBox(height: 24),
+                        ],
+                        DebtFormFields(
+                          mode: widget.mode,
+                          nameController: _nameController,
+                          currentBalanceController: _currentBalanceController,
+                          aprController: _aprController,
+                          minPaymentController: _minimumPaymentController,
+                          originalPrincipalController: _originalPrincipalController,
+                          dueDateController: _dueDayController,
+                          minimumPaymentPercentController:
+                              _minimumPaymentPercentController,
+                          minimumPaymentFloorController:
+                              _minimumPaymentFloorController,
+                          selectedDebtType: state.selectedType,
+                          interestMethod: state.interestMethod,
+                          minimumPaymentType: state.minimumPaymentType,
+                          paymentCadence: state.paymentCadence,
+                          status: state.status,
+                          excludeFromStrategy: state.excludeFromStrategy,
+                          showAdvanced: state.showAdvanced,
+                          pausedUntil: state.pausedUntil,
+                          onDebtTypeChanged:
+                              context.read<DebtFormCubit>().setDebtType,
+                          onInterestMethodChanged:
+                              context.read<DebtFormCubit>().setInterestMethod,
+                          onMinimumPaymentTypeChanged: context
+                              .read<DebtFormCubit>()
+                              .setMinimumPaymentType,
+                          onPaymentCadenceChanged: context
+                              .read<DebtFormCubit>()
+                              .setPaymentCadence,
+                          onStatusChanged:
+                              context.read<DebtFormCubit>().setStatus,
+                          onExcludeFromStrategyChanged: context
+                              .read<DebtFormCubit>()
+                              .setExcludeFromStrategy,
+                          onToggleAdvanced:
+                              context.read<DebtFormCubit>().toggleAdvanced,
+                          onCoreFieldChanged: _refreshWarnings,
+                          onSelectPausedUntil: _selectPausedUntil,
+                          onClearPausedUntil: () => context
+                              .read<DebtFormCubit>()
+                              .setPausedUntil(null),
+                          nameError: state.nameError,
+                          originalPrincipalError: state.originalPrincipalError,
+                          currentBalanceError: state.currentBalanceError,
+                          aprError: state.aprError,
+                          minPaymentError: state.minimumPaymentError,
+                          dueDayError: state.dueDayError,
+                          minimumPaymentPercentError:
+                              state.minimumPaymentPercentError,
+                          minimumPaymentFloorError:
+                              state.minimumPaymentFloorError,
+                          pausedUntilError: state.pausedUntilError,
+                          inlineError: state.inlineError,
+                          warnings: state.warnings,
+                        ),
+                        const SizedBox(height: 120),
                       ],
                     ),
-                    Icon(
-                      _isOptionalExpanded ? LucideIcons.chevronUp : LucideIcons.chevronDown,
-                      size: 20,
-                      color: AppColors.mdOnSurfaceVariant,
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
-             if (_isOptionalExpanded) ...[
-                const SizedBox(height: 16),
-                // Expanded optional fields would go here
-             ],
-            
-            const SizedBox(height: 120), // Bottom padding for CTA
+            _buildBottomBar(context),
           ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppColors.mdSurface,
-          border: Border(top: BorderSide(color: AppColors.mdOutlineVariant)),
-        ),
-        child: SafeArea(
-          child: Row(
-            children: [
-              AppButton.outlined(
-                onPressed: () => context.pop(),
-                label: 'Hủy',
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: AppButton.filled(
-                  onPressed: () {
-                    context.pop();
-                  },
-                  label: 'Thêm',
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
   }
 
-  Widget _buildTypeChip(String id, String label, IconData icon) {
-    return AppChip.filter(
-      label: label,
-      selected: _selectedType == id,
-      icon: icon,
-      onTap: () {
-        setState(() {
-          _selectedType = id;
-        });
-      },
+  Widget _buildBottomBar(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(AppDimensions.md),
+      decoration: BoxDecoration(
+        color: AppColors.mdSurface,
+        border: Border(top: BorderSide(color: AppColors.mdOutlineVariant)),
+      ),
+      child: SafeArea(
+        child: Row(
+          children: [
+            if (widget.mode != DebtFormMode.onboarding) ...[
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: widget.onCancel,
+                  child: const Text('Hủy'),
+                ),
+              ),
+              const SizedBox(width: 12),
+            ],
+            Expanded(
+              flex: widget.mode == DebtFormMode.onboarding ? 1 : 2,
+              child: BlocBuilder<DebtFormCubit, DebtFormState>(
+                builder: (context, state) {
+                  return FilledButton(
+                    onPressed: state.isSubmitting ? null : () => _submit(context),
+                    style: FilledButton.styleFrom(
+                      minimumSize: const Size.fromHeight(
+                        AppDimensions.buttonHeightLg,
+                      ),
+                      backgroundColor: AppColors.mdPrimary,
+                      foregroundColor: AppColors.mdOnPrimary,
+                      shape: const StadiumBorder(),
+                    ),
+                    child: state.isSubmitting
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: AppColors.mdOnPrimary,
+                            ),
+                          )
+                        : Text(widget.primaryActionLabel),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
+
+  Future<void> _submit(BuildContext context) async {
+    final cubit = context.read<DebtFormCubit>();
+    final debt = await cubit.save(
+      nameInput: _nameController.text,
+      originalPrincipalInput: _originalPrincipalController.text,
+      currentBalanceInput: _currentBalanceController.text,
+      aprInput: _aprController.text,
+      minimumPaymentInput: _minimumPaymentController.text,
+      dueDayInput: _dueDayController.text,
+      minimumPaymentPercentInput: _minimumPaymentPercentController.text,
+      minimumPaymentFloorInput: _minimumPaymentFloorController.text,
+    );
+    if (!mounted || debt == null) return;
+    widget.onSaved(this.context, debt);
+  }
+
+  Future<void> _selectPausedUntil() async {
+    final cubit = context.read<DebtFormCubit>();
+    final now = DateTime.now();
+    final selected = await showDatePicker(
+      context: context,
+      firstDate: DateTime(now.year, now.month, now.day),
+      initialDate: cubit.state.pausedUntil ?? now,
+      lastDate: DateTime(now.year + 10),
+    );
+    if (selected != null) {
+      cubit.setPausedUntil(selected);
+    }
+  }
+
+  void _refreshWarnings() {
+    context.read<DebtFormCubit>().refreshWarnings(
+          originalPrincipalInput: _originalPrincipalController.text,
+          currentBalanceInput: _currentBalanceController.text,
+          aprInput: _aprController.text,
+          minimumPaymentInput: _minimumPaymentController.text,
+        );
+  }
+
+  String _displayCurrency(int cents) => (cents / 100).toStringAsFixed(2);
 }

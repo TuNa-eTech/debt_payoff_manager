@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/formatters.dart';
+import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/empty_state.dart';
+import '../../../../domain/entities/debt.dart';
+import '../../../../domain/enums/debt_status.dart';
+import '../../../debts/cubit/debts_cubit.dart';
+import '../../../debts/cubit/debts_state.dart';
 
 class ProgressPage extends StatelessWidget {
   const ProgressPage({super.key});
@@ -12,205 +21,285 @@ class ProgressPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tiến độ'),
-        actions: [
-          IconButton(
-            icon: const Icon(LucideIcons.share2),
-            onPressed: () {},
-          ),
-        ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Hero Progress Card
-            Container(
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                color: AppColors.mdPrimary,
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: BlocBuilder<DebtsCubit, DebtsState>(
+        builder: (context, state) {
+          if (state.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final debts = state.debts
+              .where((debt) => debt.status != DebtStatus.archived)
+              .toList();
+
+          if (debts.isEmpty) {
+            return const EmptyState(
+              title: 'Chưa có tiến độ để hiển thị',
+              subtitle:
+                  'Thêm khoản nợ đầu tiên để app bắt đầu theo dõi mức độ hoàn thành của bạn.',
+              icon: LucideIcons.barChart2,
+            );
+          }
+
+          final totalOriginal = debts.fold<int>(
+            0,
+            (sum, debt) => sum + debt.originalPrincipal,
+          );
+          final totalRemaining = debts.fold<int>(
+            0,
+            (sum, debt) => sum + debt.currentBalance,
+          );
+          final totalPaid = (totalOriginal - totalRemaining).clamp(
+            0,
+            totalOriginal,
+          );
+          final overallProgress = totalOriginal == 0
+              ? 0.0
+              : totalPaid / totalOriginal;
+          final paidOffCount = debts
+              .where((debt) => debt.status == DebtStatus.paidOff)
+              .length;
+          final pausedCount = debts
+              .where((debt) => debt.status == DebtStatus.paused)
+              .length;
+          final activeCount = debts
+              .where((debt) => debt.status == DebtStatus.active)
+              .length;
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.pagePaddingH,
+              vertical: AppDimensions.pagePaddingV,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                AppHeroCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Text(
+                        'Đã trả được',
+                        style: AppTextStyles.labelMedium.copyWith(
+                          color: AppColors.mdPrimaryContainer,
+                        ),
+                      ),
+                      const SizedBox(height: AppDimensions.xs),
+                      Text(
+                        AppFormatters.formatCents(totalPaid),
+                        style: AppTextStyles.moneyLarge.copyWith(
+                          color: AppColors.mdOnPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: AppDimensions.sm),
+                      Text(
+                        'Còn lại ${AppFormatters.formatCents(totalRemaining)}',
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color:
+                              AppColors.mdOnPrimary.withValues(alpha: 0.82),
+                        ),
+                      ),
+                      const SizedBox(height: AppDimensions.md),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Tổng nợ đã trả', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 13)),
-                          const SizedBox(height: 4),
-                          const Text('\$4,200', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w700, fontFamily: 'Geist', letterSpacing: -0.5)),
+                          Text(
+                            'Tiến độ tổng thể',
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.mdOnPrimary.withValues(
+                                alpha: 0.82,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            '${(overallProgress * 100).round()}%',
+                            style: AppTextStyles.labelMedium.copyWith(
+                              color: AppColors.mdPrimaryContainer,
+                            ),
+                          ),
                         ],
                       ),
-                      Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Center(
-                          child: Text('28%', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16, fontFamily: 'Roboto Mono')),
+                      const SizedBox(height: AppDimensions.sm),
+                      LinearProgressIndicator(
+                        value: overallProgress.clamp(0.0, 1.0),
+                        backgroundColor: Colors.white.withValues(alpha: 0.18),
+                        color: AppColors.mdPrimaryContainer,
+                        minHeight: 6,
+                        borderRadius: BorderRadius.circular(
+                          AppDimensions.radiusFull,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  
-                  // Progress Bar
-                  Stack(
+                ),
+                const SizedBox(height: AppDimensions.sectionGap),
+                AppCard(
+                  color: AppColors.mdSurfaceContainerLow,
+                  child: Row(
                     children: [
-                      Container(
-                        height: 8,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.25),
-                          borderRadius: BorderRadius.circular(100),
+                      Expanded(
+                        child: _ProgressStat(
+                          label: 'Đang theo dõi',
+                          value: '$activeCount',
                         ),
                       ),
-                      FractionallySizedBox(
-                        widthFactor: 0.28,
-                        child: Container(
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: AppColors.mdPrimaryContainer,
-                            borderRadius: BorderRadius.circular(100),
-                          ),
+                      _ProgressDivider(),
+                      Expanded(
+                        child: _ProgressStat(
+                          label: 'Đã trả xong',
+                          value: '$paidOffCount',
+                          valueColor: AppColors.mdPrimary,
+                        ),
+                      ),
+                      _ProgressDivider(),
+                      Expanded(
+                        child: _ProgressStat(
+                          label: 'Tạm dừng',
+                          value: '$pausedCount',
                         ),
                       ),
                     ],
                   ),
-                  
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Còn lại: \$10,800', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12)),
-                      Text('Mục tiêu: Tháng 8, 2028', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12)),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            
-            const SizedBox(height: 16),
-            
-            // Stats Row
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              decoration: BoxDecoration(
-                color: AppColors.mdSurfaceContainerLow,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Row(
-                children: [
-                  Expanded(child: _buildStatItem('Tháng này', '+\$425', true)),
-                  Container(width: 1, height: 36, color: AppColors.mdOutlineVariant),
-                  Expanded(child: _buildStatItem('Lãi đã tiết kiệm', '\$120', false)),
-                  Container(width: 1, height: 36, color: AppColors.mdOutlineVariant),
-                  Expanded(child: _buildStatItem('Streak', '4 tháng', false)),
-                ],
-              ),
-            ),
-            
-            const SizedBox(height: 24),
-            
-            // Milestones
-            Text('Cột mốc tiếp theo', style: AppTextStyles.titleSmall),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.mdTertiaryContainer,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Row(
-                children: [
-                  const Icon(LucideIcons.target, color: AppColors.mdTertiary, size: 24),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Đạt 30% tổng nợ', style: AppTextStyles.titleSmall.copyWith(color: AppColors.mdOnTertiaryContainer)),
-                        const SizedBox(height: 4),
-                        Text('Chỉ còn \$300 nữa để đạt được mốc này!', style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdOnTertiaryContainer.withOpacity(0.8))),
-                      ],
+                ),
+                const SizedBox(height: AppDimensions.sectionGap),
+                AppCard(
+                  color: AppColors.mdSurfaceContainerLow,
+                  child: Text(
+                    'Tiến độ ở đây được tính trực tiếp từ chênh lệch giữa gốc ban đầu và số dư hiện tại của từng khoản nợ. Phần “lãi đã tiết kiệm” và milestone theo thời gian chưa được surface ở UI.',
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.mdOnSurfaceVariant,
                     ),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: AppDimensions.sectionGap),
+                SectionHeader(
+                  title: 'Tiến độ theo khoản',
+                  subtitle:
+                      'Dựa trên số dư hiện tại so với gốc ban đầu của từng khoản.',
+                ),
+                const SizedBox(height: AppDimensions.md),
+                ...debts.map(
+                  (debt) => Padding(
+                    padding: const EdgeInsets.only(bottom: AppDimensions.md),
+                    child: _DebtProgressCard(debt: debt),
+                  ),
+                ),
+                const SizedBox(height: 100),
+              ],
             ),
-            
-            const SizedBox(height: 32),
-            
-            // Per-Debt Progress
-            Text('Tiến độ theo khoản', style: AppTextStyles.titleSmall),
-            const SizedBox(height: 12),
-            _buildDebtProgressItem('Chase Sapphire', 0.85, '\$5,200', AppColors.mdPrimary, AppColors.mdPrimaryContainer, false),
-            const SizedBox(height: 8),
-            _buildDebtProgressItem('Car Loan', 0.15, '\$6,500', AppColors.mdTertiary, AppColors.mdTertiaryContainer, false),
-            const SizedBox(height: 8),
-            _buildDebtProgressItem('Student Loan', 0.05, '\$4,800', AppColors.mdError, AppColors.mdErrorContainer, true),
-            
-            const SizedBox(height: 100),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
+}
 
-  Widget _buildStatItem(String label, String value, bool isHighlight) {
+class _ProgressStat extends StatelessWidget {
+  const _ProgressStat({
+    required this.label,
+    required this.value,
+    this.valueColor,
+  });
+
+  final String label;
+  final String value;
+  final Color? valueColor;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 11, color: AppColors.mdOnSurfaceVariant)),
-        const SizedBox(height: 4),
-        Text(value, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: isHighlight ? AppColors.mdPrimary : AppColors.mdOnSurface, fontFamily: 'Roboto Mono')),
+        Text(
+          label,
+          style: AppTextStyles.labelSmall.copyWith(
+            color: AppColors.mdOnSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: AppDimensions.xs),
+        Text(
+          value,
+          style: AppTextStyles.titleMedium.copyWith(
+            color: valueColor ?? AppColors.mdOnSurface,
+          ),
+        ),
       ],
     );
   }
+}
 
-  Widget _buildDebtProgressItem(String title, double progress, String totalStr, Color color, Color bgColor, bool isWarning) {
+class _ProgressDivider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: isWarning ? AppColors.mdErrorContainer.withOpacity(0.3) : AppColors.mdSurfaceContainerLow,
-        borderRadius: BorderRadius.circular(12),
-      ),
+      width: 1,
+      height: 40,
+      margin: const EdgeInsets.symmetric(horizontal: AppDimensions.md),
+      color: AppColors.mdOutlineVariant,
+    );
+  }
+}
+
+class _DebtProgressCard extends StatelessWidget {
+  const _DebtProgressCard({
+    required this.debt,
+  });
+
+  final Debt debt;
+
+  @override
+  Widget build(BuildContext context) {
+    final paidAmount =
+        (debt.originalPrincipal - debt.currentBalance).clamp(0, debt.originalPrincipal);
+    final progress = debt.originalPrincipal == 0
+        ? 0.0
+        : paidAmount / debt.originalPrincipal;
+    final isPaidOff = debt.status == DebtStatus.paidOff;
+    final isPaused = debt.status == DebtStatus.paused;
+
+    return AppCard(
+      color: isPaidOff
+          ? AppColors.successContainer
+          : isPaused
+              ? AppColors.mdSurfaceContainerLow
+              : AppColors.mdSurface,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: AppTextStyles.labelMedium),
-              Text('${(progress * 100).toInt()}%', style: AppTextStyles.labelMedium.copyWith(color: color, fontFamily: 'Roboto Mono')),
+              Expanded(
+                child: Text(
+                  debt.name,
+                  style: AppTextStyles.titleMedium,
+                ),
+              ),
+              Text(
+                '${(progress * 100).round()}%',
+                style: AppTextStyles.labelMedium.copyWith(
+                  color: isPaidOff ? AppColors.success : AppColors.mdPrimary,
+                ),
+              ),
             ],
           ),
-          const SizedBox(height: 10),
-          Stack(
-            children: [
-              Container(
-                height: 6,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: isWarning ? AppColors.mdErrorContainer : AppColors.mdSurfaceContainerHigh,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-              ),
-              FractionallySizedBox(
-                widthFactor: progress,
-                child: Container(
-                  height: 6,
-                  decoration: BoxDecoration(
-                    color: color,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                ),
-              ),
-            ],
+          const SizedBox(height: AppDimensions.xs),
+          Text(
+            isPaidOff
+                ? 'Khoản nợ này đã được đánh dấu trả xong.'
+                : isPaused
+                    ? 'Khoản nợ này đang tạm dừng.'
+                    : 'Còn lại ${AppFormatters.formatCents(debt.currentBalance)} trên gốc ${AppFormatters.formatCents(debt.originalPrincipal)}',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.mdOnSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: AppDimensions.md),
+          LinearProgressIndicator(
+            value: progress.clamp(0.0, 1.0),
+            backgroundColor: AppColors.mdSurfaceContainerHighest,
+            color: isPaidOff ? AppColors.success : AppColors.mdPrimary,
+            minHeight: 6,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
           ),
         ],
       ),

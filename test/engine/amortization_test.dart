@@ -54,6 +54,26 @@ void main() {
         );
         expect(months, isNull);
       });
+
+      test('returns finite payoff months when payment exceeds interest', () {
+        final months = Amortization.computeRemainingMonths(
+          balanceCents: 1000000,
+          apr: Decimal.parse('0.06'),
+          paymentCents: 19333,
+        );
+
+        expect(months, inInclusiveRange(60, 61));
+      });
+
+      test('zero interest uses straight-line division', () {
+        final months = Amortization.computeRemainingMonths(
+          balanceCents: 12000,
+          apr: Decimal.zero,
+          paymentCents: 1000,
+        );
+
+        expect(months, 12);
+      });
     });
 
     group('computePaymentSplit', () {
@@ -68,6 +88,28 @@ void main() {
         expect(split.interest, 5000);
         // Principal = 19333 - 5000 = 14333 cents
         expect(split.principal, 14333);
+      });
+
+      test('zero APR puts the whole payment toward principal', () {
+        final split = Amortization.computePaymentSplit(
+          balanceCents: 5000,
+          apr: Decimal.zero,
+          paymentCents: 2500,
+        );
+
+        expect(split.interest, 0);
+        expect(split.principal, 2500);
+      });
+
+      test('principal portion never exceeds remaining balance', () {
+        final split = Amortization.computePaymentSplit(
+          balanceCents: 1000,
+          apr: Decimal.parse('0.12'),
+          paymentCents: 5000,
+        );
+
+        expect(split.principal, 1000);
+        expect(split.interest, 10);
       });
     });
   });

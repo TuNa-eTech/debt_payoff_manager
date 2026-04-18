@@ -47,5 +47,44 @@ void main() {
       );
       expect(interest, 0);
     });
+
+    test('compoundDaily uses effective monthly rate', () {
+      final interest = InterestCalculator.computeMonthlyInterest(
+        balanceCents: 100000,
+        apr: Decimal.parse('0.12'),
+        method: InterestMethod.compoundDaily,
+        daysInMonth: 31,
+      );
+
+      expect(interest, closeTo(1020, 10));
+    });
+
+    test('compoundMonthly matches simple monthly per-month calculation', () {
+      final compoundMonthly = InterestCalculator.computeMonthlyInterest(
+        balanceCents: 250000,
+        apr: Decimal.parse('0.18'),
+        method: InterestMethod.compoundMonthly,
+      );
+      final simpleMonthly = InterestCalculator.computeMonthlyInterest(
+        balanceCents: 250000,
+        apr: Decimal.parse('0.18'),
+        method: InterestMethod.simpleMonthly,
+      );
+
+      expect(compoundMonthly, simpleMonthly);
+    });
+
+    test('dailyRate respects custom daysInYear', () {
+      final apr = Decimal.parse('0.18');
+      final rate = InterestCalculator.dailyRate(apr, daysInYear: 360);
+
+      expect(rate.toDouble(), closeTo(0.0005, 0.00001));
+    });
+
+    test('computeApy derives annual yield from APR', () {
+      final apy = InterestCalculator.computeApy(Decimal.parse('0.12'));
+
+      expect(apy.toDouble(), closeTo(0.1268, 0.0001));
+    });
   });
 }

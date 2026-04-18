@@ -11,21 +11,23 @@ import '../domain/enums/interest_method.dart';
 /// Reference: financial-engine-spec.md §4, §5.1-5.4
 ///
 /// **Pure Dart — no Flutter imports. All methods are static and deterministic.**
-class InterestCalculator {
-  InterestCalculator._();
-
+abstract final class InterestCalculator {
   /// Compute monthly periodic rate from APR.
   ///
   /// Per §4.2: Monthly periodic rate = APR / 12
   static Decimal monthlyRate(Decimal apr) {
-    return (apr / Decimal.fromInt(FinancialConstants.monthsPerYear)).toDecimal(scaleOnInfinitePrecision: 10).roundRate();
+    return (apr / Decimal.fromInt(FinancialConstants.monthsPerYear))
+        .toDecimal(scaleOnInfinitePrecision: 10)
+        .roundRate();
   }
 
   /// Compute daily periodic rate from APR.
   ///
   /// Per §4.2: Daily periodic rate = APR / 365
   static Decimal dailyRate(Decimal apr, {int daysInYear = 365}) {
-    return (apr / Decimal.fromInt(daysInYear)).toDecimal(scaleOnInfinitePrecision: 10).roundRate();
+    return (apr / Decimal.fromInt(daysInYear))
+        .toDecimal(scaleOnInfinitePrecision: 10)
+        .roundRate();
   }
 
   /// Compute interest for a month based on the debt's interest method.
@@ -75,6 +77,8 @@ class InterestCalculator {
   static Decimal computeApy(Decimal apr, {int compoundingPeriods = 12}) {
     final ratePerPeriod = apr.toDouble() / compoundingPeriods;
     final apy = pow(1 + ratePerPeriod, compoundingPeriods) - 1;
-    return Decimal.parse(apy.toStringAsFixed(FinancialConstants.rateScaleInternal));
+    return Decimal.parse(
+      apy.toStringAsFixed(FinancialConstants.rateScaleInternal),
+    );
   }
 }

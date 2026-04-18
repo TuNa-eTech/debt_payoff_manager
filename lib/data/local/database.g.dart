@@ -16,7 +16,8 @@ class $DebtsTableTable extends DebtsTable
     aliasedName,
     false,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+    clientDefault: () => Uuid().v4(),
   );
   static const VerificationMeta _scenarioIdMeta = const VerificationMeta(
     'scenarioId',
@@ -59,9 +60,9 @@ class $DebtsTableTable extends DebtsTable
     'original_principal_cents',
     aliasedName,
     false,
-    check: () => ComparableExpr(originalPrincipalCents).isBiggerThanValue(0),
     type: DriftSqlType.int,
     requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (original_principal_cents > 0)',
   );
   static const VerificationMeta _currentBalanceCentsMeta =
       const VerificationMeta('currentBalanceCents');
@@ -70,9 +71,9 @@ class $DebtsTableTable extends DebtsTable
     'current_balance_cents',
     aliasedName,
     false,
-    check: () => ComparableExpr(currentBalanceCents).isBiggerOrEqualValue(0),
     type: DriftSqlType.int,
     requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (current_balance_cents >= 0)',
   );
   @override
   late final GeneratedColumnWithTypeConverter<Decimal, String> apr =
@@ -151,10 +152,10 @@ class $DebtsTableTable extends DebtsTable
   late final GeneratedColumn<int> dueDayOfMonth = GeneratedColumn<int>(
     'due_day_of_month',
     aliasedName,
-    true,
-    check: () => ComparableExpr(dueDayOfMonth).isBetweenValues(1, 31),
+    false,
     type: DriftSqlType.int,
-    requiredDuringInsert: false,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (due_day_of_month BETWEEN 1 AND 31)',
   );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime, String> firstDueDate =
@@ -284,8 +285,6 @@ class $DebtsTableTable extends DebtsTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
     }
     if (data.containsKey('scenario_id')) {
       context.handle(
@@ -349,6 +348,8 @@ class $DebtsTableTable extends DebtsTable
           _dueDayOfMonthMeta,
         ),
       );
+    } else if (isInserting) {
+      context.missing(_dueDayOfMonthMeta);
     }
     if (data.containsKey('priority')) {
       context.handle(
@@ -442,7 +443,7 @@ class $DebtsTableTable extends DebtsTable
       dueDayOfMonth: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}due_day_of_month'],
-      ),
+      )!,
       firstDueDate: $DebtsTableTable.$converterfirstDueDate.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
@@ -551,7 +552,7 @@ class DebtRow extends DataClass implements Insertable<DebtRow> {
   final Decimal? minimumPaymentPercent;
   final int? minimumPaymentFloorCents;
   final PaymentCadence paymentCadence;
-  final int? dueDayOfMonth;
+  final int dueDayOfMonth;
   final DateTime firstDueDate;
   final DebtStatus status;
   final DateTime? pausedUntil;
@@ -575,7 +576,7 @@ class DebtRow extends DataClass implements Insertable<DebtRow> {
     this.minimumPaymentPercent,
     this.minimumPaymentFloorCents,
     required this.paymentCadence,
-    this.dueDayOfMonth,
+    required this.dueDayOfMonth,
     required this.firstDueDate,
     required this.status,
     this.pausedUntil,
@@ -630,9 +631,7 @@ class DebtRow extends DataClass implements Insertable<DebtRow> {
         $DebtsTableTable.$converterpaymentCadence.toSql(paymentCadence),
       );
     }
-    if (!nullToAbsent || dueDayOfMonth != null) {
-      map['due_day_of_month'] = Variable<int>(dueDayOfMonth);
-    }
+    map['due_day_of_month'] = Variable<int>(dueDayOfMonth);
     {
       map['first_due_date'] = Variable<String>(
         $DebtsTableTable.$converterfirstDueDate.toSql(firstDueDate),
@@ -694,9 +693,7 @@ class DebtRow extends DataClass implements Insertable<DebtRow> {
           ? const Value.absent()
           : Value(minimumPaymentFloorCents),
       paymentCadence: Value(paymentCadence),
-      dueDayOfMonth: dueDayOfMonth == null && nullToAbsent
-          ? const Value.absent()
-          : Value(dueDayOfMonth),
+      dueDayOfMonth: Value(dueDayOfMonth),
       firstDueDate: Value(firstDueDate),
       status: Value(status),
       pausedUntil: pausedUntil == null && nullToAbsent
@@ -752,7 +749,7 @@ class DebtRow extends DataClass implements Insertable<DebtRow> {
       paymentCadence: serializer.fromJson<PaymentCadence>(
         json['paymentCadence'],
       ),
-      dueDayOfMonth: serializer.fromJson<int?>(json['dueDayOfMonth']),
+      dueDayOfMonth: serializer.fromJson<int>(json['dueDayOfMonth']),
       firstDueDate: serializer.fromJson<DateTime>(json['firstDueDate']),
       status: serializer.fromJson<DebtStatus>(json['status']),
       pausedUntil: serializer.fromJson<DateTime?>(json['pausedUntil']),
@@ -789,7 +786,7 @@ class DebtRow extends DataClass implements Insertable<DebtRow> {
         minimumPaymentFloorCents,
       ),
       'paymentCadence': serializer.toJson<PaymentCadence>(paymentCadence),
-      'dueDayOfMonth': serializer.toJson<int?>(dueDayOfMonth),
+      'dueDayOfMonth': serializer.toJson<int>(dueDayOfMonth),
       'firstDueDate': serializer.toJson<DateTime>(firstDueDate),
       'status': serializer.toJson<DebtStatus>(status),
       'pausedUntil': serializer.toJson<DateTime?>(pausedUntil),
@@ -816,7 +813,7 @@ class DebtRow extends DataClass implements Insertable<DebtRow> {
     Value<Decimal?> minimumPaymentPercent = const Value.absent(),
     Value<int?> minimumPaymentFloorCents = const Value.absent(),
     PaymentCadence? paymentCadence,
-    Value<int?> dueDayOfMonth = const Value.absent(),
+    int? dueDayOfMonth,
     DateTime? firstDueDate,
     DebtStatus? status,
     Value<DateTime?> pausedUntil = const Value.absent(),
@@ -845,9 +842,7 @@ class DebtRow extends DataClass implements Insertable<DebtRow> {
         ? minimumPaymentFloorCents.value
         : this.minimumPaymentFloorCents,
     paymentCadence: paymentCadence ?? this.paymentCadence,
-    dueDayOfMonth: dueDayOfMonth.present
-        ? dueDayOfMonth.value
-        : this.dueDayOfMonth,
+    dueDayOfMonth: dueDayOfMonth ?? this.dueDayOfMonth,
     firstDueDate: firstDueDate ?? this.firstDueDate,
     status: status ?? this.status,
     pausedUntil: pausedUntil.present ? pausedUntil.value : this.pausedUntil,
@@ -1011,7 +1006,7 @@ class DebtsTableCompanion extends UpdateCompanion<DebtRow> {
   final Value<Decimal?> minimumPaymentPercent;
   final Value<int?> minimumPaymentFloorCents;
   final Value<PaymentCadence> paymentCadence;
-  final Value<int?> dueDayOfMonth;
+  final Value<int> dueDayOfMonth;
   final Value<DateTime> firstDueDate;
   final Value<DebtStatus> status;
   final Value<DateTime?> pausedUntil;
@@ -1049,7 +1044,7 @@ class DebtsTableCompanion extends UpdateCompanion<DebtRow> {
     this.rowid = const Value.absent(),
   });
   DebtsTableCompanion.insert({
-    required String id,
+    this.id = const Value.absent(),
     this.scenarioId = const Value.absent(),
     required String name,
     required DebtType type,
@@ -1062,7 +1057,7 @@ class DebtsTableCompanion extends UpdateCompanion<DebtRow> {
     this.minimumPaymentPercent = const Value.absent(),
     this.minimumPaymentFloorCents = const Value.absent(),
     required PaymentCadence paymentCadence,
-    this.dueDayOfMonth = const Value.absent(),
+    required int dueDayOfMonth,
     required DateTime firstDueDate,
     required DebtStatus status,
     this.pausedUntil = const Value.absent(),
@@ -1073,8 +1068,7 @@ class DebtsTableCompanion extends UpdateCompanion<DebtRow> {
     this.paidOffAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
     this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       name = Value(name),
+  }) : name = Value(name),
        type = Value(type),
        originalPrincipalCents = Value(originalPrincipalCents),
        currentBalanceCents = Value(currentBalanceCents),
@@ -1082,6 +1076,7 @@ class DebtsTableCompanion extends UpdateCompanion<DebtRow> {
        interestMethod = Value(interestMethod),
        minimumPaymentType = Value(minimumPaymentType),
        paymentCadence = Value(paymentCadence),
+       dueDayOfMonth = Value(dueDayOfMonth),
        firstDueDate = Value(firstDueDate),
        status = Value(status),
        createdAt = Value(createdAt),
@@ -1161,7 +1156,7 @@ class DebtsTableCompanion extends UpdateCompanion<DebtRow> {
     Value<Decimal?>? minimumPaymentPercent,
     Value<int?>? minimumPaymentFloorCents,
     Value<PaymentCadence>? paymentCadence,
-    Value<int?>? dueDayOfMonth,
+    Value<int>? dueDayOfMonth,
     Value<DateTime>? firstDueDate,
     Value<DebtStatus>? status,
     Value<DateTime?>? pausedUntil,
@@ -1361,7 +1356,8 @@ class $PaymentsTableTable extends PaymentsTable
     aliasedName,
     false,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+    clientDefault: () => Uuid().v4(),
   );
   static const VerificationMeta _scenarioIdMeta = const VerificationMeta(
     'scenarioId',
@@ -1395,9 +1391,9 @@ class $PaymentsTableTable extends PaymentsTable
     'amount_cents',
     aliasedName,
     false,
-    check: () => ComparableExpr(amountCents).isBiggerThanValue(0),
     type: DriftSqlType.int,
     requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL CHECK (amount_cents > 0)',
   );
   static const VerificationMeta _principalPortionCentsMeta =
       const VerificationMeta('principalPortionCents');
@@ -1560,8 +1556,6 @@ class $PaymentsTableTable extends PaymentsTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
     }
     if (data.containsKey('scenario_id')) {
       context.handle(
@@ -2125,7 +2119,7 @@ class PaymentsTableCompanion extends UpdateCompanion<PaymentRow> {
     this.rowid = const Value.absent(),
   });
   PaymentsTableCompanion.insert({
-    required String id,
+    this.id = const Value.absent(),
     this.scenarioId = const Value.absent(),
     required String debtId,
     required int amountCents,
@@ -2143,8 +2137,7 @@ class PaymentsTableCompanion extends UpdateCompanion<PaymentRow> {
     required DateTime updatedAt,
     this.deletedAt = const Value.absent(),
     this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       debtId = Value(debtId),
+  }) : debtId = Value(debtId),
        amountCents = Value(amountCents),
        principalPortionCents = Value(principalPortionCents),
        interestPortionCents = Value(interestPortionCents),
@@ -2366,7 +2359,8 @@ class $PlansTableTable extends PlansTable
     aliasedName,
     false,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+    clientDefault: () => Uuid().v4(),
   );
   static const VerificationMeta _scenarioIdMeta = const VerificationMeta(
     'scenarioId',
@@ -2521,8 +2515,6 @@ class $PlansTableTable extends PlansTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
     }
     if (data.containsKey('scenario_id')) {
       context.handle(
@@ -3011,7 +3003,7 @@ class PlansTableCompanion extends UpdateCompanion<PlanRow> {
     this.rowid = const Value.absent(),
   });
   PlansTableCompanion.insert({
-    required String id,
+    this.id = const Value.absent(),
     this.scenarioId = const Value.absent(),
     required Strategy strategy,
     this.extraMonthlyAmountCents = const Value.absent(),
@@ -3025,8 +3017,7 @@ class PlansTableCompanion extends UpdateCompanion<PlanRow> {
     required DateTime updatedAt,
     this.deletedAt = const Value.absent(),
     this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       strategy = Value(strategy),
+  }) : strategy = Value(strategy),
        extraPaymentCadence = Value(extraPaymentCadence),
        lastRecastAt = Value(lastRecastAt),
        createdAt = Value(createdAt),
@@ -4266,7 +4257,8 @@ class $MilestonesTableTable extends MilestonesTable
     aliasedName,
     false,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+    clientDefault: () => Uuid().v4(),
   );
   static const VerificationMeta _scenarioIdMeta = const VerificationMeta(
     'scenarioId',
@@ -4378,8 +4370,6 @@ class $MilestonesTableTable extends MilestonesTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
     }
     if (data.containsKey('scenario_id')) {
       context.handle(
@@ -4693,7 +4683,7 @@ class MilestonesTableCompanion extends UpdateCompanion<MilestoneRow> {
     this.rowid = const Value.absent(),
   });
   MilestonesTableCompanion.insert({
-    required String id,
+    this.id = const Value.absent(),
     this.scenarioId = const Value.absent(),
     required MilestoneType type,
     this.debtId = const Value.absent(),
@@ -4703,8 +4693,7 @@ class MilestonesTableCompanion extends UpdateCompanion<MilestoneRow> {
     required DateTime createdAt,
     this.deletedAt = const Value.absent(),
     this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       type = Value(type),
+  }) : type = Value(type),
        achievedAt = Value(achievedAt),
        createdAt = Value(createdAt);
   static Insertable<MilestoneRow> custom({
@@ -4834,7 +4823,8 @@ class $InterestRateHistoryTableTable extends InterestRateHistoryTable
     aliasedName,
     false,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+    clientDefault: () => Uuid().v4(),
   );
   static const VerificationMeta _debtIdMeta = const VerificationMeta('debtId');
   @override
@@ -4948,8 +4938,6 @@ class $InterestRateHistoryTableTable extends InterestRateHistoryTable
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
     }
     if (data.containsKey('debt_id')) {
       context.handle(
@@ -5279,7 +5267,7 @@ class InterestRateHistoryTableCompanion
     this.rowid = const Value.absent(),
   });
   InterestRateHistoryTableCompanion.insert({
-    required String id,
+    this.id = const Value.absent(),
     required String debtId,
     required Decimal apr,
     required DateTime effectiveFrom,
@@ -5289,8 +5277,7 @@ class InterestRateHistoryTableCompanion
     required DateTime updatedAt,
     this.deletedAt = const Value.absent(),
     this.rowid = const Value.absent(),
-  }) : id = Value(id),
-       debtId = Value(debtId),
+  }) : debtId = Value(debtId),
        apr = Value(apr),
        effectiveFrom = Value(effectiveFrom),
        createdAt = Value(createdAt),
@@ -6432,6 +6419,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SyncStateTableTable syncStateTable = $SyncStateTableTable(this);
   late final $TimelineCacheTableTable timelineCacheTable =
       $TimelineCacheTableTable(this);
+  late final Index idxPlansScenario = Index(
+    'idx_plans_scenario',
+    'CREATE UNIQUE INDEX idx_plans_scenario ON plans (scenario_id) WHERE deleted_at IS NULL',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -6445,12 +6436,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     interestRateHistoryTable,
     syncStateTable,
     timelineCacheTable,
+    idxPlansScenario,
   ];
 }
 
 typedef $$DebtsTableTableCreateCompanionBuilder =
     DebtsTableCompanion Function({
-      required String id,
+      Value<String> id,
       Value<String> scenarioId,
       required String name,
       required DebtType type,
@@ -6463,7 +6455,7 @@ typedef $$DebtsTableTableCreateCompanionBuilder =
       Value<Decimal?> minimumPaymentPercent,
       Value<int?> minimumPaymentFloorCents,
       required PaymentCadence paymentCadence,
-      Value<int?> dueDayOfMonth,
+      required int dueDayOfMonth,
       required DateTime firstDueDate,
       required DebtStatus status,
       Value<DateTime?> pausedUntil,
@@ -6490,7 +6482,7 @@ typedef $$DebtsTableTableUpdateCompanionBuilder =
       Value<Decimal?> minimumPaymentPercent,
       Value<int?> minimumPaymentFloorCents,
       Value<PaymentCadence> paymentCadence,
-      Value<int?> dueDayOfMonth,
+      Value<int> dueDayOfMonth,
       Value<DateTime> firstDueDate,
       Value<DebtStatus> status,
       Value<DateTime?> pausedUntil,
@@ -7150,7 +7142,7 @@ class $$DebtsTableTableTableManager
                 Value<Decimal?> minimumPaymentPercent = const Value.absent(),
                 Value<int?> minimumPaymentFloorCents = const Value.absent(),
                 Value<PaymentCadence> paymentCadence = const Value.absent(),
-                Value<int?> dueDayOfMonth = const Value.absent(),
+                Value<int> dueDayOfMonth = const Value.absent(),
                 Value<DateTime> firstDueDate = const Value.absent(),
                 Value<DebtStatus> status = const Value.absent(),
                 Value<DateTime?> pausedUntil = const Value.absent(),
@@ -7189,7 +7181,7 @@ class $$DebtsTableTableTableManager
               ),
           createCompanionCallback:
               ({
-                required String id,
+                Value<String> id = const Value.absent(),
                 Value<String> scenarioId = const Value.absent(),
                 required String name,
                 required DebtType type,
@@ -7202,7 +7194,7 @@ class $$DebtsTableTableTableManager
                 Value<Decimal?> minimumPaymentPercent = const Value.absent(),
                 Value<int?> minimumPaymentFloorCents = const Value.absent(),
                 required PaymentCadence paymentCadence,
-                Value<int?> dueDayOfMonth = const Value.absent(),
+                required int dueDayOfMonth,
                 required DateTime firstDueDate,
                 required DebtStatus status,
                 Value<DateTime?> pausedUntil = const Value.absent(),
@@ -7355,7 +7347,7 @@ typedef $$DebtsTableTableProcessedTableManager =
     >;
 typedef $$PaymentsTableTableCreateCompanionBuilder =
     PaymentsTableCompanion Function({
-      required String id,
+      Value<String> id,
       Value<String> scenarioId,
       required String debtId,
       required int amountCents,
@@ -7820,7 +7812,7 @@ class $$PaymentsTableTableTableManager
               ),
           createCompanionCallback:
               ({
-                required String id,
+                Value<String> id = const Value.absent(),
                 Value<String> scenarioId = const Value.absent(),
                 required String debtId,
                 required int amountCents,
@@ -7927,7 +7919,7 @@ typedef $$PaymentsTableTableProcessedTableManager =
     >;
 typedef $$PlansTableTableCreateCompanionBuilder =
     PlansTableCompanion Function({
-      required String id,
+      Value<String> id,
       Value<String> scenarioId,
       required Strategy strategy,
       Value<int> extraMonthlyAmountCents,
@@ -8246,7 +8238,7 @@ class $$PlansTableTableTableManager
               ),
           createCompanionCallback:
               ({
-                required String id,
+                Value<String> id = const Value.absent(),
                 Value<String> scenarioId = const Value.absent(),
                 required Strategy strategy,
                 Value<int> extraMonthlyAmountCents = const Value.absent(),
@@ -8771,7 +8763,7 @@ typedef $$UserSettingsTableTableProcessedTableManager =
     >;
 typedef $$MilestonesTableTableCreateCompanionBuilder =
     MilestonesTableCompanion Function({
-      required String id,
+      Value<String> id,
       Value<String> scenarioId,
       required MilestoneType type,
       Value<String?> debtId,
@@ -9090,7 +9082,7 @@ class $$MilestonesTableTableTableManager
               ),
           createCompanionCallback:
               ({
-                required String id,
+                Value<String> id = const Value.absent(),
                 Value<String> scenarioId = const Value.absent(),
                 required MilestoneType type,
                 Value<String?> debtId = const Value.absent(),
@@ -9183,7 +9175,7 @@ typedef $$MilestonesTableTableProcessedTableManager =
     >;
 typedef $$InterestRateHistoryTableTableCreateCompanionBuilder =
     InterestRateHistoryTableCompanion Function({
-      required String id,
+      Value<String> id,
       required String debtId,
       required Decimal apr,
       required DateTime effectiveFrom,
@@ -9522,7 +9514,7 @@ class $$InterestRateHistoryTableTableTableManager
               ),
           createCompanionCallback:
               ({
-                required String id,
+                Value<String> id = const Value.absent(),
                 required String debtId,
                 required Decimal apr,
                 required DateTime effectiveFrom,

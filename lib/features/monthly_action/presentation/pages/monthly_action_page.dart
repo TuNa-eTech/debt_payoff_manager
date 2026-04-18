@@ -44,7 +44,9 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
             ),
             child: Text(
               'Tháng 4/2026',
-              style: AppTextStyles.labelSmall.copyWith(color: AppColors.mdOnSurfaceVariant),
+              style: AppTextStyles.labelSmall.copyWith(
+                color: AppColors.mdOnSurfaceVariant,
+              ),
             ),
           ),
         ],
@@ -58,7 +60,9 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: allChecked ? AppColors.mdPrimary : AppColors.mdSurfaceContainerLow,
+                color: allChecked
+                    ? AppColors.mdPrimary
+                    : AppColors.mdSurfaceContainerLow,
                 borderRadius: BorderRadius.circular(24),
               ),
               child: Column(
@@ -82,7 +86,9 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
                         ? 'Bạn đã hoàn thành tất cả thanh toán!'
                         : '$checkedCount / ${_checkedItems.length} thanh toán đã hoàn thành',
                     style: AppTextStyles.bodySmall.copyWith(
-                      color: allChecked ? Colors.white.withOpacity(0.8) : AppColors.mdOnSurfaceVariant,
+                      color: allChecked
+                          ? Colors.white.withValues(alpha: 0.8)
+                          : AppColors.mdOnSurfaceVariant,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -93,7 +99,9 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
                         height: 8,
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: allChecked ? Colors.white.withOpacity(0.25) : AppColors.mdSurfaceContainerHigh,
+                          color: allChecked
+                              ? Colors.white.withValues(alpha: 0.25)
+                              : AppColors.mdSurfaceContainerHigh,
                           borderRadius: BorderRadius.circular(100),
                         ),
                       ),
@@ -102,7 +110,9 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
                         child: Container(
                           height: 8,
                           decoration: BoxDecoration(
-                            color: allChecked ? AppColors.mdPrimaryContainer : AppColors.mdPrimary,
+                            color: allChecked
+                                ? AppColors.mdPrimaryContainer
+                                : AppColors.mdPrimary,
                             borderRadius: BorderRadius.circular(100),
                           ),
                         ),
@@ -118,7 +128,11 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
             // ── Minimum Payments Section ──
             Row(
               children: [
-                const Icon(LucideIcons.wallet, size: 16, color: AppColors.mdOnSurfaceVariant),
+                const Icon(
+                  LucideIcons.wallet,
+                  size: 16,
+                  color: AppColors.mdOnSurfaceVariant,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   'Thanh toán tối thiểu',
@@ -168,7 +182,11 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
               children: [
                 Row(
                   children: [
-                    const Icon(LucideIcons.snowflake, size: 16, color: AppColors.mdPrimary),
+                    const Icon(
+                      LucideIcons.snowflake,
+                      size: 16,
+                      color: AppColors.mdPrimary,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       'Snowball – Trả thêm',
@@ -180,7 +198,10 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
                   ],
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.mdPrimaryContainer,
                     borderRadius: BorderRadius.circular(100),
@@ -221,10 +242,17 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
                 children: [
                   _buildSummaryRow('Tổng minimum', '\$525'),
                   const SizedBox(height: 8),
-                  _buildSummaryRow('Trả thêm (Snowball)', '\$250', valueColor: AppColors.mdPrimary),
+                  _buildSummaryRow(
+                    'Trả thêm (Snowball)',
+                    '\$250',
+                    valueColor: AppColors.mdPrimary,
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Container(height: 1, color: AppColors.mdOutlineVariant),
+                    child: Container(
+                      height: 1,
+                      color: AppColors.mdOutlineVariant,
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -255,7 +283,11 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
               ),
               child: Row(
                 children: [
-                  const Icon(LucideIcons.lightbulb, color: AppColors.mdTertiary, size: 20),
+                  const Icon(
+                    LucideIcons.lightbulb,
+                    color: AppColors.mdTertiary,
+                    size: 20,
+                  ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -263,13 +295,17 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
                       children: [
                         Text(
                           'Nếu trả thêm \$250/tháng',
-                          style: AppTextStyles.titleSmall.copyWith(color: AppColors.mdOnTertiaryContainer),
+                          style: AppTextStyles.titleSmall.copyWith(
+                            color: AppColors.mdOnTertiaryContainer,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           'Bạn sẽ hết nợ sớm hơn 3 tháng và tiết kiệm \$850 tiền lãi!',
                           style: AppTextStyles.bodySmall.copyWith(
-                            color: AppColors.mdOnTertiaryContainer.withOpacity(0.8),
+                            color: AppColors.mdOnTertiaryContainer.withValues(
+                              alpha: 0.8,
+                            ),
                           ),
                         ),
                       ],
@@ -292,7 +328,9 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
         child: SafeArea(
           child: AppButton.filledLg(
             onPressed: allChecked ? () {} : null,
-            label: allChecked ? 'Hoàn thành tháng này! ✓' : 'Đánh dấu đã trả tất cả',
+            label: allChecked
+                ? 'Hoàn thành tháng này! ✓'
+                : 'Đánh dấu đã trả tất cả',
             fullWidth: true,
             icon: allChecked ? LucideIcons.check : LucideIcons.checkSquare,
           ),
@@ -325,21 +363,21 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isChecked
-              ? AppColors.mdPrimaryContainer.withOpacity(0.3)
+              ? AppColors.mdPrimaryContainer.withValues(alpha: 0.3)
               : isWarning
-                  ? AppColors.mdErrorContainer
-                  : isExtra
-                      ? AppColors.mdSurfaceContainerLow
-                      : AppColors.mdSurfaceContainerLow,
+              ? AppColors.mdErrorContainer
+              : isExtra
+              ? AppColors.mdSurfaceContainerLow
+              : AppColors.mdSurfaceContainerLow,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isChecked
-                ? AppColors.mdPrimary.withOpacity(0.4)
+                ? AppColors.mdPrimary.withValues(alpha: 0.4)
                 : isWarning
-                    ? AppColors.mdError.withOpacity(0.3)
-                    : isExtra
-                        ? AppColors.mdPrimary.withOpacity(0.2)
-                        : AppColors.mdOutlineVariant,
+                ? AppColors.mdError.withValues(alpha: 0.3)
+                : isExtra
+                ? AppColors.mdPrimary.withValues(alpha: 0.2)
+                : AppColors.mdOutlineVariant,
           ),
         ),
         child: Row(
@@ -368,10 +406,10 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: isExtra
-                    ? iconColor.withOpacity(0.1)
+                    ? iconColor.withValues(alpha: 0.1)
                     : isWarning
-                        ? AppColors.mdError.withOpacity(0.1)
-                        : AppColors.mdSurfaceContainerHigh,
+                    ? AppColors.mdError.withValues(alpha: 0.1)
+                    : AppColors.mdSurfaceContainerHigh,
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -394,8 +432,8 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
                       color: isChecked
                           ? AppColors.mdOnSurfaceVariant
                           : isWarning
-                              ? AppColors.mdOnErrorContainer
-                              : AppColors.mdOnSurface,
+                          ? AppColors.mdOnErrorContainer
+                          : AppColors.mdOnSurface,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -430,8 +468,8 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
                 color: isChecked
                     ? AppColors.mdOnSurfaceVariant
                     : isExtra
-                        ? AppColors.mdPrimary
-                        : AppColors.mdOnSurface,
+                    ? AppColors.mdPrimary
+                    : AppColors.mdOnSurface,
               ),
             ),
           ],
@@ -444,7 +482,12 @@ class _MonthlyActionPageState extends State<MonthlyActionPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.mdOnSurfaceVariant)),
+        Text(
+          label,
+          style: AppTextStyles.bodyMedium.copyWith(
+            color: AppColors.mdOnSurfaceVariant,
+          ),
+        ),
         Text(
           value,
           style: AppTextStyles.titleSmall.copyWith(

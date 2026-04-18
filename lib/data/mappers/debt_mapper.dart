@@ -23,7 +23,7 @@ extension DebtRowMapper on DebtRow {
       minimumPaymentPercent: minimumPaymentPercent,
       minimumPaymentFloor: minimumPaymentFloorCents,
       paymentCadence: paymentCadence,
-      dueDayOfMonth: dueDayOfMonth ?? 1,
+      dueDayOfMonth: dueDayOfMonth,
       firstDueDate: firstDueDate,
       status: status,
       pausedUntil: pausedUntil,

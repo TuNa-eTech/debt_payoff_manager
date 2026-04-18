@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:uuid/uuid.dart';
 
 import '../converters/datetime_converters.dart';
 import '../converters/decimal_converter.dart';
@@ -15,12 +16,11 @@ class InterestRateHistoryTable extends Table {
   @override
   String get tableName => 'interest_rate_history';
 
-  TextColumn get id => text()();
+  TextColumn get id => text().clientDefault(() => Uuid().v4())();
   TextColumn get debtId => text().references(DebtsTable, #id)();
 
   TextColumn get apr => text().map(const DecimalConverter())();
-  TextColumn get effectiveFrom =>
-      text().map(const LocalDateConverter())();
+  TextColumn get effectiveFrom => text().map(const LocalDateConverter())();
   TextColumn get effectiveTo =>
       text().nullable().map(const LocalDateConverter())();
   TextColumn get reason => text().nullable().withLength(max: 120)();

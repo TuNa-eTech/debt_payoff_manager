@@ -45,6 +45,15 @@ class DebtRepositoryImpl implements DebtRepository {
   }
 
   @override
+  Stream<Debt?> watchDebtById(String id) {
+    final query = _db.select(_db.debtsTable)
+      ..where((d) => d.id.equals(id))
+      ..where((d) => d.deletedAt.isNull());
+
+    return query.watchSingleOrNull().map((row) => row?.toDomain());
+  }
+
+  @override
   Future<List<Debt>> getActiveDebts({String scenarioId = 'main'}) {
     return getAllDebts(
       scenarioId: scenarioId,
@@ -75,6 +84,16 @@ class DebtRepositoryImpl implements DebtRepository {
     await (_db.update(_db.debtsTable)..where((d) => d.id.equals(id)))
         .write(DebtsTableCompanion(
       deletedAt: Value(now),
+      updatedAt: Value(now),
+    ));
+  }
+
+  @override
+  Future<void> restoreDebt(String id) async {
+    final now = DateTime.now().toUtc();
+    await (_db.update(_db.debtsTable)..where((d) => d.id.equals(id)))
+        .write(DebtsTableCompanion(
+      deletedAt: const Value(null),
       updatedAt: Value(now),
     ));
   }

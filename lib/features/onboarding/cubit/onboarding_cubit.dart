@@ -1,32 +1,75 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../domain/repositories/settings_repository.dart';
 import 'onboarding_state.dart';
 
 /// Cubit managing onboarding flow state.
 class OnboardingCubit extends Cubit<OnboardingState> {
-  OnboardingCubit() : super(const OnboardingState());
+  OnboardingCubit({required SettingsRepository settingsRepository})
+      : _settingsRepository = settingsRepository,
+        super(const OnboardingState());
 
-  void goToStep(OnboardingStep step) {
-    emit(state.copyWith(currentStep: step));
+  final SettingsRepository _settingsRepository;
+  StreamSubscription? _settingsSubscription;
+
+  Future<void> start() async {
+    await _settingsSubscription?.cancel();
+    _settingsSubscription = _settingsRepository.watchSettings().listen(
+      (settings) {
+        emit(
+          state.copyWith(
+            isLoading: false,
+            currentStep: OnboardingStep.fromStorage(settings.onboardingStep),
+            hasCompletedOnboarding: settings.onboardingCompleted,
+          ),
+        );
+      },
+    );
   }
 
-  void nextStep() {
+  Future<void> goToStep(OnboardingStep step) async {
+    final settings = await _settingsRepository.getSettings();
+    await _settingsRepository.updateSettings(
+      settings.copyWith(
+        onboardingStep: step.storageValue,
+        onboardingCompleted: false,
+        onboardingCompletedAt: null,
+      ),
+    );
+  }
+
+  Future<void> nextStep() async {
     final steps = OnboardingStep.values;
     final currentIndex = steps.indexOf(state.currentStep);
     if (currentIndex < steps.length - 1) {
-      emit(state.copyWith(currentStep: steps[currentIndex + 1]));
+      await goToStep(steps[currentIndex + 1]);
     }
   }
 
-  void previousStep() {
+  Future<void> previousStep() async {
     final steps = OnboardingStep.values;
     final currentIndex = steps.indexOf(state.currentStep);
     if (currentIndex > 0) {
-      emit(state.copyWith(currentStep: steps[currentIndex - 1]));
+      await goToStep(steps[currentIndex - 1]);
     }
   }
 
-  void completeOnboarding() {
-    emit(state.copyWith(hasCompletedOnboarding: true));
+  Future<void> completeOnboarding() async {
+    final settings = await _settingsRepository.getSettings();
+    await _settingsRepository.updateSettings(
+      settings.copyWith(
+        onboardingStep: OnboardingStep.complete.storageValue,
+        onboardingCompleted: true,
+        onboardingCompletedAt: DateTime.now().toUtc(),
+      ),
+    );
+  }
+
+  @override
+  Future<void> close() async {
+    await _settingsSubscription?.cancel();
+    return super.close();
   }
 }

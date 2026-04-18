@@ -124,33 +124,35 @@ Legend:
 ### E1 — Deliverables
 
 **1.1 Drift schema & migrations (Week 1)**
-- [ ] `lib/data/tables/*.dart` — 8 tables theo data-schema.md
+- [ ] `lib/data/local/tables/*.dart` — 8 tables theo data-schema.md
 - [ ] Type converters (Decimal, UTC DateTime, Local Date, Enums)
 - [ ] `AppDatabase` class với schema v1
 - [ ] Seed: UserSettings singleton + main Plan on first launch
-- [ ] Drift schema snapshot committed to `drift_schemas/v1/`
+- [ ] Drift schema snapshot committed to `drift_schemas/v1/schema.json`
 
-**1.2 Domain models & Money value object (Week 1-2)**
-- [ ] `lib/domain/models/` — Debt, Payment, Plan, InterestRateHistory, Money, Decimal wrappers
+**1.2 Domain models & mappers (Week 1-2)**
+- [ ] `lib/domain/entities/` — Debt, Payment, Plan, InterestRateHistory, UserSettings, Milestone
+- [ ] Money representation stays as `int` cents + `Decimal` (no `Money` wrapper in E1)
 - [ ] Domain ↔ Drift mappers (extension methods)
 - [ ] Unit tests cho mappers (idempotent round-trip)
 
 **1.3 Financial Engine core (Week 2-3)**
-- [ ] `lib/domain/engine/amortization.dart` — formulas §5, §6
-- [ ] `lib/domain/engine/strategy.dart` — snowball/avalanche/custom sort
-- [ ] `lib/domain/engine/allocation.dart` — extra payment + rollover §8
-- [ ] `lib/domain/engine/timeline_simulator.dart` — month-by-month simulation §9
-- [ ] `lib/domain/engine/interest_calc.dart` — 3 interest methods
+- [ ] `lib/engine/amortization.dart` — formulas §5, §6
+- [ ] `lib/engine/strategy_sorter.dart` — snowball/avalanche/custom sort
+- [ ] `lib/engine/payment_allocator.dart` — extra payment + rollover §8
+- [ ] `lib/engine/timeline_simulator.dart` — month-by-month simulation §9
+- [ ] `lib/engine/interest_calculator.dart` — 3 interest methods
 - [ ] Tất cả functions pure (no DB access), receive domain models
 
 **1.4 Test vectors + property-based (Week 3)**
-- [ ] Golden tests cho TV-1 đến TV-5 trong engine-spec §12
+- [ ] Golden tests cho TV-1 đến TV-4 trong engine-spec §12
+- [ ] TV-5 documented as deferred until full rate-history runtime (Phase 8)
 - [ ] Property-based tests (`glados`):
   - Monotonicity: tăng extra → debt-free date không trễ hơn
   - Avalanche ≤ Snowball về total interest
   - Conservation: Σ principal paid + remaining balance == Σ original
   - Rollover correctness: intra-month rollover
-- [ ] Edge case tests: 0% APR, balance > principal, forbearance month, rate change mid-timeline
+- [ ] Edge case tests: 0% APR, balance > principal, forbearance month
 
 **1.5 Repository layer (Week 3-4)**
 - [ ] `DebtRepository`, `PaymentRepository`, `PlanRepository`, `SettingsRepository`
@@ -161,7 +163,7 @@ Legend:
 ### Exit gate (E1)
 - [ ] 100% test vectors pass
 - [ ] Property-based tests pass 1000+ random scenarios
-- [ ] Test coverage ≥ 90% cho `lib/domain/engine` và `lib/data/repositories`
+- [ ] Test coverage: `lib/engine` public API = 100%, `lib/data/repositories` ≥ 90%
 - [ ] Can create debts, log payments, run simulation, get debt-free date — **tất cả qua code**, chưa cần UI
 - [ ] Integration test: 3 debts → Snowball vs Avalanche output matches Excel validation sheet
 

@@ -13,9 +13,7 @@ import '../domain/enums/min_payment_type.dart';
 /// A. Fixed amount
 /// B. Percent of balance
 /// C. Interest + percent of principal
-class MinPaymentCalculator {
-  MinPaymentCalculator._();
-
+abstract final class MinPaymentCalculator {
   /// Compute minimum payment for a given month.
   ///
   /// Returns payment in cents.
@@ -47,8 +45,7 @@ class MinPaymentCalculator {
         // §6.1 C: min_payment = max(interest + balance × percent, floor)
         assert(percent != null, 'percent required for interestPlusPercent');
         final balance = DecimalFinancialExtensions.fromCents(balanceCents);
-        final principalPortion =
-            (balance * percent!).roundMoney().toCents();
+        final principalPortion = (balance * percent!).roundMoney().toCents();
         final total = interestCents + principalPortion;
         calculated = max(total, floorCents ?? 0);
     }

@@ -11,11 +11,7 @@ import 'package:debt_payoff_manager/domain/enums/strategy.dart';
 import 'package:debt_payoff_manager/engine/strategy_sorter.dart';
 
 /// Helper to create test debts.
-Debt _debt({
-  String id = '1',
-  int balance = 100000,
-  String apr = '0.10',
-}) {
+Debt _debt({String id = '1', int balance = 100000, String apr = '0.10'}) {
   return Debt(
     id: id,
     name: 'Test $id',
@@ -97,6 +93,36 @@ void main() {
 
       // Avalanche: C (20%) → A (10%) → B (8%)
       expect(avalanche.map((d) => d.id).toList(), ['C', 'A', 'B']);
+    });
+
+    test(
+      'custom strategy respects explicit order and leaves unknown debts last',
+      () {
+        final debts = [
+          _debt(id: 'A', balance: 50000, apr: '0.10'),
+          _debt(id: 'B', balance: 20000, apr: '0.08'),
+          _debt(id: 'C', balance: 150000, apr: '0.20'),
+        ];
+
+        final sorted = StrategySorter.sort(debts, Strategy.custom, const [
+          'C',
+          'A',
+        ]);
+
+        expect(sorted.map((d) => d.id).toList(), ['C', 'A', 'B']);
+      },
+    );
+
+    test('custom strategy without order preserves input order', () {
+      final debts = [
+        _debt(id: 'A', balance: 50000, apr: '0.10'),
+        _debt(id: 'B', balance: 20000, apr: '0.08'),
+      ];
+
+      final sorted = StrategySorter.sort(debts, Strategy.custom);
+
+      expect(sorted.map((d) => d.id).toList(), ['A', 'B']);
+      expect(sorted, isNot(same(debts)));
     });
   });
 }

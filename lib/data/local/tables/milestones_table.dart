@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:uuid/uuid.dart';
 
 import '../converters/datetime_converters.dart';
 import '../converters/enum_converters.dart';
@@ -15,18 +16,14 @@ class MilestonesTable extends Table {
   @override
   String get tableName => 'milestones';
 
-  TextColumn get id => text()();
-  TextColumn get scenarioId =>
-      text().withDefault(const Constant('main'))();
+  TextColumn get id => text().clientDefault(() => Uuid().v4())();
+  TextColumn get scenarioId => text().withDefault(const Constant('main'))();
 
   // Milestone info
   TextColumn get type => text().map(const MilestoneTypeConverter())();
-  TextColumn get debtId =>
-      text().nullable().references(DebtsTable, #id)();
-  TextColumn get achievedAt =>
-      text().map(const UtcDateTimeConverter())();
-  BoolColumn get seen =>
-      boolean().withDefault(const Constant(false))();
+  TextColumn get debtId => text().nullable().references(DebtsTable, #id)();
+  TextColumn get achievedAt => text().map(const UtcDateTimeConverter())();
+  BoolColumn get seen => boolean().withDefault(const Constant(false))();
   TextColumn get metadata => text().nullable()(); // JSON
 
   // Standard

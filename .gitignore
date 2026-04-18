@@ -76,3 +76,4 @@ integration_test/**/failures/
 *.g.dart.bak
 *.freezed.dart.bak
 .env
+.gitnexus

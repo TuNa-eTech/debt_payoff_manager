@@ -8,9 +8,7 @@ import 'dart:math';
 /// của nó rollover sang debt tiếp theo **cùng tháng đó**"
 ///
 /// This is the feature "5/6 competitor làm sai hoặc làm thiếu."
-class PaymentAllocator {
-  PaymentAllocator._();
-
+abstract final class PaymentAllocator {
   /// Allocate extra payment across sorted debts with rollover.
   ///
   /// Per §8.1 algorithm:

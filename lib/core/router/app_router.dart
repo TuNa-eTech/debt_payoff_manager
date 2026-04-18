@@ -1,9 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../domain/repositories/debt_repository.dart';
+import '../../domain/repositories/settings_repository.dart';
 import '../../features/debts/presentation/pages/add_debt_page.dart';
 import '../../features/debts/presentation/pages/debt_detail_page.dart';
 import '../../features/debts/presentation/pages/debts_list_page.dart';
+import '../../features/debts/presentation/pages/edit_debt_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/onboarding/presentation/pages/add_another_debt_page.dart';
 import '../../features/onboarding/presentation/pages/aha_moment_page.dart';
@@ -41,19 +46,58 @@ class AppRoutes {
   // Sub-pages
   static const String addDebt = '/debts/add';
   static const String debtDetail = '/debts/:id';
+  static const String editDebt = '/debts/:id/edit';
   static const String logPayment = '/debts/:id/log_payment';
   static const String paymentHistory = '/debts/:id/history';
   static const String syncBackup = '/settings/sync';
+
+  static String debtDetailPath(String id) => '/debts/$id';
+  static String editDebtPath(String id) => '/debts/$id/edit';
+  static String logPaymentPath(String id) => '/debts/$id/log_payment';
+  static String paymentHistoryPath(String id) => '/debts/$id/history';
 }
 
 /// GoRouter configuration.
-GoRouter createRouter() {
+GoRouter createRouter({
+  required SettingsRepository settingsRepository,
+  required DebtRepository debtRepository,
+}) {
+  final refreshNotifier = _StreamRefreshNotifier(
+    settingsRepository.watchSettings(),
+  );
+
   return GoRouter(
     initialLocation: AppRoutes.welcome,
     debugLogDiagnostics: true,
-    redirect: (context, state) {
+    refreshListenable: refreshNotifier,
+    redirect: (context, state) async {
       debugPrint('🧭 [Router] → ${state.matchedLocation}');
-      return null; // no redirect, just logging
+      final settings = await settingsRepository.getSettings();
+      final isOnboardingRoute =
+          state.matchedLocation == AppRoutes.welcome ||
+          state.matchedLocation.startsWith('${AppRoutes.welcome}/');
+
+      if (settings.onboardingCompleted) {
+        if (isOnboardingRoute) {
+          return AppRoutes.home;
+        }
+        return null;
+      }
+
+      final target = await _resolvePendingOnboardingRoute(
+        settingsRepository: settingsRepository,
+        debtRepository: debtRepository,
+      );
+
+      if (!isOnboardingRoute) {
+        return target;
+      }
+
+      if (state.matchedLocation == AppRoutes.welcome) {
+        return target;
+      }
+
+      return null;
     },
     routes: [
       // ── Onboarding ──
@@ -117,12 +161,21 @@ GoRouter createRouter() {
                     },
                     routes: [
                       GoRoute(
+                        path: 'edit',
+                        builder: (context, state) => EditDebtPage(
+                          id: state.pathParameters['id']!,
+                        ),
+                      ),
+                      GoRoute(
                         path: 'log_payment',
-                        builder: (context, state) => LogPaymentPage(id: state.pathParameters['id']!),
+                        builder: (context, state) =>
+                            LogPaymentPage(id: state.pathParameters['id']!),
                       ),
                       GoRoute(
                         path: 'history',
-                        builder: (context, state) => PaymentHistoryPage(id: state.pathParameters['id']!),
+                        builder: (context, state) => PaymentHistoryPage(
+                          id: state.pathParameters['id']!,
+                        ),
                       ),
                     ],
                   ),
@@ -167,4 +220,42 @@ GoRouter createRouter() {
       ),
     ],
   );
+}
+
+Future<String> _resolvePendingOnboardingRoute({
+  required SettingsRepository settingsRepository,
+  required DebtRepository debtRepository,
+}) async {
+  final settings = await settingsRepository.getSettings();
+  switch (settings.onboardingStep) {
+    case 2:
+      final debts = await debtRepository.getAllDebts();
+      return debts.isEmpty ? AppRoutes.debtEntry : AppRoutes.addAnotherDebt;
+    case 3:
+      return AppRoutes.strategySelection;
+    case 4:
+      return AppRoutes.extraAmount;
+    case 5:
+      return settings.onboardingCompleted
+          ? AppRoutes.home
+          : AppRoutes.ahaMoment;
+    case 0:
+    case 1:
+    default:
+      return AppRoutes.welcome;
+  }
+}
+
+class _StreamRefreshNotifier extends ChangeNotifier {
+  _StreamRefreshNotifier(Stream<dynamic> stream) {
+    _subscription = stream.listen((_) => notifyListeners());
+  }
+
+  late final StreamSubscription<dynamic> _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
 }

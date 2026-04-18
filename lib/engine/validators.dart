@@ -7,9 +7,7 @@ import '../core/constants/financial_constants.dart';
 /// Reference: financial-engine-spec.md §11
 ///
 /// "Mỗi phép tính phải pass sanity check trước khi hiển thị."
-class FinancialValidators {
-  FinancialValidators._();
-
+abstract final class FinancialValidators {
   /// Check if balance exceeds growth cap (1.5x original).
   ///
   /// Per §11.1: balance <= originalPrincipal × 1.5
@@ -17,10 +15,11 @@ class FinancialValidators {
     required int currentBalanceCents,
     required int originalPrincipalCents,
   }) {
-    final cap = (Decimal.fromInt(originalPrincipalCents) *
-            FinancialConstants.balanceGrowthCap)
-        .toBigInt()
-        .toInt();
+    final cap =
+        (Decimal.fromInt(originalPrincipalCents) *
+                FinancialConstants.balanceGrowthCap)
+            .toBigInt()
+            .toInt();
     return currentBalanceCents > cap;
   }
 
@@ -45,8 +44,7 @@ class FinancialValidators {
   ///
   /// Per §11.2: "Debt-free date > 30 năm → warning"
   static bool isPayoffTooLong(int projectedMonths) {
-    return projectedMonths >
-        FinancialConstants.debtFreeDateWarningYears * 12;
+    return projectedMonths > FinancialConstants.debtFreeDateWarningYears * 12;
   }
 
   /// Verify payment split invariant.

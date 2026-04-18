@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 
 import '../../domain/entities/payment.dart';
+import '../../domain/enums/payment_type.dart';
 import '../../domain/repositories/payment_repository.dart';
 import '../local/database.dart';
 import '../mappers/payment_mapper.dart';
@@ -35,15 +36,11 @@ class PaymentRepositoryImpl implements PaymentRepository {
     // Date filtering uses the LocalDateConverter string format YYYY-MM-DD
     if (fromDate != null) {
       final fromStr = fromDate.toIso8601String().substring(0, 10);
-      query.where(
-        (p) => p.date.isBiggerOrEqualValue(fromStr),
-      );
+      query.where((p) => p.date.isBiggerOrEqualValue(fromStr));
     }
     if (toDate != null) {
       final toStr = toDate.toIso8601String().substring(0, 10);
-      query.where(
-        (p) => p.date.isSmallerOrEqualValue(toStr),
-      );
+      query.where((p) => p.date.isSmallerOrEqualValue(toStr));
     }
 
     query.orderBy([(p) => OrderingTerm.desc(p.date)]);
@@ -71,9 +68,7 @@ class PaymentRepositoryImpl implements PaymentRepository {
     final query = _db.select(_db.paymentsTable)
       ..where((p) => p.scenarioId.equals(scenarioId))
       ..where((p) => p.deletedAt.isNull())
-      ..where(
-        (p) => p.date.isBiggerOrEqualValue(startDate),
-      )
+      ..where((p) => p.date.isBiggerOrEqualValue(startDate))
       ..where((p) => p.date.isSmallerThanValue(endDate))
       ..orderBy([(p) => OrderingTerm.asc(p.date)]);
 
@@ -93,28 +88,26 @@ class PaymentRepositoryImpl implements PaymentRepository {
 
   @override
   Future<Payment> addPayment(Payment payment) async {
-    _validatePaymentSplit(payment);
+    _validatePayment(payment);
     await _db.into(_db.paymentsTable).insert(payment.toCompanion());
     return payment;
   }
 
   @override
   Future<void> updatePayment(Payment payment) async {
-    _validatePaymentSplit(payment);
+    _validatePayment(payment);
     final updated = payment.copyWith(updatedAt: DateTime.now().toUtc());
-    await (_db.update(_db.paymentsTable)
-          ..where((p) => p.id.equals(payment.id)))
-        .write(updated.toCompanion());
+    await (_db.update(
+      _db.paymentsTable,
+    )..where((p) => p.id.equals(payment.id))).write(updated.toCompanion());
   }
 
   @override
   Future<void> deletePayment(String id) async {
     final now = DateTime.now().toUtc();
-    await (_db.update(_db.paymentsTable)..where((p) => p.id.equals(id)))
-        .write(PaymentsTableCompanion(
-      deletedAt: Value(now),
-      updatedAt: Value(now),
-    ));
+    await (_db.update(_db.paymentsTable)..where((p) => p.id.equals(id))).write(
+      PaymentsTableCompanion(deletedAt: Value(now), updatedAt: Value(now)),
+    );
   }
 
   @override
@@ -124,9 +117,7 @@ class PaymentRepositoryImpl implements PaymentRepository {
       ..where((p) => p.deletedAt.isNull())
       ..orderBy([(p) => OrderingTerm.desc(p.date)]);
 
-    return query.watch().map(
-          (rows) => rows.map((r) => r.toDomain()).toList(),
-        );
+    return query.watch().map((rows) => rows.map((r) => r.toDomain()).toList());
   }
 
   @override
@@ -136,18 +127,23 @@ class PaymentRepositoryImpl implements PaymentRepository {
       ..where((p) => p.deletedAt.isNull())
       ..orderBy([(p) => OrderingTerm.desc(p.date)]);
 
-    return query.watch().map(
-          (rows) => rows.map((r) => r.toDomain()).toList(),
-        );
+    return query.watch().map((rows) => rows.map((r) => r.toDomain()).toList());
   }
 
-  /// Validate payment split invariant:
-  /// amount == principalPortion + interestPortion + feePortion
-  void _validatePaymentSplit(Payment payment) {
+  void _validatePayment(Payment payment) {
+    final today = DateTime.now();
+    final paymentDate = DateTime(
+      payment.date.year,
+      payment.date.month,
+      payment.date.day,
+    );
+    final localToday = DateTime(today.year, today.month, today.day);
+    final isBalanceIncreaseType =
+        payment.type == PaymentType.charge ||
+        payment.type == PaymentType.refund;
+
     final sum =
-        payment.principalPortion +
-        payment.interestPortion +
-        payment.feePortion;
+        payment.principalPortion + payment.interestPortion + payment.feePortion;
     if (payment.amount != sum) {
       throw ArgumentError(
         'Payment split must equal total: '
@@ -156,6 +152,57 @@ class PaymentRepositoryImpl implements PaymentRepository {
         'interest: ${payment.interestPortion}, '
         'fee: ${payment.feePortion})',
       );
+    }
+
+    if (payment.amount <= 0) {
+      throw ArgumentError('Payment amount must be > 0');
+    }
+
+    if (!isBalanceIncreaseType && payment.principalPortion < 0) {
+      throw ArgumentError(
+        'principalPortion cannot be negative unless type is charge/refund',
+      );
+    }
+
+    if (payment.type == PaymentType.charge && payment.principalPortion >= 0) {
+      throw ArgumentError(
+        'charge payments must use a negative principalPortion',
+      );
+    }
+
+    if (!isBalanceIncreaseType && payment.appliedBalanceAfter < 0) {
+      throw ArgumentError(
+        'appliedBalanceAfter must be >= 0 unless type is charge/refund',
+      );
+    }
+
+    if (isBalanceIncreaseType &&
+        payment.appliedBalanceAfter < payment.appliedBalanceBefore) {
+      throw ArgumentError(
+        'charge/refund payments must not decrease the applied balance',
+      );
+    }
+
+    if (!isBalanceIncreaseType &&
+        payment.appliedBalanceAfter > payment.appliedBalanceBefore) {
+      throw ArgumentError(
+        'completed debt payments must not increase the applied balance',
+      );
+    }
+
+    if (payment.status == PaymentStatus.completed &&
+        paymentDate.isAfter(localToday)) {
+      throw ArgumentError('completed payments cannot have a future date');
+    }
+
+    if (payment.status == PaymentStatus.planned &&
+        paymentDate.isBefore(localToday)) {
+      throw ArgumentError('planned payments cannot have a past date');
+    }
+
+    if (payment.status == PaymentStatus.missed &&
+        paymentDate.isAfter(localToday)) {
+      throw ArgumentError('missed payments cannot have a future date');
     }
   }
 }

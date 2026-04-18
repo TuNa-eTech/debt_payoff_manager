@@ -798,7 +798,9 @@ Expected end month 1:
   Total paid month 1: $25 + $30 + $25.83 + $74.17 = $155
 ```
 
-### TV-5: Rate change mid-term
+### TV-5: Rate change mid-term (deferred from E1)
+
+> Ghi chú Phase 1: vector này được giữ lại như tài liệu future scope, nhưng **không** thuộc acceptance set của E1 cho tới khi simulator support `InterestRateHistory` runtime đầy đủ.
 
 ```
 Input:

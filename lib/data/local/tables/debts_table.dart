@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:uuid/uuid.dart';
 
 import '../converters/datetime_converters.dart';
 import '../converters/decimal_converter.dart';
@@ -17,19 +18,20 @@ class DebtsTable extends Table {
   String get tableName => 'debts';
 
   // Identity & sync
-  TextColumn get id => text()();
-  TextColumn get scenarioId =>
-      text().withDefault(const Constant('main'))();
+  TextColumn get id => text().clientDefault(() => Uuid().v4())();
+  TextColumn get scenarioId => text().withDefault(const Constant('main'))();
 
   // Basic info
   TextColumn get name => text().withLength(min: 1, max: 60)();
   TextColumn get type => text().map(const DebtTypeConverter())();
 
   // Money (cents)
-  IntColumn get originalPrincipalCents =>
-      integer().check(originalPrincipalCents.isBiggerThanValue(0))();
-  IntColumn get currentBalanceCents =>
-      integer().check(currentBalanceCents.isBiggerOrEqualValue(0))();
+  IntColumn get originalPrincipalCents => integer().customConstraint(
+    'NOT NULL CHECK (original_principal_cents > 0)',
+  )();
+  IntColumn get currentBalanceCents => integer().customConstraint(
+    'NOT NULL CHECK (current_balance_cents >= 0)',
+  )();
 
   // Interest
   TextColumn get apr => text().map(const DecimalConverter())();
@@ -47,9 +49,9 @@ class DebtsTable extends Table {
 
   // Schedule
   TextColumn get paymentCadence => text().map(const CadenceConverter())();
-  IntColumn get dueDayOfMonth => integer()
-      .nullable()
-      .check(dueDayOfMonth.isBetweenValues(1, 31))();
+  IntColumn get dueDayOfMonth => integer().customConstraint(
+    'NOT NULL CHECK (due_day_of_month BETWEEN 1 AND 31)',
+  )();
   TextColumn get firstDueDate => text().map(const LocalDateConverter())();
 
   // Lifecycle

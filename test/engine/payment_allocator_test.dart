@@ -32,6 +32,17 @@ void main() {
       expect(allocations.isEmpty, true);
     });
 
+    test('skips debts already at zero balance', () {
+      final allocations = PaymentAllocator.allocateExtra(
+        sortedDebtBalances: [0, 5000, 10000],
+        extraPool: 6000,
+      );
+
+      expect(allocations.containsKey(0), isFalse);
+      expect(allocations[1], 5000);
+      expect(allocations[2], 1000);
+    });
+
     test('TV-4: Rollover within month', () {
       /// Test Vector 4 from spec §12
       /// Debt A: balance $25.83 after min, Debt B: balance $982.50 after min

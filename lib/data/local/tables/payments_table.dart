@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:uuid/uuid.dart';
 
 import '../converters/datetime_converters.dart';
 import '../converters/enum_converters.dart';
@@ -15,18 +16,16 @@ class PaymentsTable extends Table {
   @override
   String get tableName => 'payments';
 
-  TextColumn get id => text()();
-  TextColumn get scenarioId =>
-      text().withDefault(const Constant('main'))();
+  TextColumn get id => text().clientDefault(() => Uuid().v4())();
+  TextColumn get scenarioId => text().withDefault(const Constant('main'))();
   TextColumn get debtId => text().references(DebtsTable, #id)();
 
   // Money (cents) — invariant: amount = principal + interest + fee
   IntColumn get amountCents =>
-      integer().check(amountCents.isBiggerThanValue(0))();
+      integer().customConstraint('NOT NULL CHECK (amount_cents > 0)')();
   IntColumn get principalPortionCents => integer()();
   IntColumn get interestPortionCents => integer()();
-  IntColumn get feePortionCents =>
-      integer().withDefault(const Constant(0))();
+  IntColumn get feePortionCents => integer().withDefault(const Constant(0))();
 
   // Meta
   TextColumn get date => text().map(const LocalDateConverter())();

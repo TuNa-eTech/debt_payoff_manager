@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -6,6 +7,8 @@ import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../cubit/onboarding_cubit.dart';
+import '../../cubit/onboarding_state.dart';
 
 /// Onboarding welcome page.
 ///
@@ -51,10 +54,13 @@ class WelcomePage extends StatelessWidget {
                     // Title
                     Text(
                       'Kiểm soát nợ,\ngiải phóng tương lai.',
-                      style: AppTextStyles.headlineLarge.copyWith(// 40sp
+                      style: AppTextStyles.headlineLarge.copyWith(
+                        // 40sp
                         letterSpacing: -1.5,
                         height: 1.15,
-                        color: AppColors.mdOnSurface.withOpacity(0.95), // #000000F2
+                        color: AppColors.mdOnSurface.withValues(
+                          alpha: 0.95,
+                        ), // #000000F2
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -73,7 +79,12 @@ class WelcomePage extends StatelessWidget {
             ),
             // Bottom Action Area
             Container(
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 48), // Bottom padding for home indicator
+              padding: const EdgeInsets.fromLTRB(
+                24,
+                24,
+                24,
+                48,
+              ), // Bottom padding for home indicator
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -81,7 +92,11 @@ class WelcomePage extends StatelessWidget {
                     label: 'Thêm khoản nợ đầu tiên',
                     icon: LucideIcons.plus,
                     fullWidth: true,
-                    onPressed: () {
+                    onPressed: () async {
+                      await context.read<OnboardingCubit>().goToStep(
+                            OnboardingStep.addDebt,
+                          );
+                      if (!context.mounted) return;
                       context.go(AppRoutes.debtEntry);
                     },
                   ),

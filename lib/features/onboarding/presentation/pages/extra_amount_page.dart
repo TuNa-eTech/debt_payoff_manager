@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:uuid/uuid.dart';
 
+import '../../../../core/di/injection.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/formatters.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_chip.dart';
+import '../../../../domain/entities/plan.dart';
+import '../../../../domain/enums/strategy.dart';
+import '../../../../domain/repositories/plan_repository.dart';
+import '../../../debts/cubit/debts_cubit.dart';
+import '../../../debts/cubit/debts_state.dart';
+import '../../cubit/onboarding_cubit.dart';
+import '../../cubit/onboarding_state.dart';
 
 class ExtraAmountPage extends StatefulWidget {
   const ExtraAmountPage({super.key});
@@ -16,7 +29,28 @@ class ExtraAmountPage extends StatefulWidget {
 }
 
 class _ExtraAmountPageState extends State<ExtraAmountPage> {
-  double _extraAmount = 200;
+  final PlanRepository _planRepository = getIt.get<PlanRepository>();
+
+  Plan? _plan;
+  double _extraAmount = 0;
+  bool _isLoading = true;
+  bool _isSaving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPlan();
+  }
+
+  Future<void> _loadPlan() async {
+    final plan = await _planRepository.getCurrentPlan();
+    if (!mounted) return;
+    setState(() {
+      _plan = plan;
+      _extraAmount = (plan?.extraMonthlyAmount ?? 0) / 100;
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,228 +61,296 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
           onPressed: () => context.pop(),
         ),
         title: const Text('Ngân sách thêm'),
-        centerTitle: false,
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Progress Bar
-                    Column(
+        child: BlocBuilder<DebtsCubit, DebtsState>(
+          builder: (context, debtsState) {
+            if (_isLoading || debtsState.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            final trackedCount = debtsState.debts
+                .where((debt) => debt.currentBalance > 0)
+                .length;
+            final strategyLabel = _plan?.strategy.label ?? Strategy.snowball.label;
+
+            return Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.pagePaddingH,
+                      vertical: AppDimensions.lg,
+                    ),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Bước 4/4 · Gần xong rồi!',
-                              style: AppTextStyles.labelMedium.copyWith(
-                                color: AppColors.mdPrimary,
+                        Text(
+                          'Bước 4/4',
+                          style: AppTextStyles.labelMedium.copyWith(
+                            color: AppColors.mdPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: AppDimensions.sm),
+                        LinearProgressIndicator(
+                          value: 1,
+                          backgroundColor: AppColors.mdSurfaceContainerHighest,
+                          color: AppColors.mdPrimary,
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusFull,
+                          ),
+                          minHeight: 4,
+                        ),
+                        const SizedBox(height: AppDimensions.xl),
+                        Text(
+                          'Ngoài khoản tối thiểu, bạn muốn để thêm bao nhiêu mỗi tháng?',
+                          style: AppTextStyles.headlineSmall,
+                        ),
+                        const SizedBox(height: AppDimensions.sm),
+                        Text(
+                          'Mặc định là \$0. App sẽ lưu cấu hình này vào kế hoạch chính của bạn ngay bây giờ.',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.mdOnSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(height: AppDimensions.xl),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppDimensions.lg,
+                            vertical: AppDimensions.xl,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.mdPrimaryContainer,
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusLg,
+                            ),
+                            border: Border.all(color: AppColors.mdPrimary),
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Extra payment mỗi tháng',
+                                style: AppTextStyles.labelMedium.copyWith(
+                                  color: AppColors.mdOnPrimaryContainer,
+                                ),
                               ),
+                              const SizedBox(height: AppDimensions.sm),
+                              Text(
+                                AppFormatters.formatCents(
+                                  _extraAmount.round() * 100,
+                                ),
+                                style: AppTextStyles.displayMedium.copyWith(
+                                  color: AppColors.mdOnPrimaryContainer,
+                                ),
+                              ),
+                              const SizedBox(height: AppDimensions.sm),
+                              Text(
+                                '$strategyLabel · $trackedCount khoản đang theo dõi',
+                                style: AppTextStyles.bodySmall.copyWith(
+                                  color: AppColors.mdOnPrimaryContainer
+                                      .withValues(alpha: 0.82),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: AppDimensions.lg),
+                        SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            activeTrackColor: AppColors.mdPrimary,
+                            inactiveTrackColor:
+                                AppColors.mdSurfaceContainerHighest,
+                            thumbColor: AppColors.mdPrimary,
+                            trackHeight: 6,
+                          ),
+                          child: Slider(
+                            value: _extraAmount.clamp(0, 1000),
+                            min: 0,
+                            max: 1000,
+                            divisions: 20,
+                            onChanged: (value) {
+                              setState(() => _extraAmount = value);
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppDimensions.sm,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '\$0',
+                                style: AppTextStyles.labelSmall.copyWith(
+                                  color: AppColors.mdOnSurfaceVariant,
+                                ),
+                              ),
+                              Text(
+                                '\$1000',
+                                style: AppTextStyles.labelSmall.copyWith(
+                                  color: AppColors.mdOnSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: AppDimensions.lg),
+                        Wrap(
+                          spacing: AppDimensions.sm,
+                          runSpacing: AppDimensions.sm,
+                          children: [
+                            _AmountChip(
+                              label: '+\$50',
+                              onTap: () => _bumpExtra(50),
+                            ),
+                            _AmountChip(
+                              label: '+\$100',
+                              onTap: () => _bumpExtra(100),
+                            ),
+                            _AmountChip(
+                              label: '+\$200',
+                              onTap: () => _bumpExtra(200),
+                            ),
+                            _AmountChip(
+                              label: 'Max',
+                              onTap: () => setState(() => _extraAmount = 1000),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 8),
-                        LinearProgressIndicator(
-                          value: 1.0,
-                          backgroundColor: AppColors.mdSurfaceContainerHighest,
-                          color: AppColors.mdPrimary,
-                          borderRadius: BorderRadius.circular(4),
-                          minHeight: 4,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 32),
-                    
-                    Text(
-                      'Ngoài khoản tối thiểu,\nbạn có thể trả thêm bao nhiêu\nmỗi tháng?',
-                      style: AppTextStyles.headlineMedium.copyWith(fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Không bắt buộc. Mặc định \$0. Có thể thay đổi bất kỳ lúc nào.',
-                      style: AppTextStyles.bodyMedium.copyWith(color: AppColors.mdOnSurfaceVariant),
-                    ),
-                    const SizedBox(height: 32),
-                    
-                    // Huge Input
-                    Container(
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: AppColors.mdPrimaryContainer,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.mdPrimary, width: 2),
-                      ),
-                      alignment: Alignment.center,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            '\$',
-                            style: AppTextStyles.displayMedium.copyWith(
-                              color: AppColors.mdOnPrimaryContainer,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Text(
-                            _extraAmount.toInt().toString(),
-                            style: AppTextStyles.displayLarge.copyWith(
-                              color: AppColors.mdOnPrimaryContainer,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    
-                    // Slider
-                    SliderTheme(
-                      data: SliderTheme.of(context).copyWith(
-                        activeTrackColor: AppColors.mdPrimary,
-                        inactiveTrackColor: AppColors.mdSurfaceContainerHighest,
-                        thumbColor: AppColors.mdPrimary,
-                        trackHeight: 6,
-                      ),
-                      child: Slider(
-                        value: _extraAmount,
-                        min: 0,
-                        max: 1000,
-                        divisions: 20,
-                        onChanged: (val) {
-                          setState(() {
-                            _extraAmount = val;
-                          });
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('\$0', style: AppTextStyles.labelSmall.copyWith(color: AppColors.mdOnSurfaceVariant)),
-                          Text('\$1000', style: AppTextStyles.labelSmall.copyWith(color: AppColors.mdOnSurfaceVariant)),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    
-                    // Chips
-                    Row(
-                      children: [
-                        AppChip.assist(label: '+\$50', onTap: () => setState(() => _extraAmount += 50)),
-                        const SizedBox(width: 8),
-                        AppChip.assist(label: '+\$100', onTap: () => setState(() => _extraAmount += 100)),
-                        const SizedBox(width: 8),
-                        AppChip.assist(label: '+\$200', onTap: () => setState(() => _extraAmount += 200)),
-                        const SizedBox(width: 8),
-                        AppChip.assist(label: 'Max', onTap: () => setState(() => _extraAmount = 1000)),
-                      ],
-                    ),
-                    
-                    const SizedBox(height: 32),
-                    
-                    // Preview Impact
-                    if (_extraAmount > 0)
-                      Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
+                        const SizedBox(height: AppDimensions.xl),
+                        AppCard(
                           color: AppColors.mdSurfaceContainerLow,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.mdOutlineVariant),
-                        ),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Row(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
                                 children: [
-                                  Icon(LucideIcons.zap, color: AppColors.mdPrimary, size: 20),
-                                  const SizedBox(width: 8),
+                                  const Icon(
+                                    LucideIcons.info,
+                                    color: AppColors.mdPrimary,
+                                    size: AppDimensions.iconMd,
+                                  ),
+                                  const SizedBox(width: AppDimensions.sm),
                                   Text(
-                                    'Sức mạnh của \$${_extraAmount.toInt()}/tháng',
+                                    'Điều gì xảy ra tiếp theo?',
                                     style: AppTextStyles.titleSmall,
                                   ),
                                 ],
                               ),
-                            ),
-                            const Divider(height: 1, color: AppColors.mdOutlineVariant),
-                            Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Text(
-                                        'Trả xong sớm',
-                                        style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdOnSurfaceVariant),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text('8 tháng', style: AppTextStyles.titleMedium.copyWith(color: AppColors.mdPrimary)),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        'Tiết kiệm lãi',
-                                        style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdOnSurfaceVariant),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text('+\$430', style: AppTextStyles.titleMedium.copyWith(color: AppColors.mdPrimary)),
-                                    ],
-                                  ),
-                                ],
+                              const SizedBox(height: AppDimensions.sm),
+                              Text(
+                                'Khoản extra này sẽ được dùng làm ngân sách trả thêm mỗi tháng. Khi phần mô phỏng kế hoạch được bật, app sẽ hiển thị timeline và ngày hết nợ từ cấu hình bạn đang lưu.',
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: AppColors.mdOnSurfaceVariant,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(AppDimensions.lg),
+                  decoration: const BoxDecoration(
+                    color: AppColors.mdSurface,
+                    border: Border(
+                      top: BorderSide(color: AppColors.mdOutlineVariant),
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppButton.filledLg(
+                        label: 'Lưu và xem tóm tắt',
+                        trailingIcon: LucideIcons.arrowRight,
+                        fullWidth: true,
+                        loading: _isSaving,
+                        onPressed: () => _saveAndContinue(
+                          amountCents: _extraAmount.round() * 100,
                         ),
                       ),
-                  ],
-                ),
-              ),
-            ),
-            
-            // Bottom CTA
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: const BoxDecoration(
-                color: AppColors.mdSurface,
-                border: Border(
-                  top: BorderSide(color: AppColors.mdOutlineVariant, width: 1),
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppButton.filledLg(
-                    label: 'Xem kế hoạch của tôi!',
-                    icon: null,
-                    trailingIcon: LucideIcons.arrowRight,
-                    fullWidth: true,
-                    onPressed: () {
-                      context.go(AppRoutes.ahaMoment);
-                    },
+                      const SizedBox(height: AppDimensions.md),
+                      AppButton.text(
+                        label: 'Dùng \$0 lúc này',
+                        onPressed: _isSaving
+                            ? null
+                            : () => _saveAndContinue(amountCents: 0),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  AppButton.text(
-                    label: 'Bỏ qua, dùng \$0 — thay đổi sau',
-                    onPressed: () {
-                      context.go(AppRoutes.ahaMoment);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              ],
+            );
+          },
         ),
       ),
+    );
+  }
+
+  void _bumpExtra(int amountDollars) {
+    setState(() {
+      _extraAmount = (_extraAmount + amountDollars).clamp(0, 1000).toDouble();
+    });
+  }
+
+  Future<void> _saveAndContinue({required int amountCents}) async {
+    setState(() => _isSaving = true);
+    try {
+      final now = DateTime.now().toUtc();
+      final draft = (_plan ?? _createDraftPlan(now)).copyWith(
+        extraMonthlyAmount: amountCents,
+        updatedAt: now,
+      );
+      _plan = await _planRepository.savePlan(draft);
+      if (!mounted) return;
+      await context.read<OnboardingCubit>().goToStep(
+            OnboardingStep.complete,
+          );
+      if (!mounted) return;
+      context.go(AppRoutes.ahaMoment);
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Không thể lưu ngân sách thêm. Vui lòng thử lại.'),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
+    }
+  }
+
+  Plan _createDraftPlan(DateTime now) {
+    return Plan(
+      id: const Uuid().v4(),
+      strategy: Strategy.snowball,
+      extraMonthlyAmount: 0,
+      createdAt: now,
+      updatedAt: now,
+    );
+  }
+}
+
+class _AmountChip extends StatelessWidget {
+  const _AmountChip({
+    required this.label,
+    required this.onTap,
+  });
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppChip.assist(
+      label: label,
+      onTap: onTap,
     );
   }
 }

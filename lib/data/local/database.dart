@@ -1,5 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:drift/drift.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../domain/enums/debt_status.dart';
 import '../../domain/enums/debt_type.dart';
@@ -30,16 +31,18 @@ part 'database.g.dart';
 /// Per ADR-004: INTEGER cents for money, never REAL/DOUBLE.
 ///
 /// Run `dart run build_runner build` to generate database code.
-@DriftDatabase(tables: [
-  DebtsTable,
-  PaymentsTable,
-  PlansTable,
-  UserSettingsTable,
-  MilestonesTable,
-  InterestRateHistoryTable,
-  SyncStateTable,
-  TimelineCacheTable,
-])
+@DriftDatabase(
+  tables: [
+    DebtsTable,
+    PaymentsTable,
+    PlansTable,
+    UserSettingsTable,
+    MilestonesTable,
+    InterestRateHistoryTable,
+    SyncStateTable,
+    TimelineCacheTable,
+  ],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
@@ -48,24 +51,93 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (m) async => await m.createAll(),
-        onUpgrade: (m, from, to) async {
-          // Future migrations here
-        },
-        beforeOpen: (details) async {
-          // Enable foreign keys
-          await customStatement('PRAGMA foreign_keys = ON');
-
-          if (details.wasCreated) {
-            // Seed initial UserSettings singleton
-            final now = DateTime.now().toUtc();
-            await into(userSettingsTable).insert(
-              UserSettingsTableCompanion.insert(
-                createdAt: now,
-                updatedAt: now,
-              ),
-            );
-          }
-        },
+    onCreate: (m) async => await m.createAll(),
+    onUpgrade: (m, from, to) async {
+      // Future migrations here
+    },
+    beforeOpen: (details) async {
+      // Enable foreign keys
+      await customStatement('PRAGMA foreign_keys = ON');
+      await _repairActivePlanSingletons();
+      await customStatement(
+        'CREATE UNIQUE INDEX IF NOT EXISTS idx_plans_scenario '
+        'ON plans (scenario_id) WHERE deleted_at IS NULL',
       );
+
+      await _ensureSingletonSettingsSeeded();
+      await _ensureMainPlanSeeded();
+    },
+  );
+
+  Future<void> _repairActivePlanSingletons() async {
+    final duplicateScenarios = await customSelect(
+      'SELECT scenario_id '
+      'FROM plans '
+      'WHERE deleted_at IS NULL '
+      'GROUP BY scenario_id '
+      'HAVING COUNT(*) > 1',
+    ).get();
+
+    for (final row in duplicateScenarios) {
+      final scenarioId = row.read<String>('scenario_id');
+      final activePlans = await customSelect(
+        'SELECT id '
+        'FROM plans '
+        'WHERE scenario_id = ? AND deleted_at IS NULL '
+        'ORDER BY updated_at DESC, created_at DESC, id ASC',
+        variables: [Variable.withString(scenarioId)],
+      ).get();
+
+      if (activePlans.length <= 1) continue;
+
+      final now = DateTime.now().toUtc();
+      for (final stale in activePlans.skip(1)) {
+        await customStatement(
+          'UPDATE plans '
+          'SET deleted_at = ?, updated_at = ? '
+          'WHERE id = ?',
+          [
+            now.toIso8601String(),
+            now.toIso8601String(),
+            stale.read<String>('id'),
+          ],
+        );
+      }
+    }
+  }
+
+  Future<void> _ensureSingletonSettingsSeeded() async {
+    final existingSettings = await customSelect(
+      'SELECT 1 FROM user_settings WHERE id = ? LIMIT 1',
+      variables: [Variable.withString('singleton')],
+    ).getSingleOrNull();
+
+    if (existingSettings != null) return;
+
+    final now = DateTime.now().toUtc();
+    await into(
+      userSettingsTable,
+    ).insert(UserSettingsTableCompanion.insert(createdAt: now, updatedAt: now));
+  }
+
+  Future<void> _ensureMainPlanSeeded() async {
+    final existingMainPlan =
+        await (select(plansTable)
+              ..where((p) => p.scenarioId.equals('main'))
+              ..where((p) => p.deletedAt.isNull()))
+            .getSingleOrNull();
+
+    if (existingMainPlan != null) return;
+
+    final now = DateTime.now().toUtc();
+    await into(plansTable).insert(
+      PlansTableCompanion.insert(
+        strategy: Strategy.snowball,
+        extraPaymentCadence: PaymentCadence.monthly,
+        lastRecastAt: now,
+        createdAt: now,
+        updatedAt: now,
+      ),
+    );
+  }
 }

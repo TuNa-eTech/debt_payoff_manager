@@ -15,6 +15,11 @@ abstract class DebtRepository {
   /// Get a single debt by ID.
   Future<Debt?> getDebtById(String id);
 
+  /// Watch a single debt by ID.
+  ///
+  /// Emits `null` when the debt is soft-deleted or not found.
+  Stream<Debt?> watchDebtById(String id);
+
   /// Get only active debts for a scenario.
   Future<List<Debt>> getActiveDebts({String scenarioId = 'main'});
 
@@ -26,6 +31,9 @@ abstract class DebtRepository {
 
   /// Soft delete a debt (sets deletedAt). Per ADR-006.
   Future<void> deleteDebt(String id);
+
+  /// Restore a soft-deleted debt.
+  Future<void> restoreDebt(String id);
 
   /// Watch all non-deleted debts as a stream (for reactive UI).
   Stream<List<Debt>> watchAllDebts({String scenarioId = 'main'});
