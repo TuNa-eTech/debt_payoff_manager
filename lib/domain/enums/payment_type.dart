@@ -1,12 +1,13 @@
 /// Payment type classification.
 ///
-/// Reference: financial-engine-spec.md §3.2
+/// Reference: data-schema.md §4
 enum PaymentType {
   minimum('Minimum'),
   extra('Extra'),
   lumpSum('Lump Sum'),
   fee('Fee'),
-  refund('Refund');
+  refund('Refund'),
+  charge('Charge'); // balance increase on credit card
 
   const PaymentType(this.label);
 
@@ -15,12 +16,13 @@ enum PaymentType {
 
 /// Source of a payment.
 ///
-/// Reference: financial-engine-spec.md §3.2
+/// Reference: data-schema.md §4
 enum PaymentSource {
   scheduled('Scheduled'),
   manual('Manual'),
   windfall('Windfall'),
-  checkOff('Check Off');
+  checkOff('Check Off'),
+  import_('Import'); // imported payment records
 
   const PaymentSource(this.label);
 

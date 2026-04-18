@@ -180,6 +180,8 @@ class TimelineSimulator {
       id: '${plan.id}_min_only',
       strategy: plan.strategy,
       extraMonthlyAmount: 0,
+      createdAt: plan.createdAt,
+      updatedAt: plan.updatedAt,
     );
     return simulate(debts: debts, plan: minOnlyPlan, startDate: startDate);
   }

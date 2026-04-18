@@ -5,10 +5,14 @@ import '../enums/strategy.dart';
 
 /// Plan entity — represents a payoff strategy configuration.
 ///
-/// Reference: financial-engine-spec.md §3.3
+/// Reference: data-schema.md §5
+///
+/// Singleton per scenario. Main scenario has 1 plan;
+/// what-if scenarios each have 1 plan.
 class Plan extends Equatable {
   const Plan({
     required this.id,
+    this.scenarioId = 'main',
     required this.strategy,
     required this.extraMonthlyAmount,
     this.extraPaymentCadence = PaymentCadence.monthly,
@@ -16,10 +20,14 @@ class Plan extends Equatable {
     this.lastRecastAt,
     this.projectedDebtFreeDate,
     this.totalInterestProjected,
-    this.totalInterestSavedVsMinimumOnly,
+    this.totalInterestSaved,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
   });
 
   final String id;
+  final String scenarioId;
   final Strategy strategy;
 
   /// Extra monthly amount in cents (>= 0).
@@ -38,10 +46,15 @@ class Plan extends Equatable {
   final int? totalInterestProjected;
 
   /// Interest saved vs minimum-only approach in cents.
-  final int? totalInterestSavedVsMinimumOnly;
+  final int? totalInterestSaved;
+
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime? deletedAt;
 
   Plan copyWith({
     String? id,
+    String? scenarioId,
     Strategy? strategy,
     int? extraMonthlyAmount,
     PaymentCadence? extraPaymentCadence,
@@ -49,10 +62,14 @@ class Plan extends Equatable {
     DateTime? lastRecastAt,
     DateTime? projectedDebtFreeDate,
     int? totalInterestProjected,
-    int? totalInterestSavedVsMinimumOnly,
+    int? totalInterestSaved,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    DateTime? deletedAt,
   }) {
     return Plan(
       id: id ?? this.id,
+      scenarioId: scenarioId ?? this.scenarioId,
       strategy: strategy ?? this.strategy,
       extraMonthlyAmount: extraMonthlyAmount ?? this.extraMonthlyAmount,
       extraPaymentCadence: extraPaymentCadence ?? this.extraPaymentCadence,
@@ -62,16 +79,18 @@ class Plan extends Equatable {
           projectedDebtFreeDate ?? this.projectedDebtFreeDate,
       totalInterestProjected:
           totalInterestProjected ?? this.totalInterestProjected,
-      totalInterestSavedVsMinimumOnly:
-          totalInterestSavedVsMinimumOnly ??
-              this.totalInterestSavedVsMinimumOnly,
+      totalInterestSaved: totalInterestSaved ?? this.totalInterestSaved,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
     );
   }
 
   @override
   List<Object?> get props => [
-        id, strategy, extraMonthlyAmount, extraPaymentCadence,
+        id, scenarioId, strategy, extraMonthlyAmount, extraPaymentCadence,
         customOrder, lastRecastAt, projectedDebtFreeDate,
-        totalInterestProjected, totalInterestSavedVsMinimumOnly,
+        totalInterestProjected, totalInterestSaved,
+        createdAt, updatedAt, deletedAt,
       ];
 }

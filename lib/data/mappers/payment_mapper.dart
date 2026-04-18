@@ -1,47 +1,57 @@
+import 'package:drift/drift.dart';
+
 import '../../domain/entities/payment.dart';
-import '../../domain/enums/payment_type.dart';
+import '../local/database.dart';
 
-/// Maps between Drift table data and domain [Payment] entity.
-class PaymentMapper {
-  PaymentMapper._();
-
-  static Payment fromMap(Map<String, dynamic> map) {
+/// Maps between Drift [PaymentRow] and domain [Payment] entity.
+///
+/// Per ADR-018: Repository pattern — Drift types don't leak to domain/UI.
+extension PaymentRowMapper on PaymentRow {
+  /// Convert a Drift row to a domain [Payment] entity.
+  Payment toDomain() {
     return Payment(
-      id: map['id'] as String,
-      debtId: map['debtId'] as String,
-      amount: map['amount'] as int,
-      principalPortion: map['principalPortion'] as int,
-      interestPortion: map['interestPortion'] as int,
-      feePortion: (map['feePortion'] as int?) ?? 0,
-      date: DateTime.parse(map['date'] as String),
-      type: PaymentType.values.byName(map['type'] as String),
-      source: PaymentSource.values.byName(map['source'] as String),
-      note: map['note'] as String?,
-      status: PaymentStatus.values.byName(map['status'] as String),
-      appliedBalanceBefore: map['appliedBalanceBefore'] as int,
-      appliedBalanceAfter: map['appliedBalanceAfter'] as int,
-      createdAt: DateTime.parse(map['createdAt'] as String),
-      updatedAt: DateTime.parse(map['updatedAt'] as String),
+      id: id,
+      scenarioId: scenarioId,
+      debtId: debtId,
+      amount: amountCents,
+      principalPortion: principalPortionCents,
+      interestPortion: interestPortionCents,
+      feePortion: feePortionCents,
+      date: date,
+      type: type,
+      source: source,
+      note: note,
+      status: status,
+      appliedBalanceBefore: appliedBalanceBeforeCents,
+      appliedBalanceAfter: appliedBalanceAfterCents,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      deletedAt: deletedAt,
     );
   }
+}
 
-  static Map<String, dynamic> toMap(Payment payment) {
-    return {
-      'id': payment.id,
-      'debtId': payment.debtId,
-      'amount': payment.amount,
-      'principalPortion': payment.principalPortion,
-      'interestPortion': payment.interestPortion,
-      'feePortion': payment.feePortion,
-      'date': payment.date.toIso8601String(),
-      'type': payment.type.name,
-      'source': payment.source.name,
-      'note': payment.note,
-      'status': payment.status.name,
-      'appliedBalanceBefore': payment.appliedBalanceBefore,
-      'appliedBalanceAfter': payment.appliedBalanceAfter,
-      'createdAt': payment.createdAt.toIso8601String(),
-      'updatedAt': payment.updatedAt.toIso8601String(),
-    };
+/// Maps from domain [Payment] to Drift [PaymentsTableCompanion].
+extension PaymentCompanionMapper on Payment {
+  PaymentsTableCompanion toCompanion() {
+    return PaymentsTableCompanion(
+      id: Value(id),
+      scenarioId: Value(scenarioId),
+      debtId: Value(debtId),
+      amountCents: Value(amount),
+      principalPortionCents: Value(principalPortion),
+      interestPortionCents: Value(interestPortion),
+      feePortionCents: Value(feePortion),
+      date: Value(date),
+      type: Value(type),
+      source: Value(source),
+      note: Value(note),
+      status: Value(status),
+      appliedBalanceBeforeCents: Value(appliedBalanceBefore),
+      appliedBalanceAfterCents: Value(appliedBalanceAfter),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: Value(deletedAt),
+    );
   }
 }

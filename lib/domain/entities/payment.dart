@@ -10,6 +10,7 @@ import '../enums/payment_type.dart';
 class Payment extends Equatable {
   const Payment({
     required this.id,
+    this.scenarioId = 'main',
     required this.debtId,
     required this.amount,
     required this.principalPortion,
@@ -24,10 +25,12 @@ class Payment extends Equatable {
     required this.appliedBalanceAfter,
     required this.createdAt,
     required this.updatedAt,
+    this.deletedAt,
   }) : assert(amount == principalPortion + interestPortion + feePortion,
             'Payment split must equal total amount');
 
   final String id;
+  final String scenarioId;
   final String debtId;
 
   /// Total payment in cents (> 0).
@@ -61,9 +64,11 @@ class Payment extends Equatable {
 
   final DateTime createdAt;
   final DateTime updatedAt;
+  final DateTime? deletedAt;
 
   Payment copyWith({
     String? id,
+    String? scenarioId,
     String? debtId,
     int? amount,
     int? principalPortion,
@@ -78,9 +83,11 @@ class Payment extends Equatable {
     int? appliedBalanceAfter,
     DateTime? createdAt,
     DateTime? updatedAt,
+    DateTime? deletedAt,
   }) {
     return Payment(
       id: id ?? this.id,
+      scenarioId: scenarioId ?? this.scenarioId,
       debtId: debtId ?? this.debtId,
       amount: amount ?? this.amount,
       principalPortion: principalPortion ?? this.principalPortion,
@@ -95,13 +102,15 @@ class Payment extends Equatable {
       appliedBalanceAfter: appliedBalanceAfter ?? this.appliedBalanceAfter,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
     );
   }
 
   @override
   List<Object?> get props => [
-        id, debtId, amount, principalPortion, interestPortion, feePortion,
-        date, type, source, note, status,
+        id, scenarioId, debtId, amount, principalPortion, interestPortion,
+        feePortion, date, type, source, note, status,
         appliedBalanceBefore, appliedBalanceAfter, createdAt, updatedAt,
+        deletedAt,
       ];
 }

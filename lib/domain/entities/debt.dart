@@ -16,6 +16,7 @@ import '../enums/payment_cadence.dart';
 class Debt extends Equatable {
   const Debt({
     required this.id,
+    this.scenarioId = 'main',
     required this.name,
     required this.type,
     required this.originalPrincipal,
@@ -36,9 +37,11 @@ class Debt extends Equatable {
     required this.createdAt,
     required this.updatedAt,
     this.paidOffAt,
+    this.deletedAt,
   });
 
   final String id;
+  final String scenarioId;
   final String name;
   final DebtType type;
 
@@ -84,6 +87,7 @@ class Debt extends Equatable {
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? paidOffAt;
+  final DateTime? deletedAt;
 
   /// Check if this debt is currently paused.
   bool isPaused(DateTime currentDate) {
@@ -95,6 +99,7 @@ class Debt extends Equatable {
   /// Create a copy with updated fields.
   Debt copyWith({
     String? id,
+    String? scenarioId,
     String? name,
     DebtType? type,
     int? originalPrincipal,
@@ -115,9 +120,11 @@ class Debt extends Equatable {
     DateTime? createdAt,
     DateTime? updatedAt,
     DateTime? paidOffAt,
+    DateTime? deletedAt,
   }) {
     return Debt(
       id: id ?? this.id,
+      scenarioId: scenarioId ?? this.scenarioId,
       name: name ?? this.name,
       type: type ?? this.type,
       originalPrincipal: originalPrincipal ?? this.originalPrincipal,
@@ -139,12 +146,14 @@ class Debt extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       paidOffAt: paidOffAt ?? this.paidOffAt,
+      deletedAt: deletedAt ?? this.deletedAt,
     );
   }
 
   @override
   List<Object?> get props => [
         id,
+        scenarioId,
         name,
         type,
         originalPrincipal,
@@ -165,5 +174,6 @@ class Debt extends Equatable {
         createdAt,
         updatedAt,
         paidOffAt,
+        deletedAt,
       ];
 }

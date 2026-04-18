@@ -1,49 +1,55 @@
 import 'dart:convert';
 
+import 'package:drift/drift.dart';
+
 import '../../domain/entities/plan.dart';
-import '../../domain/enums/payment_cadence.dart';
-import '../../domain/enums/strategy.dart';
+import '../local/database.dart';
 
-/// Maps between Drift table data and domain [Plan] entity.
-class PlanMapper {
-  PlanMapper._();
-
-  static Plan fromMap(Map<String, dynamic> map) {
+/// Maps between Drift [PlanRow] and domain [Plan] entity.
+///
+/// Per ADR-018: Repository pattern — Drift types don't leak to domain/UI.
+extension PlanRowMapper on PlanRow {
+  /// Convert a Drift row to a domain [Plan] entity.
+  Plan toDomain() {
     return Plan(
-      id: map['id'] as String,
-      strategy: Strategy.values.byName(map['strategy'] as String),
-      extraMonthlyAmount: map['extraMonthlyAmount'] as int,
-      extraPaymentCadence: PaymentCadence.values
-          .byName(map['extraPaymentCadence'] as String),
-      customOrder: map['customOrder'] != null
-          ? List<String>.from(jsonDecode(map['customOrder'] as String))
+      id: id,
+      scenarioId: scenarioId,
+      strategy: strategy,
+      extraMonthlyAmount: extraMonthlyAmountCents,
+      extraPaymentCadence: extraPaymentCadence,
+      customOrder: customOrderJson != null
+          ? List<String>.from(jsonDecode(customOrderJson!))
           : null,
-      lastRecastAt: map['lastRecastAt'] != null
-          ? DateTime.parse(map['lastRecastAt'] as String)
-          : null,
-      projectedDebtFreeDate: map['projectedDebtFreeDate'] != null
-          ? DateTime.parse(map['projectedDebtFreeDate'] as String)
-          : null,
-      totalInterestProjected: map['totalInterestProjected'] as int?,
-      totalInterestSavedVsMinimumOnly:
-          map['totalInterestSavedVsMinimumOnly'] as int?,
+      lastRecastAt: lastRecastAt,
+      projectedDebtFreeDate: projectedDebtFreeDate,
+      totalInterestProjected: totalInterestProjectedCents,
+      totalInterestSaved: totalInterestSavedCents,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      deletedAt: deletedAt,
     );
   }
+}
 
-  static Map<String, dynamic> toMap(Plan plan) {
-    return {
-      'id': plan.id,
-      'strategy': plan.strategy.name,
-      'extraMonthlyAmount': plan.extraMonthlyAmount,
-      'extraPaymentCadence': plan.extraPaymentCadence.name,
-      'customOrder':
-          plan.customOrder != null ? jsonEncode(plan.customOrder) : null,
-      'lastRecastAt': plan.lastRecastAt?.toIso8601String(),
-      'projectedDebtFreeDate':
-          plan.projectedDebtFreeDate?.toIso8601String(),
-      'totalInterestProjected': plan.totalInterestProjected,
-      'totalInterestSavedVsMinimumOnly':
-          plan.totalInterestSavedVsMinimumOnly,
-    };
+/// Maps from domain [Plan] to Drift [PlansTableCompanion].
+extension PlanCompanionMapper on Plan {
+  PlansTableCompanion toCompanion() {
+    return PlansTableCompanion(
+      id: Value(id),
+      scenarioId: Value(scenarioId),
+      strategy: Value(strategy),
+      extraMonthlyAmountCents: Value(extraMonthlyAmount),
+      extraPaymentCadence: Value(extraPaymentCadence),
+      customOrderJson: Value(
+        customOrder != null ? jsonEncode(customOrder) : null,
+      ),
+      lastRecastAt: Value(lastRecastAt ?? DateTime.now().toUtc()),
+      projectedDebtFreeDate: Value(projectedDebtFreeDate),
+      totalInterestProjectedCents: Value(totalInterestProjected),
+      totalInterestSavedCents: Value(totalInterestSaved),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: Value(deletedAt),
+    );
   }
 }
