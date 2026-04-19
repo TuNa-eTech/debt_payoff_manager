@@ -69,11 +69,41 @@ class AppTestKeys {
   static const debtsAddFab = ValueKey<String>('debts:add-fab');
   static const debtsFilterPaidOff = ValueKey<String>('debts:filter-paid-off');
   static const debtsFilterArchived = ValueKey<String>('debts:filter-archived');
+  static const settingsCloudBackup = ValueKey<String>(
+    'settings:data-cloud-backup',
+  );
+  static const syncBackupViewPricing = ValueKey<String>(
+    'settings:sync-backup-view-pricing',
+  );
+  static const pricingContinueFree = ValueKey<String>('pricing:continue-free');
+  static const settingsDataExportCsv = ValueKey<String>(
+    'settings:data-export-csv',
+  );
+  static const settingsDataLocalBackup = ValueKey<String>(
+    'settings:data-local-backup',
+  );
+  static const settingsDataRestoreBackup = ValueKey<String>(
+    'settings:data-restore-backup',
+  );
+  static const settingsDataClearAll = ValueKey<String>(
+    'settings:data-clear-all',
+  );
+  static const settingsDataRestoreConfirm = ValueKey<String>(
+    'settings:data-restore-confirm',
+  );
+  static const settingsDataClearAllConfirmOne = ValueKey<String>(
+    'settings:data-clear-all-confirm-one',
+  );
+  static const settingsDataClearAllConfirmTwo = ValueKey<String>(
+    'settings:data-clear-all-confirm-two',
+  );
 
   // Debt detail / actions
   static const debtDetailEdit = ValueKey<String>('debt-detail:edit');
   static const debtDetailMore = ValueKey<String>('debt-detail:more');
-  static const debtDetailLogPayment = ValueKey<String>('debt-detail:log-payment');
+  static const debtDetailLogPayment = ValueKey<String>(
+    'debt-detail:log-payment',
+  );
   static const debtDetailPaymentHistory = ValueKey<String>(
     'debt-detail:payment-history',
   );
@@ -89,9 +119,13 @@ class AppTestKeys {
   static const paymentLogAmount = ValueKey<String>('payment-log:amount');
   static const paymentLogDate = ValueKey<String>('payment-log:date');
   static const paymentLogSubmit = ValueKey<String>('payment-log:submit');
-  static const paymentTypeMinimum = ValueKey<String>('payment-log:type-minimum');
+  static const paymentTypeMinimum = ValueKey<String>(
+    'payment-log:type-minimum',
+  );
   static const paymentTypeExtra = ValueKey<String>('payment-log:type-extra');
-  static const paymentTypeLumpSum = ValueKey<String>('payment-log:type-lumpsum');
+  static const paymentTypeLumpSum = ValueKey<String>(
+    'payment-log:type-lumpsum',
+  );
 
   static ValueKey<String> monthlyActionSection(String debtId) =>
       ValueKey<String>('monthly-action:section:$debtId');

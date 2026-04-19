@@ -8,6 +8,7 @@ import 'domain/repositories/debt_repository.dart';
 import 'domain/repositories/settings_repository.dart';
 import 'features/debts/cubit/debts_cubit.dart';
 import 'features/onboarding/cubit/onboarding_cubit.dart';
+import 'features/onboarding/services/onboarding_analytics.dart';
 
 /// Root application widget.
 ///
@@ -27,6 +28,7 @@ class _DebtPayoffAppState extends State<DebtPayoffApp> {
   late final DebtsCubit _debtsCubit = getIt<DebtsCubit>()..start();
   late final OnboardingCubit _onboardingCubit = OnboardingCubit(
     settingsRepository: _settingsRepository,
+    onboardingAnalytics: getIt<OnboardingAnalytics>(),
   )..start();
   late final router = createRouter(
     settingsRepository: _settingsRepository,

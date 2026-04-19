@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,7 +11,9 @@ import '../../../debts/cubit/debts_cubit.dart';
 import '../../../debts/cubit/debt_form_cubit.dart';
 import '../../../debts/presentation/pages/add_debt_page.dart';
 import '../../cubit/onboarding_state.dart';
+import '../../services/onboarding_analytics.dart';
 import '../onboarding_navigation.dart';
+import '../widgets/onboarding_step_tracker.dart';
 
 class DebtEntryPage extends StatelessWidget {
   const DebtEntryPage({super.key});
@@ -41,27 +45,35 @@ class DebtEntryPage extends StatelessWidget {
       ),
       child: Builder(
         builder: (context) {
-          return PopScope(
-            canPop: false,
-            onPopInvokedWithResult: (didPop, result) {
-              if (didPop) return;
-              _handleBack(context);
-            },
-            child: DebtFormScaffold(
-              mode: DebtFormMode.onboarding,
-              title: 'Thêm khoản nợ đầu tiên',
-              primaryActionLabel: 'Lưu khoản nợ',
-              progressLabel: 'Bước 1/4',
-              progressValue: 0.25,
-              backButtonKey: AppTestKeys.onboardingDebtEntryBack,
-              onCancel: () => _handleBack(context),
-              onSaved: (context, debt) async {
-                await navigateToOnboardingStep(
-                  context,
-                  step: OnboardingStep.addDebt,
-                  route: AppRoutes.addAnotherDebt,
-                );
+          return OnboardingStepTracker(
+            screen: OnboardingAnalyticsScreen.debtEntry,
+            child: PopScope(
+              canPop: false,
+              onPopInvokedWithResult: (didPop, result) {
+                if (didPop) return;
+                _handleBack(context);
               },
+              child: DebtFormScaffold(
+                mode: DebtFormMode.onboarding,
+                title: 'Thêm khoản nợ đầu tiên',
+                primaryActionLabel: 'Lưu khoản nợ',
+                progressLabel: 'Bước 1/4',
+                progressValue: 0.25,
+                backButtonKey: AppTestKeys.onboardingDebtEntryBack,
+                onCancel: () => _handleBack(context),
+                onSaved: (context, debt) async {
+                  unawaited(
+                    getIt<OnboardingAnalytics>().trackDebtSaved(
+                      debtCount: context.read<DebtsCubit>().state.debts.length,
+                    ),
+                  );
+                  await navigateToOnboardingStep(
+                    context,
+                    step: OnboardingStep.addDebt,
+                    route: AppRoutes.addAnotherDebt,
+                  );
+                },
+              ),
             ),
           );
         },

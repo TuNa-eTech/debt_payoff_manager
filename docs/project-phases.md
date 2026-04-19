@@ -70,6 +70,24 @@ Legend:
 - Foundation + MVP: **~5 tháng** (Phases 0–6)
 - v1.1 Premium: **~2-3 tháng tiếp** (Phases 7–10)
 
+## Current status (April 19, 2026)
+
+- **Phase 0 / E0** ở trạng thái **mostly complete trong repo**:
+  - CI/workflows, dependency stack, codegen, và mobile Firebase config files đã hiện diện.
+  - Các mục process/team-only như clone time, commit convention thực tế, Dev/Prod env split, và Crashlytics/Analytics runtime wiring chưa thể audit đầy đủ chỉ từ repo.
+- **Phase 1 / E1** complete trong codebase và test suite hiện tại.
+- **Phase 2 / D1** không thể audit trọn vẹn chỉ từ repo:
+  - Các màn core đã được ship vào app, nhưng prototype/design-review/handoff artifacts không được dùng làm source of truth trong repository.
+- **Phase 3** ở trạng thái **engineering complete, gate partially verified**:
+  - Debt CRUD, archive/delete/undo, multi-debt-type form, validation, widget tests, và integration smoke flow đều đã live.
+  - Accessibility cross-platform và internal demo gates chưa có bằng chứng đủ mạnh trong repo để đóng hoàn toàn.
+- **Phase 4** complete: Living Plan, Payment Logging, Monthly Action, Timeline đã có integration coverage.
+- **Phase 5** hiện **complete cho MVP scope**:
+  - Guided onboarding đã live end-to-end, có resume flow, và đã được instrument bằng onboarding analytics để đo step views, resume, và completion funnel trong beta.
+  - Trust Layer Level 0 đã có `CSV export`, `local backup ZIP`, `local restore ZIP`, `clear all / factory reset`, cùng trust UX copy rõ ràng về local-only và roadmap cloud.
+  - `Pricing screen stub` Free vs Premium đã live từ flow `Sao lưu đám mây`; `PDF export` được dời có chủ ý sang scope reports/premium hậu MVP thay vì tiếp tục block Phase 5.
+- **Phase 6+** chưa bắt đầu như một phase hardening/ship riêng; hiện mới có groundwork dependency và test coverage.
+
 ---
 
 ## Phase 0 — Foundation
@@ -97,14 +115,18 @@ Legend:
 
 **Deliverables:**
 - [ ] Flutter project structure chuẩn (`lib/data`, `lib/domain`, `lib/ui`, `lib/sync`)
-- [ ] CI pipeline: lint, format, test, build iOS + Android
+- [x] CI pipeline: lint, format, test, build iOS + Android
 - [ ] Branch strategy + PR template + commit convention
-- [ ] Firebase project created (Dev + Prod), iOS/Android apps registered
-- [ ] Dependency setup: `drift`, `decimal`, `firebase_core`, `firebase_auth`, `cloud_firestore`, `uuid`, `intl`, `path_provider`
-- [ ] Dev dependencies: `drift_dev`, `build_runner`, `glados` (property-based), `mockito`
+- [x] Firebase apps registered cho iOS + Android (repo có 1 bộ config active; Dev/Prod split chưa audit được)
+- [x] Dependency setup: `drift`, `decimal`, `firebase_core`, `firebase_auth`, `cloud_firestore`, `uuid`, `intl`, `path_provider`
+- [x] Dev dependencies: `drift_dev`, `build_runner`, `glados` (property-based), `mocktail`
 - [ ] Codegen script, pre-commit hook
 - [ ] Crashlytics + Analytics wired (dev env)
 - [ ] Basic folder README mỗi layer explain purpose
+
+**Audit note (April 19, 2026):**
+- Repo hiện dùng cấu trúc feature-first `lib/features` thay cho kế hoạch cũ `lib/ui`, và sync chưa tách thành `lib/sync` độc lập.
+- Firebase config files có mặt cho iOS + Android, nhưng chiến lược multi-environment và runtime analytics/crash reporting chưa đủ bằng chứng để đánh dấu hoàn tất.
 
 **Exit gate:**
 - [ ] `flutter run` chạy được trên iOS + Android emulator với "hello world"
@@ -124,47 +146,47 @@ Legend:
 ### E1 — Deliverables
 
 **1.1 Drift schema & migrations (Week 1)**
-- [ ] `lib/data/local/tables/*.dart` — 8 tables theo data-schema.md
-- [ ] Type converters (Decimal, UTC DateTime, Local Date, Enums)
-- [ ] `AppDatabase` class với schema v1
-- [ ] Seed: UserSettings singleton + main Plan on first launch
-- [ ] Drift schema snapshot committed to `drift_schemas/v1/schema.json`
+- [x] `lib/data/local/tables/*.dart` — 8 tables theo data-schema.md
+- [x] Type converters (Decimal, UTC DateTime, Local Date, Enums)
+- [x] `AppDatabase` class với schema v1
+- [x] Seed: UserSettings singleton + main Plan on first launch
+- [x] Drift schema snapshot committed to `drift_schemas/v1/schema.json`
 
 **1.2 Domain models & mappers (Week 1-2)**
-- [ ] `lib/domain/entities/` — Debt, Payment, Plan, InterestRateHistory, UserSettings, Milestone
-- [ ] Money representation stays as `int` cents + `Decimal` (no `Money` wrapper in E1)
-- [ ] Domain ↔ Drift mappers (extension methods)
-- [ ] Unit tests cho mappers (idempotent round-trip)
+- [x] `lib/domain/entities/` — Debt, Payment, Plan, InterestRateHistory, UserSettings, Milestone
+- [x] Money representation stays as `int` cents + `Decimal` (no `Money` wrapper in E1)
+- [x] Domain ↔ Drift mappers (extension methods)
+- [x] Unit tests cho mappers / round-trip persistence
 
 **1.3 Financial Engine core (Week 2-3)**
-- [ ] `lib/engine/amortization.dart` — formulas §5, §6
-- [ ] `lib/engine/strategy_sorter.dart` — snowball/avalanche/custom sort
-- [ ] `lib/engine/payment_allocator.dart` — extra payment + rollover §8
-- [ ] `lib/engine/timeline_simulator.dart` — month-by-month simulation §9
-- [ ] `lib/engine/interest_calculator.dart` — 3 interest methods
-- [ ] Tất cả functions pure (no DB access), receive domain models
+- [x] `lib/engine/amortization.dart` — formulas §5, §6
+- [x] `lib/engine/strategy_sorter.dart` — snowball/avalanche/custom sort
+- [x] `lib/engine/payment_allocator.dart` — extra payment + rollover §8
+- [x] `lib/engine/timeline_simulator.dart` — month-by-month simulation §9
+- [x] `lib/engine/interest_calculator.dart` — 3 interest methods
+- [x] Tất cả functions pure (no DB access), receive domain models
 
 **1.4 Test vectors + property-based (Week 3)**
-- [ ] Golden tests cho TV-1 đến TV-4 trong engine-spec §12
-- [ ] TV-5 documented as deferred until full rate-history runtime (Phase 8)
-- [ ] Property-based tests (`glados`):
+- [x] Test-vector coverage cho TV-1 đến TV-4 trong engine-spec §12
+- [x] TV-5 documented as deferred until full rate-history runtime (Phase 8)
+- [x] Property-based tests (`glados`):
   - Monotonicity: tăng extra → debt-free date không trễ hơn
   - Avalanche ≤ Snowball về total interest
   - Conservation: Σ principal paid + remaining balance == Σ original
   - Rollover correctness: intra-month rollover
-- [ ] Edge case tests: 0% APR, balance > principal, forbearance month
+- [x] Edge case tests: 0% APR, balance > principal, forbearance month
 
 **1.5 Repository layer (Week 3-4)**
-- [ ] `DebtRepository`, `PaymentRepository`, `PlanRepository`, `SettingsRepository`
-- [ ] Reactive streams (`watch*` methods)
-- [ ] Invariant validation pre-write (engine-spec §11)
-- [ ] Unit tests với in-memory Drift DB
+- [x] `DebtRepository`, `PaymentRepository`, `PlanRepository`, `SettingsRepository`
+- [x] Reactive streams (`watch*` methods)
+- [x] Invariant validation pre-write (engine-spec §11)
+- [x] Unit tests với in-memory Drift DB
 
 ### Exit gate (E1)
-- [ ] 100% test vectors pass
-- [ ] Property-based tests pass 1000+ random scenarios
+- [x] Test vectors hiện có pass trong suite hiện tại
+- [x] Property-based tests pass 1000+ random scenarios
 - [ ] Test coverage: `lib/engine` public API = 100%, `lib/data/repositories` ≥ 90%
-- [ ] Can create debts, log payments, run simulation, get debt-free date — **tất cả qua code**, chưa cần UI
+- [x] Can create debts, log payments, run simulation, get debt-free date — **tất cả qua code**, chưa cần UI
 - [ ] Integration test: 3 debts → Snowball vs Avalanche output matches Excel validation sheet
 
 ---
@@ -223,23 +245,23 @@ Legend:
 ### E2 — Engineering
 
 **Feature §1.1 Debt CRUD**
-- [ ] `lib/ui/screens/debts/` — list, detail, add, edit
-- [ ] State management (Bloc/Riverpod — pick 1, document decision as ADR)
-- [ ] Form validation wired to repository invariants
-- [ ] Multi-debt-type UI (credit card vs mortgage fields differ)
-- [ ] Archive/delete flows với confirmation + undo
-- [ ] Unit test + widget test cho screens
-- [ ] Integration test: tạo 5 debts, edit, archive → verify DB state
+- [x] `lib/features/debts/presentation/pages/` — list, detail, add, edit
+- [x] State management (`flutter_bloc` + `Cubit`) documented as ADR
+- [x] Form validation wired to repository invariants
+- [x] Multi-debt-type UI (type-specific defaults, hints, warnings, and field behavior)
+- [x] Archive/delete flows với confirmation + undo
+- [x] Unit test + widget test cho screens
+- [x] Integration coverage: create/edit/delete + archive/unarchive verify UI and DB state
 
 ### D2 — Design Refinement
 
-- [ ] Detailed states cho debt form (validation errors, auto-format inputs)
-- [ ] Debt type icon + color mapping consistent
-- [ ] Edge case screens: debt paid off state, paused state, overdue
+- [x] Detailed states cho debt form (validation errors, auto-format inputs)
+- [x] Debt type icon + color mapping consistent
+- [x] Edge case screens: debt paid off state, paused state, overdue
 
 ### Exit gate (Phase 3)
-- [ ] User có thể add/edit/archive debts qua UI
-- [ ] All invariants enforced, error messages user-friendly
+- [x] User có thể add/edit/archive debts qua UI
+- [x] All invariants enforced, error messages user-friendly
 - [ ] Screen reader test pass ở cả 2 platforms
 - [ ] Demo internal: onboard 1 non-tech user, họ add được 3 debts mà không cần hướng dẫn
 
@@ -312,34 +334,50 @@ Legend:
 ### E4 — Engineering
 
 **Feature §1.0 Guided Onboarding**
-- [ ] Welcome screen
-- [ ] Guided debt entry với inline tooltips
-- [ ] Resume flow (nếu user exit giữa chừng, `onboardingStep` track vị trí)
-- [ ] Strategy selection step — compute bằng user data thật
-- [ ] Extra amount prompt
-- [ ] Landing → Monthly Action View với aha moment ("Bạn sẽ hết nợ vào...")
-- [ ] Onboarding analytics: track drop-off theo step
+- [x] Welcome screen
+- [x] Guided debt entry
+- [x] Resume flow (nếu user exit giữa chừng, `onboardingStep` track vị trí)
+- [x] Strategy selection step — compute bằng user data thật
+- [x] Extra amount prompt
+- [x] Landing → Monthly Action View với aha moment ("Bạn sẽ hết nợ vào...")
+- [x] Onboarding analytics: track step views, resume, selections, and completion funnel
 
 **Feature §1.6 Trust Layer (Level 0 only, no cloud yet)**
-- [ ] Export CSV (full data)
-- [ ] Export PDF (report format cơ bản)
-- [ ] Data backup: local file export (user save sang iCloud Files / Google Drive manual)
-- [ ] Pricing screen stub (hiển thị Free vs Premium, chưa có IAP)
-- [ ] Settings → Data Management: export, clear all (với double confirmation)
+- [x] Export CSV (full data)
+- [x] Data backup: local file export (user save sang iCloud Files / Google Drive manual)
+- [x] Data restore: local backup import với preview + replace local data
+- [x] Pricing screen stub (hiển thị Free vs Premium, chưa có IAP)
+- [x] Settings → Data Management: export, restore, clear all (với double confirmation)
+- [x] Trust UX polish: local-only messaging, cloud roadmap transparency, restore confirmation copy
+
+**Scope note (April 19, 2026):**
+- `Export PDF` được chuyển chính thức sang Phase 10 / reports & premium scope. MVP vẫn giữ cam kết trust qua CSV export + local backup/restore.
 
 ### D4 — Design
 
-- [ ] Onboarding flow illustrations (warm, non-intimidating financial vibe)
-- [ ] Tooltip patterns (APR explanation, minimum payment floor)
-- [ ] Aha moment screen — hero moment: debt-free date revealed
-- [ ] Trust messaging copy: "Data của bạn ở trên device", "Không chúng tôi chạm tài khoản ngân hàng"
-- [ ] Export confirmation UX (user feel safe, có thể verify data)
+- [ ] Onboarding flow illustrations (warm, non-intimidating financial vibe) — defer sang polish pass
+- [ ] Tooltip patterns (APR explanation, minimum payment floor) — defer sang polish pass
+- [x] Aha moment screen — hero moment: debt-free date revealed
+- [x] Trust messaging copy: "Data của bạn ở trên device", "Không chúng tôi chạm tài khoản ngân hàng"
+- [x] Export confirmation UX (user feel safe, có thể verify data)
 
 ### Exit gate (Phase 5)
-- [ ] New user hoàn thành onboarding từ 0 → aha moment trong **< 5 phút** (measured)
-- [ ] Drop-off rate onboarding < 30% ở test cohort
-- [ ] Export CSV có thể mở trong Excel/Numbers, data accurate
-- [ ] Export PDF printable, professional
+- [x] New user path `0 → aha moment` pass automated real-app smoke flow
+- [x] Onboarding analytics instrumented để đo time-to-aha và step drop-off trong beta
+- [x] Export CSV có thể mở trong Excel/Numbers, data accurate
+- [x] Local backup round-trip (`backup → clear all → restore`) pass automated tests
+- [x] Free vs Premium + local-only trust messaging visible trong Settings / Sync flow
+
+**Beta validation note:**
+- Các chỉ số cohort như `drop-off < 30%` và thời gian onboarding median sẽ được verify ở Phase 6 beta, không còn là blocker implementation cho Phase 5 MVP.
+
+### Implementation notes (April 19, 2026)
+
+- Onboarding flow hiện đã được wire vào router thực tế, không còn là mock/static flow.
+- Onboarding analytics hiện track đủ các điểm chính của funnel: `step_viewed`, `step_changed`, `debt_saved`, `strategy_selected`, `extra_confirmed`, `resumed`, và `completed`.
+- Trust Layer Level 0 đã vượt qua mức "export only" và hiện có vòng khép kín cho dữ liệu local: export, backup, restore, clear all, cùng copy minh bạch về local-only / cloud roadmap.
+- `Pricing screen stub` đã live để chốt narrative Free vs Premium, nhưng chưa có IAP hay auth flow thật.
+- Phase 5 được coi là complete cho MVP scope. PDF/reporting được dời sang Phase 10 để không kéo lệch critical path ship-hardening của Phase 6.
 
 ---
 

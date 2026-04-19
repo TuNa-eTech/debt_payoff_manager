@@ -19,10 +19,15 @@ import '../../domain/repositories/plan_repository.dart';
 import '../../domain/repositories/settings_repository.dart';
 import '../../features/debts/cubit/debts_cubit.dart';
 import '../../features/monthly_action/cubit/monthly_action_cubit.dart';
+import '../../features/onboarding/services/onboarding_analytics.dart';
 import '../../features/plan/cubit/plan_timeline_cubit.dart';
+import '../services/app_analytics.dart';
+import '../services/backup_file_picker.dart';
+import '../services/data_management_service.dart';
 import '../services/monthly_action_service.dart';
 import '../services/payment_logging_service.dart';
 import '../services/plan_recast_service.dart';
+import '../services/share_launcher.dart';
 
 /// Global service locator instance.
 final getIt = GetIt.instance;
@@ -30,7 +35,13 @@ final getIt = GetIt.instance;
 /// Initialize dependency injection.
 ///
 /// Call this in `main()` before `runApp()`.
-void configureDependencies({AppDatabase? database}) {
+void configureDependencies({
+  AppDatabase? database,
+  AppAnalytics? appAnalytics,
+  BackupFilePicker? backupFilePicker,
+  DataManagementService? dataManagementService,
+  ShareLauncher? shareLauncher,
+}) {
   // Database — singleton, opened once
   getIt.registerLazySingleton<AppDatabase>(
     () => database ?? DatabaseProvider.openDatabase(),
@@ -86,6 +97,23 @@ void configureDependencies({AppDatabase? database}) {
       planRepository: getIt<PlanRepository>(),
       planRecastService: getIt<PlanRecastService>(),
     ),
+  );
+  getIt.registerLazySingleton<DataManagementService>(
+    () =>
+        dataManagementService ??
+        DataManagementService(db: getIt<AppDatabase>()),
+  );
+  getIt.registerLazySingleton<BackupFilePicker>(
+    () => backupFilePicker ?? FilePickerBackupFilePicker(),
+  );
+  getIt.registerLazySingleton<AppAnalytics>(
+    () => appAnalytics ?? const NoopAppAnalytics(),
+  );
+  getIt.registerLazySingleton<OnboardingAnalytics>(
+    () => OnboardingAnalytics(analytics: getIt<AppAnalytics>()),
+  );
+  getIt.registerLazySingleton<ShareLauncher>(
+    () => shareLauncher ?? SharePlusLauncher(),
   );
 
   // Public repository contracts

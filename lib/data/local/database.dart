@@ -64,10 +64,35 @@ class AppDatabase extends _$AppDatabase {
         'ON plans (scenario_id) WHERE deleted_at IS NULL',
       );
 
-      await _ensureSingletonSettingsSeeded();
-      await _ensureMainPlanSeeded();
+      await seedFactoryDefaults();
     },
   );
+
+  Future<void> seedFactoryDefaults() async {
+    await _ensureSingletonSettingsSeeded();
+    await _ensureMainPlanSeeded();
+  }
+
+  Future<void> clearAllUserData({bool reseedFactoryDefaults = false}) async {
+    await delete(paymentsTable).go();
+    await delete(interestRateHistoryTable).go();
+    await delete(milestonesTable).go();
+    await delete(timelineCacheTable).go();
+    await delete(syncStateTable).go();
+    await delete(debtsTable).go();
+    await delete(plansTable).go();
+    await delete(userSettingsTable).go();
+
+    if (reseedFactoryDefaults) {
+      await seedFactoryDefaults();
+    }
+  }
+
+  Future<void> resetToFactoryState() async {
+    await transaction(() async {
+      await clearAllUserData(reseedFactoryDefaults: true);
+    });
+  }
 
   Future<void> _repairActivePlanSingletons() async {
     final duplicateScenarios = await customSelect(

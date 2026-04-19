@@ -274,7 +274,7 @@ void main() {
       },
     );
 
-    testWidgets('settings sync opens outside the primary shell', (
+    testWidgets('settings trust flow opens sync details and pricing stub', (
       tester,
     ) async {
       final harness = await TestAppHarness.create();
@@ -287,14 +287,34 @@ void main() {
       harness.router.go(AppRoutes.settings);
       await _pumpUntilLocation(tester, harness, AppRoutes.settings);
 
-      final syncTile = find.text('Đồng bộ & Sao lưu');
+      final syncTile = find.byKey(AppTestKeys.settingsCloudBackup);
       await tester.pumpUntilVisible(syncTile);
       await tester.ensureVisible(syncTile);
       await tester.tap(syncTile);
       await tester.pumpRouterIdle();
-      await tester.pumpUntilVisible(find.text('Mở khoá Sao lưu'));
+      await tester.pumpUntilVisible(
+        find.textContaining('Sao lưu đám mây là bước tiếp theo'),
+      );
 
-      harness.router.pop();
+      final pricingCta = find.byKey(AppTestKeys.syncBackupViewPricing);
+      await tester.scrollUntilVisible(
+        pricingCta,
+        200,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await tester.pumpRouterIdle();
+      await tester.tap(pricingCta);
+      await tester.pumpRouterIdle();
+      await tester.pumpUntilVisible(find.text('Free vs Premium'));
+
+      final continueFree = find.byKey(AppTestKeys.pricingContinueFree);
+      await tester.scrollUntilVisible(
+        continueFree,
+        200,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await tester.pumpRouterIdle();
+      await tester.tap(continueFree);
       await tester.pumpRouterIdle();
       await _pumpUntilLocation(tester, harness, AppRoutes.settings);
     });

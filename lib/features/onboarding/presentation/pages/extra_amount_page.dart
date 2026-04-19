@@ -25,7 +25,9 @@ import '../../../../domain/repositories/plan_repository.dart';
 import '../../../debts/cubit/debts_cubit.dart';
 import '../../../debts/cubit/debts_state.dart';
 import '../../cubit/onboarding_state.dart';
+import '../../services/onboarding_analytics.dart';
 import '../onboarding_navigation.dart';
+import '../widgets/onboarding_step_tracker.dart';
 
 class ExtraAmountPage extends StatefulWidget {
   const ExtraAmountPage({super.key});
@@ -80,275 +82,279 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-        _handleBack();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            key: AppTestKeys.onboardingExtraBack,
-            icon: const Icon(LucideIcons.arrowLeft),
-            onPressed: _handleBack,
+    return OnboardingStepTracker(
+      screen: OnboardingAnalyticsScreen.extraAmount,
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
+          _handleBack();
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              key: AppTestKeys.onboardingExtraBack,
+              icon: const Icon(LucideIcons.arrowLeft),
+              onPressed: _handleBack,
+            ),
+            title: const Text('Ngân sách thêm'),
           ),
-          title: const Text('Ngân sách thêm'),
-        ),
-        body: SafeArea(
-          child: BlocBuilder<DebtsCubit, DebtsState>(
-            builder: (context, debtsState) {
-              if (_isLoading || debtsState.isLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
+          body: SafeArea(
+            child: BlocBuilder<DebtsCubit, DebtsState>(
+              builder: (context, debtsState) {
+                if (_isLoading || debtsState.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-              final trackedDebts = debtsState.debts
-                  .where((debt) => debt.currentBalance > 0)
-                  .toList(growable: false);
-              _maybeSchedulePreview(trackedDebts);
-              final trackedCount = trackedDebts.length;
-              final strategyLabel =
-                  _plan?.strategy.label ?? Strategy.snowball.label;
-              final amountCents = _extraAmount.round() * 100;
+                final trackedDebts = debtsState.debts
+                    .where((debt) => debt.currentBalance > 0)
+                    .toList(growable: false);
+                _maybeSchedulePreview(trackedDebts);
+                final trackedCount = trackedDebts.length;
+                final strategyLabel =
+                    _plan?.strategy.label ?? Strategy.snowball.label;
+                final amountCents = _extraAmount.round() * 100;
 
-              return Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppDimensions.pagePaddingH,
-                        vertical: AppDimensions.lg,
+                return Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppDimensions.pagePaddingH,
+                          vertical: AppDimensions.lg,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Bước 4/4',
+                              style: AppTextStyles.labelMedium.copyWith(
+                                color: AppColors.mdPrimary,
+                              ),
+                            ),
+                            const SizedBox(height: AppDimensions.sm),
+                            LinearProgressIndicator(
+                              value: 1,
+                              backgroundColor:
+                                  AppColors.mdSurfaceContainerHighest,
+                              color: AppColors.mdPrimary,
+                              borderRadius: BorderRadius.circular(
+                                AppDimensions.radiusFull,
+                              ),
+                              minHeight: 4,
+                            ),
+                            const SizedBox(height: AppDimensions.xl),
+                            Text(
+                              'Ngoài khoản tối thiểu, bạn muốn để thêm bao nhiêu mỗi tháng?',
+                              style: AppTextStyles.headlineSmall,
+                            ),
+                            const SizedBox(height: AppDimensions.sm),
+                            Text(
+                              'Mặc định là \$0. Preview sẽ recast live sau 300ms để cho bạn thấy debt-free date và lãi tiết kiệm thật.',
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.mdOnSurfaceVariant,
+                              ),
+                            ),
+                            const SizedBox(height: AppDimensions.xl),
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppDimensions.lg,
+                                vertical: AppDimensions.xl,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.mdPrimaryContainer,
+                                borderRadius: BorderRadius.circular(
+                                  AppDimensions.radiusLg,
+                                ),
+                                border: Border.all(color: AppColors.mdPrimary),
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Extra payment mỗi tháng',
+                                    style: AppTextStyles.labelMedium.copyWith(
+                                      color: AppColors.mdOnPrimaryContainer,
+                                    ),
+                                  ),
+                                  const SizedBox(height: AppDimensions.sm),
+                                  Text(
+                                    AppFormatters.formatCents(amountCents),
+                                    style: AppTextStyles.displayMedium.copyWith(
+                                      color: AppColors.mdOnPrimaryContainer,
+                                    ),
+                                  ),
+                                  const SizedBox(height: AppDimensions.sm),
+                                  Text(
+                                    '$strategyLabel · $trackedCount khoản đang theo dõi',
+                                    style: AppTextStyles.bodySmall.copyWith(
+                                      color: AppColors.mdOnPrimaryContainer
+                                          .withValues(alpha: 0.82),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: AppDimensions.lg),
+                            SliderTheme(
+                              data: SliderTheme.of(context).copyWith(
+                                activeTrackColor: AppColors.mdPrimary,
+                                inactiveTrackColor:
+                                    AppColors.mdSurfaceContainerHighest,
+                                thumbColor: AppColors.mdPrimary,
+                                trackHeight: 6,
+                              ),
+                              child: Slider(
+                                value: _extraAmount.clamp(0, 1000),
+                                min: 0,
+                                max: 1000,
+                                divisions: 20,
+                                onChanged: (value) {
+                                  _setExtraAmount(
+                                    value,
+                                    trackedDebts: trackedDebts,
+                                  );
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppDimensions.sm,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '\$0',
+                                    style: AppTextStyles.labelSmall.copyWith(
+                                      color: AppColors.mdOnSurfaceVariant,
+                                    ),
+                                  ),
+                                  Text(
+                                    '\$1000',
+                                    style: AppTextStyles.labelSmall.copyWith(
+                                      color: AppColors.mdOnSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: AppDimensions.lg),
+                            Wrap(
+                              spacing: AppDimensions.sm,
+                              runSpacing: AppDimensions.sm,
+                              children: [
+                                _AmountChip(
+                                  label: '+\$50',
+                                  onTap: () => _bumpExtra(
+                                    50,
+                                    trackedDebts: trackedDebts,
+                                  ),
+                                ),
+                                _AmountChip(
+                                  key: AppTestKeys.onboardingExtraPreset100,
+                                  label: '+\$100',
+                                  onTap: () => _bumpExtra(
+                                    100,
+                                    trackedDebts: trackedDebts,
+                                  ),
+                                ),
+                                _AmountChip(
+                                  label: '+\$200',
+                                  onTap: () => _bumpExtra(
+                                    200,
+                                    trackedDebts: trackedDebts,
+                                  ),
+                                ),
+                                _AmountChip(
+                                  label: 'Max',
+                                  onTap: () => _setExtraAmount(
+                                    1000,
+                                    trackedDebts: trackedDebts,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: AppDimensions.xl),
+                            _ExtraPreviewCard(
+                              preview: _preview,
+                              strategyLabel: strategyLabel,
+                              extraMonthlyAmount: amountCents,
+                              isLoading: _isPreviewLoading,
+                              hasTrackedDebts: trackedDebts.isNotEmpty,
+                            ),
+                            const SizedBox(height: AppDimensions.xl),
+                            AppCard(
+                              color: AppColors.mdSurfaceContainerLow,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        LucideIcons.info,
+                                        color: AppColors.mdPrimary,
+                                        size: AppDimensions.iconMd,
+                                      ),
+                                      const SizedBox(width: AppDimensions.sm),
+                                      Text(
+                                        'Điều gì xảy ra tiếp theo?',
+                                        style: AppTextStyles.titleSmall,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: AppDimensions.sm),
+                                  Text(
+                                    'Khoản extra này sẽ được dùng làm ngân sách trả thêm mỗi tháng. Khi bạn bấm lưu, plan summary và timeline cache sẽ recast ngay.',
+                                    style: AppTextStyles.bodyMedium.copyWith(
+                                      color: AppColors.mdOnSurfaceVariant,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(AppDimensions.lg),
+                      decoration: const BoxDecoration(
+                        color: AppColors.mdSurface,
+                        border: Border(
+                          top: BorderSide(color: AppColors.mdOutlineVariant),
+                        ),
                       ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            'Bước 4/4',
-                            style: AppTextStyles.labelMedium.copyWith(
-                              color: AppColors.mdPrimary,
-                            ),
-                          ),
-                          const SizedBox(height: AppDimensions.sm),
-                          LinearProgressIndicator(
-                            value: 1,
-                            backgroundColor:
-                                AppColors.mdSurfaceContainerHighest,
-                            color: AppColors.mdPrimary,
-                            borderRadius: BorderRadius.circular(
-                              AppDimensions.radiusFull,
-                            ),
-                            minHeight: 4,
-                          ),
-                          const SizedBox(height: AppDimensions.xl),
-                          Text(
-                            'Ngoài khoản tối thiểu, bạn muốn để thêm bao nhiêu mỗi tháng?',
-                            style: AppTextStyles.headlineSmall,
-                          ),
-                          const SizedBox(height: AppDimensions.sm),
-                          Text(
-                            'Mặc định là \$0. Preview sẽ recast live sau 300ms để cho bạn thấy debt-free date và lãi tiết kiệm thật.',
-                            style: AppTextStyles.bodyMedium.copyWith(
-                              color: AppColors.mdOnSurfaceVariant,
-                            ),
-                          ),
-                          const SizedBox(height: AppDimensions.xl),
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: AppDimensions.lg,
-                              vertical: AppDimensions.xl,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppColors.mdPrimaryContainer,
-                              borderRadius: BorderRadius.circular(
-                                AppDimensions.radiusLg,
+                          SizedBox(
+                            key: AppTestKeys.onboardingExtraContinue,
+                            child: AppButton.filledLg(
+                              label: 'Lưu và xem tóm tắt',
+                              trailingIcon: LucideIcons.arrowRight,
+                              fullWidth: true,
+                              loading: _isSaving,
+                              onPressed: () => _saveAndContinue(
+                                amountCents: _extraAmount.round() * 100,
                               ),
-                              border: Border.all(color: AppColors.mdPrimary),
-                            ),
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Extra payment mỗi tháng',
-                                  style: AppTextStyles.labelMedium.copyWith(
-                                    color: AppColors.mdOnPrimaryContainer,
-                                  ),
-                                ),
-                                const SizedBox(height: AppDimensions.sm),
-                                Text(
-                                  AppFormatters.formatCents(amountCents),
-                                  style: AppTextStyles.displayMedium.copyWith(
-                                    color: AppColors.mdOnPrimaryContainer,
-                                  ),
-                                ),
-                                const SizedBox(height: AppDimensions.sm),
-                                Text(
-                                  '$strategyLabel · $trackedCount khoản đang theo dõi',
-                                  style: AppTextStyles.bodySmall.copyWith(
-                                    color: AppColors.mdOnPrimaryContainer
-                                        .withValues(alpha: 0.82),
-                                  ),
-                                ),
-                              ],
                             ),
                           ),
-                          const SizedBox(height: AppDimensions.lg),
-                          SliderTheme(
-                            data: SliderTheme.of(context).copyWith(
-                              activeTrackColor: AppColors.mdPrimary,
-                              inactiveTrackColor:
-                                  AppColors.mdSurfaceContainerHighest,
-                              thumbColor: AppColors.mdPrimary,
-                              trackHeight: 6,
-                            ),
-                            child: Slider(
-                              value: _extraAmount.clamp(0, 1000),
-                              min: 0,
-                              max: 1000,
-                              divisions: 20,
-                              onChanged: (value) {
-                                _setExtraAmount(
-                                  value,
-                                  trackedDebts: trackedDebts,
-                                );
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: AppDimensions.sm,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '\$0',
-                                  style: AppTextStyles.labelSmall.copyWith(
-                                    color: AppColors.mdOnSurfaceVariant,
-                                  ),
-                                ),
-                                Text(
-                                  '\$1000',
-                                  style: AppTextStyles.labelSmall.copyWith(
-                                    color: AppColors.mdOnSurfaceVariant,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: AppDimensions.lg),
-                          Wrap(
-                            spacing: AppDimensions.sm,
-                            runSpacing: AppDimensions.sm,
-                            children: [
-                              _AmountChip(
-                                label: '+\$50',
-                                onTap: () => _bumpExtra(
-                                  50,
-                                  trackedDebts: trackedDebts,
-                                ),
-                              ),
-                              _AmountChip(
-                                key: AppTestKeys.onboardingExtraPreset100,
-                                label: '+\$100',
-                                onTap: () => _bumpExtra(
-                                  100,
-                                  trackedDebts: trackedDebts,
-                                ),
-                              ),
-                              _AmountChip(
-                                label: '+\$200',
-                                onTap: () => _bumpExtra(
-                                  200,
-                                  trackedDebts: trackedDebts,
-                                ),
-                              ),
-                              _AmountChip(
-                                label: 'Max',
-                                onTap: () => _setExtraAmount(
-                                  1000,
-                                  trackedDebts: trackedDebts,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: AppDimensions.xl),
-                          _ExtraPreviewCard(
-                            preview: _preview,
-                            strategyLabel: strategyLabel,
-                            extraMonthlyAmount: amountCents,
-                            isLoading: _isPreviewLoading,
-                            hasTrackedDebts: trackedDebts.isNotEmpty,
-                          ),
-                          const SizedBox(height: AppDimensions.xl),
-                          AppCard(
-                            color: AppColors.mdSurfaceContainerLow,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      LucideIcons.info,
-                                      color: AppColors.mdPrimary,
-                                      size: AppDimensions.iconMd,
-                                    ),
-                                    const SizedBox(width: AppDimensions.sm),
-                                    Text(
-                                      'Điều gì xảy ra tiếp theo?',
-                                      style: AppTextStyles.titleSmall,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: AppDimensions.sm),
-                                Text(
-                                  'Khoản extra này sẽ được dùng làm ngân sách trả thêm mỗi tháng. Khi bạn bấm lưu, plan summary và timeline cache sẽ recast ngay.',
-                                  style: AppTextStyles.bodyMedium.copyWith(
-                                    color: AppColors.mdOnSurfaceVariant,
-                                  ),
-                                ),
-                              ],
-                            ),
+                          const SizedBox(height: AppDimensions.md),
+                          AppButton.text(
+                            label: 'Dùng \$0 lúc này',
+                            onPressed: _isSaving
+                                ? null
+                                : () => _saveAndContinue(amountCents: 0),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(AppDimensions.lg),
-                    decoration: const BoxDecoration(
-                      color: AppColors.mdSurface,
-                      border: Border(
-                        top: BorderSide(color: AppColors.mdOutlineVariant),
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                          key: AppTestKeys.onboardingExtraContinue,
-                          child: AppButton.filledLg(
-                            label: 'Lưu và xem tóm tắt',
-                            trailingIcon: LucideIcons.arrowRight,
-                            fullWidth: true,
-                            loading: _isSaving,
-                            onPressed: () => _saveAndContinue(
-                              amountCents: _extraAmount.round() * 100,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: AppDimensions.md),
-                        AppButton.text(
-                          label: 'Dùng \$0 lúc này',
-                          onPressed: _isSaving
-                              ? null
-                              : () => _saveAndContinue(amountCents: 0),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            },
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -438,6 +444,11 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
         updatedAt: now,
       );
       _plan = await _planRepository.savePlan(draft);
+      unawaited(
+        getIt<OnboardingAnalytics>().trackExtraConfirmed(
+          extraAmountCents: amountCents,
+        ),
+      );
       if (!mounted) return;
       context.go(AppRoutes.ahaMoment);
     } catch (_) {
@@ -530,7 +541,9 @@ class _ExtraPreviewCard extends StatelessWidget {
           Text(
             preview?.projectedDebtFreeDate == null
                 ? 'Đang recast...'
-                : AppFormatters.formatMonthYear(preview!.projectedDebtFreeDate!),
+                : AppFormatters.formatMonthYear(
+                    preview!.projectedDebtFreeDate!,
+                  ),
             style: AppTextStyles.headlineSmall.copyWith(
               color: AppColors.mdPrimary,
             ),

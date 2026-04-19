@@ -1,8 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'app.dart';
 import 'core/di/injection.dart';
+import 'core/services/app_analytics.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +26,18 @@ void main() async {
   );
 
   // Initialize dependency injection
-  configureDependencies();
+  configureDependencies(appAnalytics: await _bootstrapAnalytics());
 
   runApp(const DebtPayoffApp());
+}
+
+Future<AppAnalytics> _bootstrapAnalytics() async {
+  try {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp();
+    }
+    return FirebaseAppAnalytics();
+  } catch (_) {
+    return const NoopAppAnalytics();
+  }
 }

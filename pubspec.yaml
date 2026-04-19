@@ -56,9 +56,11 @@ dependencies:
   connectivity_plus: ^6.0.5
 
   # Export & reports (Feature §2.6)
+  archive: ^4.0.9
   pdf: ^3.11.1
   csv: ^6.0.0
   share_plus: ^10.0.2
+  file_picker: ^10.3.10
 
   # Preferences (lightweight — not source of truth)
   shared_preferences: ^2.3.2

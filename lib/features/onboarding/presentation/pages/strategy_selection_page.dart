@@ -27,7 +27,9 @@ import '../../../debts/cubit/debts_cubit.dart';
 import '../../../debts/cubit/debts_state.dart';
 import '../../cubit/onboarding_cubit.dart';
 import '../../cubit/onboarding_state.dart';
+import '../../services/onboarding_analytics.dart';
 import '../onboarding_navigation.dart';
+import '../widgets/onboarding_step_tracker.dart';
 
 class StrategySelectionPage extends StatefulWidget {
   const StrategySelectionPage({super.key});
@@ -75,216 +77,221 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-        _handleBack();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            key: AppTestKeys.onboardingStrategyBack,
-            icon: const Icon(LucideIcons.arrowLeft),
-            onPressed: _handleBack,
+    return OnboardingStepTracker(
+      screen: OnboardingAnalyticsScreen.strategySelection,
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
+          _handleBack();
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              key: AppTestKeys.onboardingStrategyBack,
+              icon: const Icon(LucideIcons.arrowLeft),
+              onPressed: _handleBack,
+            ),
+            title: const Text('Chọn chiến lược'),
           ),
-          title: const Text('Chọn chiến lược'),
-        ),
-        body: SafeArea(
-          child: BlocBuilder<DebtsCubit, DebtsState>(
-            builder: (context, debtsState) {
-              final trackedDebts = debtsState.debts
-                  .where((debt) => debt.currentBalance > 0)
-                  .toList();
-              _maybeRefreshPreviews(trackedDebts);
+          body: SafeArea(
+            child: BlocBuilder<DebtsCubit, DebtsState>(
+              builder: (context, debtsState) {
+                final trackedDebts = debtsState.debts
+                    .where((debt) => debt.currentBalance > 0)
+                    .toList();
+                _maybeRefreshPreviews(trackedDebts);
 
-              if (_isLoading || debtsState.isLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
+                if (_isLoading || debtsState.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-              return Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppDimensions.pagePaddingH,
-                        vertical: AppDimensions.lg,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Bước 3/4',
-                            style: AppTextStyles.labelMedium.copyWith(
-                              color: AppColors.mdOnSurfaceVariant,
+                return Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppDimensions.pagePaddingH,
+                          vertical: AppDimensions.lg,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Bước 3/4',
+                              style: AppTextStyles.labelMedium.copyWith(
+                                color: AppColors.mdOnSurfaceVariant,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: AppDimensions.sm),
-                          LinearProgressIndicator(
-                            value: 0.75,
-                            backgroundColor:
-                                AppColors.mdSurfaceContainerHighest,
-                            color: AppColors.mdPrimary,
-                            borderRadius: BorderRadius.circular(
-                              AppDimensions.radiusFull,
+                            const SizedBox(height: AppDimensions.sm),
+                            LinearProgressIndicator(
+                              value: 0.75,
+                              backgroundColor:
+                                  AppColors.mdSurfaceContainerHighest,
+                              color: AppColors.mdPrimary,
+                              borderRadius: BorderRadius.circular(
+                                AppDimensions.radiusFull,
+                              ),
+                              minHeight: 4,
                             ),
-                            minHeight: 4,
-                          ),
-                          const SizedBox(height: AppDimensions.xl),
-                          Text(
-                            'Chọn cách app ưu tiên khoản nợ khi bạn bắt đầu trả thêm.',
-                            style: AppTextStyles.headlineSmall,
-                          ),
-                          const SizedBox(height: AppDimensions.sm),
-                          Text(
-                            trackedDebts.isEmpty
-                                ? 'Bạn cần ít nhất một khoản nợ để chọn chiến lược.'
-                                : 'App đang so projection thật của Snowball và Avalanche từ dữ liệu khoản nợ hiện tại của bạn.',
-                            style: AppTextStyles.bodyMedium.copyWith(
-                              color: AppColors.mdOnSurfaceVariant,
+                            const SizedBox(height: AppDimensions.xl),
+                            Text(
+                              'Chọn cách app ưu tiên khoản nợ khi bạn bắt đầu trả thêm.',
+                              style: AppTextStyles.headlineSmall,
                             ),
-                          ),
-                          const SizedBox(height: AppDimensions.xl),
-                          if (trackedDebts.isEmpty)
-                            AppCard(
-                              color: AppColors.mdSurfaceContainerLow,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Chưa có khoản nợ để áp dụng chiến lược',
-                                    style: AppTextStyles.titleMedium,
-                                  ),
-                                  const SizedBox(height: AppDimensions.sm),
-                                  Text(
-                                    'Hãy thêm ít nhất một khoản nợ trước khi tiếp tục.',
-                                    style: AppTextStyles.bodyMedium,
-                                  ),
-                                  const SizedBox(height: AppDimensions.md),
-                                  AppButton.outlined(
-                                    label: 'Quay lại thêm khoản nợ',
-                                    icon: LucideIcons.plus,
-                                    onPressed: () => navigateToOnboardingStep(
-                                      context,
-                                      step: OnboardingStep.addDebt,
-                                      route: AppRoutes.debtEntry,
+                            const SizedBox(height: AppDimensions.sm),
+                            Text(
+                              trackedDebts.isEmpty
+                                  ? 'Bạn cần ít nhất một khoản nợ để chọn chiến lược.'
+                                  : 'App đang so projection thật của Snowball và Avalanche từ dữ liệu khoản nợ hiện tại của bạn.',
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.mdOnSurfaceVariant,
+                              ),
+                            ),
+                            const SizedBox(height: AppDimensions.xl),
+                            if (trackedDebts.isEmpty)
+                              AppCard(
+                                color: AppColors.mdSurfaceContainerLow,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Chưa có khoản nợ để áp dụng chiến lược',
+                                      style: AppTextStyles.titleMedium,
                                     ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          else ...[
-                            _StrategyCard(
-                              key: AppTestKeys.onboardingStrategySnowball,
-                              title: 'Snowball',
-                              subtitle: _topPriorityText(
-                                strategy: Strategy.snowball,
-                                debts: trackedDebts,
-                              ),
-                              detail: _previewDetail(
-                                _previews[Strategy.snowball],
-                              ),
-                              badgeText: _previewBadgeText(
-                                _previews[Strategy.snowball],
-                                fallback: 'Ưu tiên khoản có số dư nhỏ nhất.',
-                              ),
-                              badgeColor: AppColors.mdPrimaryContainer,
-                              badgeTextColor: AppColors.mdOnPrimaryContainer,
-                              icon: LucideIcons.snowflake,
-                              isSelected:
-                                  _selectedStrategy == Strategy.snowball,
-                              onTap: () {
-                                setState(
-                                  () => _selectedStrategy = Strategy.snowball,
-                                );
-                              },
-                            ),
-                            const SizedBox(height: AppDimensions.md),
-                            _StrategyCard(
-                              key: AppTestKeys.onboardingStrategyAvalanche,
-                              title: 'Avalanche',
-                              subtitle: _topPriorityText(
-                                strategy: Strategy.avalanche,
-                                debts: trackedDebts,
-                              ),
-                              detail: _previewDetail(
-                                _previews[Strategy.avalanche],
-                              ),
-                              badgeText: _previewBadgeText(
-                                _previews[Strategy.avalanche],
-                                fallback: 'Ưu tiên APR cao nhất để giảm lãi.',
-                              ),
-                              badgeColor: AppColors.mdSecondaryContainer,
-                              badgeTextColor: AppColors.mdOnSecondaryContainer,
-                              icon: LucideIcons.trendingDown,
-                              isSelected:
-                                  _selectedStrategy == Strategy.avalanche,
-                              onTap: () {
-                                setState(
-                                  () => _selectedStrategy = Strategy.avalanche,
-                                );
-                              },
-                            ),
-                            const SizedBox(height: AppDimensions.lg),
-                            _SelectedStrategyPreviewCard(
-                              strategy: _selectedStrategy,
-                              preview: _previews[_selectedStrategy],
-                              extraMonthlyAmount:
-                                  _plan?.extraMonthlyAmount ?? 0,
-                              isLoading: _isPreviewLoading,
-                            ),
-                            const SizedBox(height: AppDimensions.lg),
-                            AppCard(
-                              color: AppColors.mdSurfaceContainerLow,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Icon(
-                                    LucideIcons.shield,
-                                    color: AppColors.mdPrimary,
-                                    size: AppDimensions.iconMd,
-                                  ),
-                                  const SizedBox(width: AppDimensions.sm),
-                                  Expanded(
-                                    child: Text(
-                                      'Bạn có thể đổi chiến lược bất kỳ lúc nào sau onboarding. Mỗi lần đổi, plan summary và timeline cache sẽ recast lại.',
-                                      style: AppTextStyles.bodySmall.copyWith(
-                                        color: AppColors.mdOnSurfaceVariant,
+                                    const SizedBox(height: AppDimensions.sm),
+                                    Text(
+                                      'Hãy thêm ít nhất một khoản nợ trước khi tiếp tục.',
+                                      style: AppTextStyles.bodyMedium,
+                                    ),
+                                    const SizedBox(height: AppDimensions.md),
+                                    AppButton.outlined(
+                                      label: 'Quay lại thêm khoản nợ',
+                                      icon: LucideIcons.plus,
+                                      onPressed: () => navigateToOnboardingStep(
+                                        context,
+                                        step: OnboardingStep.addDebt,
+                                        route: AppRoutes.debtEntry,
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
+                              )
+                            else ...[
+                              _StrategyCard(
+                                key: AppTestKeys.onboardingStrategySnowball,
+                                title: 'Snowball',
+                                subtitle: _topPriorityText(
+                                  strategy: Strategy.snowball,
+                                  debts: trackedDebts,
+                                ),
+                                detail: _previewDetail(
+                                  _previews[Strategy.snowball],
+                                ),
+                                badgeText: _previewBadgeText(
+                                  _previews[Strategy.snowball],
+                                  fallback: 'Ưu tiên khoản có số dư nhỏ nhất.',
+                                ),
+                                badgeColor: AppColors.mdPrimaryContainer,
+                                badgeTextColor: AppColors.mdOnPrimaryContainer,
+                                icon: LucideIcons.snowflake,
+                                isSelected:
+                                    _selectedStrategy == Strategy.snowball,
+                                onTap: () {
+                                  setState(
+                                    () => _selectedStrategy = Strategy.snowball,
+                                  );
+                                },
                               ),
-                            ),
+                              const SizedBox(height: AppDimensions.md),
+                              _StrategyCard(
+                                key: AppTestKeys.onboardingStrategyAvalanche,
+                                title: 'Avalanche',
+                                subtitle: _topPriorityText(
+                                  strategy: Strategy.avalanche,
+                                  debts: trackedDebts,
+                                ),
+                                detail: _previewDetail(
+                                  _previews[Strategy.avalanche],
+                                ),
+                                badgeText: _previewBadgeText(
+                                  _previews[Strategy.avalanche],
+                                  fallback: 'Ưu tiên APR cao nhất để giảm lãi.',
+                                ),
+                                badgeColor: AppColors.mdSecondaryContainer,
+                                badgeTextColor:
+                                    AppColors.mdOnSecondaryContainer,
+                                icon: LucideIcons.trendingDown,
+                                isSelected:
+                                    _selectedStrategy == Strategy.avalanche,
+                                onTap: () {
+                                  setState(
+                                    () =>
+                                        _selectedStrategy = Strategy.avalanche,
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: AppDimensions.lg),
+                              _SelectedStrategyPreviewCard(
+                                strategy: _selectedStrategy,
+                                preview: _previews[_selectedStrategy],
+                                extraMonthlyAmount:
+                                    _plan?.extraMonthlyAmount ?? 0,
+                                isLoading: _isPreviewLoading,
+                              ),
+                              const SizedBox(height: AppDimensions.lg),
+                              AppCard(
+                                color: AppColors.mdSurfaceContainerLow,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      LucideIcons.shield,
+                                      color: AppColors.mdPrimary,
+                                      size: AppDimensions.iconMd,
+                                    ),
+                                    const SizedBox(width: AppDimensions.sm),
+                                    Expanded(
+                                      child: Text(
+                                        'Bạn có thể đổi chiến lược bất kỳ lúc nào sau onboarding. Mỗi lần đổi, plan summary và timeline cache sẽ recast lại.',
+                                        style: AppTextStyles.bodySmall.copyWith(
+                                          color: AppColors.mdOnSurfaceVariant,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ],
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(AppDimensions.lg),
-                    decoration: const BoxDecoration(
-                      color: AppColors.mdSurface,
-                      border: Border(
-                        top: BorderSide(color: AppColors.mdOutlineVariant),
+                    Container(
+                      padding: const EdgeInsets.all(AppDimensions.lg),
+                      decoration: const BoxDecoration(
+                        color: AppColors.mdSurface,
+                        border: Border(
+                          top: BorderSide(color: AppColors.mdOutlineVariant),
+                        ),
+                      ),
+                      child: SizedBox(
+                        key: AppTestKeys.onboardingStrategyContinue,
+                        child: AppButton.filledLg(
+                          label: 'Lưu chiến lược và tiếp tục',
+                          trailingIcon: LucideIcons.arrowRight,
+                          fullWidth: true,
+                          loading: _isSaving,
+                          onPressed: trackedDebts.isEmpty
+                              ? null
+                              : _saveAndContinue,
+                        ),
                       ),
                     ),
-                    child: SizedBox(
-                      key: AppTestKeys.onboardingStrategyContinue,
-                      child: AppButton.filledLg(
-                        label: 'Lưu chiến lược và tiếp tục',
-                        trailingIcon: LucideIcons.arrowRight,
-                        fullWidth: true,
-                        loading: _isSaving,
-                        onPressed: trackedDebts.isEmpty
-                            ? null
-                            : _saveAndContinue,
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -383,7 +390,10 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
     return 'Debt-free $payoffDate · ${AppFormatters.formatMonthsDuration(preview.projectedMonths)} · lãi ${AppFormatters.formatCents(preview.totalInterestProjected)}';
   }
 
-  String _previewBadgeText(StrategyPreview? preview, {required String fallback}) {
+  String _previewBadgeText(
+    StrategyPreview? preview, {
+    required String fallback,
+  }) {
     if (preview == null) return fallback;
     return 'Tiết kiệm ${AppFormatters.formatCents(preview.totalInterestSaved)} vs minimum-only';
   }
@@ -397,6 +407,9 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
         updatedAt: now,
       );
       _plan = await _planRepository.savePlan(draft);
+      unawaited(
+        getIt<OnboardingAnalytics>().trackStrategySelected(_selectedStrategy),
+      );
       if (!mounted) return;
       await context.read<OnboardingCubit>().goToStep(
         OnboardingStep.extraAmount,

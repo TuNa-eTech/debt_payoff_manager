@@ -5,9 +5,13 @@ import 'package:go_router/go_router.dart';
 
 import 'package:debt_payoff_manager/core/di/injection.dart';
 import 'package:debt_payoff_manager/core/router/app_router.dart';
+import 'package:debt_payoff_manager/core/services/app_analytics.dart';
+import 'package:debt_payoff_manager/core/services/backup_file_picker.dart';
+import 'package:debt_payoff_manager/core/services/data_management_service.dart';
 import 'package:debt_payoff_manager/core/services/monthly_action_service.dart';
 import 'package:debt_payoff_manager/core/services/payment_logging_service.dart';
 import 'package:debt_payoff_manager/core/services/plan_recast_service.dart';
+import 'package:debt_payoff_manager/core/services/share_launcher.dart';
 import 'package:debt_payoff_manager/data/local/database.dart';
 import 'package:debt_payoff_manager/data/local/database_provider.dart';
 import 'package:debt_payoff_manager/data/local/stores/sync_state_store.dart';
@@ -20,6 +24,7 @@ import 'package:debt_payoff_manager/domain/repositories/debt_repository.dart';
 import 'package:debt_payoff_manager/domain/repositories/settings_repository.dart';
 import 'package:debt_payoff_manager/features/debts/cubit/debts_cubit.dart';
 import 'package:debt_payoff_manager/features/onboarding/cubit/onboarding_cubit.dart';
+import 'package:debt_payoff_manager/features/onboarding/services/onboarding_analytics.dart';
 
 class TestAppHarness {
   TestAppHarness._({
@@ -33,6 +38,10 @@ class TestAppHarness {
     required this.planRecastService,
     required this.paymentLoggingService,
     required this.monthlyActionService,
+    required this.appAnalytics,
+    required this.backupFilePicker,
+    required this.dataManagementService,
+    required this.shareLauncher,
     required this.closeDbOnDispose,
   });
 
@@ -46,6 +55,10 @@ class TestAppHarness {
   final PlanRecastService planRecastService;
   final PaymentLoggingService paymentLoggingService;
   final MonthlyActionService monthlyActionService;
+  final AppAnalytics appAnalytics;
+  final BackupFilePicker backupFilePicker;
+  final DataManagementService dataManagementService;
+  final ShareLauncher shareLauncher;
   final bool closeDbOnDispose;
 
   late _TestAppScope _appScope;
@@ -64,12 +77,22 @@ class TestAppHarness {
 
   static Future<TestAppHarness> create({
     AppDatabase? db,
+    AppAnalytics? appAnalytics,
+    BackupFilePicker? backupFilePicker,
+    DataManagementService? dataManagementService,
+    ShareLauncher? shareLauncher,
     bool closeDbOnDispose = true,
   }) async {
     await getIt.reset();
 
     final resolvedDb = db ?? DatabaseProvider.openTestDatabase();
-    configureDependencies(database: resolvedDb);
+    configureDependencies(
+      database: resolvedDb,
+      appAnalytics: appAnalytics,
+      backupFilePicker: backupFilePicker,
+      dataManagementService: dataManagementService,
+      shareLauncher: shareLauncher,
+    );
 
     final harness = TestAppHarness._(
       db: resolvedDb,
@@ -82,6 +105,10 @@ class TestAppHarness {
       planRecastService: getIt<PlanRecastService>(),
       paymentLoggingService: getIt<PaymentLoggingService>(),
       monthlyActionService: getIt<MonthlyActionService>(),
+      appAnalytics: getIt<AppAnalytics>(),
+      backupFilePicker: getIt<BackupFilePicker>(),
+      dataManagementService: getIt<DataManagementService>(),
+      shareLauncher: getIt<ShareLauncher>(),
       closeDbOnDispose: closeDbOnDispose,
     );
     await harness._createAppScope();
@@ -132,6 +159,7 @@ class TestAppHarness {
 
     final onboardingCubit = OnboardingCubit(
       settingsRepository: settingsRepository,
+      onboardingAnalytics: getIt<OnboardingAnalytics>(),
     );
     await onboardingCubit.start();
 
