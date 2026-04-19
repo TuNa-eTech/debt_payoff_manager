@@ -12,7 +12,7 @@ env:
 jobs:
   analyze:
     name: Lint & Format
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -29,7 +29,7 @@ jobs:
 
   codegen:
     name: Codegen
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: analyze
     steps:
       - uses: actions/checkout@v4
@@ -51,7 +51,7 @@ jobs:
 
   unit-and-engine:
     name: Unit + Engine tests
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: analyze
     steps:
       - uses: actions/checkout@v4
@@ -73,7 +73,7 @@ jobs:
 
   firestore-rules:
     name: Firestore rules tests
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: analyze
     steps:
       - uses: actions/checkout@v4
@@ -97,7 +97,7 @@ jobs:
 
   build-android:
     name: Build Android (unsigned)
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: [analyze, unit-and-engine]
     steps:
       - uses: actions/checkout@v4
@@ -112,6 +112,8 @@ jobs:
           cache: true
       - run: flutter pub get
       - run: dart run build_runner build --delete-conflicting-outputs
+      - name: Accept Android licenses
+        run: yes | flutter doctor --android-licenses || true
       - name: Build debug APK
         run: flutter build apk --debug
 
@@ -133,7 +135,7 @@ jobs:
 
   coverage-gate:
     name: Coverage threshold
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: unit-and-engine
     steps:
       - uses: actions/checkout@v4
