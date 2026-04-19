@@ -98,6 +98,7 @@ dev_dependencies:
   firebase_auth_mocks: ^0.14.1
   golden_toolkit: ^0.15.0
   patrol: ^3.13.2           # Enhanced integration test
+  flutter_launcher_icons: ^0.14.3
 
 flutter:
   uses-material-design: true

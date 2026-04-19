@@ -75,6 +75,11 @@ Legend:
 - **Phase 0 / E0** ở trạng thái **mostly complete trong repo**:
   - CI/workflows, dependency stack, codegen, và mobile Firebase config files đã hiện diện.
   - Các mục process/team-only như clone time, commit convention thực tế, Dev/Prod env split, và Crashlytics/Analytics runtime wiring chưa thể audit đầy đủ chỉ từ repo.
+- **Phase 0 / D0** update:
+  - Logo concept finalized: **"Debt Payoff X"** — V3 Minimalist Peak + X Summit (Mountain peak with X at summit + horizon line, Forest Green gradient background).
+  - Tagline: **"Clear debt. Live free."**
+  - Brand lockup (icon + wordmark + tagline) đã có.
+  - Dark mode variant đã có.
 - **Phase 1 / E1** complete trong codebase và test suite hiện tại.
 - **Phase 2 / D1** không thể audit trọn vẹn chỉ từ repo:
   - Các màn core đã được ship vào app, nhưng prototype/design-review/handoff artifacts không được dùng làm source of truth trong repository.
@@ -86,6 +91,9 @@ Legend:
   - Guided onboarding đã live end-to-end, có resume flow, và đã được instrument bằng onboarding analytics để đo step views, resume, và completion funnel trong beta.
   - Trust Layer Level 0 đã có `CSV export`, `local backup ZIP`, `local restore ZIP`, `clear all / factory reset`, cùng trust UX copy rõ ràng về local-only và roadmap cloud.
   - `Pricing screen stub` Free vs Premium đã live từ flow `Sao lưu đám mây`; `PDF export` được dời có chủ ý sang scope reports/premium hậu MVP thay vì tiếp tục block Phase 5.
+- **Phase 6 / E5** bắt đầu:
+  - App icon đã setup qua `flutter_launcher_icons` — generated full icon set cho iOS (20+ sizes) và Android (mipmap + adaptive icon với Forest Green background).
+  - Source icon: `assets/icons/app_icon.png`, config: `flutter_launcher_icons.yaml`.
 - **Phase 6+** chưa bắt đầu như một phase hardening/ship riêng; hiện mới có groundwork dependency và test coverage.
 
 ---
@@ -100,7 +108,11 @@ Legend:
 ### D0 — Design Setup (Week 1-2)
 
 **Deliverables:**
-- [ ] Brand direction: logo concept, color palette (accessible, financial-trust vibe)
+- [x] Brand direction: logo concept, color palette (accessible, financial-trust vibe)
+  - Brand name: **Debt Payoff X** | Tagline: **Clear debt. Live free.**
+  - Logo: V3 Minimalist Peak + X Summit — two lines forming mountain, crossing at summit as X, curved horizon below
+  - Color: Forest Green (#1B6B4A) gradient background, white glyph — Apple HIG compliant
+  - Assets: `assets/icons/app_icon.png` (source), dark mode variant, full brand lockup
 - [ ] Design tokens: color system, typography scale, spacing, radius, shadows
 - [ ] Icon set shortlist (Feather / Heroicons / Phosphor — pick 1)
 - [ ] File Pencil setup: `design.pen` với token library + component starter
@@ -218,7 +230,7 @@ Legend:
 **2.3 Core screens — hi-fi (Week 2-3)**
 - [ ] Apply design tokens, typography, spacing
 - [ ] Interactive prototype trong Pencil
-- [ ] Dark mode variant
+- [ ] Single light theme finalized across core screens
 - [ ] Accessibility review: contrast AA+, touch targets ≥44pt, screen reader labels
 
 **2.4 Interaction patterns (Week 3)**
@@ -391,7 +403,11 @@ Legend:
 
 ### E5 — Engineering
 
-- [ ] App icon + splash screen per platform
+- [x] App icon per platform (generated via `flutter_launcher_icons`)
+  - iOS: full AppIcon.appiconset (1024×1024 down to 20×20, all @1x/@2x/@3x)
+  - Android: mipmap (mdpi–xxxhdpi) + adaptive icon (foreground + Forest Green background)
+  - Config: `flutter_launcher_icons.yaml`
+- [ ] Splash screen per platform
 - [ ] Localization infrastructure (i18n, extract strings, en-US initial)
 - [ ] Currency formatting per locale
 - [ ] Performance audit: recast < 500ms, screen transition < 100ms
@@ -409,7 +425,7 @@ Legend:
 - [ ] Marketing page / landing page design (nếu có website)
 - [ ] Onboarding tutorial video (30s) nếu quyết định cần
 - [ ] Error state final polish
-- [ ] Dark mode QA
+- [ ] Light theme QA
 
 ### Exit gate (Phase 6)
 - [ ] Crash-free session rate > 99% trong beta

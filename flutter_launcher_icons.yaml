@@ -1,0 +1,24 @@
+flutter_launcher_icons:
+  # App Icon — V3-A Minimalist Peak + X Summit
+  # Brand: Debt Payoff X | Tagline: Clear debt. Live free.
+  
+  android: true
+  ios: true
+  image_path: "assets/icons/app_icon.png"
+  
+  # Remove alpha channel for iOS (required by Apple)
+  remove_alpha_ios: true
+  
+  # Android adaptive icon configuration
+  adaptive_icon_background: "#1B6B4A"
+  adaptive_icon_foreground: "assets/icons/app_icon.png"
+  
+  # Minimum SDK for adaptive icons
+  min_sdk_android: 21
+  
+  # Web favicon
+  web:
+    generate: true
+    image_path: "assets/icons/app_icon.png"
+    background_color: "#1B6B4A"
+    theme_color: "#1B6B4A"

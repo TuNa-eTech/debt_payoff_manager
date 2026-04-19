@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'app.dart';
 import 'core/di/injection.dart';
 import 'core/services/app_analytics.dart';
+import 'core/theme/app_colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,13 +16,12 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  // Set system UI overlay style for dark theme
+  // Lock the Android/iOS system chrome to the app's light theme.
   SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
+    SystemUiOverlayStyle.dark.copyWith(
       statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Color(0xFF0F1419),
-      systemNavigationBarIconBrightness: Brightness.light,
+      systemNavigationBarColor: AppColors.mdSurface,
+      systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
 

@@ -54,7 +54,6 @@ class _DebtPayoffAppState extends State<DebtPayoffApp> {
         title: 'Debt Payoff Manager',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
-        themeMode: ThemeMode.light,
         routerConfig: router,
       ),
     );

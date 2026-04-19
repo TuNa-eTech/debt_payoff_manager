@@ -124,9 +124,7 @@ class AppTheme {
         hintStyle: AppTextStyles.bodyMedium.copyWith(
           color: AppColors.mdOnSurfaceVariant,
         ),
-        errorStyle: AppTextStyles.labelSmall.copyWith(
-          color: AppColors.mdError,
-        ),
+        errorStyle: AppTextStyles.labelSmall.copyWith(color: AppColors.mdError),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: AppDimensions.md,
           vertical: AppDimensions.md,
@@ -325,15 +323,21 @@ class AppTheme {
       // ── Switch ──
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return AppColors.mdOnPrimary;
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.mdOnPrimary;
+          }
           return AppColors.mdOutline;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return AppColors.mdPrimary;
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.mdPrimary;
+          }
           return AppColors.mdSurfaceContainerHighest;
         }),
         trackOutlineColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return Colors.transparent;
+          if (states.contains(WidgetState.selected)) {
+            return Colors.transparent;
+          }
           return AppColors.mdOutline;
         }),
       ),
@@ -369,8 +373,4 @@ class AppTheme {
       ),
     );
   }
-
-  /// Legacy alias — kept so AppTheme.darkTheme references still compile.
-  @Deprecated('Use AppTheme.lightTheme. The app is now light-mode.')
-  static ThemeData get darkTheme => lightTheme;
 }
