@@ -17,7 +17,9 @@ import '../debt_ui_utils.dart';
 import '../widgets/debt_card.dart';
 
 class DebtsListPage extends StatelessWidget {
-  const DebtsListPage({super.key});
+  const DebtsListPage({super.key, this.referenceDate});
+
+  final DateTime? referenceDate;
 
   @override
   Widget build(BuildContext context) {
@@ -102,8 +104,16 @@ class DebtsListPage extends StatelessWidget {
                   if (state.visibleDebts.isEmpty)
                     _EmptyList(filter: state.filter)
                   else
-                    ...state.visibleDebts.map(
-                      (debt) => Padding(
+                    ...state.visibleDebts.map((debt) {
+                      final isPaidOff =
+                          debt.status == DebtStatus.paidOff ||
+                          debt.status == DebtStatus.archived;
+                      final isOverdueDebt = isDebtOverdue(
+                        debt,
+                        now: referenceDate,
+                      );
+
+                      return Padding(
                         padding: const EdgeInsets.only(
                           bottom: AppDimensions.md,
                         ),
@@ -111,20 +121,19 @@ class DebtsListPage extends StatelessWidget {
                           key: AppTestKeys.debtCard(debt.id),
                           child: DebtCard(
                             name: debt.name,
-                            subtitle: debtSubtitle(debt),
+                            subtitle: debtSubtitle(debt, now: referenceDate),
                             balanceText: debtBalanceText(debt),
                             progress: debtProgress(debt),
                             icon: debtTypeIcon(debt.type),
                             iconColor: debtTypeColor(debt.type),
-                            isPaidOff:
-                                debt.status == DebtStatus.paidOff ||
-                                debt.status == DebtStatus.archived,
+                            isOverdue: isOverdueDebt,
+                            isPaidOff: isPaidOff,
                             onTap: () =>
-                                context.go(AppRoutes.debtDetailPath(debt.id)),
+                                context.push(AppRoutes.debtDetailPath(debt.id)),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    }),
                   const SizedBox(height: 80),
                 ],
               ),
@@ -133,7 +142,7 @@ class DebtsListPage extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton.extended(
           key: AppTestKeys.debtsAddFab,
-          onPressed: () => context.go(AppRoutes.addDebt),
+          onPressed: () => context.push(AppRoutes.addDebt),
           backgroundColor: AppColors.mdPrimaryContainer,
           foregroundColor: AppColors.mdOnPrimaryContainer,
           elevation: 2,

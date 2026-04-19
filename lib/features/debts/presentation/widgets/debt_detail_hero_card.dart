@@ -6,10 +6,7 @@ import '../../../../domain/entities/debt.dart';
 import '../debt_ui_utils.dart';
 
 class DebtDetailHeroCard extends StatelessWidget {
-  const DebtDetailHeroCard({
-    super.key,
-    required this.debt,
-  });
+  const DebtDetailHeroCard({super.key, required this.debt});
 
   final Debt debt;
 
@@ -17,6 +14,13 @@ class DebtDetailHeroCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final progress = debtProgress(debt);
     final iconColor = debtTypeColor(debt.type);
+    final isOverdueDebt = isDebtOverdue(debt);
+    final statusBackgroundColor = isOverdueDebt
+        ? AppColors.mdErrorContainer
+        : Colors.white.withValues(alpha: 0.16);
+    final statusForegroundColor = isOverdueDebt
+        ? AppColors.mdOnErrorContainer
+        : Colors.white;
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -39,10 +43,7 @@ class DebtDetailHeroCard extends StatelessWidget {
                       color: Colors.white.withValues(alpha: 0.12),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
-                      debtTypeIcon(debt.type),
-                      color: Colors.white,
-                    ),
+                    child: Icon(debtTypeIcon(debt.type), color: Colors.white),
                   ),
                   const SizedBox(width: 12),
                   Text(
@@ -61,12 +62,12 @@ class DebtDetailHeroCard extends StatelessWidget {
                   vertical: 4,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.16),
+                  color: statusBackgroundColor,
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  debtStatusLabel(debt.status),
-                  style: const TextStyle(color: Colors.white, fontSize: 11),
+                  debtStatusLabel(debt.status, debt: debt),
+                  style: TextStyle(color: statusForegroundColor, fontSize: 11),
                 ),
               ),
             ],

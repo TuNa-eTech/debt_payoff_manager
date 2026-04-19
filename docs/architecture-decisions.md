@@ -377,6 +377,53 @@
 
 ---
 
+## ADR-022: State management cho app slice hiện tại = `flutter_bloc` với `Cubit`
+
+- **Status:** Accepted
+- **Date:** 2026-04-18
+- **Context:** Phase 3 yêu cầu chốt 1 cách quản lý state cho debt-management UI và document thành ADR. Code hiện tại đã dùng `flutter_bloc`, `MultiBlocProvider`, và các `Cubit` riêng cho `DebtsCubit`, `DebtFormCubit`, `OnboardingCubit`, `MonthlyActionCubit`; dependencies được cấp qua `get_it`, còn data flow dài hạn vẫn đi qua repository streams.
+- **Decision:**
+  - Dùng `flutter_bloc` làm state-management package cho app slice hiện tại
+  - Ưu tiên `Cubit` cho feature/UI state hiện có thay vì event-based `Bloc`
+  - Repository tiếp tục là boundary cho data access; `Cubit` orchestration state và user actions ở presentation layer
+- **Rationale:**
+  - Phù hợp với mức độ phức tạp hiện tại: CRUD, form state, onboarding flow, filter/view state không cần event bus riêng
+  - Nhất quán với wiring đã tồn tại ở `DebtPayoffApp` (`MultiBlocProvider`) và DI hiện tại (`get_it.registerFactory<DebtsCubit>`)
+  - Giữ state transitions explicit, dễ test, và tách khỏi repository/domain layer theo đúng layering đang dùng
+  - Tránh đưa thêm một paradigm song song vào cùng app slice khi codebase đã chuẩn hóa trên `Cubit`
+- **Consequences:**
+  - (+) Một pattern nhất quán cho screen-level state trong các feature đã triển khai
+  - (+) Side effects như load/listen/save/archive đi qua các method rõ ràng trên `Cubit`, dễ trace trong widget/integration tests
+  - (+) `Cubit` đủ gọn cho Phase 3 scope, không ép team viết event classes khi chưa cần
+  - (−) Provider/lifecycle management vẫn thủ công ở app/router boundary
+  - (−) Khi flow sau này có orchestration phức tạp hơn, có thể cần nâng một số slice lên full `Bloc` hoặc đánh giá lại ADR này bằng ADR mới
+  - (−) Không tận dụng dependency graph/reactive provider ergonomics của các giải pháp khác; đổi hướng sau này sẽ tốn migration cost
+
+---
+
+## ADR-023: Navigation shell chỉ bọc 5 route gốc, subflows render full-screen trên root navigator
+
+- **Status:** Accepted
+- **Date:** 2026-04-18
+- **Context:** Sau khi hoàn tất Phase 4, các màn drill-down như debt detail, log payment, payment history và sync backup bị ảnh hưởng bởi việc `StatefulShellRoute` bọc cả shell lẫn subflows. Bottom navigation xuất hiện ở cả màn form/detail làm phát sinh overlap với CTA, safe-area handling rối hơn, và trải nghiệm task-focused trên mobile bị loãng.
+- **Decision:**
+  - `StatefulShellRoute.indexedStack` chỉ quản lý 5 route gốc: `/home`, `/debts`, `/plan`, `/progress`, `/settings`
+  - Các subflows như `/debts/add`, `/debts/:id`, `/debts/:id/edit`, `/debts/:id/log_payment`, `/debts/:id/history`, `/settings/sync` render trên `root navigator`
+  - Điều hướng từ tab root sang subflow dùng `push`/`pop`; không dùng conditional hide bottom nav trong shell scaffold
+- **Rationale:**
+  - Giải quyết đúng gốc vấn đề layout thay vì vá padding theo từng page
+  - Giữ bottom nav đúng semantic của top-level navigation, còn detail/form/history trở thành full-screen task flows
+  - Giúp keyboard/safe-area handling ổn định hơn cho các form và CTA cố định
+  - Vẫn giữ được branch state của 5 tab gốc nhờ `StatefulShellRoute.indexedStack`
+- **Consequences:**
+  - (+) UX mobile nhất quán hơn, không còn shell chrome chen vào các flow nhập liệu hoặc chi tiết
+  - (+) Giảm logic bù `navBarHeight` rải rác ở subpages
+  - (+) Back stack rõ ràng hơn: vào subflow rồi `pop` về đúng tab trước đó
+  - (−) Call sites phải phân biệt `push` cho subflow và `goBranch` cho tab navigation
+  - (−) Router tests và deep-link expectations cần explicit hơn ở boundary giữa shell và root navigator
+
+---
+
 ## Summary — Quick reference
 
 | ADR | Quyết định | Impact |
@@ -402,6 +449,8 @@
 | 019 | Batch + debounce sync | Firestore cost |
 | 020 | Sanitized logging | Privacy |
 | 021 | Monthly Action View on-the-fly | Living Plan simplicity |
+| 022 | `flutter_bloc` + `Cubit` cho app slice hiện tại | UI state consistency |
+| 023 | Shell chỉ bọc 5 route gốc; subflows dùng root navigator | Mobile navigation clarity |
 
 ---
 

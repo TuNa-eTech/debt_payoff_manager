@@ -57,6 +57,9 @@ class AppTestKeys {
     'debt-form:minimum-payment',
   );
   static const debtFormDueDay = ValueKey<String>('debt-form:due-day');
+  static const debtFormAdvancedToggle = ValueKey<String>(
+    'debt-form:advanced-toggle',
+  );
   static const debtFormSave = ValueKey<String>('debt-form:save');
   static const debtFormCancel = ValueKey<String>('debt-form:cancel');
 
@@ -70,6 +73,10 @@ class AppTestKeys {
   // Debt detail / actions
   static const debtDetailEdit = ValueKey<String>('debt-detail:edit');
   static const debtDetailMore = ValueKey<String>('debt-detail:more');
+  static const debtDetailLogPayment = ValueKey<String>('debt-detail:log-payment');
+  static const debtDetailPaymentHistory = ValueKey<String>(
+    'debt-detail:payment-history',
+  );
   static const debtOptionArchive = ValueKey<String>('debt-option:archive');
   static const debtOptionUnarchive = ValueKey<String>('debt-option:unarchive');
   static const debtOptionDelete = ValueKey<String>('debt-option:delete');
@@ -77,6 +84,29 @@ class AppTestKeys {
     'dialog:confirm-primary',
   );
   static const snackbarUndo = ValueKey<String>('snackbar:undo');
+
+  // Phase 4 payments / monthly action
+  static const paymentLogAmount = ValueKey<String>('payment-log:amount');
+  static const paymentLogDate = ValueKey<String>('payment-log:date');
+  static const paymentLogSubmit = ValueKey<String>('payment-log:submit');
+  static const paymentTypeMinimum = ValueKey<String>('payment-log:type-minimum');
+  static const paymentTypeExtra = ValueKey<String>('payment-log:type-extra');
+  static const paymentTypeLumpSum = ValueKey<String>('payment-log:type-lumpsum');
+
+  static ValueKey<String> monthlyActionSection(String debtId) =>
+      ValueKey<String>('monthly-action:section:$debtId');
+
+  static ValueKey<String> monthlyActionItem(String actionId) =>
+      ValueKey<String>('monthly-action:item:$actionId');
+
+  static ValueKey<String> monthlyActionCheckOff(String actionId) =>
+      ValueKey<String>('monthly-action:checkoff:$actionId');
+
+  static ValueKey<String> paymentHistoryMonthChip(String yearMonth) =>
+      ValueKey<String>('payment-history:month:$yearMonth');
+
+  static ValueKey<String> timelineMonthCard(int monthIndex) =>
+      ValueKey<String>('timeline:month:$monthIndex');
 
   static ValueKey<String> debtCard(String id) =>
       ValueKey<String>('debt-card:$id');

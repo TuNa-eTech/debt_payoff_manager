@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -6,15 +8,21 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/di/injection.dart';
+import '../../../../core/models/strategy_preview.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/services/plan_recast_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/formatters.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/app_chip.dart';
+import '../../../../domain/entities/debt.dart';
 import '../../../../domain/entities/plan.dart';
 import '../../../../domain/enums/strategy.dart';
 import '../../../../domain/repositories/plan_repository.dart';
+import '../../../../engine/strategy_sorter.dart';
 import '../../../debts/cubit/debts_cubit.dart';
 import '../../../debts/cubit/debts_state.dart';
 import '../../cubit/onboarding_cubit.dart';
@@ -30,11 +38,16 @@ class StrategySelectionPage extends StatefulWidget {
 
 class _StrategySelectionPageState extends State<StrategySelectionPage> {
   final PlanRepository _planRepository = getIt.get<PlanRepository>();
+  final PlanRecastService _planRecastService = getIt.get<PlanRecastService>();
 
   Plan? _plan;
   Strategy _selectedStrategy = Strategy.snowball;
   bool _isLoading = true;
   bool _isSaving = false;
+  bool _isPreviewLoading = false;
+  Map<Strategy, StrategyPreview> _previews = const {};
+  String? _previewFingerprint;
+  int _previewRequestId = 0;
 
   @override
   void initState() {
@@ -83,6 +96,7 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
               final trackedDebts = debtsState.debts
                   .where((debt) => debt.currentBalance > 0)
                   .toList();
+              _maybeRefreshPreviews(trackedDebts);
 
               if (_isLoading || debtsState.isLoading) {
                 return const Center(child: CircularProgressIndicator());
@@ -125,7 +139,7 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                           Text(
                             trackedDebts.isEmpty
                                 ? 'Bạn cần ít nhất một khoản nợ để chọn chiến lược.'
-                                : 'Chiến lược được lưu ngay bây giờ. Timeline chi tiết và ngày hết nợ sẽ hiện khi phần mô phỏng kế hoạch được bật.',
+                                : 'App đang so projection thật của Snowball và Avalanche từ dữ liệu khoản nợ hiện tại của bạn.',
                             style: AppTextStyles.bodyMedium.copyWith(
                               color: AppColors.mdOnSurfaceVariant,
                             ),
@@ -163,11 +177,17 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                             _StrategyCard(
                               key: AppTestKeys.onboardingStrategySnowball,
                               title: 'Snowball',
-                              subtitle:
-                                  'Ưu tiên khoản có số dư nhỏ nhất trước để tạo đà.',
-                              detail:
-                                  '${trackedDebts.length} khoản sẽ được sắp theo số dư tăng dần.',
-                              badgeText: 'Tập trung vào động lực sớm',
+                              subtitle: _topPriorityText(
+                                strategy: Strategy.snowball,
+                                debts: trackedDebts,
+                              ),
+                              detail: _previewDetail(
+                                _previews[Strategy.snowball],
+                              ),
+                              badgeText: _previewBadgeText(
+                                _previews[Strategy.snowball],
+                                fallback: 'Ưu tiên khoản có số dư nhỏ nhất.',
+                              ),
                               badgeColor: AppColors.mdPrimaryContainer,
                               badgeTextColor: AppColors.mdOnPrimaryContainer,
                               icon: LucideIcons.snowflake,
@@ -183,11 +203,17 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                             _StrategyCard(
                               key: AppTestKeys.onboardingStrategyAvalanche,
                               title: 'Avalanche',
-                              subtitle:
-                                  'Ưu tiên khoản có APR cao nhất để giảm lãi trước.',
-                              detail:
-                                  '${trackedDebts.length} khoản sẽ được sắp theo APR giảm dần.',
-                              badgeText: 'Tập trung vào tối ưu chi phí',
+                              subtitle: _topPriorityText(
+                                strategy: Strategy.avalanche,
+                                debts: trackedDebts,
+                              ),
+                              detail: _previewDetail(
+                                _previews[Strategy.avalanche],
+                              ),
+                              badgeText: _previewBadgeText(
+                                _previews[Strategy.avalanche],
+                                fallback: 'Ưu tiên APR cao nhất để giảm lãi.',
+                              ),
                               badgeColor: AppColors.mdSecondaryContainer,
                               badgeTextColor: AppColors.mdOnSecondaryContainer,
                               icon: LucideIcons.trendingDown,
@@ -198,6 +224,14 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                                   () => _selectedStrategy = Strategy.avalanche,
                                 );
                               },
+                            ),
+                            const SizedBox(height: AppDimensions.lg),
+                            _SelectedStrategyPreviewCard(
+                              strategy: _selectedStrategy,
+                              preview: _previews[_selectedStrategy],
+                              extraMonthlyAmount:
+                                  _plan?.extraMonthlyAmount ?? 0,
+                              isLoading: _isPreviewLoading,
                             ),
                             const SizedBox(height: AppDimensions.lg),
                             AppCard(
@@ -213,7 +247,7 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                                   const SizedBox(width: AppDimensions.sm),
                                   Expanded(
                                     child: Text(
-                                      'Bạn có thể đổi chiến lược bất kỳ lúc nào sau khi hoàn tất onboarding.',
+                                      'Bạn có thể đổi chiến lược bất kỳ lúc nào sau onboarding. Mỗi lần đổi, plan summary và timeline cache sẽ recast lại.',
                                       style: AppTextStyles.bodySmall.copyWith(
                                         color: AppColors.mdOnSurfaceVariant,
                                       ),
@@ -257,6 +291,103 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
     );
   }
 
+  void _maybeRefreshPreviews(List<Debt> trackedDebts) {
+    if (_isLoading || trackedDebts.isEmpty) return;
+
+    final fingerprint = _previewStateFingerprint(trackedDebts);
+    if (fingerprint == _previewFingerprint) return;
+    _previewFingerprint = fingerprint;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      unawaited(_refreshPreviews(trackedDebts));
+    });
+  }
+
+  Future<void> _refreshPreviews(List<Debt> trackedDebts) async {
+    final requestId = ++_previewRequestId;
+    setState(() => _isPreviewLoading = true);
+
+    try {
+      final now = DateTime.now().toUtc();
+      final draft = (_plan ?? _createDraftPlan(now)).copyWith(updatedAt: now);
+      final previews = await Future.wait([
+        _planRecastService.previewPlan(
+          plan: draft.copyWith(strategy: Strategy.snowball),
+          debts: trackedDebts,
+        ),
+        _planRecastService.previewPlan(
+          plan: draft.copyWith(strategy: Strategy.avalanche),
+          debts: trackedDebts,
+        ),
+      ]);
+
+      if (!mounted || requestId != _previewRequestId) return;
+      setState(() {
+        _previews = {
+          Strategy.snowball: previews[0],
+          Strategy.avalanche: previews[1],
+        };
+        _isPreviewLoading = false;
+      });
+    } catch (_) {
+      if (!mounted || requestId != _previewRequestId) return;
+      setState(() => _isPreviewLoading = false);
+    }
+  }
+
+  String _previewStateFingerprint(List<Debt> debts) {
+    final buffer = StringBuffer()
+      ..write(_plan?.extraMonthlyAmount ?? 0)
+      ..write('|')
+      ..write(_plan?.strategy.name ?? 'none');
+    for (final debt in debts) {
+      buffer
+        ..write('|')
+        ..write(debt.id)
+        ..write(':')
+        ..write(debt.currentBalance)
+        ..write(':')
+        ..write(debt.apr)
+        ..write(':')
+        ..write(debt.status.name)
+        ..write(':')
+        ..write(debt.excludeFromStrategy);
+    }
+    return buffer.toString();
+  }
+
+  String _topPriorityText({
+    required Strategy strategy,
+    required List<Debt> debts,
+  }) {
+    final candidates = debts
+        .where((debt) => !debt.excludeFromStrategy)
+        .toList(growable: false);
+    if (candidates.isEmpty) {
+      return 'Mọi khoản đang được exclude khỏi strategy.';
+    }
+
+    final ordered = StrategySorter.sort(candidates, strategy);
+    return 'Bắt đầu với ${ordered.first.name}';
+  }
+
+  String _previewDetail(StrategyPreview? preview) {
+    if (preview == null) {
+      return 'Đang tính payoff date và projected interest từ dữ liệu hiện tại...';
+    }
+
+    final payoffDate = preview.projectedDebtFreeDate == null
+        ? 'Đang recast'
+        : AppFormatters.formatMonthYear(preview.projectedDebtFreeDate!);
+    return 'Debt-free $payoffDate · ${AppFormatters.formatMonthsDuration(preview.projectedMonths)} · lãi ${AppFormatters.formatCents(preview.totalInterestProjected)}';
+  }
+
+  String _previewBadgeText(StrategyPreview? preview, {required String fallback}) {
+    if (preview == null) return fallback;
+    return 'Tiết kiệm ${AppFormatters.formatCents(preview.totalInterestSaved)} vs minimum-only';
+  }
+
   Future<void> _saveAndContinue() async {
     setState(() => _isSaving = true);
     try {
@@ -293,6 +424,132 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
       extraMonthlyAmount: 0,
       createdAt: now,
       updatedAt: now,
+    );
+  }
+}
+
+class _SelectedStrategyPreviewCard extends StatelessWidget {
+  const _SelectedStrategyPreviewCard({
+    required this.strategy,
+    required this.preview,
+    required this.extraMonthlyAmount,
+    required this.isLoading,
+  });
+
+  final Strategy strategy;
+  final StrategyPreview? preview;
+  final int extraMonthlyAmount;
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isLoading && preview == null) {
+      return const AppCard(
+        color: AppColors.mdSurfaceContainerLow,
+        child: SizedBox(
+          height: 128,
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    }
+
+    return AppCard(
+      color: AppColors.mdSurfaceContainerLow,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text('Preview hiện tại', style: AppTextStyles.titleSmall),
+              const Spacer(),
+              AppChip.status(label: strategy.label, icon: LucideIcons.sparkles),
+            ],
+          ),
+          const SizedBox(height: AppDimensions.md),
+          Row(
+            children: [
+              Expanded(
+                child: _PreviewStat(
+                  label: 'Debt-free date',
+                  value: preview?.projectedDebtFreeDate == null
+                      ? 'Đang recast'
+                      : AppFormatters.formatShortMonthYear(
+                          preview!.projectedDebtFreeDate!,
+                        ),
+                ),
+              ),
+              const SizedBox(width: AppDimensions.md),
+              Expanded(
+                child: _PreviewStat(
+                  label: 'Projected length',
+                  value: preview == null
+                      ? '--'
+                      : AppFormatters.formatMonthsDuration(
+                          preview!.projectedMonths,
+                        ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppDimensions.md),
+          Row(
+            children: [
+              Expanded(
+                child: _PreviewStat(
+                  label: 'Projected interest',
+                  value: preview == null
+                      ? '--'
+                      : AppFormatters.formatCents(
+                          preview!.totalInterestProjected,
+                        ),
+                ),
+              ),
+              const SizedBox(width: AppDimensions.md),
+              Expanded(
+                child: _PreviewStat(
+                  label: 'Extra / tháng',
+                  value: AppFormatters.formatCents(extraMonthlyAmount),
+                  valueColor: AppColors.mdPrimary,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PreviewStat extends StatelessWidget {
+  const _PreviewStat({
+    required this.label,
+    required this.value,
+    this.valueColor,
+  });
+
+  final String label;
+  final String value;
+  final Color? valueColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: AppTextStyles.labelSmall.copyWith(
+            color: AppColors.mdOnSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: AppDimensions.xs),
+        Text(
+          value,
+          style: AppTextStyles.titleMedium.copyWith(
+            color: valueColor ?? AppColors.mdOnSurface,
+          ),
+        ),
+      ],
     );
   }
 }

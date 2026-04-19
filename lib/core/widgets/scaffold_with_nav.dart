@@ -10,7 +10,7 @@ import '../theme/app_dimensions.dart';
 ///
 /// Used as the shell for [StatefulShellRoute.indexedStack] in GoRouter.
 /// Matches the 5-tab layout defined in the design prototype:
-/// Tổng quan · Khoản nợ · Kế hoạch · Tiến độ · Cài đặt
+/// Tháng này · Khoản nợ · Kế hoạch · Tiến độ · Cài đặt
 class ScaffoldWithNav extends StatelessWidget {
   const ScaffoldWithNav({super.key, required this.child});
 
@@ -49,7 +49,7 @@ class ScaffoldWithNav extends StatelessWidget {
                 size: AppDimensions.iconMd,
                 color: AppColors.mdOnPrimaryContainer,
               ),
-              label: 'Tổng quan',
+              label: 'Tháng này',
             ),
             NavigationDestination(
               icon: Icon(

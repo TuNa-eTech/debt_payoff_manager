@@ -60,7 +60,7 @@ class HomeEmptyView extends StatelessWidget {
                   label: 'Thêm khoản nợ',
                   icon: LucideIcons.plus,
                   fullWidth: true,
-                  onPressed: () => context.go(AppRoutes.addDebt),
+                  onPressed: () => context.push(AppRoutes.addDebt),
                 ),
               ],
             ),

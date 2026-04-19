@@ -1,59 +1,69 @@
 import 'package:equatable/equatable.dart';
 
-/// Data for a single payment action item in the monthly view.
-class MonthlyPaymentItem extends Equatable {
-  const MonthlyPaymentItem({
-    required this.debtId,
-    required this.debtName,
-    required this.amountCents,
-    required this.dueDate,
-    this.isCompleted = false,
-    this.isOverdue = false,
+import '../../../../core/models/monthly_action_models.dart';
+import '../../../../core/models/recast_delta.dart';
+import '../../../../domain/entities/plan.dart';
+
+class MonthlyActionState extends Equatable {
+  const MonthlyActionState({
+    this.isLoading = true,
+    this.referenceDate,
+    this.plan,
+    this.delta,
+    this.sections = const [],
+    this.summary,
+    this.submittingIds = const <String>{},
+    this.errorMessage,
+    this.hasTrackedDebts = false,
   });
 
-  final String debtId;
-  final String debtName;
-  final int amountCents;
-  final DateTime dueDate;
-  final bool isCompleted;
-  final bool isOverdue;
+  final bool isLoading;
+  final DateTime? referenceDate;
+  final Plan? plan;
+  final RecastDelta? delta;
+  final List<MonthlyActionSection> sections;
+  final MonthlyActionSummary? summary;
+  final Set<String> submittingIds;
+  final String? errorMessage;
+  final bool hasTrackedDebts;
+
+  bool get hasActionItems => sections.any((section) => section.items.isNotEmpty);
+
+  MonthlyActionState copyWith({
+    bool? isLoading,
+    DateTime? referenceDate,
+    Plan? plan,
+    RecastDelta? delta,
+    List<MonthlyActionSection>? sections,
+    MonthlyActionSummary? summary,
+    Set<String>? submittingIds,
+    String? errorMessage,
+    bool clearErrorMessage = false,
+    bool? hasTrackedDebts,
+  }) {
+    return MonthlyActionState(
+      isLoading: isLoading ?? this.isLoading,
+      referenceDate: referenceDate ?? this.referenceDate,
+      plan: plan ?? this.plan,
+      delta: delta ?? this.delta,
+      sections: sections ?? this.sections,
+      summary: summary ?? this.summary,
+      submittingIds: submittingIds ?? this.submittingIds,
+      errorMessage: clearErrorMessage ? null : (errorMessage ?? this.errorMessage),
+      hasTrackedDebts: hasTrackedDebts ?? this.hasTrackedDebts,
+    );
+  }
 
   @override
   List<Object?> get props => [
-        debtId, debtName, amountCents, dueDate, isCompleted, isOverdue,
+        isLoading,
+        referenceDate,
+        plan,
+        delta,
+        sections,
+        summary,
+        submittingIds,
+        errorMessage,
+        hasTrackedDebts,
       ];
-}
-
-/// State for monthly action feature.
-sealed class MonthlyActionState extends Equatable {
-  const MonthlyActionState();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class MonthlyActionInitial extends MonthlyActionState {
-  const MonthlyActionInitial();
-}
-
-class MonthlyActionLoading extends MonthlyActionState {
-  const MonthlyActionLoading();
-}
-
-class MonthlyActionLoaded extends MonthlyActionState {
-  const MonthlyActionLoaded({
-    required this.items,
-    required this.totalDueCents,
-    required this.completedCount,
-  });
-
-  final List<MonthlyPaymentItem> items;
-  final int totalDueCents;
-  final int completedCount;
-
-  int get totalCount => items.length;
-  int get overdueCount => items.where((i) => i.isOverdue).length;
-
-  @override
-  List<Object?> get props => [items, totalDueCents, completedCount];
 }

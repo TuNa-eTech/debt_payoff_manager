@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../domain/repositories/debt_repository.dart';
@@ -62,11 +62,22 @@ GoRouter createRouter({
   required SettingsRepository settingsRepository,
   required DebtRepository debtRepository,
 }) {
+  final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+  final homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
+  final debtsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'debts');
+  final planNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'plan');
+  final progressNavigatorKey = GlobalKey<NavigatorState>(
+    debugLabel: 'progress',
+  );
+  final settingsNavigatorKey = GlobalKey<NavigatorState>(
+    debugLabel: 'settings',
+  );
   final refreshNotifier = _StreamRefreshNotifier(
     settingsRepository.watchSettings(),
   );
 
   return GoRouter(
+    navigatorKey: rootNavigatorKey,
     initialLocation: AppRoutes.welcome,
     debugLogDiagnostics: true,
     refreshListenable: refreshNotifier,
@@ -134,6 +145,7 @@ GoRouter createRouter({
         branches: [
           // 1. Tổng quan (Home)
           StatefulShellBranch(
+            navigatorKey: homeNavigatorKey,
             routes: [
               GoRoute(
                 path: AppRoutes.home,
@@ -143,48 +155,17 @@ GoRouter createRouter({
           ),
           // 2. Khoản nợ (Debts)
           StatefulShellBranch(
+            navigatorKey: debtsNavigatorKey,
             routes: [
               GoRoute(
                 path: AppRoutes.debts,
                 builder: (context, state) => const DebtsListPage(),
-                routes: [
-                  GoRoute(
-                    path: 'add',
-                    builder: (context, state) => const AddDebtPage(),
-                  ),
-                  GoRoute(
-                    path: ':id',
-                    builder: (context, state) {
-                      return DebtDetailPage(
-                        id: state.pathParameters['id']!,
-                      );
-                    },
-                    routes: [
-                      GoRoute(
-                        path: 'edit',
-                        builder: (context, state) => EditDebtPage(
-                          id: state.pathParameters['id']!,
-                        ),
-                      ),
-                      GoRoute(
-                        path: 'log_payment',
-                        builder: (context, state) =>
-                            LogPaymentPage(id: state.pathParameters['id']!),
-                      ),
-                      GoRoute(
-                        path: 'history',
-                        builder: (context, state) => PaymentHistoryPage(
-                          id: state.pathParameters['id']!,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
               ),
             ],
           ),
           // 3. Kế hoạch (Plan / Timeline)
           StatefulShellBranch(
+            navigatorKey: planNavigatorKey,
             routes: [
               GoRoute(
                 path: AppRoutes.plan,
@@ -194,6 +175,7 @@ GoRouter createRouter({
           ),
           // 4. Tiến độ (Progress)
           StatefulShellBranch(
+            navigatorKey: progressNavigatorKey,
             routes: [
               GoRoute(
                 path: AppRoutes.progress,
@@ -203,20 +185,46 @@ GoRouter createRouter({
           ),
           // 5. Cài đặt (Settings)
           StatefulShellBranch(
+            navigatorKey: settingsNavigatorKey,
             routes: [
               GoRoute(
                 path: AppRoutes.settings,
                 builder: (context, state) => const SettingsPage(),
-                routes: [
-                  GoRoute(
-                    path: 'sync',
-                    builder: (context, state) => const SyncBackupPage(),
-                  ),
-                ],
               ),
             ],
           ),
         ],
+      ),
+      GoRoute(
+        path: AppRoutes.addDebt,
+        builder: (context, state) => const AddDebtPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.debtDetail,
+        builder: (context, state) {
+          return DebtDetailPage(id: state.pathParameters['id']!);
+        },
+        routes: [
+          GoRoute(
+            path: 'edit',
+            builder: (context, state) =>
+                EditDebtPage(id: state.pathParameters['id']!),
+          ),
+          GoRoute(
+            path: 'log_payment',
+            builder: (context, state) =>
+                LogPaymentPage(id: state.pathParameters['id']!),
+          ),
+          GoRoute(
+            path: 'history',
+            builder: (context, state) =>
+                PaymentHistoryPage(id: state.pathParameters['id']!),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: AppRoutes.syncBackup,
+        builder: (context, state) => const SyncBackupPage(),
       ),
     ],
   );

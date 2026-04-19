@@ -257,41 +257,47 @@ Legend:
 **Features §1.2 + §1.3 + §1.4 + §1.5**
 
 **4.1 Plan & Strategy (Week 1)**
-- [ ] Strategy selection screen với live preview (compute bằng engine)
-- [ ] Extra monthly amount input với debounced recast
-- [ ] Plan persistence + sync state management
+- [x] Strategy selection screen với live preview (compute bằng engine)
+- [x] Extra monthly amount input với debounced recast
+- [x] Plan persistence + sync state management
 
 **4.2 Living Timeline (Week 1-2)**
-- [ ] Timeline view UI — month list với collapse/expand
-- [ ] Debt-free date highlight + "delta từ lần trước" indicator
-- [ ] Total interest projected vs minimum-only comparison
-- [ ] TimelineCache integration
+- [x] Timeline view UI — month list với collapse/expand
+- [x] Debt-free date highlight + "delta từ lần trước" indicator
+- [x] Total interest projected vs minimum-only comparison
+- [x] TimelineCache integration
 
 **4.3 Payment Logging (Week 2)**
-- [ ] Log payment form (amount, type, date, note)
-- [ ] Payment history view (filter theo debt / theo tháng)
-- [ ] Balance auto-update + timeline recast trigger
-- [ ] Snapshot audit trail (`appliedBalanceBefore`/`After`)
+- [x] Log payment form (amount, type, date, note)
+- [x] Payment history view (filter theo debt / theo tháng)
+- [x] Balance auto-update + timeline recast trigger
+- [x] Snapshot audit trail (`appliedBalanceBefore`/`After`)
 
 **4.4 Monthly Action View (Week 2-3)**
-- [ ] Home screen → "Tháng này bạn cần trả" list
-- [ ] On-the-fly compute (ADR-021)
-- [ ] Check-off flow → creates Payment với `source = checkOff`
-- [ ] Overdue + upcoming indicators
+- [x] Home screen → "Tháng này bạn cần trả" list
+- [x] On-the-fly compute (ADR-021)
+- [x] Check-off flow → creates Payment với `source = checkOff`
+- [x] Overdue + upcoming indicators
 
 ### D3 — Design
 
-- [ ] Timeline visualization: chart vs list — decide based on info density test
-- [ ] Check-off animation (satisfying feedback)
-- [ ] Recast explanation UI (ADR-021, spec §1.3): "Debt-free date: May 2028 → April 2028 (↓ 1 tháng)"
-- [ ] Edge case UI: timeline > 10 năm (collapse), all debts paid off (celebration)
+- [x] Timeline visualization: chart vs list — decide based on info density test
+- [x] Check-off animation (satisfying feedback)
+- [x] Recast explanation UI (ADR-021, spec §1.3): "Debt-free date: May 2028 → April 2028 (↓ 1 tháng)"
+- [x] Edge case UI: timeline > 10 năm (collapse), all debts paid off (celebration)
 
 ### Exit gate (Phase 4)
-- [ ] Living Plan principle verified: edit debt → timeline recast < 500ms
-- [ ] User log payment 3 times → balance accurate, timeline reflects reality
-- [ ] Monthly view shows correct debts, amounts, due dates
-- [ ] Engine output matches UI display cent-exact (no rounding drift)
-- [ ] Demo internal: 5 test users log 10 payments/mỗi người không bug
+- [x] Living Plan principle verified: edit debt → timeline recast < 500ms
+- [x] User log payment 3 times → balance accurate, timeline reflects reality
+- [x] Monthly view shows correct debts, amounts, due dates
+- [x] Engine output matches UI display cent-exact (no rounding drift)
+- [x] Demo internal: 5 test users log 10 payments/mỗi người không bug
+
+### Phase 4 closeout notes
+
+- Monthly Action View chính thức thay `/home`; overview tổng quan chuyển sang tab Progress.
+- Bottom navigation chỉ còn xuất hiện ở 5 route gốc: `/home`, `/debts`, `/plan`, `/progress`, `/settings`.
+- Detail/form/history/sync routes render full-screen trên root navigator để tránh shell overlap và giữ trải nghiệm task-focused.
 
 ---
 

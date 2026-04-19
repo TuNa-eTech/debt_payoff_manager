@@ -1,501 +1,617 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../../../../core/constants/app_test_keys.dart';
+import '../../../../core/di/injection.dart';
+import '../../../../core/models/monthly_action_models.dart';
+import '../../../../core/models/recast_delta.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/formatters.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/app_chip.dart';
+import '../../../../core/widgets/empty_state.dart';
+import '../../../debts/presentation/debt_ui_utils.dart';
+import '../../cubit/monthly_action_cubit.dart';
+import '../../cubit/monthly_action_state.dart';
 
-/// Monthly action page — "Tháng này bạn cần trả"
-///
-/// Feature 1.5: Monthly Action View
-/// Primary checklist showing all debts due this month with suggested
-/// extra payment allocation based on the user's active strategy.
-class MonthlyActionPage extends StatefulWidget {
+/// Monthly action page — "Tháng này bạn cần trả".
+class MonthlyActionPage extends StatelessWidget {
   const MonthlyActionPage({super.key});
 
   @override
-  State<MonthlyActionPage> createState() => _MonthlyActionPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => getIt<MonthlyActionCubit>()..start(),
+      child: const _MonthlyActionView(),
+    );
+  }
 }
 
-class _MonthlyActionPageState extends State<MonthlyActionPage> {
-  // Demo state — in production this comes from Cubit
-  final Map<String, bool> _checkedItems = {
-    'chase': false,
-    'student': false,
-    'car': false,
-    'extra': false,
-  };
+class _MonthlyActionView extends StatelessWidget {
+  const _MonthlyActionView();
 
   @override
   Widget build(BuildContext context) {
-    final allChecked = _checkedItems.values.every((v) => v);
-    final checkedCount = _checkedItems.values.where((v) => v).length;
+    return BlocConsumer<MonthlyActionCubit, MonthlyActionState>(
+      listenWhen: (previous, current) =>
+          previous.errorMessage != current.errorMessage &&
+          current.errorMessage != null,
+      listener: (context, state) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Tháng này'),
+            actions: [
+              if (state.referenceDate != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: AppDimensions.md),
+                  child: Center(
+                    child: AppChip.status(
+                      label: AppFormatters.formatShortMonthYear(
+                        state.referenceDate!,
+                      ),
+                      icon: LucideIcons.calendarDays,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          body: _buildBody(context, state),
+        );
+      },
+    );
+  }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tháng này'),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 16),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
+  Widget _buildBody(BuildContext context, MonthlyActionState state) {
+    if (state.isLoading && !state.hasTrackedDebts) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (!state.hasTrackedDebts) {
+      return const EmptyState(
+        title: 'Chưa có khoản nợ để theo dõi',
+        subtitle:
+            'Thêm khoản nợ đầu tiên để app dựng checklist thanh toán tháng này và debt-free date của bạn.',
+        icon: LucideIcons.walletCards,
+      );
+    }
+
+    if (!state.hasActionItems) {
+      return SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.pagePaddingH,
+          vertical: AppDimensions.pagePaddingV,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _PlanHero(state: state),
+            const SizedBox(height: AppDimensions.sectionGap),
+            const AppCard(
               color: AppColors.mdSurfaceContainerLow,
-              borderRadius: BorderRadius.circular(100),
+              child: EmptyState(
+                title: 'Không có checklist cho tháng này',
+                subtitle:
+                    'Mọi khoản đang theo dõi của bạn đã trả xong hoặc đang tạm dừng. Timeline vẫn được recast từ dữ liệu mới nhất.',
+                icon: LucideIcons.partyPopper,
+              ),
             ),
+          ],
+        ),
+      );
+    }
+
+    return RefreshIndicator(
+      onRefresh: () => context.read<MonthlyActionCubit>().loadMonthlyActions(),
+      child: ListView(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.pagePaddingH,
+          vertical: AppDimensions.pagePaddingV,
+        ),
+        children: [
+          _PlanHero(state: state),
+          if (state.delta?.hasMeaningfulChange ?? false)
+            Padding(
+              padding: const EdgeInsets.only(top: AppDimensions.md),
+              child: _RecastBanner(delta: state.delta!),
+            ),
+          const SizedBox(height: AppDimensions.sectionGap),
+          _SummaryCard(summary: state.summary),
+          const SizedBox(height: AppDimensions.sectionGap),
+          const SectionHeader(
+            title: 'Tháng này bạn cần trả',
+            subtitle:
+                'Checklist này được compute trực tiếp từ strategy, timeline cache, và payment history của bạn.',
+          ),
+          const SizedBox(height: AppDimensions.md),
+          ...state.sections.map(
+            (section) => Padding(
+              padding: const EdgeInsets.only(bottom: AppDimensions.md),
+              child: _MonthlyActionSectionCard(
+                section: section,
+                submittingIds: state.submittingIds,
+                onCheckOff: (item) =>
+                    context.read<MonthlyActionCubit>().checkOffPayment(item),
+              ),
+            ),
+          ),
+          const SizedBox(height: 80),
+        ],
+      ),
+    );
+  }
+}
+
+class _PlanHero extends StatelessWidget {
+  const _PlanHero({required this.state});
+
+  final MonthlyActionState state;
+
+  @override
+  Widget build(BuildContext context) {
+    final summary = state.summary;
+    final plan = state.plan;
+    return AppHeroCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Debt-free date',
+            style: AppTextStyles.labelMedium.copyWith(
+              color: AppColors.mdPrimaryContainer,
+            ),
+          ),
+          const SizedBox(height: AppDimensions.xs),
+          Text(
+            plan?.projectedDebtFreeDate == null
+                ? 'Đang recast...'
+                : AppFormatters.formatMonthYear(plan!.projectedDebtFreeDate!),
+            style: AppTextStyles.displaySmall.copyWith(
+              color: AppColors.mdOnPrimary,
+            ),
+          ),
+          const SizedBox(height: AppDimensions.md),
+          Row(
+            children: [
+              Expanded(
+                child: _HeroStat(
+                  label: 'Tổng tháng này',
+                  value: summary == null
+                      ? '--'
+                      : AppFormatters.formatCents(summary.totalDueCents),
+                ),
+              ),
+              const SizedBox(width: AppDimensions.md),
+              Expanded(
+                child: _HeroStat(
+                  label: 'Đã hoàn thành',
+                  value: summary == null
+                      ? '--'
+                      : '${summary.completedCount}/${summary.totalCount}',
+                ),
+              ),
+            ],
+          ),
+          if (plan != null) ...[
+            const SizedBox(height: AppDimensions.md),
+            Text(
+              '${plan.strategy.label} · Extra ${AppFormatters.formatCents(plan.extraMonthlyAmount)} / tháng',
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.mdOnPrimary.withValues(alpha: 0.82),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _HeroStat extends StatelessWidget {
+  const _HeroStat({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(AppDimensions.md),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: AppTextStyles.labelSmall.copyWith(
+              color: AppColors.mdPrimaryContainer,
+            ),
+          ),
+          const SizedBox(height: AppDimensions.xs),
+          Text(
+            value,
+            style: AppTextStyles.titleMedium.copyWith(
+              color: AppColors.mdOnPrimary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SummaryCard extends StatelessWidget {
+  const _SummaryCard({required this.summary});
+
+  final MonthlyActionSummary? summary;
+
+  @override
+  Widget build(BuildContext context) {
+    if (summary == null) {
+      return const AppCard(
+        color: AppColors.mdSurfaceContainerLow,
+        child: SizedBox(
+          height: 96,
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    }
+
+    return AppCard(
+      color: AppColors.mdSurfaceContainerLow,
+      child: Row(
+        children: [
+          Expanded(
+            child: _SummaryStat(
+              label: 'Minimum',
+              value: AppFormatters.formatCents(summary!.totalMinimumCents),
+            ),
+          ),
+          const _Divider(),
+          Expanded(
+            child: _SummaryStat(
+              label: 'Extra',
+              value: AppFormatters.formatCents(summary!.totalExtraCents),
+              valueColor: AppColors.mdPrimary,
+            ),
+          ),
+          const _Divider(),
+          Expanded(
+            child: _SummaryStat(
+              label: 'Overdue',
+              value: '${summary!.overdueCount}',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SummaryStat extends StatelessWidget {
+  const _SummaryStat({
+    required this.label,
+    required this.value,
+    this.valueColor,
+  });
+
+  final String label;
+  final String value;
+  final Color? valueColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: AppTextStyles.labelSmall.copyWith(
+            color: AppColors.mdOnSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: AppDimensions.xs),
+        Text(
+          value,
+          style: AppTextStyles.titleMedium.copyWith(
+            color: valueColor ?? AppColors.mdOnSurface,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _Divider extends StatelessWidget {
+  const _Divider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 1,
+      height: 42,
+      margin: const EdgeInsets.symmetric(horizontal: AppDimensions.md),
+      color: AppColors.mdOutlineVariant,
+    );
+  }
+}
+
+class _RecastBanner extends StatelessWidget {
+  const _RecastBanner({required this.delta});
+
+  final RecastDelta delta;
+
+  @override
+  Widget build(BuildContext context) {
+    final monthDelta = delta.debtFreeMonthDelta;
+    final projectedDelta = delta.projectedInterestDelta;
+    final savedDelta = delta.savedInterestDelta;
+    final movedSooner = delta.hasDebtFreeDateChange && monthDelta < 0;
+    final movedLater = delta.hasDebtFreeDateChange && monthDelta > 0;
+    final improvedInterest =
+        !delta.hasDebtFreeDateChange &&
+        ((projectedDelta != null && projectedDelta < 0) ||
+            (savedDelta != null && savedDelta > 0));
+    final worsenedInterest =
+        !delta.hasDebtFreeDateChange &&
+        ((projectedDelta != null && projectedDelta > 0) ||
+            (savedDelta != null && savedDelta < 0));
+    final isPositive = movedSooner || improvedInterest;
+    final isNegative = movedLater || worsenedInterest;
+
+    return AppCard(
+      color: isPositive
+          ? AppColors.mdPrimaryContainer
+          : isNegative
+          ? AppColors.mdErrorContainer
+          : AppColors.mdSurfaceContainerLow,
+      borderColor: Colors.transparent,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            isPositive
+                ? LucideIcons.trendingDown
+                : isNegative
+                ? LucideIcons.alertCircle
+                : LucideIcons.sparkles,
+            color: isPositive
+                ? AppColors.mdPrimary
+                : isNegative
+                ? AppColors.debtRed
+                : AppColors.mdOnSurfaceVariant,
+          ),
+          const SizedBox(width: AppDimensions.sm),
+          Expanded(
             child: Text(
-              'Tháng 4/2026',
-              style: AppTextStyles.labelSmall.copyWith(
-                color: AppColors.mdOnSurfaceVariant,
+              _message(),
+              style: AppTextStyles.bodySmall.copyWith(
+                color: isPositive
+                    ? AppColors.mdOnPrimaryContainer
+                    : isNegative
+                    ? AppColors.debtRed
+                    : AppColors.mdOnSurface,
               ),
             ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // ── Progress Banner ──
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: allChecked
-                    ? AppColors.mdPrimary
-                    : AppColors.mdSurfaceContainerLow,
-                borderRadius: BorderRadius.circular(24),
+    );
+  }
+
+  String _message() {
+    if (delta.hasDebtFreeDateChange &&
+        delta.previousDebtFreeDate != null &&
+        delta.newDebtFreeDate != null) {
+      final monthDelta = delta.debtFreeMonthDelta;
+      return 'Debt-free date: ${AppFormatters.formatMonthYear(delta.previousDebtFreeDate!)} → ${AppFormatters.formatMonthYear(delta.newDebtFreeDate!)}'
+          '${monthDelta == 0
+              ? ''
+              : monthDelta < 0
+              ? ' (sớm hơn ${monthDelta.abs()} tháng)'
+              : ' (trễ hơn $monthDelta tháng)'}';
+    }
+
+    if (delta.hasProjectedInterestChange &&
+        delta.previousTotalInterestProjected != null &&
+        delta.newTotalInterestProjected != null) {
+      final projectedDelta = delta.projectedInterestDelta!;
+      return 'Projected interest: ${AppFormatters.formatCents(delta.previousTotalInterestProjected!)} → ${AppFormatters.formatCents(delta.newTotalInterestProjected!)}'
+          '${projectedDelta == 0
+              ? ''
+              : projectedDelta < 0
+              ? ' (giảm ${AppFormatters.formatCents(projectedDelta.abs())})'
+              : ' (tăng ${AppFormatters.formatCents(projectedDelta)})'}';
+    }
+
+    if (delta.hasSavedInterestChange &&
+        delta.previousTotalInterestSaved != null &&
+        delta.newTotalInterestSaved != null) {
+      final savedDelta = delta.savedInterestDelta!;
+      return 'Saved vs minimum: ${AppFormatters.formatCents(delta.previousTotalInterestSaved!)} → ${AppFormatters.formatCents(delta.newTotalInterestSaved!)}'
+          '${savedDelta == 0
+              ? ''
+              : savedDelta > 0
+              ? ' (tăng ${AppFormatters.formatCents(savedDelta)})'
+              : ' (giảm ${AppFormatters.formatCents(savedDelta.abs())})'}';
+    }
+
+    return 'Timeline vừa được recast từ dữ liệu mới nhất của bạn.';
+  }
+}
+
+class _MonthlyActionSectionCard extends StatelessWidget {
+  const _MonthlyActionSectionCard({
+    required this.section,
+    required this.submittingIds,
+    required this.onCheckOff,
+  });
+
+  final MonthlyActionSection section;
+  final Set<String> submittingIds;
+  final ValueChanged<MonthlyActionItem> onCheckOff;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      key: AppTestKeys.monthlyActionSection(section.debtId),
+      color: AppColors.mdSurface,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                debtTypeIcon(section.debtType),
+                color: AppColors.mdPrimary,
+                size: AppDimensions.iconMd,
               ),
-              child: Column(
-                children: [
-                  Icon(
-                    allChecked ? LucideIcons.partyPopper : LucideIcons.target,
-                    size: 32,
-                    color: allChecked ? Colors.white : AppColors.mdPrimary,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    allChecked ? 'Tuyệt vời! 🎉' : 'Tiến độ tháng này',
-                    style: AppTextStyles.titleMedium.copyWith(
-                      color: allChecked ? Colors.white : AppColors.mdOnSurface,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    allChecked
-                        ? 'Bạn đã hoàn thành tất cả thanh toán!'
-                        : '$checkedCount / ${_checkedItems.length} thanh toán đã hoàn thành',
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: allChecked
-                          ? Colors.white.withValues(alpha: 0.8)
-                          : AppColors.mdOnSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Progress bar
-                  Stack(
-                    children: [
-                      Container(
-                        height: 8,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: allChecked
-                              ? Colors.white.withValues(alpha: 0.25)
-                              : AppColors.mdSurfaceContainerHigh,
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                      ),
-                      FractionallySizedBox(
-                        widthFactor: checkedCount / _checkedItems.length,
-                        child: Container(
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: allChecked
-                                ? AppColors.mdPrimaryContainer
-                                : AppColors.mdPrimary,
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // ── Minimum Payments Section ──
-            Row(
-              children: [
-                const Icon(
-                  LucideIcons.wallet,
-                  size: 16,
-                  color: AppColors.mdOnSurfaceVariant,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'Thanh toán tối thiểu',
-                  style: AppTextStyles.labelMedium.copyWith(
-                    color: AppColors.mdOnSurfaceVariant,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-
-            _buildChecklistItem(
-              id: 'chase',
-              title: 'Chase Sapphire',
-              subtitle: 'Minimum · Hạn 15/4',
-              amount: '\$125',
-              icon: LucideIcons.creditCard,
-              iconColor: AppColors.mdPrimary,
-            ),
-            const SizedBox(height: 8),
-            _buildChecklistItem(
-              id: 'student',
-              title: 'Student Loan',
-              subtitle: 'Minimum · Hạn 20/4',
-              amount: '\$80',
-              icon: LucideIcons.graduationCap,
-              iconColor: AppColors.mdSecondary,
-              isWarning: true,
-              warningText: 'Quá hạn 3 ngày',
-            ),
-            const SizedBox(height: 8),
-            _buildChecklistItem(
-              id: 'car',
-              title: 'Toyota Car Loan',
-              subtitle: 'Minimum · Hạn 25/4',
-              amount: '\$320',
-              icon: LucideIcons.car,
-              iconColor: AppColors.mdTertiary,
-            ),
-
-            const SizedBox(height: 28),
-
-            // ── Extra Payment Section ──
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
+              const SizedBox(width: AppDimensions.sm),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(
-                      LucideIcons.snowflake,
-                      size: 16,
-                      color: AppColors.mdPrimary,
-                    ),
-                    const SizedBox(width: 8),
+                    Text(section.debtName, style: AppTextStyles.titleMedium),
                     Text(
-                      'Snowball – Trả thêm',
-                      style: AppTextStyles.labelMedium.copyWith(
+                      'Tổng cần trả ${AppFormatters.formatCents(section.totalDueCents)}',
+                      style: AppTextStyles.bodySmall.copyWith(
                         color: AppColors.mdOnSurfaceVariant,
-                        letterSpacing: 0.5,
                       ),
                     ),
                   ],
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.mdPrimaryContainer,
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: Text(
-                    'Ưu tiên #1',
-                    style: AppTextStyles.labelSmall.copyWith(
-                      color: AppColors.mdOnPrimaryContainer,
-                      fontSize: 10,
-                    ),
+              ),
+              if (section.isCompleted)
+                AppChip.status(label: 'Đã xong', icon: LucideIcons.check),
+            ],
+          ),
+          const SizedBox(height: AppDimensions.md),
+          ...section.items.map(
+            (item) => Padding(
+              padding: const EdgeInsets.only(bottom: AppDimensions.sm),
+              child: _ActionRow(
+                item: item,
+                isSubmitting: submittingIds.contains(item.id),
+                onCheckOff: () => onCheckOff(item),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActionRow extends StatelessWidget {
+  const _ActionRow({
+    required this.item,
+    required this.isSubmitting,
+    required this.onCheckOff,
+  });
+
+  final MonthlyActionItem item;
+  final bool isSubmitting;
+  final VoidCallback onCheckOff;
+
+  @override
+  Widget build(BuildContext context) {
+    final title = item.kind == MonthlyActionKind.minimum
+        ? 'Minimum payment'
+        : 'Extra payment';
+    final chipLabel = item.isOverdue
+        ? 'Quá hạn'
+        : item.isUpcoming
+        ? 'Sắp đến hạn'
+        : item.kind == MonthlyActionKind.extra && item.priorityRank != null
+        ? 'Ưu tiên #${item.priorityRank}'
+        : null;
+
+    return Container(
+      key: AppTestKeys.monthlyActionItem(item.id),
+      padding: const EdgeInsets.all(AppDimensions.md),
+      decoration: BoxDecoration(
+        color: item.isCompleted
+            ? AppColors.mdPrimaryContainer.withValues(alpha: 0.35)
+            : AppColors.mdSurfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+        border: Border.all(
+          color: item.isOverdue
+              ? AppColors.debtRed.withValues(alpha: 0.2)
+              : AppColors.whisperBorder,
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: AppTextStyles.titleSmall),
+                const SizedBox(height: AppDimensions.xs),
+                Text(
+                  item.subtitle,
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.mdOnSurfaceVariant,
                   ),
                 ),
+                const SizedBox(height: AppDimensions.xs),
+                Text(
+                  item.kind == MonthlyActionKind.minimum
+                      ? 'Hạn ${AppFormatters.formatDate(item.dueDate)}'
+                      : 'Trong ${AppFormatters.formatMonthYear(item.dueDate)}',
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.mdOnSurfaceVariant,
+                  ),
+                ),
+                if (chipLabel != null) ...[
+                  const SizedBox(height: AppDimensions.sm),
+                  AppChip.status(label: chipLabel),
+                ],
               ],
             ),
-            const SizedBox(height: 12),
-
-            _buildChecklistItem(
-              id: 'extra',
-              title: 'Chase Sapphire',
-              subtitle: 'Extra theo Snowball · Dư nợ thấp nhất',
-              amount: '\$250',
-              icon: LucideIcons.zap,
-              iconColor: AppColors.mdPrimary,
-              isExtra: true,
-            ),
-
-            const SizedBox(height: 28),
-
-            // ── Summary ──
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.mdSurfaceContainerLow,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.mdOutlineVariant),
-              ),
-              child: Column(
-                children: [
-                  _buildSummaryRow('Tổng minimum', '\$525'),
-                  const SizedBox(height: 8),
-                  _buildSummaryRow(
-                    'Trả thêm (Snowball)',
-                    '\$250',
-                    valueColor: AppColors.mdPrimary,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Container(
-                      height: 1,
-                      color: AppColors.mdOutlineVariant,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Tổng tháng này', style: AppTextStyles.titleSmall),
-                      Text(
-                        '\$775',
-                        style: AppTextStyles.titleLarge.copyWith(
-                          color: AppColors.mdPrimary,
-                          fontFamily: 'Roboto Mono',
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // ── Insight Card ──
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.mdTertiaryContainer,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    LucideIcons.lightbulb,
-                    color: AppColors.mdTertiary,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Nếu trả thêm \$250/tháng',
-                          style: AppTextStyles.titleSmall.copyWith(
-                            color: AppColors.mdOnTertiaryContainer,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Bạn sẽ hết nợ sớm hơn 3 tháng và tiết kiệm \$850 tiền lãi!',
-                          style: AppTextStyles.bodySmall.copyWith(
-                            color: AppColors.mdOnTertiaryContainer.withValues(
-                              alpha: 0.8,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 120),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppColors.mdSurface,
-          border: Border(top: BorderSide(color: AppColors.mdOutlineVariant)),
-        ),
-        child: SafeArea(
-          child: AppButton.filledLg(
-            onPressed: allChecked ? () {} : null,
-            label: allChecked
-                ? 'Hoàn thành tháng này! ✓'
-                : 'Đánh dấu đã trả tất cả',
-            fullWidth: true,
-            icon: allChecked ? LucideIcons.check : LucideIcons.checkSquare,
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildChecklistItem({
-    required String id,
-    required String title,
-    required String subtitle,
-    required String amount,
-    required IconData icon,
-    required Color iconColor,
-    bool isWarning = false,
-    String? warningText,
-    bool isExtra = false,
-  }) {
-    final isChecked = _checkedItems[id] ?? false;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _checkedItems[id] = !isChecked;
-        });
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: isChecked
-              ? AppColors.mdPrimaryContainer.withValues(alpha: 0.3)
-              : isWarning
-              ? AppColors.mdErrorContainer
-              : isExtra
-              ? AppColors.mdSurfaceContainerLow
-              : AppColors.mdSurfaceContainerLow,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isChecked
-                ? AppColors.mdPrimary.withValues(alpha: 0.4)
-                : isWarning
-                ? AppColors.mdError.withValues(alpha: 0.3)
-                : isExtra
-                ? AppColors.mdPrimary.withValues(alpha: 0.2)
-                : AppColors.mdOutlineVariant,
-          ),
-        ),
-        child: Row(
-          children: [
-            // Checkbox
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                color: isChecked ? AppColors.mdPrimary : Colors.transparent,
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(
-                  color: isChecked ? AppColors.mdPrimary : AppColors.mdOutline,
-                  width: 2,
+          const SizedBox(width: AppDimensions.md),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                AppFormatters.formatCents(item.amountCents),
+                style: AppTextStyles.titleMedium.copyWith(
+                  color: item.isOverdue
+                      ? AppColors.debtRed
+                      : AppColors.mdOnSurface,
                 ),
               ),
-              child: isChecked
-                  ? const Icon(LucideIcons.check, size: 14, color: Colors.white)
-                  : null,
-            ),
-            const SizedBox(width: 14),
-
-            // Icon
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: isExtra
-                    ? iconColor.withValues(alpha: 0.1)
-                    : isWarning
-                    ? AppColors.mdError.withValues(alpha: 0.1)
-                    : AppColors.mdSurfaceContainerHigh,
-                shape: BoxShape.circle,
+              const SizedBox(height: AppDimensions.sm),
+              SizedBox(
+                key: AppTestKeys.monthlyActionCheckOff(item.id),
+                child: AppButton.tonal(
+                  label: item.isCompleted ? 'Đã log' : 'Check off',
+                  icon: item.isCompleted
+                      ? LucideIcons.checkCircle2
+                      : LucideIcons.check,
+                  loading: isSubmitting,
+                  onPressed: item.isCompleted || isSubmitting
+                      ? null
+                      : onCheckOff,
+                ),
               ),
-              child: Icon(
-                icon,
-                size: 16,
-                color: isWarning ? AppColors.mdError : iconColor,
-              ),
-            ),
-            const SizedBox(width: 12),
-
-            // Content
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: AppTextStyles.titleSmall.copyWith(
-                      decoration: isChecked ? TextDecoration.lineThrough : null,
-                      color: isChecked
-                          ? AppColors.mdOnSurfaceVariant
-                          : isWarning
-                          ? AppColors.mdOnErrorContainer
-                          : AppColors.mdOnSurface,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  if (isWarning && warningText != null)
-                    Text(
-                      warningText,
-                      style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.mdError,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 11,
-                      ),
-                    )
-                  else
-                    Text(
-                      subtitle,
-                      style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.mdOnSurfaceVariant,
-                        fontSize: 11,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-
-            // Amount
-            Text(
-              amount,
-              style: AppTextStyles.titleMedium.copyWith(
-                fontFamily: 'Roboto Mono',
-                fontWeight: FontWeight.w600,
-                decoration: isChecked ? TextDecoration.lineThrough : null,
-                color: isChecked
-                    ? AppColors.mdOnSurfaceVariant
-                    : isExtra
-                    ? AppColors.mdPrimary
-                    : AppColors.mdOnSurface,
-              ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
-    );
-  }
-
-  Widget _buildSummaryRow(String label, String value, {Color? valueColor}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: AppTextStyles.bodyMedium.copyWith(
-            color: AppColors.mdOnSurfaceVariant,
-          ),
-        ),
-        Text(
-          value,
-          style: AppTextStyles.titleSmall.copyWith(
-            fontFamily: 'Roboto Mono',
-            color: valueColor ?? AppColors.mdOnSurface,
-          ),
-        ),
-      ],
     );
   }
 }

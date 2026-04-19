@@ -16,21 +16,16 @@ import '../../../../domain/enums/debt_status.dart';
 import '../../../debts/presentation/debt_ui_utils.dart';
 
 class HomePopulatedView extends StatelessWidget {
-  const HomePopulatedView({
-    super.key,
-    required this.debts,
-    required this.plan,
-  });
+  const HomePopulatedView({super.key, required this.debts, required this.plan});
 
   final List<Debt> debts;
   final Plan? plan;
 
   @override
   Widget build(BuildContext context) {
-    final trackedDebts = debts
-        .where((debt) => debt.status != DebtStatus.archived)
-        .toList()
-      ..sort((a, b) => b.currentBalance.compareTo(a.currentBalance));
+    final trackedDebts =
+        debts.where((debt) => debt.status != DebtStatus.archived).toList()
+          ..sort((a, b) => b.currentBalance.compareTo(a.currentBalance));
     final totalOriginal = trackedDebts.fold<int>(
       0,
       (sum, debt) => sum + debt.originalPrincipal,
@@ -145,10 +140,7 @@ class HomePopulatedView extends StatelessWidget {
                 ),
                 _VerticalDivider(),
                 Expanded(
-                  child: _SummaryStat(
-                    label: 'Tạm dừng',
-                    value: '$pausedCount',
-                  ),
+                  child: _SummaryStat(label: 'Tạm dừng', value: '$pausedCount'),
                 ),
               ],
             ),
@@ -167,9 +159,7 @@ class HomePopulatedView extends StatelessWidget {
               child: design_system.DebtCard(
                 name: debt.name,
                 balance: AppFormatters.formatCents(debt.currentBalance),
-                apr: AppFormatters.formatApr(
-                  double.parse(debt.apr.toString()),
-                ),
+                apr: AppFormatters.formatApr(double.parse(debt.apr.toString())),
                 minPayment: AppFormatters.formatCents(debt.minimumPayment),
                 dueDate: debt.status == DebtStatus.paused
                     ? 'Tạm dừng'
@@ -178,7 +168,7 @@ class HomePopulatedView extends StatelessWidget {
                     ? design_system.DebtCardState.paid
                     : design_system.DebtCardState.normal,
                 debtTypeIcon: debtTypeIcon(debt.type),
-                onTap: () => context.go(AppRoutes.debtDetailPath(debt.id)),
+                onTap: () => context.push(AppRoutes.debtDetailPath(debt.id)),
               ),
             ),
           ),
@@ -237,10 +227,7 @@ class HomePopulatedView extends StatelessWidget {
 }
 
 class _HeroStat extends StatelessWidget {
-  const _HeroStat({
-    required this.label,
-    required this.value,
-  });
+  const _HeroStat({required this.label, required this.value});
 
   final String label;
   final String value;

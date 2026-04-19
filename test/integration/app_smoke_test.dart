@@ -187,6 +187,14 @@ void main() {
 
         await _enterText(tester, AppTestKeys.debtFormName, 'Travel Card');
         await _enterText(tester, AppTestKeys.debtFormCurrentBalance, '1500');
+        await tester.pumpUntilVisible(
+          find.byKey(AppTestKeys.debtFormAdvancedToggle),
+        );
+        await tester.ensureVisible(
+          find.byKey(AppTestKeys.debtFormAdvancedToggle),
+        );
+        await tester.tap(find.byKey(AppTestKeys.debtFormAdvancedToggle));
+        await tester.pumpRouterIdle();
         await _enterText(tester, AppTestKeys.debtFormOriginalPrincipal, '2000');
         await _enterText(tester, AppTestKeys.debtFormApr, '18.50');
         await _enterText(tester, AppTestKeys.debtFormMinimumPayment, '50');
@@ -220,11 +228,7 @@ void main() {
           AppTestKeys.debtDetailEdit,
           scope: find.byKey(AppTestKeys.debtDetail(createdDebt.id)),
         );
-        await _pumpUntilLocation(
-          tester,
-          harness,
-          AppRoutes.editDebtPath(createdDebt.id),
-        );
+        await tester.pumpUntilVisible(find.text('Chỉnh sửa khoản nợ'));
 
         await _enterText(
           tester,
@@ -269,6 +273,31 @@ void main() {
         );
       },
     );
+
+    testWidgets('settings sync opens outside the primary shell', (
+      tester,
+    ) async {
+      final harness = await TestAppHarness.create();
+      addTearDown(() => harness.disposeWidgetTest(tester));
+
+      await harness.onboardingCubit.completeOnboarding();
+      await harness.pumpApp(tester);
+      await _pumpUntilLocation(tester, harness, AppRoutes.home);
+
+      harness.router.go(AppRoutes.settings);
+      await _pumpUntilLocation(tester, harness, AppRoutes.settings);
+
+      final syncTile = find.text('Đồng bộ & Sao lưu');
+      await tester.pumpUntilVisible(syncTile);
+      await tester.ensureVisible(syncTile);
+      await tester.tap(syncTile);
+      await tester.pumpRouterIdle();
+      await tester.pumpUntilVisible(find.text('Mở khoá Sao lưu'));
+
+      harness.router.pop();
+      await tester.pumpRouterIdle();
+      await _pumpUntilLocation(tester, harness, AppRoutes.settings);
+    });
 
     testWidgets('archive and unarchive respect paid-off only semantics', (
       tester,

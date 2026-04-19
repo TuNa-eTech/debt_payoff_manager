@@ -54,8 +54,7 @@ class SettingsPage extends StatelessWidget {
                         _buildDivider(),
                         _buildListTile(
                           title: 'Trả thêm hàng tháng',
-                          subtitle:
-                              'Đang lưu trong kế hoạch chính của bạn.',
+                          subtitle: 'Đang lưu trong kế hoạch chính của bạn.',
                           trailingText:
                               '\$${((plan?.extraMonthlyAmount ?? 0) / 100).toStringAsFixed(2)}',
                           onTap: () => context.go(AppRoutes.plan),
@@ -101,7 +100,8 @@ class SettingsPage extends StatelessWidget {
                         _buildDivider(),
                         _buildListTile(
                           title: 'Locale',
-                          subtitle: 'Ảnh hưởng tới format ngày và ngôn ngữ hiển thị.',
+                          subtitle:
+                              'Ảnh hưởng tới format ngày và ngôn ngữ hiển thị.',
                           trailingText: settings.localeCode,
                         ),
                       ],
@@ -116,7 +116,7 @@ class SettingsPage extends StatelessWidget {
                           trailingText: settings.trustLevel == 0
                               ? 'Local only'
                               : 'Trust ${settings.trustLevel}',
-                          onTap: () => context.go(AppRoutes.syncBackup),
+                          onTap: () => context.push(AppRoutes.syncBackup),
                         ),
                         _buildDivider(),
                         _buildListTile(
@@ -285,10 +285,7 @@ class SettingsPage extends StatelessWidget {
       return content;
     }
 
-    return InkWell(
-      onTap: onTap,
-      child: content,
-    );
+    return InkWell(onTap: onTap, child: content);
   }
 
   Widget _buildSwitchTile({

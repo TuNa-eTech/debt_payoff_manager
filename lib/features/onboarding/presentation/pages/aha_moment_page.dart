@@ -12,6 +12,7 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/app_chip.dart';
 import '../../../../domain/entities/plan.dart';
 import '../../../../domain/repositories/plan_repository.dart';
 import '../../../debts/cubit/debts_cubit.dart';
@@ -66,6 +67,9 @@ class AhaMomentPage extends StatelessWidget {
                     (sum, debt) => sum + debt.currentBalance,
                   );
                   final plan = planSnapshot.data;
+                  final payoffDate = plan?.projectedDebtFreeDate;
+                  final projectedInterest = plan?.totalInterestProjected ?? 0;
+                  final interestSaved = plan?.totalInterestSaved ?? 0;
 
                   return Column(
                     children: [
@@ -119,7 +123,9 @@ class AhaMomentPage extends StatelessWidget {
                               Text(
                                 trackedDebts.isEmpty
                                     ? 'Bạn chưa có khoản nợ nào trong kế hoạch.'
-                                    : 'Kế hoạch cơ bản của bạn đã sẵn sàng.',
+                                    : payoffDate == null
+                                        ? 'Kế hoạch của bạn đang recast.'
+                                        : 'Bạn có thể debt-free vào ${AppFormatters.formatMonthYear(payoffDate)}.',
                                 style: AppTextStyles.headlineLarge.copyWith(
                                   color: AppColors.mdOnPrimary,
                                 ),
@@ -129,7 +135,7 @@ class AhaMomentPage extends StatelessWidget {
                               Text(
                                 trackedDebts.isEmpty
                                     ? 'Hãy quay lại bước trước để thêm ít nhất một khoản nợ.'
-                                    : 'Chúng tôi đã lưu khoản nợ, chiến lược và ngân sách extra của bạn. Phần mô phỏng chi tiết sẽ xuất hiện sau khi timeline projection được bật.',
+                                    : 'Chúng tôi đã recast plan summary từ khoản nợ, strategy và extra budget hiện tại. Checklist tháng này đã sẵn sàng ở tab Tháng này.',
                                 style: AppTextStyles.bodyLarge.copyWith(
                                   color: AppColors.mdOnPrimary.withValues(
                                     alpha: 0.84,
@@ -145,9 +151,19 @@ class AhaMomentPage extends StatelessWidget {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Tóm tắt hiện tại',
-                                      style: AppTextStyles.titleMedium,
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Tóm tắt hiện tại',
+                                          style: AppTextStyles.titleMedium,
+                                        ),
+                                        const Spacer(),
+                                        if (plan != null)
+                                          AppChip.status(
+                                            label: plan.strategy.label,
+                                            icon: LucideIcons.sparkles,
+                                          ),
+                                      ],
                                     ),
                                     const SizedBox(height: AppDimensions.lg),
                                     Row(
@@ -162,8 +178,12 @@ class AhaMomentPage extends StatelessWidget {
                                         ),
                                         Expanded(
                                           child: _SummaryStat(
-                                            label: 'Khoản đang theo dõi',
-                                            value: '${trackedDebts.length}',
+                                            label: 'Debt-free date',
+                                            value: payoffDate == null
+                                                ? 'Đang recast'
+                                                : AppFormatters.formatShortMonthYear(
+                                                    payoffDate,
+                                                  ),
                                           ),
                                         ),
                                       ],
@@ -173,11 +193,8 @@ class AhaMomentPage extends StatelessWidget {
                                       children: [
                                         Expanded(
                                           child: _SummaryStat(
-                                            label: 'Chiến lược',
-                                            value:
-                                                plan?.strategy.label ??
-                                                'Snowball',
-                                            emphasize: true,
+                                            label: 'Khoản đang theo dõi',
+                                            value: '${trackedDebts.length}',
                                           ),
                                         ),
                                         Expanded(
@@ -186,6 +203,28 @@ class AhaMomentPage extends StatelessWidget {
                                             value: AppFormatters.formatCents(
                                               plan?.extraMonthlyAmount ?? 0,
                                             ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: AppDimensions.lg),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: _SummaryStat(
+                                            label: 'Projected interest',
+                                            value: AppFormatters.formatCents(
+                                              projectedInterest,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: _SummaryStat(
+                                            label: 'Saved vs minimum',
+                                            value: AppFormatters.formatCents(
+                                              interestSaved,
+                                            ),
+                                            emphasize: true,
                                           ),
                                         ),
                                       ],
@@ -216,7 +255,7 @@ class AhaMomentPage extends StatelessWidget {
                                           ),
                                           Expanded(
                                             child: Text(
-                                              'Dữ liệu của bạn đã được lưu local trên thiết bị. Bạn không cần tạo tài khoản để bắt đầu.',
+                                              'Dữ liệu của bạn đã được lưu local trên thiết bị. Từ đây bạn có thể vào Monthly Action View để check off payment thật và xem timeline recast ngay.',
                                               style: AppTextStyles.bodySmall
                                                   .copyWith(
                                                     color: AppColors
@@ -241,7 +280,7 @@ class AhaMomentPage extends StatelessWidget {
                           child: AppButton.filledLg(
                             label: trackedDebts.isEmpty
                                 ? 'Quay lại thêm khoản nợ'
-                                : 'Vào màn hình chính',
+                                : 'Mở Monthly Action View',
                             trailingIcon: trackedDebts.isEmpty
                                 ? null
                                 : LucideIcons.arrowRight,

@@ -178,13 +178,18 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          LinearProgressIndicator(
-                            value: widget.progressValue,
-                            backgroundColor:
-                                AppColors.mdSurfaceContainerHighest,
-                            color: AppColors.mdPrimary,
-                            borderRadius: BorderRadius.circular(4),
-                            minHeight: 4,
+                          Semantics(
+                            label: widget.progressLabel!,
+                            value:
+                                '${(widget.progressValue! * 100).round()}% hoàn thành',
+                            child: LinearProgressIndicator(
+                              value: widget.progressValue,
+                              backgroundColor:
+                                  AppColors.mdSurfaceContainerHighest,
+                              color: AppColors.mdPrimary,
+                              borderRadius: BorderRadius.circular(4),
+                              minHeight: 4,
+                            ),
                           ),
                           const SizedBox(height: 24),
                         ],
@@ -208,33 +213,47 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
                           status: state.status,
                           excludeFromStrategy: state.excludeFromStrategy,
                           showAdvanced: state.showAdvanced,
+                          showOriginalPrincipalByDefault:
+                              state.showOriginalPrincipalByDefault,
+                          showDueDayByDefault: state.showDueDayByDefault,
                           pausedUntil: state.pausedUntil,
-                          onDebtTypeChanged: context
-                              .read<DebtFormCubit>()
-                              .setDebtType,
-                          onInterestMethodChanged: context
-                              .read<DebtFormCubit>()
-                              .setInterestMethod,
-                          onMinimumPaymentTypeChanged: context
-                              .read<DebtFormCubit>()
-                              .setMinimumPaymentType,
-                          onPaymentCadenceChanged: context
-                              .read<DebtFormCubit>()
-                              .setPaymentCadence,
-                          onStatusChanged: context
-                              .read<DebtFormCubit>()
-                              .setStatus,
+                          onDebtTypeChanged: (type) {
+                            final cubit = context.read<DebtFormCubit>();
+                            cubit.setDebtType(type);
+                            _refreshFormFeedback();
+                          },
+                          onInterestMethodChanged: (method) {
+                            final cubit = context.read<DebtFormCubit>();
+                            cubit.setInterestMethod(method);
+                            _refreshFormFeedback();
+                          },
+                          onMinimumPaymentTypeChanged: (type) {
+                            final cubit = context.read<DebtFormCubit>();
+                            cubit.setMinimumPaymentType(type);
+                            _refreshFormFeedback();
+                          },
+                          onPaymentCadenceChanged: (cadence) {
+                            final cubit = context.read<DebtFormCubit>();
+                            cubit.setPaymentCadence(cadence);
+                            _refreshFormFeedback();
+                          },
+                          onStatusChanged: (status) {
+                            final cubit = context.read<DebtFormCubit>();
+                            cubit.setStatus(status);
+                            _refreshFormFeedback();
+                          },
                           onExcludeFromStrategyChanged: context
                               .read<DebtFormCubit>()
                               .setExcludeFromStrategy,
                           onToggleAdvanced: context
                               .read<DebtFormCubit>()
                               .toggleAdvanced,
-                          onCoreFieldChanged: _refreshWarnings,
+                          onCoreFieldChanged: _refreshFormFeedback,
                           onSelectPausedUntil: _selectPausedUntil,
-                          onClearPausedUntil: () => context
-                              .read<DebtFormCubit>()
-                              .setPausedUntil(null),
+                          onClearPausedUntil: () {
+                            context.read<DebtFormCubit>().setPausedUntil(null);
+                            _refreshFormFeedback();
+                          },
                           nameError: state.nameError,
                           originalPrincipalError: state.originalPrincipalError,
                           currentBalanceError: state.currentBalanceError,
@@ -347,15 +366,20 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
     );
     if (selected != null) {
       cubit.setPausedUntil(selected);
+      _refreshFormFeedback();
     }
   }
 
-  void _refreshWarnings() {
-    context.read<DebtFormCubit>().refreshWarnings(
+  void _refreshFormFeedback() {
+    context.read<DebtFormCubit>().refreshFormFeedback(
+      nameInput: _nameController.text,
       originalPrincipalInput: _originalPrincipalController.text,
       currentBalanceInput: _currentBalanceController.text,
       aprInput: _aprController.text,
       minimumPaymentInput: _minimumPaymentController.text,
+      dueDayInput: _dueDayController.text,
+      minimumPaymentPercentInput: _minimumPaymentPercentController.text,
+      minimumPaymentFloorInput: _minimumPaymentFloorController.text,
     );
   }
 

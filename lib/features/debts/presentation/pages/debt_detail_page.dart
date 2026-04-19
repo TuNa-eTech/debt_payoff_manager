@@ -10,6 +10,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/formatters.dart';
+import '../../../../core/widgets/app_button.dart';
 import '../../../../domain/entities/debt.dart';
 import '../../../../domain/enums/debt_status.dart';
 import '../../../../domain/repositories/debt_repository.dart';
@@ -62,7 +63,7 @@ class DebtDetailPage extends StatelessWidget {
               IconButton(
                 key: AppTestKeys.debtDetailEdit,
                 icon: const Icon(LucideIcons.pencil),
-                onPressed: () => context.go(AppRoutes.editDebtPath(debt.id)),
+                onPressed: () => context.push(AppRoutes.editDebtPath(debt.id)),
               ),
               IconButton(
                 key: AppTestKeys.debtDetailMore,
@@ -190,13 +191,39 @@ class DebtDetailPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Nhật ký thanh toán và lịch sử giao dịch chưa được bật ở UI hiện tại. Màn này chỉ hiển thị dữ liệu khoản nợ thật để tránh gây hiểu lầm bằng số liệu giả.',
+                        'Log payment thật để giảm current balance, tạo audit trail trước/sau, và recast timeline ngay lập tức.',
                         style: AppTextStyles.bodySmall,
+                      ),
+                      const SizedBox(height: AppDimensions.md),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: AppButton.filled(
+                              key: AppTestKeys.debtDetailLogPayment,
+                              label: 'Log payment',
+                              icon: LucideIcons.plus,
+                              onPressed: () => context.push(
+                                AppRoutes.logPaymentPath(debt.id),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: AppDimensions.sm),
+                          Expanded(
+                            child: AppButton.outlined(
+                              key: AppTestKeys.debtDetailPaymentHistory,
+                              label: 'Xem history',
+                              icon: LucideIcons.history,
+                              onPressed: () => context.push(
+                                AppRoutes.paymentHistoryPath(debt.id),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 100),
+                const SizedBox(height: AppDimensions.xl),
               ],
             ),
           ),
@@ -224,7 +251,7 @@ class DebtDetailPage extends StatelessWidget {
     return DebtOptionsSheet.show(
       context,
       debt: debt,
-      onEdit: () => context.go(AppRoutes.editDebtPath(debt.id)),
+      onEdit: () => context.push(AppRoutes.editDebtPath(debt.id)),
       onArchiveToggle: debt.status == DebtStatus.paidOff
           ? () => _archiveDebt(context, debt)
           : debt.status == DebtStatus.archived

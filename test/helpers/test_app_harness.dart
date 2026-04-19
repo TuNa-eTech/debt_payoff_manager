@@ -5,15 +5,18 @@ import 'package:go_router/go_router.dart';
 
 import 'package:debt_payoff_manager/core/di/injection.dart';
 import 'package:debt_payoff_manager/core/router/app_router.dart';
+import 'package:debt_payoff_manager/core/services/monthly_action_service.dart';
+import 'package:debt_payoff_manager/core/services/payment_logging_service.dart';
+import 'package:debt_payoff_manager/core/services/plan_recast_service.dart';
 import 'package:debt_payoff_manager/data/local/database.dart';
 import 'package:debt_payoff_manager/data/local/database_provider.dart';
+import 'package:debt_payoff_manager/data/local/stores/sync_state_store.dart';
+import 'package:debt_payoff_manager/data/local/stores/timeline_cache_store.dart';
 import 'package:debt_payoff_manager/data/repositories/debt_repository_impl.dart';
 import 'package:debt_payoff_manager/data/repositories/payment_repository_impl.dart';
 import 'package:debt_payoff_manager/data/repositories/plan_repository_impl.dart';
 import 'package:debt_payoff_manager/data/repositories/settings_repository_impl.dart';
 import 'package:debt_payoff_manager/domain/repositories/debt_repository.dart';
-import 'package:debt_payoff_manager/domain/repositories/payment_repository.dart';
-import 'package:debt_payoff_manager/domain/repositories/plan_repository.dart';
 import 'package:debt_payoff_manager/domain/repositories/settings_repository.dart';
 import 'package:debt_payoff_manager/features/debts/cubit/debts_cubit.dart';
 import 'package:debt_payoff_manager/features/onboarding/cubit/onboarding_cubit.dart';
@@ -25,6 +28,11 @@ class TestAppHarness {
     required this.paymentRepository,
     required this.planRepository,
     required this.settingsRepository,
+    required this.syncStateStore,
+    required this.timelineCacheStore,
+    required this.planRecastService,
+    required this.paymentLoggingService,
+    required this.monthlyActionService,
     required this.closeDbOnDispose,
   });
 
@@ -33,6 +41,11 @@ class TestAppHarness {
   final PaymentRepositoryImpl paymentRepository;
   final PlanRepositoryImpl planRepository;
   final SettingsRepositoryImpl settingsRepository;
+  final SyncStateStore syncStateStore;
+  final TimelineCacheStore timelineCacheStore;
+  final PlanRecastService planRecastService;
+  final PaymentLoggingService paymentLoggingService;
+  final MonthlyActionService monthlyActionService;
   final bool closeDbOnDispose;
 
   late _TestAppScope _appScope;
@@ -56,23 +69,19 @@ class TestAppHarness {
     await getIt.reset();
 
     final resolvedDb = db ?? DatabaseProvider.openTestDatabase();
-    final debtRepository = DebtRepositoryImpl(db: resolvedDb);
-    final paymentRepository = PaymentRepositoryImpl(db: resolvedDb);
-    final planRepository = PlanRepositoryImpl(db: resolvedDb);
-    final settingsRepository = SettingsRepositoryImpl(db: resolvedDb);
-
-    getIt.registerSingleton<AppDatabase>(resolvedDb);
-    getIt.registerSingleton<DebtRepository>(debtRepository);
-    getIt.registerSingleton<PaymentRepository>(paymentRepository);
-    getIt.registerSingleton<PlanRepository>(planRepository);
-    getIt.registerSingleton<SettingsRepository>(settingsRepository);
+    configureDependencies(database: resolvedDb);
 
     final harness = TestAppHarness._(
       db: resolvedDb,
-      debtRepository: debtRepository,
-      paymentRepository: paymentRepository,
-      planRepository: planRepository,
-      settingsRepository: settingsRepository,
+      debtRepository: getIt<DebtRepositoryImpl>(),
+      paymentRepository: getIt<PaymentRepositoryImpl>(),
+      planRepository: getIt<PlanRepositoryImpl>(),
+      settingsRepository: getIt<SettingsRepositoryImpl>(),
+      syncStateStore: getIt<SyncStateStore>(),
+      timelineCacheStore: getIt<TimelineCacheStore>(),
+      planRecastService: getIt<PlanRecastService>(),
+      paymentLoggingService: getIt<PaymentLoggingService>(),
+      monthlyActionService: getIt<MonthlyActionService>(),
       closeDbOnDispose: closeDbOnDispose,
     );
     await harness._createAppScope();
@@ -118,7 +127,7 @@ class TestAppHarness {
   }
 
   Future<void> _createAppScope() async {
-    final debtsCubit = DebtsCubit(debtRepository: debtRepository);
+    final debtsCubit = DebtsCubit(debtRepository: getIt<DebtRepository>());
     await debtsCubit.start();
 
     final onboardingCubit = OnboardingCubit(
@@ -127,8 +136,8 @@ class TestAppHarness {
     await onboardingCubit.start();
 
     final router = createRouter(
-      settingsRepository: settingsRepository,
-      debtRepository: debtRepository,
+      settingsRepository: getIt<SettingsRepository>(),
+      debtRepository: getIt<DebtRepository>(),
     );
 
     _appScope = _TestAppScope(

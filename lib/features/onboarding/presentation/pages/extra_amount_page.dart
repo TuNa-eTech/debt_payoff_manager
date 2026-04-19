@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -6,7 +8,9 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/di/injection.dart';
+import '../../../../core/models/strategy_preview.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/services/plan_recast_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -14,6 +18,7 @@ import '../../../../core/utils/formatters.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_chip.dart';
+import '../../../../domain/entities/debt.dart';
 import '../../../../domain/entities/plan.dart';
 import '../../../../domain/enums/strategy.dart';
 import '../../../../domain/repositories/plan_repository.dart';
@@ -31,11 +36,23 @@ class ExtraAmountPage extends StatefulWidget {
 
 class _ExtraAmountPageState extends State<ExtraAmountPage> {
   final PlanRepository _planRepository = getIt.get<PlanRepository>();
+  final PlanRecastService _planRecastService = getIt.get<PlanRecastService>();
 
   Plan? _plan;
   double _extraAmount = 0;
   bool _isLoading = true;
   bool _isSaving = false;
+  bool _isPreviewLoading = false;
+  StrategyPreview? _preview;
+  Timer? _previewDebounce;
+  String? _previewFingerprint;
+  int _previewRequestId = 0;
+
+  @override
+  void dispose() {
+    _previewDebounce?.cancel();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -85,11 +102,14 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              final trackedCount = debtsState.debts
+              final trackedDebts = debtsState.debts
                   .where((debt) => debt.currentBalance > 0)
-                  .length;
+                  .toList(growable: false);
+              _maybeSchedulePreview(trackedDebts);
+              final trackedCount = trackedDebts.length;
               final strategyLabel =
                   _plan?.strategy.label ?? Strategy.snowball.label;
+              final amountCents = _extraAmount.round() * 100;
 
               return Column(
                 children: [
@@ -126,7 +146,7 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                           ),
                           const SizedBox(height: AppDimensions.sm),
                           Text(
-                            'Mặc định là \$0. App sẽ lưu cấu hình này vào kế hoạch chính của bạn ngay bây giờ.',
+                            'Mặc định là \$0. Preview sẽ recast live sau 300ms để cho bạn thấy debt-free date và lãi tiết kiệm thật.',
                             style: AppTextStyles.bodyMedium.copyWith(
                               color: AppColors.mdOnSurfaceVariant,
                             ),
@@ -155,9 +175,7 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                                 ),
                                 const SizedBox(height: AppDimensions.sm),
                                 Text(
-                                  AppFormatters.formatCents(
-                                    _extraAmount.round() * 100,
-                                  ),
+                                  AppFormatters.formatCents(amountCents),
                                   style: AppTextStyles.displayMedium.copyWith(
                                     color: AppColors.mdOnPrimaryContainer,
                                   ),
@@ -188,7 +206,10 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                               max: 1000,
                               divisions: 20,
                               onChanged: (value) {
-                                setState(() => _extraAmount = value);
+                                _setExtraAmount(
+                                  value,
+                                  trackedDebts: trackedDebts,
+                                );
                               },
                             ),
                           ),
@@ -221,23 +242,42 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                             children: [
                               _AmountChip(
                                 label: '+\$50',
-                                onTap: () => _bumpExtra(50),
+                                onTap: () => _bumpExtra(
+                                  50,
+                                  trackedDebts: trackedDebts,
+                                ),
                               ),
                               _AmountChip(
                                 key: AppTestKeys.onboardingExtraPreset100,
                                 label: '+\$100',
-                                onTap: () => _bumpExtra(100),
+                                onTap: () => _bumpExtra(
+                                  100,
+                                  trackedDebts: trackedDebts,
+                                ),
                               ),
                               _AmountChip(
                                 label: '+\$200',
-                                onTap: () => _bumpExtra(200),
+                                onTap: () => _bumpExtra(
+                                  200,
+                                  trackedDebts: trackedDebts,
+                                ),
                               ),
                               _AmountChip(
                                 label: 'Max',
-                                onTap: () =>
-                                    setState(() => _extraAmount = 1000),
+                                onTap: () => _setExtraAmount(
+                                  1000,
+                                  trackedDebts: trackedDebts,
+                                ),
                               ),
                             ],
+                          ),
+                          const SizedBox(height: AppDimensions.xl),
+                          _ExtraPreviewCard(
+                            preview: _preview,
+                            strategyLabel: strategyLabel,
+                            extraMonthlyAmount: amountCents,
+                            isLoading: _isPreviewLoading,
+                            hasTrackedDebts: trackedDebts.isNotEmpty,
                           ),
                           const SizedBox(height: AppDimensions.xl),
                           AppCard(
@@ -261,7 +301,7 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                                 ),
                                 const SizedBox(height: AppDimensions.sm),
                                 Text(
-                                  'Khoản extra này sẽ được dùng làm ngân sách trả thêm mỗi tháng. Khi phần mô phỏng kế hoạch được bật, app sẽ hiển thị timeline và ngày hết nợ từ cấu hình bạn đang lưu.',
+                                  'Khoản extra này sẽ được dùng làm ngân sách trả thêm mỗi tháng. Khi bạn bấm lưu, plan summary và timeline cache sẽ recast ngay.',
                                   style: AppTextStyles.bodyMedium.copyWith(
                                     color: AppColors.mdOnSurfaceVariant,
                                   ),
@@ -315,10 +355,78 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
     );
   }
 
-  void _bumpExtra(int amountDollars) {
-    setState(() {
-      _extraAmount = (_extraAmount + amountDollars).clamp(0, 1000).toDouble();
-    });
+  void _bumpExtra(int amountDollars, {required List<Debt> trackedDebts}) {
+    _setExtraAmount(
+      (_extraAmount + amountDollars).clamp(0, 1000).toDouble(),
+      trackedDebts: trackedDebts,
+    );
+  }
+
+  void _setExtraAmount(double value, {required List<Debt> trackedDebts}) {
+    setState(() => _extraAmount = value);
+    _schedulePreview(trackedDebts);
+  }
+
+  void _maybeSchedulePreview(List<Debt> trackedDebts) {
+    if (_isLoading || trackedDebts.isEmpty) return;
+
+    final fingerprint = _previewStateFingerprint(trackedDebts);
+    if (fingerprint == _previewFingerprint) return;
+    _previewFingerprint = fingerprint;
+    _schedulePreview(trackedDebts);
+  }
+
+  void _schedulePreview(List<Debt> trackedDebts) {
+    _previewDebounce?.cancel();
+    _previewDebounce = Timer(
+      const Duration(milliseconds: 300),
+      () => unawaited(_refreshPreview(trackedDebts)),
+    );
+  }
+
+  Future<void> _refreshPreview(List<Debt> trackedDebts) async {
+    final requestId = ++_previewRequestId;
+    setState(() => _isPreviewLoading = true);
+
+    try {
+      final now = DateTime.now().toUtc();
+      final draft = (_plan ?? _createDraftPlan(now)).copyWith(
+        extraMonthlyAmount: _extraAmount.round() * 100,
+        updatedAt: now,
+      );
+      final preview = await _planRecastService.previewPlan(
+        plan: draft,
+        debts: trackedDebts,
+      );
+
+      if (!mounted || requestId != _previewRequestId) return;
+      setState(() {
+        _preview = preview;
+        _isPreviewLoading = false;
+      });
+    } catch (_) {
+      if (!mounted || requestId != _previewRequestId) return;
+      setState(() => _isPreviewLoading = false);
+    }
+  }
+
+  String _previewStateFingerprint(List<Debt> debts) {
+    final buffer = StringBuffer()
+      ..write(_plan?.strategy.name ?? 'none')
+      ..write('|')
+      ..write(_extraAmount.round() * 100);
+    for (final debt in debts) {
+      buffer
+        ..write('|')
+        ..write(debt.id)
+        ..write(':')
+        ..write(debt.currentBalance)
+        ..write(':')
+        ..write(debt.apr)
+        ..write(':')
+        ..write(debt.status.name);
+    }
+    return buffer.toString();
   }
 
   Future<void> _saveAndContinue({required int amountCents}) async {
@@ -366,5 +474,135 @@ class _AmountChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppChip.assist(label: label, onTap: onTap);
+  }
+}
+
+class _ExtraPreviewCard extends StatelessWidget {
+  const _ExtraPreviewCard({
+    required this.preview,
+    required this.strategyLabel,
+    required this.extraMonthlyAmount,
+    required this.isLoading,
+    required this.hasTrackedDebts,
+  });
+
+  final StrategyPreview? preview;
+  final String strategyLabel;
+  final int extraMonthlyAmount;
+  final bool isLoading;
+  final bool hasTrackedDebts;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!hasTrackedDebts) {
+      return AppCard(
+        color: AppColors.mdSurfaceContainerLow,
+        child: Text(
+          'Thêm ít nhất một khoản nợ để xem preview payoff thật.',
+          style: AppTextStyles.bodyMedium,
+        ),
+      );
+    }
+
+    if (isLoading && preview == null) {
+      return const AppCard(
+        color: AppColors.mdSurfaceContainerLow,
+        child: SizedBox(
+          height: 128,
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    }
+
+    return AppCard(
+      color: AppColors.mdSurfaceContainerLow,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text('Live preview', style: AppTextStyles.titleSmall),
+              const SizedBox(width: AppDimensions.sm),
+              AppChip.status(label: strategyLabel, icon: LucideIcons.zap),
+            ],
+          ),
+          const SizedBox(height: AppDimensions.md),
+          Text(
+            preview?.projectedDebtFreeDate == null
+                ? 'Đang recast...'
+                : AppFormatters.formatMonthYear(preview!.projectedDebtFreeDate!),
+            style: AppTextStyles.headlineSmall.copyWith(
+              color: AppColors.mdPrimary,
+            ),
+          ),
+          const SizedBox(height: AppDimensions.xs),
+          Text(
+            'Debt-free date với extra ${AppFormatters.formatCents(extraMonthlyAmount)} / tháng',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.mdOnSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: AppDimensions.md),
+          Row(
+            children: [
+              Expanded(
+                child: _PreviewStat(
+                  label: 'Projected interest',
+                  value: preview == null
+                      ? '--'
+                      : AppFormatters.formatCents(
+                          preview!.totalInterestProjected,
+                        ),
+                ),
+              ),
+              const SizedBox(width: AppDimensions.md),
+              Expanded(
+                child: _PreviewStat(
+                  label: 'Saved vs minimum',
+                  value: preview == null
+                      ? '--'
+                      : AppFormatters.formatCents(preview!.totalInterestSaved),
+                  valueColor: AppColors.mdPrimary,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PreviewStat extends StatelessWidget {
+  const _PreviewStat({
+    required this.label,
+    required this.value,
+    this.valueColor,
+  });
+
+  final String label;
+  final String value;
+  final Color? valueColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: AppTextStyles.labelSmall.copyWith(
+            color: AppColors.mdOnSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: AppDimensions.xs),
+        Text(
+          value,
+          style: AppTextStyles.titleMedium.copyWith(
+            color: valueColor ?? AppColors.mdOnSurface,
+          ),
+        ),
+      ],
+    );
   }
 }
