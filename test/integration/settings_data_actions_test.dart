@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:debt_payoff_manager/core/constants/app_test_keys.dart';
+import 'package:debt_payoff_manager/core/i18n/app_locale.dart';
 import 'package:debt_payoff_manager/core/models/backup_bundle_preview.dart';
 import 'package:debt_payoff_manager/core/models/data_export_artifact.dart';
 import 'package:debt_payoff_manager/core/models/picked_backup_bundle.dart';
@@ -106,6 +107,7 @@ void main() {
           backupFilePicker: fakePicker,
           dataManagementService: fakeService,
           shareLauncher: _RecordingShareLauncher(),
+          seedLocaleCode: AppLocale.englishLocaleCode,
         );
         addTearDown(() => harness.disposeWidgetTest(tester));
 
@@ -119,13 +121,14 @@ void main() {
         await tester.ensureVisible(restoreTile);
         await tester.tap(restoreTile);
         await tester.pump();
-        await tester.pumpUntilVisible(find.text('Khôi phục từ bản sao lưu?'));
+        await tester.pumpUntilVisible(
+          find.byKey(AppTestKeys.settingsDataRestoreConfirm),
+        );
 
         expect(fakePicker.pickCallCount, 1);
         expect(fakeService.inspectedBackupPaths, <String>[
           '/tmp/debt_payoff_backup_test.zip',
         ]);
-        expect(find.text('Khôi phục từ bản sao lưu?'), findsOneWidget);
         expect(find.textContaining('debts: 3'), findsOneWidget);
         expect(find.textContaining('payments: 2'), findsOneWidget);
 

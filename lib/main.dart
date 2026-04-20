@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'app.dart';
 import 'core/di/injection.dart';
+import 'core/i18n/app_locale.dart';
 import 'core/services/app_analytics.dart';
 import 'core/theme/app_colors.dart';
 
@@ -26,7 +27,12 @@ void main() async {
   );
 
   // Initialize dependency injection
-  configureDependencies(appAnalytics: await _bootstrapAnalytics());
+  configureDependencies(
+    appAnalytics: await _bootstrapAnalytics(),
+    seedLocaleCode: AppLocale.localeCodeForSystemLocale(
+      WidgetsBinding.instance.platformDispatcher.locale,
+    ),
+  );
 
   runApp(const DebtPayoffApp());
 }

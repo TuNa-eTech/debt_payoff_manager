@@ -5,6 +5,8 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/i18n/app_locale.dart';
+import '../../../../core/i18n/app_locale_picker_sheet.dart';
 import '../../../../core/models/backup_bundle_preview.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/services/backup_file_picker.dart';
@@ -13,7 +15,9 @@ import '../../../../core/services/share_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/formatters.dart';
 import '../../../../domain/entities/user_settings.dart';
+import '../../../../domain/enums/strategy.dart';
 import '../../../../domain/repositories/plan_repository.dart';
 import '../../../../domain/repositories/settings_repository.dart';
 
@@ -41,6 +45,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return StreamBuilder<UserSettings>(
       stream: _settingsRepository.watchSettings(),
       builder: (context, settingsSnapshot) {
@@ -57,40 +63,43 @@ class _SettingsPageState extends State<SettingsPage> {
             final plan = planSnapshot.data;
 
             return Scaffold(
-              appBar: AppBar(title: const Text('Cài đặt')),
+              appBar: AppBar(title: Text(l10n.settingsPageTitle)),
               body: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(vertical: AppDimensions.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     _buildSection(
-                      title: 'KẾ HOẠCH TRẢ NỢ',
+                      title: l10n.settingsSectionPlan,
                       children: [
                         _buildListTile(
-                          title: 'Chiến lược hiện tại',
-                          subtitle:
-                              'Mở tab Kế hoạch để xem thứ tự ưu tiên chi tiết.',
-                          trailingText: plan?.strategy.label ?? 'Snowball',
+                          title: l10n.settingsCurrentStrategyTitle,
+                          subtitle: l10n.settingsCurrentStrategySubtitle,
+                          trailingText: _strategyLabel(
+                            plan?.strategy ?? Strategy.snowball,
+                          ),
                           onTap: () => context.go(AppRoutes.plan),
                         ),
                         _buildDivider(),
                         _buildListTile(
-                          title: 'Trả thêm hàng tháng',
-                          subtitle: 'Đang lưu trong kế hoạch chính của bạn.',
-                          trailingText:
-                              '\$${((plan?.extraMonthlyAmount ?? 0) / 100).toStringAsFixed(2)}',
+                          title: l10n.settingsExtraMonthlyTitle,
+                          subtitle: l10n.settingsExtraMonthlySubtitle,
+                          trailingText: AppFormatters.formatCents(
+                            plan?.extraMonthlyAmount ?? 0,
+                            currencyCode: settings.currencyCode,
+                            localeCode: settings.localeCode,
+                          ),
                           onTap: () => context.go(AppRoutes.plan),
                         ),
                       ],
                     ),
                     const SizedBox(height: AppDimensions.md),
                     _buildSection(
-                      title: 'NHẮC NHỞ',
+                      title: l10n.settingsSectionReminders,
                       children: [
                         _buildSwitchTile(
-                          title: 'Nhắc nhở thanh toán',
-                          subtitle:
-                              'App sẽ dùng cài đặt này khi payment reminders được bật.',
+                          title: l10n.settingsPaymentReminderTitle,
+                          subtitle: l10n.settingsPaymentReminderSubtitle,
                           value: settings.notifPaymentReminder,
                           onChanged: (value) => _updateSettings(
                             settings.copyWith(notifPaymentReminder: value),
@@ -98,9 +107,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         _buildDivider(),
                         _buildSwitchTile(
-                          title: 'Nhật ký hàng tháng',
-                          subtitle:
-                              'Dùng cho monthly log summary khi flow này được mở.',
+                          title: l10n.settingsMonthlyLogTitle,
+                          subtitle: l10n.settingsMonthlyLogSubtitle,
                           value: settings.notifMonthlyLog,
                           onChanged: (value) => _updateSettings(
                             settings.copyWith(notifMonthlyLog: value),
@@ -110,45 +118,45 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     const SizedBox(height: AppDimensions.md),
                     _buildSection(
-                      title: 'TUỲ CHỌN',
+                      title: l10n.settingsSectionOptions,
                       children: [
                         _buildListTile(
-                          title: 'Loại tiền tệ',
-                          subtitle: 'Hiện tại chỉ dùng cho format hiển thị.',
+                          title: l10n.settingsCurrencyTitle,
+                          subtitle: l10n.settingsCurrencySubtitle,
                           trailingText: settings.currencyCode,
                         ),
                         _buildDivider(),
                         _buildListTile(
-                          title: 'Locale',
-                          subtitle:
-                              'Ảnh hưởng tới format ngày và ngôn ngữ hiển thị.',
-                          trailingText: settings.localeCode,
+                          key: AppTestKeys.settingsLocale,
+                          title: l10n.settingsLocaleTitle,
+                          subtitle: l10n.settingsLocaleSubtitle,
+                          trailingText: AppLocale.displayNameForLocaleCode(
+                            settings.localeCode,
+                          ),
+                          onTap: () => _showLocalePicker(settings),
                         ),
                       ],
                     ),
                     const SizedBox(height: AppDimensions.md),
                     _buildSection(
-                      title: 'DỮ LIỆU',
+                      title: l10n.settingsSectionData,
                       children: [
                         _buildDataStatusBanner(settings),
                         _buildDivider(),
                         _buildListTile(
                           key: AppTestKeys.settingsCloudBackup,
-                          title: 'Sao lưu đám mây',
+                          title: l10n.settingsCloudBackupTitle,
                           subtitle: _trustLevelCopy(settings.trustLevel),
-                          trailingText: settings.trustLevel == 0
-                              ? 'Local only'
-                              : 'Trust ${settings.trustLevel}',
+                          trailingText: _trustLevelLabel(settings.trustLevel),
                           enabled: !_isDataActionPending,
                           onTap: () => context.push(AppRoutes.syncBackup),
                         ),
                         _buildDivider(),
                         _buildListTile(
                           key: AppTestKeys.settingsDataExportCsv,
-                          title: 'Xuất dữ liệu (CSV)',
-                          subtitle:
-                              'ZIP gồm nhiều file CSV + manifest để bạn tự kiểm tra từng bảng.',
-                          trailingText: 'ZIP',
+                          title: l10n.settingsExportCsvTitle,
+                          subtitle: l10n.settingsExportCsvSubtitle,
+                          trailingText: l10n.settingsZipLabel,
                           enabled: !_isDataActionPending,
                           isLoading:
                               _pendingAction == _SettingsDataAction.csvExport,
@@ -157,10 +165,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         _buildDivider(),
                         _buildListTile(
                           key: AppTestKeys.settingsDataLocalBackup,
-                          title: 'Sao lưu cục bộ',
-                          subtitle:
-                              'Tạo JSON backup ZIP đầy đủ để lưu sang Files, Drive hoặc ổ đĩa ngoài.',
-                          trailingText: 'ZIP',
+                          title: l10n.settingsLocalBackupTitle,
+                          subtitle: l10n.settingsLocalBackupSubtitle,
+                          trailingText: l10n.settingsZipLabel,
                           enabled: !_isDataActionPending,
                           isLoading:
                               _pendingAction == _SettingsDataAction.localBackup,
@@ -171,10 +178,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         _buildDivider(),
                         _buildListTile(
                           key: AppTestKeys.settingsDataRestoreBackup,
-                          title: 'Khôi phục từ bản sao lưu',
-                          subtitle:
-                              'Đọc preview manifest và số bản ghi trước khi thay thế dữ liệu local.',
-                          trailingText: 'Restore',
+                          title: l10n.settingsRestoreTitle,
+                          subtitle: l10n.settingsRestoreSubtitle,
+                          trailingText: l10n.settingsRestoreAction,
                           enabled: !_isDataActionPending,
                           isLoading:
                               _pendingAction ==
@@ -186,10 +192,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         _buildDivider(),
                         _buildListTile(
                           key: AppTestKeys.settingsDataClearAll,
-                          title: 'Xóa toàn bộ dữ liệu',
-                          subtitle:
-                              'Chỉ reset dữ liệu trên thiết bị này. Cloud chưa bật ở Level 0.',
-                          trailingText: 'Reset',
+                          title: l10n.settingsClearAllTitle,
+                          subtitle: l10n.settingsClearAllSubtitle,
+                          trailingText: l10n.settingsResetAction,
                           titleColor: AppColors.mdError,
                           trailingColor: AppColors.mdError,
                           enabled: !_isDataActionPending,
@@ -208,13 +213,13 @@ class _SettingsPageState extends State<SettingsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Phiên bản 1.0.0 (MVP)',
+                            l10n.settingsVersionFooter,
                             style: AppTextStyles.bodySmall.copyWith(
                               color: AppColors.mdOnSurfaceVariant,
                             ),
                           ),
                           Text(
-                            '© 2026 Debt Payoff',
+                            l10n.settingsCopyrightFooter,
                             style: AppTextStyles.bodySmall.copyWith(
                               color: AppColors.mdOnSurfaceVariant,
                             ),
@@ -253,6 +258,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _restoreFromBackup() async {
     await _runDataAction(_SettingsDataAction.restoreBackup, () async {
+      final settings = await _settingsRepository.getSettings();
       final picked = await _backupFilePicker.pickBackupBundle();
       if (picked == null) {
         return;
@@ -266,7 +272,10 @@ class _SettingsPageState extends State<SettingsPage> {
         return;
       }
 
-      final confirmed = await _confirmRestore(preview);
+      final confirmed = await _confirmRestore(
+        preview,
+        localeCode: settings.localeCode,
+      );
       if (confirmed != true || !mounted) {
         return;
       }
@@ -276,14 +285,16 @@ class _SettingsPageState extends State<SettingsPage> {
         fileName: preview.fileName,
       );
       if (mounted) {
-        context.showSnackBar(
-          'Đã khôi phục dữ liệu local từ bản sao lưu đã chọn.',
-        );
+        context.showSnackBar(context.l10n.settingsRestoreSuccess);
       }
     });
   }
 
-  Future<bool?> _confirmRestore(BackupBundlePreview preview) {
+  Future<bool?> _confirmRestore(
+    BackupBundlePreview preview, {
+    required String localeCode,
+  }) {
+    final l10n = context.l10n;
     final rowCounts = preview.tableRowCounts.entries
         .map((entry) => '${entry.key}: ${entry.value}')
         .join('\n');
@@ -292,26 +303,27 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          title: const Text('Khôi phục từ bản sao lưu?'),
+          title: Text(l10n.settingsRestoreDialogTitle),
           content: SingleChildScrollView(
             child: Text(
-              'File: ${preview.fileName}\n'
-              'Xuất lúc: ${_formatPreviewTimestamp(preview.exportedAtUtc)}\n'
-              'Tổng bản ghi: ${preview.totalRows}\n\n'
-              'Dữ liệu trong backup:\n'
+              '${l10n.settingsRestoreDialogFileLabel}: ${preview.fileName}\n'
+              '${l10n.settingsRestoreDialogExportedAtLabel}: '
+              '${_formatPreviewTimestamp(preview.exportedAtUtc, localeCode: localeCode)}\n'
+              '${l10n.settingsRestoreDialogTotalRecordsLabel}: ${preview.totalRows}\n\n'
+              '${l10n.settingsRestoreDialogDataHeader}\n'
               '$rowCounts\n\n'
-              'Toàn bộ dữ liệu local hiện tại sẽ bị thay thế.',
+              '${l10n.settingsRestoreDialogWarning}',
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dialogContext, false),
-              child: const Text('Hủy'),
+              child: Text(l10n.settingsCancel),
             ),
             FilledButton(
               key: AppTestKeys.settingsDataRestoreConfirm,
               onPressed: () => Navigator.pop(dialogContext, true),
-              child: const Text('Khôi phục'),
+              child: Text(l10n.settingsRestoreConfirm),
             ),
           ],
         );
@@ -320,23 +332,22 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _confirmClearAll() async {
+    final l10n = context.l10n;
     final confirmedStepOne = await showDialog<bool>(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          title: const Text('Xóa toàn bộ dữ liệu?'),
-          content: const Text(
-            'Thao tác này sẽ xóa toàn bộ dữ liệu local và đưa app về trạng thái lần đầu mở.',
-          ),
+          title: Text(l10n.settingsClearAllDialogTitle),
+          content: Text(l10n.settingsClearAllDialogBody),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dialogContext, false),
-              child: const Text('Hủy'),
+              child: Text(l10n.settingsCancel),
             ),
             FilledButton(
               key: AppTestKeys.settingsDataClearAllConfirmOne,
               onPressed: () => Navigator.pop(dialogContext, true),
-              child: const Text('Tiếp tục'),
+              child: Text(l10n.settingsContinue),
             ),
           ],
         );
@@ -351,14 +362,12 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          title: const Text('Xác nhận lần cuối'),
-          content: const Text(
-            'Bạn sẽ mất toàn bộ debts, payments, milestones và backup local hiện tại trong app này.',
-          ),
+          title: Text(l10n.settingsFinalConfirmTitle),
+          content: Text(l10n.settingsFinalConfirmBody),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dialogContext, false),
-              child: const Text('Quay lại'),
+              child: Text(l10n.settingsGoBack),
             ),
             FilledButton(
               key: AppTestKeys.settingsDataClearAllConfirmTwo,
@@ -367,7 +376,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 foregroundColor: Colors.white,
               ),
               onPressed: () => Navigator.pop(dialogContext, true),
-              child: const Text('Xóa sạch'),
+              child: Text(l10n.settingsDeleteAllConfirm),
             ),
           ],
         );
@@ -416,26 +425,59 @@ class _SettingsPageState extends State<SettingsPage> {
     return message;
   }
 
-  String _trustLevelCopy(int trustLevel) {
-    switch (trustLevel) {
-      case 1:
-        return 'Cloud backup cơ bản đã bật. Local export vẫn luôn khả dụng.';
-      case 2:
-        return 'Đang dùng trust mode cao hơn. Hãy kiểm tra quyền chia sẻ trước khi reset local.';
-      case 0:
-      default:
-        return 'Hiện tại bạn đang ở local-only. Cloud backup là roadmap tiếp theo, không phải yêu cầu để dùng app.';
+  Future<void> _showLocalePicker(UserSettings settings) async {
+    await showAppLocalePickerSheet(
+      context,
+      selectedLocaleCode: settings.localeCode,
+      onSelected: (localeCode) {
+        return _updateSettings(settings.copyWith(localeCode: localeCode));
+      },
+    );
+  }
+
+  String _strategyLabel(Strategy strategy) {
+    final l10n = context.l10n;
+    switch (strategy) {
+      case Strategy.avalanche:
+        return l10n.settingsStrategyAvalanche;
+      case Strategy.custom:
+        return l10n.settingsStrategyCustom;
+      case Strategy.snowball:
+        return l10n.settingsStrategySnowball;
     }
   }
 
-  String _formatPreviewTimestamp(DateTime value) {
-    final local = value.toLocal();
-    final day = local.day.toString().padLeft(2, '0');
-    final month = local.month.toString().padLeft(2, '0');
-    final year = local.year.toString().padLeft(4, '0');
-    final hour = local.hour.toString().padLeft(2, '0');
-    final minute = local.minute.toString().padLeft(2, '0');
-    return '$day/$month/$year $hour:$minute';
+  String _trustLevelLabel(int trustLevel) {
+    final l10n = context.l10n;
+    switch (trustLevel) {
+      case 1:
+        return l10n.settingsTrustLevelOneLabel;
+      case 2:
+        return l10n.settingsTrustLevelTwoLabel;
+      case 0:
+      default:
+        return l10n.settingsTrustLevelLocalOnlyLabel;
+    }
+  }
+
+  String _trustLevelCopy(int trustLevel) {
+    final l10n = context.l10n;
+    switch (trustLevel) {
+      case 1:
+        return l10n.settingsTrustLevelOneBody;
+      case 2:
+        return l10n.settingsTrustLevelTwoBody;
+      case 0:
+      default:
+        return l10n.settingsTrustLevelLocalOnlyBody;
+    }
+  }
+
+  String _formatPreviewTimestamp(DateTime value, {required String localeCode}) {
+    return AppFormatters.formatDateTime(
+      value.toLocal(),
+      localeCode: localeCode,
+    );
   }
 
   Widget _buildSection({
@@ -467,14 +509,15 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _buildDataStatusBanner(UserSettings settings) {
+    final l10n = context.l10n;
     final isLocalOnly = settings.trustLevel == 0;
     final icon = isLocalOnly ? LucideIcons.shieldCheck : LucideIcons.cloud;
     final title = isLocalOnly
-        ? 'Local-first đang bật'
-        : 'Trust mode nâng cao đang bật';
+        ? l10n.settingsDataBannerLocalTitle
+        : l10n.settingsDataBannerTrustTitle;
     final body = isLocalOnly
-        ? 'Dữ liệu hiện nằm trên thiết bị này. Bạn luôn có CSV export, local backup/restore và clear all mà không cần tài khoản hoặc bank linking.'
-        : 'Bạn đang ở trust level > 0. Local export vẫn còn, nhưng các thao tác reset cần cẩn thận hơn vì có thể liên quan tới cloud semantics.';
+        ? l10n.settingsDataBannerLocalBody
+        : l10n.settingsDataBannerTrustBody;
 
     return Container(
       padding: const EdgeInsets.symmetric(

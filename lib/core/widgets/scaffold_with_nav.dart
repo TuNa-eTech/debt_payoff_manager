@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../constants/app_test_keys.dart';
+import '../extensions/context_extensions.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_dimensions.dart';
 
@@ -18,78 +19,46 @@ class ScaffoldWithNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Scaffold(
       body: child,
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
-          border: Border(
-            top: BorderSide(color: AppColors.mdOutlineVariant, width: 1),
-          ),
+          border: Border(top: BorderSide(color: AppColors.mdOutlineVariant, width: 1)),
         ),
         child: NavigationBar(
           selectedIndex: child.currentIndex,
-          onDestinationSelected: (index) => child.goBranch(
-            index,
-            initialLocation: index == child.currentIndex,
-          ),
+          onDestinationSelected: (index) => child.goBranch(index, initialLocation: index == child.currentIndex),
           backgroundColor: AppColors.mdSurface,
           surfaceTintColor: Colors.transparent,
           indicatorColor: AppColors.mdPrimaryContainer,
-          height: AppDimensions.navBarHeight,
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-          destinations: const [
+          destinations: [
             NavigationDestination(
-              icon: Icon(
-                LucideIcons.calendarCheck,
-                key: AppTestKeys.navHomeTab,
-                size: AppDimensions.iconMd,
-              ),
-              selectedIcon: Icon(
-                LucideIcons.calendarCheck,
-                size: AppDimensions.iconMd,
-                color: AppColors.mdOnPrimaryContainer,
-              ),
-              label: 'Tháng này',
+              icon: Icon(LucideIcons.calendarCheck, key: AppTestKeys.navHomeTab, size: AppDimensions.iconMd),
+              selectedIcon: Icon(LucideIcons.calendarCheck, size: AppDimensions.iconMd, color: AppColors.mdOnPrimaryContainer),
+              label: l10n.navThisMonth,
             ),
             NavigationDestination(
-              icon: Icon(
-                LucideIcons.creditCard,
-                key: AppTestKeys.navDebtsTab,
-                size: AppDimensions.iconMd,
-              ),
-              selectedIcon: Icon(
-                LucideIcons.creditCard,
-                size: AppDimensions.iconMd,
-                color: AppColors.mdOnPrimaryContainer,
-              ),
-              label: 'Khoản nợ',
+              icon: Icon(LucideIcons.creditCard, key: AppTestKeys.navDebtsTab, size: AppDimensions.iconMd),
+              selectedIcon: Icon(LucideIcons.creditCard, size: AppDimensions.iconMd, color: AppColors.mdOnPrimaryContainer),
+              label: l10n.navDebts,
             ),
             NavigationDestination(
               icon: Icon(LucideIcons.trendingDown, size: AppDimensions.iconMd),
-              selectedIcon: Icon(
-                LucideIcons.trendingDown,
-                size: AppDimensions.iconMd,
-                color: AppColors.mdOnPrimaryContainer,
-              ),
-              label: 'Kế hoạch',
+              selectedIcon: Icon(LucideIcons.trendingDown, size: AppDimensions.iconMd, color: AppColors.mdOnPrimaryContainer),
+              label: l10n.navPlan,
             ),
             NavigationDestination(
               icon: Icon(LucideIcons.barChart2, size: AppDimensions.iconMd),
-              selectedIcon: Icon(
-                LucideIcons.barChart2,
-                size: AppDimensions.iconMd,
-                color: AppColors.mdOnPrimaryContainer,
-              ),
-              label: 'Tiến độ',
+              selectedIcon: Icon(LucideIcons.barChart2, size: AppDimensions.iconMd, color: AppColors.mdOnPrimaryContainer),
+              label: l10n.navProgress,
             ),
             NavigationDestination(
               icon: Icon(LucideIcons.settings, size: AppDimensions.iconMd),
-              selectedIcon: Icon(
-                LucideIcons.settings,
-                size: AppDimensions.iconMd,
-                color: AppColors.mdOnPrimaryContainer,
-              ),
-              label: 'Cài đặt',
+              selectedIcon: Icon(LucideIcons.settings, size: AppDimensions.iconMd, color: AppColors.mdOnPrimaryContainer),
+              label: l10n.navSettings,
             ),
           ],
         ),

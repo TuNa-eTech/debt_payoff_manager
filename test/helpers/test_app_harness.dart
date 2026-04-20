@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:debt_payoff_manager/core/di/injection.dart';
+import 'package:debt_payoff_manager/core/i18n/app_locale.dart';
 import 'package:debt_payoff_manager/core/router/app_router.dart';
 import 'package:debt_payoff_manager/core/services/app_analytics.dart';
 import 'package:debt_payoff_manager/core/services/backup_file_picker.dart';
@@ -20,11 +21,13 @@ import 'package:debt_payoff_manager/data/repositories/debt_repository_impl.dart'
 import 'package:debt_payoff_manager/data/repositories/payment_repository_impl.dart';
 import 'package:debt_payoff_manager/data/repositories/plan_repository_impl.dart';
 import 'package:debt_payoff_manager/data/repositories/settings_repository_impl.dart';
+import 'package:debt_payoff_manager/domain/entities/user_settings.dart';
 import 'package:debt_payoff_manager/domain/repositories/debt_repository.dart';
 import 'package:debt_payoff_manager/domain/repositories/settings_repository.dart';
 import 'package:debt_payoff_manager/features/debts/cubit/debts_cubit.dart';
 import 'package:debt_payoff_manager/features/onboarding/cubit/onboarding_cubit.dart';
 import 'package:debt_payoff_manager/features/onboarding/services/onboarding_analytics.dart';
+import 'package:debt_payoff_manager/l10n/app_localizations.dart';
 
 class TestAppHarness {
   TestAppHarness._({
@@ -81,17 +84,21 @@ class TestAppHarness {
     BackupFilePicker? backupFilePicker,
     DataManagementService? dataManagementService,
     ShareLauncher? shareLauncher,
+    String seedLocaleCode = AppLocale.fallbackLocaleCode,
     bool closeDbOnDispose = true,
   }) async {
     await getIt.reset();
 
-    final resolvedDb = db ?? DatabaseProvider.openTestDatabase();
+    final resolvedDb =
+        db ??
+        DatabaseProvider.openTestDatabase(initialLocaleCode: seedLocaleCode);
     configureDependencies(
       database: resolvedDb,
       appAnalytics: appAnalytics,
       backupFilePicker: backupFilePicker,
       dataManagementService: dataManagementService,
       shareLauncher: shareLauncher,
+      seedLocaleCode: seedLocaleCode,
     );
 
     final harness = TestAppHarness._(
@@ -182,12 +189,25 @@ class TestAppHarness {
   }
 
   Widget _buildApp() {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<DebtsCubit>.value(value: debtsCubit),
-        BlocProvider<OnboardingCubit>.value(value: onboardingCubit),
-      ],
-      child: MaterialApp.router(routerConfig: router),
+    return StreamBuilder<UserSettings>(
+      stream: settingsRepository.watchSettings(),
+      builder: (context, snapshot) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<DebtsCubit>.value(value: debtsCubit),
+            BlocProvider<OnboardingCubit>.value(value: onboardingCubit),
+          ],
+          child: MaterialApp.router(
+            locale: AppLocale.flutterLocaleForCode(snapshot.data?.localeCode),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            onGenerateTitle: (context) =>
+                AppLocalizations.of(context)?.appName ?? 'Debt Payoff X',
+            title: 'Debt Payoff X',
+            routerConfig: router,
+          ),
+        );
+      },
     );
   }
 }

@@ -1,0 +1,7 @@
+{
+  "@@locale": "vi",
+  "appName": "Debt Payoff X",
+  "@appName": {
+    "description": "Application name shown in localized UI."
+  }
+}

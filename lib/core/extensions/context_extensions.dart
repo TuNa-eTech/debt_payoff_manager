@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
+
 /// Extensions on [BuildContext] for convenient access to theme and media.
 extension ContextExtensions on BuildContext {
   /// Access current [ThemeData].
@@ -13,6 +15,17 @@ extension ContextExtensions on BuildContext {
 
   /// Access current [MediaQueryData].
   MediaQueryData get mediaQuery => MediaQuery.of(this);
+
+  /// Access current localized strings.
+  AppLocalizations get l10n {
+    final localizations = AppLocalizations.of(this);
+    assert(
+      localizations != null,
+      'AppLocalizations not found in BuildContext. '
+      'Did you forget to configure MaterialApp.localizationsDelegates?',
+    );
+    return localizations!;
+  }
 
   /// Screen width.
   double get screenWidth => mediaQuery.size.width;

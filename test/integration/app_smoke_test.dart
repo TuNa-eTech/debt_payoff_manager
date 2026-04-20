@@ -228,7 +228,7 @@ void main() {
           AppTestKeys.debtDetailEdit,
           scope: find.byKey(AppTestKeys.debtDetail(createdDebt.id)),
         );
-        await tester.pumpUntilVisible(find.text('Chỉnh sửa khoản nợ'));
+        await tester.pumpUntilVisible(find.byKey(AppTestKeys.debtFormName));
 
         await _enterText(
           tester,
@@ -292,9 +292,6 @@ void main() {
       await tester.ensureVisible(syncTile);
       await tester.tap(syncTile);
       await tester.pumpRouterIdle();
-      await tester.pumpUntilVisible(
-        find.textContaining('Sao lưu đám mây là bước tiếp theo'),
-      );
 
       final pricingCta = find.byKey(AppTestKeys.syncBackupViewPricing);
       await tester.scrollUntilVisible(
@@ -305,7 +302,6 @@ void main() {
       await tester.pumpRouterIdle();
       await tester.tap(pricingCta);
       await tester.pumpRouterIdle();
-      await tester.pumpUntilVisible(find.text('Free vs Premium'));
 
       final continueFree = find.byKey(AppTestKeys.pricingContinueFree);
       await tester.scrollUntilVisible(

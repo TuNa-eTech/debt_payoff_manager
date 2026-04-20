@@ -1,6 +1,7 @@
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:debt_payoff_manager/core/i18n/app_locale.dart';
 import 'package:debt_payoff_manager/data/local/database.dart';
 import 'package:debt_payoff_manager/data/repositories/settings_repository_impl.dart';
 
@@ -25,6 +26,7 @@ void main() {
       expect(settings.id, 'singleton');
       expect(settings.trustLevel, 0);
       expect(settings.currencyCode, 'USD');
+      expect(settings.localeCode, AppLocale.englishLocaleCode);
       expect(settings.onboardingStep, 0);
       expect(settings.onboardingCompleted, false);
     });

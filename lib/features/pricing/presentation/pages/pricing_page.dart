@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
+import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -14,8 +15,10 @@ class PricingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Free vs Premium')),
+      appBar: AppBar(title: Text(l10n.pricingPageTitle)),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(
@@ -25,43 +28,40 @@ class PricingPage extends StatelessWidget {
             AppDimensions.xxl,
           ),
           children: [
-            Text(
-              'Local-first trước. Premium chỉ mở khi thật sự thêm giá trị.',
-              style: AppTextStyles.headlineSmall,
-            ),
+            Text(l10n.pricingHeadline, style: AppTextStyles.headlineSmall),
             const SizedBox(height: AppDimensions.sm),
             Text(
-              'Bản MVP hiện tại vẫn giữ đầy đủ core payoff flow miễn phí. Premium là lộ trình tiếp theo cho cloud backup, PDF report và shared planning.',
+              l10n.pricingBody,
               style: AppTextStyles.bodyMedium.copyWith(
                 color: AppColors.mdOnSurfaceVariant,
               ),
             ),
             const SizedBox(height: AppDimensions.xl),
-            const _TierCard(
-              title: 'Free',
-              subtitle: 'Có sẵn trong MVP',
+            _TierCard(
+              title: l10n.pricingFreeTitle,
+              subtitle: l10n.pricingFreeSubtitle,
               accentColor: AppColors.mdPrimary,
               backgroundColor: AppColors.mdPrimaryContainer,
               icon: LucideIcons.shield,
               bullets: <String>[
-                'Nhập và chỉnh sửa không giới hạn khoản nợ',
-                'Snowball / Avalanche + living timeline',
-                'Payment logging + monthly action view',
-                'CSV export + local backup/restore + clear all',
+                l10n.pricingFreeBulletUnlimitedDebts,
+                l10n.pricingFreeBulletStrategies,
+                l10n.pricingFreeBulletPayments,
+                l10n.pricingFreeBulletExport,
               ],
             ),
             const SizedBox(height: AppDimensions.lg),
-            const _TierCard(
-              title: 'Premium',
-              subtitle: 'Stub để chuẩn bị monetization, chưa có IAP',
+            _TierCard(
+              title: l10n.pricingPremiumTitle,
+              subtitle: l10n.pricingPremiumSubtitle,
               accentColor: AppColors.mdSecondary,
               backgroundColor: AppColors.mdSecondaryContainer,
               icon: LucideIcons.cloud,
               bullets: <String>[
-                'Cloud backup giữa nhiều thiết bị',
-                'Partner sharing và scenario comparison',
-                'PDF report để in hoặc gửi cố vấn tài chính',
-                'Pricing minh bạch, không trial mập mờ',
+                l10n.pricingPremiumBulletCloud,
+                l10n.pricingPremiumBulletSharing,
+                l10n.pricingPremiumBulletPdf,
+                l10n.pricingPremiumBulletPricing,
               ],
             ),
             const SizedBox(height: AppDimensions.lg),
@@ -78,7 +78,7 @@ class PricingPage extends StatelessWidget {
                   const SizedBox(width: AppDimensions.sm),
                   Expanded(
                     child: Text(
-                      'Cam kết trust không đổi khi lên Premium: không bank linking, không auto-charge mập mờ, và local export vẫn luôn khả dụng.',
+                      l10n.pricingTrustMessage,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.mdOnSurfaceVariant,
                       ),
@@ -91,14 +91,14 @@ class PricingPage extends StatelessWidget {
             SizedBox(
               key: AppTestKeys.pricingContinueFree,
               child: AppButton.filledLg(
-                label: 'Tiếp tục với bản miễn phí',
+                label: l10n.pricingContinueFree,
                 fullWidth: true,
                 onPressed: context.pop,
               ),
             ),
             const SizedBox(height: AppDimensions.md),
             Text(
-              'Premium chưa mở trong bản MVP này.',
+              l10n.pricingMvpNotice,
               style: AppTextStyles.bodySmall.copyWith(
                 color: AppColors.mdOnSurfaceVariant,
               ),

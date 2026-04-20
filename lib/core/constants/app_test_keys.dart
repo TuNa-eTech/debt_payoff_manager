@@ -10,6 +10,9 @@ class AppTestKeys {
 
   // Onboarding
   static const welcomeAddFirstDebt = ValueKey<String>('welcome:add-first-debt');
+  static const welcomeChangeLanguage = ValueKey<String>(
+    'welcome:change-language',
+  );
   static const onboardingAddAnotherContinue = ValueKey<String>(
     'onboarding:add-another-continue',
   );
@@ -71,6 +74,13 @@ class AppTestKeys {
   static const debtsFilterArchived = ValueKey<String>('debts:filter-archived');
   static const settingsCloudBackup = ValueKey<String>(
     'settings:data-cloud-backup',
+  );
+  static const settingsLocale = ValueKey<String>('settings:locale');
+  static const settingsLocaleOptionEnglish = ValueKey<String>(
+    'settings:locale-option-english',
+  );
+  static const settingsLocaleOptionVietnamese = ValueKey<String>(
+    'settings:locale-option-vietnamese',
   );
   static const syncBackupViewPricing = ValueKey<String>(
     'settings:sync-backup-view-pricing',

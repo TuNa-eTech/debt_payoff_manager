@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
+import '../../../../core/di/injection.dart';
+import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/i18n/app_locale.dart';
+import '../../../../core/i18n/app_locale_picker_sheet.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/app_button.dart';
+import '../../../../domain/entities/user_settings.dart';
+import '../../../../domain/repositories/settings_repository.dart';
 import '../../cubit/onboarding_state.dart';
 import '../../services/onboarding_analytics.dart';
 import '../onboarding_navigation.dart';
@@ -19,6 +25,9 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final settingsRepository = getIt<SettingsRepository>();
+
     return OnboardingStepTracker(
       screen: OnboardingAnalyticsScreen.welcome,
       child: Scaffold(
@@ -56,7 +65,7 @@ class WelcomePage extends StatelessWidget {
                       const SizedBox(height: 32),
                       // Title
                       Text(
-                        'Kiểm soát nợ,\ngiải phóng tương lai.',
+                        l10n.welcomeTitle,
                         style: AppTextStyles.headlineLarge.copyWith(
                           // 40sp
                           letterSpacing: -1.5,
@@ -69,12 +78,45 @@ class WelcomePage extends StatelessWidget {
                       const SizedBox(height: 16),
                       // Subtitle
                       Text(
-                        'Tạo kế hoạch trả nợ cá nhân hoá trong 3 phút.\n'
-                        'Không tài khoản. Không chạm ngân hàng.',
+                        l10n.welcomeSubtitle,
                         style: AppTextStyles.bodyLarge.copyWith(
                           color: const Color(0xFF615D59), // #615D59
                           height: 1.5,
                         ),
+                      ),
+                      const SizedBox(height: 12),
+                      StreamBuilder<UserSettings>(
+                        stream: settingsRepository.watchSettings(),
+                        builder: (context, snapshot) {
+                          final settings = snapshot.data;
+
+                          return Align(
+                            alignment: Alignment.centerLeft,
+                            child: SizedBox(
+                              key: AppTestKeys.welcomeChangeLanguage,
+                              child: AppButton.text(
+                                label: l10n.welcomeChangeLanguage,
+                                icon: LucideIcons.languages,
+                                onPressed: settings == null
+                                    ? null
+                                    : () => showAppLocalePickerSheet(
+                                        context,
+                                        selectedLocaleCode: settings.localeCode,
+                                        onSelected: (localeCode) {
+                                          return settingsRepository.updateSettings(
+                                            settings.copyWith(
+                                              localeCode:
+                                                  AppLocale.resolveSupportedLocaleCode(
+                                                    localeCode,
+                                                  ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -94,7 +136,7 @@ class WelcomePage extends StatelessWidget {
                     SizedBox(
                       key: AppTestKeys.welcomeAddFirstDebt,
                       child: AppButton.filledLg(
-                        label: 'Thêm khoản nợ đầu tiên',
+                        label: l10n.welcomeAddFirstDebt,
                         icon: LucideIcons.plus,
                         fullWidth: true,
                         onPressed: () => navigateToOnboardingStep(
@@ -109,11 +151,20 @@ class WelcomePage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _buildTrustBadge(LucideIcons.shield, 'Local-first'),
+                        _buildTrustBadge(
+                          LucideIcons.shield,
+                          l10n.welcomeTrustLocalFirst,
+                        ),
                         const SizedBox(width: 20),
-                        _buildTrustBadge(LucideIcons.ban, 'Không sync bank'),
+                        _buildTrustBadge(
+                          LucideIcons.ban,
+                          l10n.welcomeTrustNoBankSync,
+                        ),
                         const SizedBox(width: 20),
-                        _buildTrustBadge(LucideIcons.lock, 'Miễn phí'),
+                        _buildTrustBadge(
+                          LucideIcons.lock,
+                          l10n.welcomeTrustFree,
+                        ),
                       ],
                     ),
                   ],

@@ -20,22 +20,22 @@ class AppDimensions {
   static const double sectionGap = 24.0;
 
   // ── Border radius (MD3 shape scale) ──
-  static const double radiusXs = 4.0;    // None / Extra Small
-  static const double radiusSm = 8.0;    // Small — buttons, inputs
-  static const double radiusMd = 12.0;   // Medium
-  static const double radiusLg = 16.0;   // Large — cards
-  static const double radiusXl = 28.0;   // Extra Large
-  static const double radius2xl = 24.0;  // Hero cards (design system uses 24)
+  static const double radiusXs = 4.0; // None / Extra Small
+  static const double radiusSm = 8.0; // Small — buttons, inputs
+  static const double radiusMd = 12.0; // Medium
+  static const double radiusLg = 16.0; // Large — cards
+  static const double radiusXl = 28.0; // Extra Large
+  static const double radius2xl = 24.0; // Hero cards (design system uses 24)
   static const double radiusFull = 999.0; // Full — pills, FABs, chips
 
   // ── Component heights ──
-  static const double buttonHeightSm = 36.0;  // Chips
-  static const double buttonHeight = 48.0;    // Standard buttons
-  static const double buttonHeightLg = 56.0;  // Primary CTA / FAB
-  static const double inputHeight = 56.0;     // Text fields
+  static const double buttonHeightSm = 36.0; // Chips
+  static const double buttonHeight = 48.0; // Standard buttons
+  static const double buttonHeightLg = 56.0; // Primary CTA / FAB
+  static const double inputHeight = 56.0; // Text fields
   static const double statusBarHeight = 44.0;
   static const double topAppBarHeight = 64.0;
-  static const double navBarHeight = 80.0;
+  static const double navBarHeight = 70.0;
 
   // ── Icon sizes ──
   static const double iconXs = 14.0;

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
+import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
@@ -15,6 +16,8 @@ class SyncBackupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Scaffold(
       backgroundColor: AppColors.mdSurface,
       appBar: AppBar(
@@ -54,38 +57,38 @@ class SyncBackupPage extends StatelessWidget {
             ),
             const SizedBox(height: AppDimensions.xl),
             Text(
-              'Sao lưu đám mây là bước tiếp theo, không phải điều kiện để dùng app.',
+              l10n.syncBackupHeadline,
               style: AppTextStyles.headlineSmall,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppDimensions.sm),
             Text(
-              'Hiện tại app của bạn đang ở chế độ local-only. Bạn vẫn có đầy đủ export, local backup và restore mà không cần tài khoản.',
+              l10n.syncBackupBody,
               style: AppTextStyles.bodyMedium.copyWith(
                 color: AppColors.mdOnSurfaceVariant,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppDimensions.xl),
-            const _TrustCard(
-              title: 'Bạn đã có trong bản miễn phí',
+            _TrustCard(
+              title: l10n.syncBackupFreeTitle,
               icon: LucideIcons.shield,
               bullets: <String>[
-                'CSV export đầy đủ để mở trong Excel hoặc Numbers',
-                'Local backup ZIP để lưu thủ công sang Files hoặc Drive',
-                'Restore có preview trước khi thay thế dữ liệu local',
-                'Clear all / factory reset mà không khóa quyền truy cập dữ liệu',
+                l10n.syncBackupFreeBulletCsv,
+                l10n.syncBackupFreeBulletBackup,
+                l10n.syncBackupFreeBulletPreview,
+                l10n.syncBackupFreeBulletReset,
               ],
             ),
             const SizedBox(height: AppDimensions.lg),
-            const _TrustCard(
-              title: 'Premium sau này sẽ thêm',
+            _TrustCard(
+              title: l10n.syncBackupPremiumTitle,
               icon: LucideIcons.sparkles,
               bullets: <String>[
-                'Cloud backup giữa nhiều thiết bị',
-                'Partner sharing và scenario comparison',
-                'PDF report để in hoặc gửi cố vấn tài chính',
-                'Pricing minh bạch, không trial mập mờ',
+                l10n.syncBackupPremiumBulletCloud,
+                l10n.syncBackupPremiumBulletSharing,
+                l10n.syncBackupPremiumBulletPdf,
+                l10n.syncBackupPremiumBulletPricing,
               ],
             ),
             const SizedBox(height: AppDimensions.lg),
@@ -102,7 +105,7 @@ class SyncBackupPage extends StatelessWidget {
                   const SizedBox(width: AppDimensions.sm),
                   Expanded(
                     child: Text(
-                      'Cam kết trust không đổi: dữ liệu khởi đầu nằm trên thiết bị, không bank linking, và export local vẫn luôn mở ngay cả khi Premium xuất hiện.',
+                      l10n.syncBackupTrustMessage,
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.mdOnSurfaceVariant,
                       ),
@@ -115,14 +118,14 @@ class SyncBackupPage extends StatelessWidget {
             SizedBox(
               key: AppTestKeys.syncBackupViewPricing,
               child: AppButton.filledLg(
-                label: 'Xem Free vs Premium',
+                label: l10n.syncBackupViewPricing,
                 fullWidth: true,
                 onPressed: () => context.push(AppRoutes.pricing),
               ),
             ),
             const SizedBox(height: AppDimensions.md),
             AppButton.text(
-              label: 'Tiếp tục dùng local-only',
+              label: l10n.syncBackupContinueLocal,
               onPressed: () => Navigator.pop(context),
             ),
           ],

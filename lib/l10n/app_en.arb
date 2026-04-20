@@ -1,0 +1,877 @@
+{
+  "@@locale": "en",
+  "appName": "Debt Payoff X",
+  "@appName": {
+    "description": "Application name shown in localized UI."
+  },
+  "navDebts": "Debts",
+  "@navDebts": {
+    "description": "Bottom navigation label for the debts tab."
+  },
+  "navPlan": "Plan",
+  "@navPlan": {
+    "description": "Bottom navigation label for the plan tab."
+  },
+  "navProgress": "Progress",
+  "@navProgress": {
+    "description": "Bottom navigation label for the progress tab."
+  },
+  "navSettings": "Settings",
+  "@navSettings": {
+    "description": "Bottom navigation label for the settings tab."
+  },
+  "navThisMonth": "This month",
+  "@navThisMonth": {
+    "description": "Bottom navigation label for the overview home tab."
+  },
+  "commonAddDebt": "Add debt",
+  "@commonAddDebt": {
+    "description": "Generic action to add a new debt."
+  },
+  "commonSavePayment": "Save payment",
+  "@commonSavePayment": {
+    "description": "Generic action to save a payment."
+  },
+  "commonUndo": "Undo",
+  "@commonUndo": {
+    "description": "Generic undo action."
+  },
+  "commonViewAll": "View all",
+  "@commonViewAll": {
+    "description": "Generic action to view all items in a list."
+  },
+  "commonRecordAnotherAmount": "Enter another amount",
+  "@commonRecordAnotherAmount": {
+    "description": "Action to switch from a suggested amount to a custom amount."
+  },
+  "paymentTypeMinimumLabel": "Minimum",
+  "@paymentTypeMinimumLabel": {
+    "description": "Label for a minimum payment type."
+  },
+  "paymentTypeExtraLabel": "Extra",
+  "@paymentTypeExtraLabel": {
+    "description": "Label for an extra payment type."
+  },
+  "paymentTypeLumpSumLabel": "Lump sum",
+  "@paymentTypeLumpSumLabel": {
+    "description": "Label for a lump-sum payment type."
+  },
+  "homeCurrentBalanceTitle": "Current total balance",
+  "@homeCurrentBalanceTitle": {
+    "description": "Title on the home hero card for the current outstanding balance."
+  },
+  "homeStrategyLabel": "Strategy",
+  "@homeStrategyLabel": {
+    "description": "Label for the active payoff strategy on the home hero card."
+  },
+  "homeExtraMonthlyLabel": "Extra / month",
+  "@homeExtraMonthlyLabel": {
+    "description": "Label for the extra monthly amount on the home hero card."
+  },
+  "homePaidAmountLabel": "Paid {amount}",
+  "@homePaidAmountLabel": {
+    "description": "Label showing how much has already been paid.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTrackedLabel": "Tracking",
+  "@homeTrackedLabel": {
+    "description": "Label for the number of active tracked debts."
+  },
+  "homePaidOffLabel": "Paid off",
+  "@homePaidOffLabel": {
+    "description": "Label for the number of debts already paid off."
+  },
+  "homePausedLabel": "Paused",
+  "@homePausedLabel": {
+    "description": "Label for the number of paused debts."
+  },
+  "homeTrackedDebtsTitle": "Debts to watch",
+  "@homeTrackedDebtsTitle": {
+    "description": "Section title for the debt list on the home screen."
+  },
+  "homeTrackedDebtsSubtitle": "This list comes directly from the debts you have saved.",
+  "@homeTrackedDebtsSubtitle": {
+    "description": "Section subtitle for the debt list on the home screen."
+  },
+  "homeDuePaused": "Paused",
+  "@homeDuePaused": {
+    "description": "Due-date text for a paused debt."
+  },
+  "homeDueDay": "Day {day}",
+  "@homeDueDay": {
+    "description": "Due-date label showing the calendar day of month.",
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "homeNoDebtsTracked": "There are no debts to track yet.",
+  "@homeNoDebtsTracked": {
+    "description": "Empty-state text when the home debt snapshot has no visible debts."
+  },
+  "homeCurrentPlanTitle": "Current payoff plan",
+  "@homeCurrentPlanTitle": {
+    "description": "Title for the current payoff plan card on the home screen."
+  },
+  "homeCurrentPlanPendingSubtitle": "The app will recalculate your payoff date as soon as you record the latest payment.",
+  "@homeCurrentPlanPendingSubtitle": {
+    "description": "Subtitle shown when the projected payoff date is not available yet."
+  },
+  "homeCurrentPlanProjectedSubtitle": "If you keep this pace, you could be debt-free by {monthYear}.",
+  "@homeCurrentPlanProjectedSubtitle": {
+    "description": "Subtitle shown when the payoff date projection is available.",
+    "placeholders": {
+      "monthYear": {
+        "type": "String"
+      }
+    }
+  },
+  "homeCurrentPlanStrategyLine": "{strategy} · Extra {amount} / month",
+  "@homeCurrentPlanStrategyLine": {
+    "description": "Compact line showing the current strategy and extra monthly amount.",
+    "placeholders": {
+      "strategy": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeViewPlanDetails": "View detailed plan",
+  "@homeViewPlanDetails": {
+    "description": "CTA on the home plan summary card."
+  },
+  "monthlyActionStandaloneTitle": "This month's actions",
+  "@monthlyActionStandaloneTitle": {
+    "description": "App bar title for the standalone monthly action page."
+  },
+  "monthlyActionEmptyTitle": "No debts are being tracked yet",
+  "@monthlyActionEmptyTitle": {
+    "description": "Empty-state title for the monthly action section when there are no debts."
+  },
+  "monthlyActionEmptySubtitle": "Add your first debt so the app can suggest what to do this month.",
+  "@monthlyActionEmptySubtitle": {
+    "description": "Empty-state subtitle for the monthly action section when there are no debts."
+  },
+  "monthlyActionSectionTitle": "This month's actions",
+  "@monthlyActionSectionTitle": {
+    "description": "Main title for the monthly action section."
+  },
+  "monthlyActionSectionSubtitle": "Handle required items first. The app will suggest extra payments separately.",
+  "@monthlyActionSectionSubtitle": {
+    "description": "Subtitle for the monthly action section."
+  },
+  "monthlyActionCompletionChip": "{completed}/{total} done",
+  "@monthlyActionCompletionChip": {
+    "description": "Progress chip for completed required actions.",
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "monthlyActionSummaryDebtFreeLabel": "Projected payoff date",
+  "@monthlyActionSummaryDebtFreeLabel": {
+    "description": "Label for the projected payoff date in the monthly action summary card."
+  },
+  "monthlyActionSummaryRecalculating": "Recalculating",
+  "@monthlyActionSummaryRecalculating": {
+    "description": "Fallback text when monthly action metrics are still recalculating."
+  },
+  "monthlyActionSummaryRequired": "Required",
+  "@monthlyActionSummaryRequired": {
+    "description": "Label for required monthly payment total."
+  },
+  "monthlyActionSummaryExtra": "Extra",
+  "@monthlyActionSummaryExtra": {
+    "description": "Label for extra monthly payment total."
+  },
+  "monthlyActionSummaryOverdue": "Overdue",
+  "@monthlyActionSummaryOverdue": {
+    "description": "Label for overdue count in the monthly action summary card."
+  },
+  "monthlyActionRequiredSectionTitle": "Required this month",
+  "@monthlyActionRequiredSectionTitle": {
+    "description": "Title for the required monthly action section."
+  },
+  "monthlyActionRequiredSectionSubtitle": "Start with overdue items, then the ones coming up soon.",
+  "@monthlyActionRequiredSectionSubtitle": {
+    "description": "Subtitle for the required monthly action section."
+  },
+  "monthlyActionOptionalSectionTitle": "Pay extra to finish sooner",
+  "@monthlyActionOptionalSectionTitle": {
+    "description": "Title for the optional extra-payment section."
+  },
+  "monthlyActionOptionalSectionSubtitle": "Only do this after the required items are covered.",
+  "@monthlyActionOptionalSectionSubtitle": {
+    "description": "Subtitle for the optional extra-payment section."
+  },
+  "monthlyActionAllDoneTitle": "You have finished this month's required payments",
+  "@monthlyActionAllDoneTitle": {
+    "description": "Title for the completion card when all required payments are done."
+  },
+  "monthlyActionAllDoneSubtitle": "If you still have room in the budget, use the extra section below to finish sooner.",
+  "@monthlyActionAllDoneSubtitle": {
+    "description": "Subtitle for the completion card when all required payments are done."
+  },
+  "monthlyActionNextActionTitle": "There is nothing left to handle this month",
+  "@monthlyActionNextActionTitle": {
+    "description": "Title for the next-best-action card when there are no monthly actions."
+  },
+  "monthlyActionNextActionSubtitle": "You can review your current plan or record another payment if you just paid extra.",
+  "@monthlyActionNextActionSubtitle": {
+    "description": "Subtitle for the next-best-action card when there are no monthly actions."
+  },
+  "monthlyActionNextActionPrimary": "View plan",
+  "@monthlyActionNextActionPrimary": {
+    "description": "Primary CTA on the next-best-action card."
+  },
+  "monthlyActionRequiredTotal": "Need to pay {amount}",
+  "@monthlyActionRequiredTotal": {
+    "description": "Subtitle on a required monthly-action debt card.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionSuggestedTotal": "Suggested {amount}",
+  "@monthlyActionSuggestedTotal": {
+    "description": "Subtitle on an optional monthly-action debt card.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionDoneBadge": "Done",
+  "@monthlyActionDoneBadge": {
+    "description": "Badge shown when a monthly action section is already completed."
+  },
+  "monthlyActionDueDate": "Due {date}",
+  "@monthlyActionDueDate": {
+    "description": "Due-date label for a required monthly action.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionOptionalTiming": "After your required payments for this month are done",
+  "@monthlyActionOptionalTiming": {
+    "description": "Timing hint for an optional extra payment item."
+  },
+  "monthlyActionOptionalHelper": "This payment helps shorten your payoff timeline.",
+  "@monthlyActionOptionalHelper": {
+    "description": "Helper text for an optional extra payment item."
+  },
+  "monthlyActionOverdueChip": "Overdue",
+  "@monthlyActionOverdueChip": {
+    "description": "Status chip for overdue monthly actions."
+  },
+  "monthlyActionUpcomingChip": "Upcoming",
+  "@monthlyActionUpcomingChip": {
+    "description": "Status chip for upcoming monthly actions."
+  },
+  "monthlyActionPriorityChip": "Priority #{rank}",
+  "@monthlyActionPriorityChip": {
+    "description": "Priority chip for optional monthly actions.",
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "monthlyActionSavedButton": "Saved",
+  "@monthlyActionSavedButton": {
+    "description": "Disabled CTA label after a monthly action has already been logged."
+  },
+  "monthlyActionPaidButton": "Paid",
+  "@monthlyActionPaidButton": {
+    "description": "Primary CTA label for monthly actions."
+  },
+  "monthlyActionSnackbarSaved": "Saved a payment for {debtName}.",
+  "@monthlyActionSnackbarSaved": {
+    "description": "Snackbar shown after confirming a monthly action payment.",
+    "placeholders": {
+      "debtName": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionConfirmTitle": "Confirm payment",
+  "@monthlyActionConfirmTitle": {
+    "description": "Title of the monthly action confirmation bottom sheet."
+  },
+  "monthlyActionConfirmSubtitle": "This will be added to your history and will update your payoff plan.",
+  "@monthlyActionConfirmSubtitle": {
+    "description": "Subtitle of the monthly action confirmation bottom sheet."
+  },
+  "monthlyActionInfoDebt": "Debt",
+  "@monthlyActionInfoDebt": {
+    "description": "Label for the debt name row in the monthly action confirmation sheet."
+  },
+  "monthlyActionInfoType": "Payment type",
+  "@monthlyActionInfoType": {
+    "description": "Label for the payment type row in the monthly action confirmation sheet."
+  },
+  "monthlyActionInfoAmount": "Amount",
+  "@monthlyActionInfoAmount": {
+    "description": "Label for the amount row in the monthly action confirmation sheet."
+  },
+  "monthlyActionInfoDate": "Applied date",
+  "@monthlyActionInfoDate": {
+    "description": "Label for the date row in the monthly action confirmation sheet."
+  },
+  "monthlyActionRecastDebtFree": "Projected payoff date: {previous} → {current}{delta}",
+  "@monthlyActionRecastDebtFree": {
+    "description": "Banner text describing a projected payoff date change after a recast.",
+    "placeholders": {
+      "previous": {
+        "type": "String"
+      },
+      "current": {
+        "type": "String"
+      },
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionRecastProjectedInterest": "Projected interest: {previous} → {current}{delta}",
+  "@monthlyActionRecastProjectedInterest": {
+    "description": "Banner text describing a projected interest change after a recast.",
+    "placeholders": {
+      "previous": {
+        "type": "String"
+      },
+      "current": {
+        "type": "String"
+      },
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionRecastSavedInterest": "Interest saved: {previous} → {current}{delta}",
+  "@monthlyActionRecastSavedInterest": {
+    "description": "Banner text describing a saved-interest change after a recast.",
+    "placeholders": {
+      "previous": {
+        "type": "String"
+      },
+      "current": {
+        "type": "String"
+      },
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionDeltaSooner": " ({months} months sooner)",
+  "@monthlyActionDeltaSooner": {
+    "description": "Suffix for an earlier payoff-date projection.",
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "monthlyActionDeltaLater": " ({months} months later)",
+  "@monthlyActionDeltaLater": {
+    "description": "Suffix for a later payoff-date projection.",
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "monthlyActionDeltaReduced": " (down {amount})",
+  "@monthlyActionDeltaReduced": {
+    "description": "Suffix for a reduced interest projection.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionDeltaIncreased": " (up {amount})",
+  "@monthlyActionDeltaIncreased": {
+    "description": "Suffix for an increased interest projection.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionRecastNeutral": "Your plan has been refreshed using your latest data.",
+  "@monthlyActionRecastNeutral": {
+    "description": "Neutral banner text when the recast has no highlighted payoff change."
+  },
+  "logPaymentTitle": "Log payment",
+  "@logPaymentTitle": {
+    "description": "App bar title on the log payment page."
+  },
+  "logPaymentMissingDebt": "This debt no longer exists or has already been deleted.",
+  "@logPaymentMissingDebt": {
+    "description": "Fallback text when the debt referenced by the log payment page cannot be found."
+  },
+  "logPaymentCurrentBalance": "Current balance {amount}",
+  "@logPaymentCurrentBalance": {
+    "description": "Label showing the current debt balance on the log payment page.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "logPaymentAmountLabel": "Amount paid",
+  "@logPaymentAmountLabel": {
+    "description": "Label for the payment amount input."
+  },
+  "logPaymentAmountHelper": "This amount will be subtracted directly from the current balance.",
+  "@logPaymentAmountHelper": {
+    "description": "Helper text under the payment amount input."
+  },
+  "logPaymentTypeLabel": "Payment type",
+  "@logPaymentTypeLabel": {
+    "description": "Label above the payment type chips."
+  },
+  "logPaymentDateLabel": "Applied date",
+  "@logPaymentDateLabel": {
+    "description": "Label for the payment date field."
+  },
+  "logPaymentNoteLabel": "Note",
+  "@logPaymentNoteLabel": {
+    "description": "Label for the optional payment note field."
+  },
+  "logPaymentNoteHint": "Example: autopay, bonus, paycheck sweep",
+  "@logPaymentNoteHint": {
+    "description": "Hint text for the optional payment note field."
+  },
+  "logPaymentInfo": "This payment will store the before and after balances and refresh your payoff plan right away.",
+  "@logPaymentInfo": {
+    "description": "Info card text on the log payment page."
+  },
+  "logPaymentInvalidAmount": "Enter a valid amount greater than 0.",
+  "@logPaymentInvalidAmount": {
+    "description": "Inline validation error when the payment amount is invalid."
+  },
+  "logPaymentSavedMessage": "Payment saved and plan updated.",
+  "@logPaymentSavedMessage": {
+    "description": "Snackbar shown after manually logging a payment."
+  },
+  "pricingBody": "The current MVP keeps the full core payoff flow free. Premium is the next step for cloud backup, PDF reports, and shared planning.",
+  "@pricingBody": {
+    "description": "Body copy on the pricing page."
+  },
+  "pricingContinueFree": "Continue with Free",
+  "@pricingContinueFree": {
+    "description": "Primary CTA on the pricing page."
+  },
+  "pricingFreeBulletExport": "CSV export + local backup/restore + clear all",
+  "@pricingFreeBulletExport": {
+    "description": "Free tier bullet describing export and backup support."
+  },
+  "pricingFreeBulletPayments": "Payment logging + monthly action view",
+  "@pricingFreeBulletPayments": {
+    "description": "Free tier bullet describing payment logging features."
+  },
+  "pricingFreeBulletStrategies": "Snowball / Avalanche + living timeline",
+  "@pricingFreeBulletStrategies": {
+    "description": "Free tier bullet describing strategy and timeline features."
+  },
+  "pricingFreeBulletUnlimitedDebts": "Unlimited debt entry and editing",
+  "@pricingFreeBulletUnlimitedDebts": {
+    "description": "Free tier bullet describing unlimited debt management."
+  },
+  "pricingFreeSubtitle": "Included in the MVP",
+  "@pricingFreeSubtitle": {
+    "description": "Subtitle for the free tier card."
+  },
+  "pricingFreeTitle": "Free",
+  "@pricingFreeTitle": {
+    "description": "Title for the free tier card."
+  },
+  "pricingHeadline": "Local-first first. Premium only unlocks when it adds real value.",
+  "@pricingHeadline": {
+    "description": "Headline on the pricing page."
+  },
+  "pricingMvpNotice": "Premium is not available in this MVP yet.",
+  "@pricingMvpNotice": {
+    "description": "Notice below the pricing CTA."
+  },
+  "pricingPageTitle": "Free vs Premium",
+  "@pricingPageTitle": {
+    "description": "App bar title on the pricing page."
+  },
+  "pricingPremiumBulletCloud": "Cloud backup across devices",
+  "@pricingPremiumBulletCloud": {
+    "description": "Premium tier bullet describing cloud backup."
+  },
+  "pricingPremiumBulletPdf": "PDF reports to print or share with an advisor",
+  "@pricingPremiumBulletPdf": {
+    "description": "Premium tier bullet describing PDF reports."
+  },
+  "pricingPremiumBulletPricing": "Transparent pricing, no fuzzy trial",
+  "@pricingPremiumBulletPricing": {
+    "description": "Premium tier bullet describing pricing philosophy."
+  },
+  "pricingPremiumBulletSharing": "Partner sharing and scenario comparison",
+  "@pricingPremiumBulletSharing": {
+    "description": "Premium tier bullet describing sharing features."
+  },
+  "pricingPremiumSubtitle": "Monetization placeholder, no IAP yet",
+  "@pricingPremiumSubtitle": {
+    "description": "Subtitle for the premium tier card."
+  },
+  "pricingPremiumTitle": "Premium",
+  "@pricingPremiumTitle": {
+    "description": "Title for the premium tier card."
+  },
+  "pricingTrustMessage": "Our trust model stays the same on Premium: no bank linking, no fuzzy auto-charges, and local export always stays available.",
+  "@pricingTrustMessage": {
+    "description": "Trust reassurance card copy on the pricing page."
+  },
+  "settingsCancel": "Cancel",
+  "@settingsCancel": {
+    "description": "Generic cancel action in settings dialogs."
+  },
+  "settingsClearAllDialogBody": "This will delete all local data and return the app to its first-launch state.",
+  "@settingsClearAllDialogBody": {
+    "description": "Body text for the first clear-all confirmation dialog."
+  },
+  "settingsClearAllDialogTitle": "Clear all data?",
+  "@settingsClearAllDialogTitle": {
+    "description": "Title for the first clear-all confirmation dialog."
+  },
+  "settingsClearAllSubtitle": "Only resets data on this device. Cloud is not enabled at Level 0.",
+  "@settingsClearAllSubtitle": {
+    "description": "Subtitle for the clear-all settings tile."
+  },
+  "settingsClearAllTitle": "Clear all data",
+  "@settingsClearAllTitle": {
+    "description": "Title for the clear-all settings tile."
+  },
+  "settingsCloudBackupTitle": "Cloud backup",
+  "@settingsCloudBackupTitle": {
+    "description": "Title for the cloud backup settings tile."
+  },
+  "settingsContinue": "Continue",
+  "@settingsContinue": {
+    "description": "Continue action in settings dialogs."
+  },
+  "settingsCopyrightFooter": "© 2026 Debt Payoff X",
+  "@settingsCopyrightFooter": {
+    "description": "Footer copyright label on the settings page."
+  },
+  "settingsCurrencySubtitle": "Currently used for display formatting only.",
+  "@settingsCurrencySubtitle": {
+    "description": "Subtitle for the currency settings tile."
+  },
+  "settingsCurrencyTitle": "Currency",
+  "@settingsCurrencyTitle": {
+    "description": "Title for the currency settings tile."
+  },
+  "settingsDataBannerLocalBody": "Your data currently lives on this device. You always have CSV export, local backup/restore, and clear all without an account or bank linking.",
+  "@settingsDataBannerLocalBody": {
+    "description": "Body text for the local-only trust banner in settings."
+  },
+  "settingsDataBannerLocalTitle": "Local-first is enabled",
+  "@settingsDataBannerLocalTitle": {
+    "description": "Title for the local-only trust banner in settings."
+  },
+  "settingsDataBannerTrustBody": "You are using trust level > 0. Local export is still available, but reset actions need more care because they may relate to cloud semantics.",
+  "@settingsDataBannerTrustBody": {
+    "description": "Body text for the elevated trust banner in settings."
+  },
+  "settingsDataBannerTrustTitle": "Advanced trust mode is enabled",
+  "@settingsDataBannerTrustTitle": {
+    "description": "Title for the elevated trust banner in settings."
+  },
+  "settingsDeleteAllConfirm": "Delete everything",
+  "@settingsDeleteAllConfirm": {
+    "description": "Final destructive confirmation button for clear-all."
+  },
+  "settingsExportCsvSubtitle": "ZIP bundle with multiple CSV files + manifest so you can inspect each table yourself.",
+  "@settingsExportCsvSubtitle": {
+    "description": "Subtitle for the CSV export settings tile."
+  },
+  "settingsExportCsvTitle": "Export data (CSV)",
+  "@settingsExportCsvTitle": {
+    "description": "Title for the CSV export settings tile."
+  },
+  "settingsExtraMonthlySubtitle": "Saved in your main plan.",
+  "@settingsExtraMonthlySubtitle": {
+    "description": "Subtitle for the extra monthly amount settings tile."
+  },
+  "settingsExtraMonthlyTitle": "Extra monthly amount",
+  "@settingsExtraMonthlyTitle": {
+    "description": "Title for the extra monthly amount settings tile."
+  },
+  "settingsFinalConfirmBody": "You will lose all debts, payments, milestones, and the current local backup stored in this app.",
+  "@settingsFinalConfirmBody": {
+    "description": "Body text for the final clear-all confirmation dialog."
+  },
+  "settingsFinalConfirmTitle": "Final confirmation",
+  "@settingsFinalConfirmTitle": {
+    "description": "Title for the final clear-all confirmation dialog."
+  },
+  "settingsGoBack": "Go back",
+  "@settingsGoBack": {
+    "description": "Go back action in the final clear-all confirmation dialog."
+  },
+  "settingsCurrentStrategySubtitle": "Open the Plan tab to view the detailed priority order.",
+  "@settingsCurrentStrategySubtitle": {
+    "description": "Subtitle for the current strategy settings tile."
+  },
+  "settingsCurrentStrategyTitle": "Current strategy",
+  "@settingsCurrentStrategyTitle": {
+    "description": "Title for the current strategy settings tile."
+  },
+  "settingsLocaleSheetTitle": "Choose language",
+  "@settingsLocaleSheetTitle": {
+    "description": "Title for the settings locale picker sheet."
+  },
+  "settingsLocaleSubtitle": "Changes the display language and date formatting.",
+  "@settingsLocaleSubtitle": {
+    "description": "Subtitle for the language settings tile."
+  },
+  "settingsLocaleTitle": "Language",
+  "@settingsLocaleTitle": {
+    "description": "Title for the language settings tile."
+  },
+  "settingsLocalBackupSubtitle": "Create a full JSON backup ZIP to save in Files, Drive, or external storage.",
+  "@settingsLocalBackupSubtitle": {
+    "description": "Subtitle for the local backup settings tile."
+  },
+  "settingsLocalBackupTitle": "Local backup",
+  "@settingsLocalBackupTitle": {
+    "description": "Title for the local backup settings tile."
+  },
+  "settingsMonthlyLogSubtitle": "Used for monthly log summaries when that flow is enabled.",
+  "@settingsMonthlyLogSubtitle": {
+    "description": "Subtitle for the monthly log settings toggle."
+  },
+  "settingsMonthlyLogTitle": "Monthly log",
+  "@settingsMonthlyLogTitle": {
+    "description": "Title for the monthly log settings toggle."
+  },
+  "settingsPageTitle": "Settings",
+  "@settingsPageTitle": {
+    "description": "App bar title for the settings page."
+  },
+  "settingsPaymentReminderSubtitle": "The app will use this when payment reminders are enabled.",
+  "@settingsPaymentReminderSubtitle": {
+    "description": "Subtitle for the payment reminders settings toggle."
+  },
+  "settingsPaymentReminderTitle": "Payment reminders",
+  "@settingsPaymentReminderTitle": {
+    "description": "Title for the payment reminders settings toggle."
+  },
+  "settingsResetAction": "Reset",
+  "@settingsResetAction": {
+    "description": "Short trailing action label for reset on the clear-all tile."
+  },
+  "settingsRestoreAction": "Restore",
+  "@settingsRestoreAction": {
+    "description": "Short trailing action label for restore on the restore tile."
+  },
+  "settingsRestoreConfirm": "Restore",
+  "@settingsRestoreConfirm": {
+    "description": "Confirmation button label for the restore dialog."
+  },
+  "settingsRestoreDialogDataHeader": "Data in this backup:",
+  "@settingsRestoreDialogDataHeader": {
+    "description": "Header introducing backup row counts in the restore dialog."
+  },
+  "settingsRestoreDialogExportedAtLabel": "Exported at",
+  "@settingsRestoreDialogExportedAtLabel": {
+    "description": "Label for the exported-at timestamp in the restore dialog."
+  },
+  "settingsRestoreDialogFileLabel": "File",
+  "@settingsRestoreDialogFileLabel": {
+    "description": "Label for the file name in the restore dialog."
+  },
+  "settingsRestoreDialogTitle": "Restore from backup?",
+  "@settingsRestoreDialogTitle": {
+    "description": "Title for the restore confirmation dialog."
+  },
+  "settingsRestoreDialogTotalRecordsLabel": "Total records",
+  "@settingsRestoreDialogTotalRecordsLabel": {
+    "description": "Label for the total records count in the restore dialog."
+  },
+  "settingsRestoreDialogWarning": "All current local data will be replaced.",
+  "@settingsRestoreDialogWarning": {
+    "description": "Warning shown in the restore confirmation dialog."
+  },
+  "settingsRestoreSubtitle": "Read the manifest preview and row counts before replacing local data.",
+  "@settingsRestoreSubtitle": {
+    "description": "Subtitle for the restore settings tile."
+  },
+  "settingsRestoreSuccess": "Local data restored from the selected backup.",
+  "@settingsRestoreSuccess": {
+    "description": "Snackbar message shown after a successful local restore."
+  },
+  "settingsRestoreTitle": "Restore from backup",
+  "@settingsRestoreTitle": {
+    "description": "Title for the restore settings tile."
+  },
+  "settingsSectionData": "DATA",
+  "@settingsSectionData": {
+    "description": "Section header for data settings."
+  },
+  "settingsSectionOptions": "OPTIONS",
+  "@settingsSectionOptions": {
+    "description": "Section header for general options in settings."
+  },
+  "settingsSectionPlan": "PAYOFF PLAN",
+  "@settingsSectionPlan": {
+    "description": "Section header for plan-related settings."
+  },
+  "settingsSectionReminders": "REMINDERS",
+  "@settingsSectionReminders": {
+    "description": "Section header for reminders in settings."
+  },
+  "settingsStrategyAvalanche": "Avalanche",
+  "@settingsStrategyAvalanche": {
+    "description": "Localized label for the avalanche payoff strategy."
+  },
+  "settingsStrategyCustom": "Custom",
+  "@settingsStrategyCustom": {
+    "description": "Localized label for the custom payoff strategy."
+  },
+  "settingsStrategySnowball": "Snowball",
+  "@settingsStrategySnowball": {
+    "description": "Localized label for the snowball payoff strategy."
+  },
+  "settingsTrustLevelLocalOnlyBody": "You are currently in local-only mode. Cloud backup is the next roadmap step, not a requirement to use the app.",
+  "@settingsTrustLevelLocalOnlyBody": {
+    "description": "Subtitle copy for cloud backup when trust level is local-only."
+  },
+  "settingsTrustLevelLocalOnlyLabel": "Local only",
+  "@settingsTrustLevelLocalOnlyLabel": {
+    "description": "Trailing label for cloud backup when trust level is local-only."
+  },
+  "settingsTrustLevelOneBody": "Basic cloud backup is enabled. Local export is still always available.",
+  "@settingsTrustLevelOneBody": {
+    "description": "Subtitle copy for cloud backup when trust level is 1."
+  },
+  "settingsTrustLevelOneLabel": "Trust 1",
+  "@settingsTrustLevelOneLabel": {
+    "description": "Trailing label for cloud backup when trust level is 1."
+  },
+  "settingsTrustLevelTwoBody": "A higher trust mode is active. Review sharing permissions before resetting local data.",
+  "@settingsTrustLevelTwoBody": {
+    "description": "Subtitle copy for cloud backup when trust level is 2."
+  },
+  "settingsTrustLevelTwoLabel": "Trust 2",
+  "@settingsTrustLevelTwoLabel": {
+    "description": "Trailing label for cloud backup when trust level is 2."
+  },
+  "settingsVersionFooter": "Version 1.0.0 (MVP)",
+  "@settingsVersionFooter": {
+    "description": "Version footer on the settings page."
+  },
+  "settingsZipLabel": "ZIP",
+  "@settingsZipLabel": {
+    "description": "Short trailing label for ZIP-based data actions."
+  },
+  "syncBackupBody": "Your app is currently running in local-only mode. You still have full export, local backup, and restore without an account.",
+  "@syncBackupBody": {
+    "description": "Body copy on the sync backup page."
+  },
+  "syncBackupContinueLocal": "Keep using local-only",
+  "@syncBackupContinueLocal": {
+    "description": "Secondary CTA on the sync backup page."
+  },
+  "syncBackupFreeBulletBackup": "Local backup ZIP for manual storage in Files or Drive",
+  "@syncBackupFreeBulletBackup": {
+    "description": "Free bullet on the sync backup page describing local backup."
+  },
+  "syncBackupFreeBulletCsv": "Full CSV export for Excel or Numbers",
+  "@syncBackupFreeBulletCsv": {
+    "description": "Free bullet on the sync backup page describing CSV export."
+  },
+  "syncBackupFreeBulletPreview": "Restore preview before replacing local data",
+  "@syncBackupFreeBulletPreview": {
+    "description": "Free bullet on the sync backup page describing restore preview."
+  },
+  "syncBackupFreeBulletReset": "Clear all / factory reset without losing access to your data",
+  "@syncBackupFreeBulletReset": {
+    "description": "Free bullet on the sync backup page describing reset controls."
+  },
+  "syncBackupFreeTitle": "Already included in Free",
+  "@syncBackupFreeTitle": {
+    "description": "Title for the free capability card on the sync backup page."
+  },
+  "syncBackupHeadline": "Cloud backup is the next step, not a requirement to use the app.",
+  "@syncBackupHeadline": {
+    "description": "Headline on the sync backup page."
+  },
+  "syncBackupPremiumBulletCloud": "Cloud backup across devices",
+  "@syncBackupPremiumBulletCloud": {
+    "description": "Premium bullet on the sync backup page describing cloud backup."
+  },
+  "syncBackupPremiumBulletPdf": "PDF reports to print or send to an advisor",
+  "@syncBackupPremiumBulletPdf": {
+    "description": "Premium bullet on the sync backup page describing PDF reports."
+  },
+  "syncBackupPremiumBulletPricing": "Transparent pricing, no fuzzy trial",
+  "@syncBackupPremiumBulletPricing": {
+    "description": "Premium bullet on the sync backup page describing pricing philosophy."
+  },
+  "syncBackupPremiumBulletSharing": "Partner sharing and scenario comparison",
+  "@syncBackupPremiumBulletSharing": {
+    "description": "Premium bullet on the sync backup page describing sharing features."
+  },
+  "syncBackupPremiumTitle": "Premium will add later",
+  "@syncBackupPremiumTitle": {
+    "description": "Title for the premium capability card on the sync backup page."
+  },
+  "syncBackupTrustMessage": "Our trust commitment does not change: data starts on-device, no bank linking, and local export stays open even when Premium arrives.",
+  "@syncBackupTrustMessage": {
+    "description": "Trust reassurance card copy on the sync backup page."
+  },
+  "syncBackupViewPricing": "View Free vs Premium",
+  "@syncBackupViewPricing": {
+    "description": "Primary CTA on the sync backup page that opens pricing."
+  },
+  "welcomeAddFirstDebt": "Add your first debt",
+  "@welcomeAddFirstDebt": {
+    "description": "Primary CTA on the welcome page."
+  },
+  "welcomeChangeLanguage": "Change language",
+  "@welcomeChangeLanguage": {
+    "description": "Small text action on the welcome page that opens the language picker."
+  },
+  "welcomeSubtitle": "Build a personalized payoff plan in 3 minutes.\nNo account. No bank connection.",
+  "@welcomeSubtitle": {
+    "description": "Subtitle on the welcome page."
+  },
+  "welcomeTitle": "Take control of debt,\nfree your future.",
+  "@welcomeTitle": {
+    "description": "Headline on the welcome page."
+  },
+  "welcomeTrustFree": "Free to use",
+  "@welcomeTrustFree": {
+    "description": "Trust badge label on the welcome page describing free access."
+  },
+  "welcomeTrustLocalFirst": "Local-first",
+  "@welcomeTrustLocalFirst": {
+    "description": "Trust badge label on the welcome page describing local-first behavior."
+  },
+  "welcomeTrustNoBankSync": "No bank sync",
+  "@welcomeTrustNoBankSync": {
+    "description": "Trust badge label on the welcome page describing no bank connection."
+  }
+}

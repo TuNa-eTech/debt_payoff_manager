@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/di/injection.dart';
+import 'core/i18n/app_locale.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'domain/entities/user_settings.dart';
 import 'domain/repositories/debt_repository.dart';
 import 'domain/repositories/settings_repository.dart';
 import 'features/debts/cubit/debts_cubit.dart';
 import 'features/onboarding/cubit/onboarding_cubit.dart';
 import 'features/onboarding/services/onboarding_analytics.dart';
+import 'l10n/app_localizations.dart';
 
 /// Root application widget.
 ///
@@ -45,17 +48,31 @@ class _DebtPayoffAppState extends State<DebtPayoffApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<OnboardingCubit>.value(value: _onboardingCubit),
-        BlocProvider<DebtsCubit>.value(value: _debtsCubit),
-      ],
-      child: MaterialApp.router(
-        title: 'Debt Payoff Manager',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        routerConfig: router,
-      ),
+    return StreamBuilder<UserSettings>(
+      stream: _settingsRepository.watchSettings(),
+      builder: (context, settingsSnapshot) {
+        final locale = AppLocale.flutterLocaleForCode(
+          settingsSnapshot.data?.localeCode,
+        );
+
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<OnboardingCubit>.value(value: _onboardingCubit),
+            BlocProvider<DebtsCubit>.value(value: _debtsCubit),
+          ],
+          child: MaterialApp.router(
+            locale: locale,
+            onGenerateTitle: (context) =>
+                AppLocalizations.of(context)?.appName ?? 'Debt Payoff X',
+            title: 'Debt Payoff X',
+            debugShowCheckedModeBanner: false,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            theme: AppTheme.lightTheme,
+            routerConfig: router,
+          ),
+        );
+      },
     );
   }
 }

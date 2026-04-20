@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 
+import '../../core/i18n/app_locale.dart';
 import 'database.dart';
 
 /// Provides database instances for production and testing.
@@ -15,20 +16,28 @@ class DatabaseProvider {
   ///
   /// The database file is stored in the app's documents directory
   /// as `debt_payoff.sqlite`.
-  static AppDatabase openDatabase() {
-    return AppDatabase(driftDatabase(name: 'debt_payoff'));
+  static AppDatabase openDatabase({
+    String initialLocaleCode = AppLocale.fallbackLocaleCode,
+  }) {
+    return AppDatabase(
+      driftDatabase(name: 'debt_payoff'),
+      initialLocaleCode: initialLocaleCode,
+    );
   }
 
   /// Open an in-memory database for testing.
   ///
   /// Each call creates a fresh, isolated database instance.
   /// Per ADR-015: Drift NativeDatabase.memory() for unit tests.
-  static AppDatabase openTestDatabase() {
+  static AppDatabase openTestDatabase({
+    String initialLocaleCode = AppLocale.fallbackLocaleCode,
+  }) {
     return AppDatabase(
       DatabaseConnection(
         NativeDatabase.memory(),
         closeStreamsSynchronously: true,
       ),
+      initialLocaleCode: initialLocaleCode,
     );
   }
 }

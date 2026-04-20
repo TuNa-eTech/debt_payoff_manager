@@ -41,6 +41,7 @@ void configureDependencies({
   BackupFilePicker? backupFilePicker,
   DataManagementService? dataManagementService,
   ShareLauncher? shareLauncher,
+  String? seedLocaleCode,
 }) {
   // Database — singleton, opened once
   getIt.registerLazySingleton<AppDatabase>(

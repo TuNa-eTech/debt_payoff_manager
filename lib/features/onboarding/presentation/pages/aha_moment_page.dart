@@ -75,12 +75,14 @@ class AhaMomentPage extends StatelessWidget {
                     final projectedInterest = plan?.totalInterestProjected ?? 0;
                     final interestSaved = plan?.totalInterestSaved ?? 0;
 
+                    final screenHeight = MediaQuery.sizeOf(context).height;
+                    final isCompact = screenHeight < 700;
                     return Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: AppDimensions.sm,
-                            vertical: AppDimensions.sm,
+                            vertical: 0,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,60 +101,84 @@ class AhaMomentPage extends StatelessWidget {
                         ),
                         Expanded(
                           child: SingleChildScrollView(
-                            padding: const EdgeInsets.symmetric(
+                            padding: EdgeInsets.symmetric(
                               horizontal: AppDimensions.lg,
-                              vertical: AppDimensions.sm,
+                              vertical: isCompact ? AppDimensions.xs : AppDimensions.sm,
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Align(
-                                  child: Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.mdOnPrimary.withValues(
-                                        alpha: 0.14,
+                                if (!isCompact)
+                                  Align(
+                                    child: Container(
+                                      width: 64,
+                                      height: 64,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.mdOnPrimary.withValues(
+                                          alpha: 0.14,
+                                        ),
+                                        shape: BoxShape.circle,
                                       ),
-                                      shape: BoxShape.circle,
+                                      child: const Icon(
+                                        LucideIcons.sparkles,
+                                        size: AppDimensions.iconXl,
+                                        color: AppColors.mdOnPrimary,
+                                      ),
                                     ),
-                                    child: const Icon(
-                                      LucideIcons.sparkles,
-                                      size: AppDimensions.iconXxl,
-                                      color: AppColors.mdOnPrimary,
+                                  )
+                                else
+                                  Align(
+                                    child: Container(
+                                      width: 48,
+                                      height: 48,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.mdOnPrimary.withValues(
+                                          alpha: 0.14,
+                                        ),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        LucideIcons.sparkles,
+                                        size: AppDimensions.iconSm + 8,
+                                        color: AppColors.mdOnPrimary,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(height: AppDimensions.lg),
+                                SizedBox(height: isCompact ? AppDimensions.sm : AppDimensions.md),
                                 Text(
                                   trackedDebts.isEmpty
                                       ? 'Bạn chưa có khoản nợ nào trong kế hoạch.'
                                       : payoffDate == null
                                       ? 'Kế hoạch của bạn đang recast.'
                                       : 'Bạn có thể debt-free vào ${AppFormatters.formatMonthYear(payoffDate)}.',
-                                  style: AppTextStyles.headlineLarge.copyWith(
+                                  style: (isCompact
+                                          ? AppTextStyles.headlineSmall
+                                          : AppTextStyles.headlineMedium)
+                                      .copyWith(
                                     color: AppColors.mdOnPrimary,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
-                                const SizedBox(height: AppDimensions.md),
-                                Text(
-                                  trackedDebts.isEmpty
-                                      ? 'Hãy quay lại bước trước để thêm ít nhất một khoản nợ.'
-                                      : 'Chúng tôi đã recast plan summary từ khoản nợ, strategy và extra budget hiện tại. Checklist tháng này đã sẵn sàng ở tab Tháng này.',
-                                  style: AppTextStyles.bodyLarge.copyWith(
-                                    color: AppColors.mdOnPrimary.withValues(
-                                      alpha: 0.84,
+                                if (!isCompact) ...[
+                                  const SizedBox(height: AppDimensions.sm),
+                                  Text(
+                                    trackedDebts.isEmpty
+                                        ? 'Hãy quay lại bước trước để thêm ít nhất một khoản nợ.'
+                                        : 'Kế hoạch đã được recast. Checklist tháng này đã sẵn sàng.',
+                                    style: AppTextStyles.bodyLarge.copyWith(
+                                      color: AppColors.mdOnPrimary.withValues(
+                                        alpha: 0.84,
+                                      ),
                                     ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: AppDimensions.xl),
+                                ],
+                                SizedBox(height: isCompact ? AppDimensions.sm : AppDimensions.lg),
                                 AppCard(
                                   color: AppColors.mdOnPrimary,
                                   borderRadius: AppDimensions.radius2xl,
                                   padding: const EdgeInsets.all(
-                                    AppDimensions.xl,
+                                    AppDimensions.lg,
                                   ),
                                   child: Column(
                                     crossAxisAlignment:
@@ -172,7 +198,7 @@ class AhaMomentPage extends StatelessWidget {
                                             ),
                                         ],
                                       ),
-                                      const SizedBox(height: AppDimensions.lg),
+                                      SizedBox(height: isCompact ? AppDimensions.sm : AppDimensions.md),
                                       Row(
                                         children: [
                                           Expanded(
@@ -181,6 +207,7 @@ class AhaMomentPage extends StatelessWidget {
                                               value: AppFormatters.formatCents(
                                                 totalBalance,
                                               ),
+                                              isCompact: isCompact,
                                             ),
                                           ),
                                           Expanded(
@@ -191,17 +218,19 @@ class AhaMomentPage extends StatelessWidget {
                                                   : AppFormatters.formatShortMonthYear(
                                                       payoffDate,
                                                     ),
+                                              isCompact: isCompact,
                                             ),
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(height: AppDimensions.lg),
+                                      SizedBox(height: isCompact ? AppDimensions.xs : AppDimensions.md),
                                       Row(
                                         children: [
                                           Expanded(
                                             child: _SummaryStat(
-                                              label: 'Khoản đang theo dõi',
+                                              label: 'Khoản theo dõi',
                                               value: '${trackedDebts.length}',
+                                              isCompact: isCompact,
                                             ),
                                           ),
                                           Expanded(
@@ -210,11 +239,12 @@ class AhaMomentPage extends StatelessWidget {
                                               value: AppFormatters.formatCents(
                                                 plan?.extraMonthlyAmount ?? 0,
                                               ),
+                                              isCompact: isCompact,
                                             ),
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(height: AppDimensions.lg),
+                                      SizedBox(height: isCompact ? AppDimensions.xs : AppDimensions.md),
                                       Row(
                                         children: [
                                           Expanded(
@@ -223,6 +253,7 @@ class AhaMomentPage extends StatelessWidget {
                                               value: AppFormatters.formatCents(
                                                 projectedInterest,
                                               ),
+                                              isCompact: isCompact,
                                             ),
                                           ),
                                           Expanded(
@@ -232,15 +263,16 @@ class AhaMomentPage extends StatelessWidget {
                                                 interestSaved,
                                               ),
                                               emphasize: true,
+                                              isCompact: isCompact,
                                             ),
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(height: AppDimensions.lg),
+                                      SizedBox(height: isCompact ? AppDimensions.xs : AppDimensions.md),
                                       Container(
                                         width: double.infinity,
-                                        padding: const EdgeInsets.all(
-                                          AppDimensions.md,
+                                        padding: EdgeInsets.all(
+                                          isCompact ? AppDimensions.sm : AppDimensions.md,
                                         ),
                                         decoration: BoxDecoration(
                                           color: AppColors.mdPrimaryContainer,
@@ -262,7 +294,9 @@ class AhaMomentPage extends StatelessWidget {
                                             ),
                                             Expanded(
                                               child: Text(
-                                                'Dữ liệu của bạn đã được lưu local trên thiết bị. Từ đây bạn có thể vào Monthly Action View để check off payment thật và xem timeline recast ngay.',
+                                                isCompact
+                                                    ? 'Dữ liệu lưu local. Không cần tài khoản.'
+                                                    : 'Dữ liệu của bạn đã được lưu local trên thiết bị. Từ đây bạn có thể vào Monthly Action View để check off payment thật và xem timeline recast ngay.',
                                                 style: AppTextStyles.bodySmall
                                                     .copyWith(
                                                       color: AppColors
@@ -281,7 +315,12 @@ class AhaMomentPage extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(AppDimensions.lg),
+                          padding: EdgeInsets.fromLTRB(
+                            AppDimensions.lg,
+                            isCompact ? AppDimensions.sm : AppDimensions.lg,
+                            AppDimensions.lg,
+                            AppDimensions.lg,
+                          ),
                           child: SizedBox(
                             key: AppTestKeys.onboardingComplete,
                             child: AppButton.filledLg(
@@ -328,11 +367,13 @@ class _SummaryStat extends StatelessWidget {
     required this.label,
     required this.value,
     this.emphasize = false,
+    this.isCompact = false,
   });
 
   final String label;
   final String value;
   final bool emphasize;
+  final bool isCompact;
 
   @override
   Widget build(BuildContext context) {
@@ -341,14 +382,17 @@ class _SummaryStat extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppTextStyles.labelMedium.copyWith(
+          style: AppTextStyles.labelSmall.copyWith(
             color: AppColors.mdOnSurfaceVariant,
           ),
         ),
         const SizedBox(height: AppDimensions.xs),
         Text(
           value,
-          style: AppTextStyles.titleLarge.copyWith(
+          style: (isCompact
+                  ? AppTextStyles.titleMedium
+                  : AppTextStyles.titleLarge)
+              .copyWith(
             color: emphasize ? AppColors.mdPrimary : AppColors.mdOnSurface,
           ),
         ),

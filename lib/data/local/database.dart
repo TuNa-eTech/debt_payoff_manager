@@ -2,6 +2,7 @@ import 'package:decimal/decimal.dart';
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../core/i18n/app_locale.dart';
 import '../../domain/enums/debt_status.dart';
 import '../../domain/enums/debt_type.dart';
 import '../../domain/enums/interest_method.dart';
@@ -44,7 +45,14 @@ part 'database.g.dart';
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  AppDatabase(super.e);
+  AppDatabase(
+    super.e, {
+    String initialLocaleCode = AppLocale.fallbackLocaleCode,
+  }) : _initialLocaleCode = AppLocale.resolveSupportedLocaleCode(
+         initialLocaleCode,
+       );
+
+  final String _initialLocaleCode;
 
   @override
   int get schemaVersion => 1;
@@ -140,9 +148,13 @@ class AppDatabase extends _$AppDatabase {
     if (existingSettings != null) return;
 
     final now = DateTime.now().toUtc();
-    await into(
-      userSettingsTable,
-    ).insert(UserSettingsTableCompanion.insert(createdAt: now, updatedAt: now));
+    await into(userSettingsTable).insert(
+      UserSettingsTableCompanion.insert(
+        localeCode: Value(_initialLocaleCode),
+        createdAt: now,
+        updatedAt: now,
+      ),
+    );
   }
 
   Future<void> _ensureMainPlanSeeded() async {

@@ -1,0 +1,877 @@
+{
+  "@@locale": "vi",
+  "appName": "Debt Payoff X",
+  "@appName": {
+    "description": "Application name shown in localized UI."
+  },
+  "navDebts": "Khoản nợ",
+  "@navDebts": {
+    "description": "Bottom navigation label for the debts tab."
+  },
+  "navPlan": "Kế hoạch",
+  "@navPlan": {
+    "description": "Bottom navigation label for the plan tab."
+  },
+  "navProgress": "Tiến độ",
+  "@navProgress": {
+    "description": "Bottom navigation label for the progress tab."
+  },
+  "navSettings": "Cài đặt",
+  "@navSettings": {
+    "description": "Bottom navigation label for the settings tab."
+  },
+  "navThisMonth": "Tháng này",
+  "@navThisMonth": {
+    "description": "Bottom navigation label for the overview home tab."
+  },
+  "commonAddDebt": "Thêm khoản nợ",
+  "@commonAddDebt": {
+    "description": "Generic action to add a new debt."
+  },
+  "commonSavePayment": "Lưu thanh toán",
+  "@commonSavePayment": {
+    "description": "Generic action to save a payment."
+  },
+  "commonUndo": "Hoàn tác",
+  "@commonUndo": {
+    "description": "Generic undo action."
+  },
+  "commonViewAll": "Xem tất cả",
+  "@commonViewAll": {
+    "description": "Generic action to view all items in a list."
+  },
+  "commonRecordAnotherAmount": "Ghi số khác",
+  "@commonRecordAnotherAmount": {
+    "description": "Action to switch from a suggested amount to a custom amount."
+  },
+  "paymentTypeMinimumLabel": "Tối thiểu",
+  "@paymentTypeMinimumLabel": {
+    "description": "Label for a minimum payment type."
+  },
+  "paymentTypeExtraLabel": "Trả thêm",
+  "@paymentTypeExtraLabel": {
+    "description": "Label for an extra payment type."
+  },
+  "paymentTypeLumpSumLabel": "Trả dồn",
+  "@paymentTypeLumpSumLabel": {
+    "description": "Label for a lump-sum payment type."
+  },
+  "homeCurrentBalanceTitle": "Tổng dư nợ hiện tại",
+  "@homeCurrentBalanceTitle": {
+    "description": "Title on the home hero card for the current outstanding balance."
+  },
+  "homeStrategyLabel": "Chiến lược",
+  "@homeStrategyLabel": {
+    "description": "Label for the active payoff strategy on the home hero card."
+  },
+  "homeExtraMonthlyLabel": "Extra / tháng",
+  "@homeExtraMonthlyLabel": {
+    "description": "Label for the extra monthly amount on the home hero card."
+  },
+  "homePaidAmountLabel": "Đã trả {amount}",
+  "@homePaidAmountLabel": {
+    "description": "Label showing how much has already been paid.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeTrackedLabel": "Đang theo dõi",
+  "@homeTrackedLabel": {
+    "description": "Label for the number of active tracked debts."
+  },
+  "homePaidOffLabel": "Đã trả xong",
+  "@homePaidOffLabel": {
+    "description": "Label for the number of debts already paid off."
+  },
+  "homePausedLabel": "Tạm dừng",
+  "@homePausedLabel": {
+    "description": "Label for the number of paused debts."
+  },
+  "homeTrackedDebtsTitle": "Khoản nợ cần theo dõi",
+  "@homeTrackedDebtsTitle": {
+    "description": "Section title for the debt list on the home screen."
+  },
+  "homeTrackedDebtsSubtitle": "Danh sách này lấy trực tiếp từ dữ liệu bạn đã lưu.",
+  "@homeTrackedDebtsSubtitle": {
+    "description": "Section subtitle for the debt list on the home screen."
+  },
+  "homeDuePaused": "Tạm dừng",
+  "@homeDuePaused": {
+    "description": "Due-date text for a paused debt."
+  },
+  "homeDueDay": "Ngày {day}",
+  "@homeDueDay": {
+    "description": "Due-date label showing the calendar day of month.",
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "homeNoDebtsTracked": "Hiện chưa có khoản nợ nào cần theo dõi.",
+  "@homeNoDebtsTracked": {
+    "description": "Empty-state text when the home debt snapshot has no visible debts."
+  },
+  "homeCurrentPlanTitle": "Kế hoạch trả nợ hiện tại",
+  "@homeCurrentPlanTitle": {
+    "description": "Title for the current payoff plan card on the home screen."
+  },
+  "homeCurrentPlanPendingSubtitle": "App sẽ tính lại ngày hết nợ ngay khi bạn cập nhật khoản trả mới nhất.",
+  "@homeCurrentPlanPendingSubtitle": {
+    "description": "Subtitle shown when the projected payoff date is not available yet."
+  },
+  "homeCurrentPlanProjectedSubtitle": "Nếu giữ nhịp hiện tại, bạn có thể hết nợ vào {monthYear}.",
+  "@homeCurrentPlanProjectedSubtitle": {
+    "description": "Subtitle shown when the payoff date projection is available.",
+    "placeholders": {
+      "monthYear": {
+        "type": "String"
+      }
+    }
+  },
+  "homeCurrentPlanStrategyLine": "{strategy} · Extra {amount} / tháng",
+  "@homeCurrentPlanStrategyLine": {
+    "description": "Compact line showing the current strategy and extra monthly amount.",
+    "placeholders": {
+      "strategy": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "homeViewPlanDetails": "Xem kế hoạch chi tiết",
+  "@homeViewPlanDetails": {
+    "description": "CTA on the home plan summary card."
+  },
+  "monthlyActionStandaloneTitle": "Việc tháng này",
+  "@monthlyActionStandaloneTitle": {
+    "description": "App bar title for the standalone monthly action page."
+  },
+  "monthlyActionEmptyTitle": "Chưa có khoản nợ để theo dõi",
+  "@monthlyActionEmptyTitle": {
+    "description": "Empty-state title for the monthly action section when there are no debts."
+  },
+  "monthlyActionEmptySubtitle": "Thêm khoản nợ đầu tiên để app gợi ý việc cần làm trong tháng.",
+  "@monthlyActionEmptySubtitle": {
+    "description": "Empty-state subtitle for the monthly action section when there are no debts."
+  },
+  "monthlyActionSectionTitle": "Việc cần làm tháng này",
+  "@monthlyActionSectionTitle": {
+    "description": "Main title for the monthly action section."
+  },
+  "monthlyActionSectionSubtitle": "Xử lý khoản bắt buộc trước. App sẽ gợi ý phần trả thêm riêng.",
+  "@monthlyActionSectionSubtitle": {
+    "description": "Subtitle for the monthly action section."
+  },
+  "monthlyActionCompletionChip": "Đã xong {completed}/{total}",
+  "@monthlyActionCompletionChip": {
+    "description": "Progress chip for completed required actions.",
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "monthlyActionSummaryDebtFreeLabel": "Ngày hết nợ dự kiến",
+  "@monthlyActionSummaryDebtFreeLabel": {
+    "description": "Label for the projected payoff date in the monthly action summary card."
+  },
+  "monthlyActionSummaryRecalculating": "Đang tính lại",
+  "@monthlyActionSummaryRecalculating": {
+    "description": "Fallback text when monthly action metrics are still recalculating."
+  },
+  "monthlyActionSummaryRequired": "Bắt buộc",
+  "@monthlyActionSummaryRequired": {
+    "description": "Label for required monthly payment total."
+  },
+  "monthlyActionSummaryExtra": "Trả thêm",
+  "@monthlyActionSummaryExtra": {
+    "description": "Label for extra monthly payment total."
+  },
+  "monthlyActionSummaryOverdue": "Quá hạn",
+  "@monthlyActionSummaryOverdue": {
+    "description": "Label for overdue count in the monthly action summary card."
+  },
+  "monthlyActionRequiredSectionTitle": "Cần trả bắt buộc",
+  "@monthlyActionRequiredSectionTitle": {
+    "description": "Title for the required monthly action section."
+  },
+  "monthlyActionRequiredSectionSubtitle": "Quá hạn trước, rồi đến các khoản sắp đến hạn.",
+  "@monthlyActionRequiredSectionSubtitle": {
+    "description": "Subtitle for the required monthly action section."
+  },
+  "monthlyActionOptionalSectionTitle": "Trả thêm để hết nợ sớm hơn",
+  "@monthlyActionOptionalSectionTitle": {
+    "description": "Title for the optional extra-payment section."
+  },
+  "monthlyActionOptionalSectionSubtitle": "Chỉ làm phần này sau khi xong các khoản bắt buộc.",
+  "@monthlyActionOptionalSectionSubtitle": {
+    "description": "Subtitle for the optional extra-payment section."
+  },
+  "monthlyActionAllDoneTitle": "Bạn đã xong các khoản bắt buộc tháng này",
+  "@monthlyActionAllDoneTitle": {
+    "description": "Title for the completion card when all required payments are done."
+  },
+  "monthlyActionAllDoneSubtitle": "Nếu còn dư ngân sách, bạn có thể dùng phần trả thêm bên dưới để về đích sớm hơn.",
+  "@monthlyActionAllDoneSubtitle": {
+    "description": "Subtitle for the completion card when all required payments are done."
+  },
+  "monthlyActionNextActionTitle": "Tháng này chưa còn khoản nào cần xử lý",
+  "@monthlyActionNextActionTitle": {
+    "description": "Title for the next-best-action card when there are no monthly actions."
+  },
+  "monthlyActionNextActionSubtitle": "Bạn có thể xem kế hoạch hiện tại hoặc ghi một khoản thanh toán khác nếu vừa trả thêm.",
+  "@monthlyActionNextActionSubtitle": {
+    "description": "Subtitle for the next-best-action card when there are no monthly actions."
+  },
+  "monthlyActionNextActionPrimary": "Xem kế hoạch",
+  "@monthlyActionNextActionPrimary": {
+    "description": "Primary CTA on the next-best-action card."
+  },
+  "monthlyActionRequiredTotal": "Cần trả {amount}",
+  "@monthlyActionRequiredTotal": {
+    "description": "Subtitle on a required monthly-action debt card.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionSuggestedTotal": "Gợi ý {amount}",
+  "@monthlyActionSuggestedTotal": {
+    "description": "Subtitle on an optional monthly-action debt card.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionDoneBadge": "Đã xong",
+  "@monthlyActionDoneBadge": {
+    "description": "Badge shown when a monthly action section is already completed."
+  },
+  "monthlyActionDueDate": "Hạn {date}",
+  "@monthlyActionDueDate": {
+    "description": "Due-date label for a required monthly action.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionOptionalTiming": "Sau khi xong khoản bắt buộc tháng này",
+  "@monthlyActionOptionalTiming": {
+    "description": "Timing hint for an optional extra payment item."
+  },
+  "monthlyActionOptionalHelper": "Khoản này giúp bạn rút ngắn thời gian hết nợ.",
+  "@monthlyActionOptionalHelper": {
+    "description": "Helper text for an optional extra payment item."
+  },
+  "monthlyActionOverdueChip": "Quá hạn",
+  "@monthlyActionOverdueChip": {
+    "description": "Status chip for overdue monthly actions."
+  },
+  "monthlyActionUpcomingChip": "Sắp đến hạn",
+  "@monthlyActionUpcomingChip": {
+    "description": "Status chip for upcoming monthly actions."
+  },
+  "monthlyActionPriorityChip": "Ưu tiên #{rank}",
+  "@monthlyActionPriorityChip": {
+    "description": "Priority chip for optional monthly actions.",
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "monthlyActionSavedButton": "Đã lưu",
+  "@monthlyActionSavedButton": {
+    "description": "Disabled CTA label after a monthly action has already been logged."
+  },
+  "monthlyActionPaidButton": "Đã thanh toán",
+  "@monthlyActionPaidButton": {
+    "description": "Primary CTA label for monthly actions."
+  },
+  "monthlyActionSnackbarSaved": "Đã lưu thanh toán cho {debtName}.",
+  "@monthlyActionSnackbarSaved": {
+    "description": "Snackbar shown after confirming a monthly action payment.",
+    "placeholders": {
+      "debtName": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionConfirmTitle": "Xác nhận thanh toán",
+  "@monthlyActionConfirmTitle": {
+    "description": "Title of the monthly action confirmation bottom sheet."
+  },
+  "monthlyActionConfirmSubtitle": "Khoản này sẽ được lưu vào lịch sử và cập nhật lại kế hoạch trả nợ của bạn.",
+  "@monthlyActionConfirmSubtitle": {
+    "description": "Subtitle of the monthly action confirmation bottom sheet."
+  },
+  "monthlyActionInfoDebt": "Khoản nợ",
+  "@monthlyActionInfoDebt": {
+    "description": "Label for the debt name row in the monthly action confirmation sheet."
+  },
+  "monthlyActionInfoType": "Loại thanh toán",
+  "@monthlyActionInfoType": {
+    "description": "Label for the payment type row in the monthly action confirmation sheet."
+  },
+  "monthlyActionInfoAmount": "Số tiền",
+  "@monthlyActionInfoAmount": {
+    "description": "Label for the amount row in the monthly action confirmation sheet."
+  },
+  "monthlyActionInfoDate": "Ngày áp dụng",
+  "@monthlyActionInfoDate": {
+    "description": "Label for the date row in the monthly action confirmation sheet."
+  },
+  "monthlyActionRecastDebtFree": "Ngày hết nợ dự kiến: {previous} → {current}{delta}",
+  "@monthlyActionRecastDebtFree": {
+    "description": "Banner text describing a projected payoff date change after a recast.",
+    "placeholders": {
+      "previous": {
+        "type": "String"
+      },
+      "current": {
+        "type": "String"
+      },
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionRecastProjectedInterest": "Tổng lãi dự kiến: {previous} → {current}{delta}",
+  "@monthlyActionRecastProjectedInterest": {
+    "description": "Banner text describing a projected interest change after a recast.",
+    "placeholders": {
+      "previous": {
+        "type": "String"
+      },
+      "current": {
+        "type": "String"
+      },
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionRecastSavedInterest": "Lãi tiết kiệm được: {previous} → {current}{delta}",
+  "@monthlyActionRecastSavedInterest": {
+    "description": "Banner text describing a saved-interest change after a recast.",
+    "placeholders": {
+      "previous": {
+        "type": "String"
+      },
+      "current": {
+        "type": "String"
+      },
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionDeltaSooner": " (sớm hơn {months} tháng)",
+  "@monthlyActionDeltaSooner": {
+    "description": "Suffix for an earlier payoff-date projection.",
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "monthlyActionDeltaLater": " (trễ hơn {months} tháng)",
+  "@monthlyActionDeltaLater": {
+    "description": "Suffix for a later payoff-date projection.",
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "monthlyActionDeltaReduced": " (giảm {amount})",
+  "@monthlyActionDeltaReduced": {
+    "description": "Suffix for a reduced interest projection.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionDeltaIncreased": " (tăng {amount})",
+  "@monthlyActionDeltaIncreased": {
+    "description": "Suffix for an increased interest projection.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionRecastNeutral": "Kế hoạch vừa được cập nhật từ dữ liệu mới nhất của bạn.",
+  "@monthlyActionRecastNeutral": {
+    "description": "Neutral banner text when the recast has no highlighted payoff change."
+  },
+  "logPaymentTitle": "Ghi nhận thanh toán",
+  "@logPaymentTitle": {
+    "description": "App bar title on the log payment page."
+  },
+  "logPaymentMissingDebt": "Khoản nợ này không còn tồn tại hoặc đã bị xóa.",
+  "@logPaymentMissingDebt": {
+    "description": "Fallback text when the debt referenced by the log payment page cannot be found."
+  },
+  "logPaymentCurrentBalance": "Dư nợ hiện tại {amount}",
+  "@logPaymentCurrentBalance": {
+    "description": "Label showing the current debt balance on the log payment page.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "logPaymentAmountLabel": "Số tiền đã trả",
+  "@logPaymentAmountLabel": {
+    "description": "Label for the payment amount input."
+  },
+  "logPaymentAmountHelper": "Số tiền này sẽ được trừ trực tiếp vào dư nợ hiện tại.",
+  "@logPaymentAmountHelper": {
+    "description": "Helper text under the payment amount input."
+  },
+  "logPaymentTypeLabel": "Loại thanh toán",
+  "@logPaymentTypeLabel": {
+    "description": "Label above the payment type chips."
+  },
+  "logPaymentDateLabel": "Ngày áp dụng",
+  "@logPaymentDateLabel": {
+    "description": "Label for the payment date field."
+  },
+  "logPaymentNoteLabel": "Ghi chú",
+  "@logPaymentNoteLabel": {
+    "description": "Label for the optional payment note field."
+  },
+  "logPaymentNoteHint": "Ví dụ: autopay, bonus, paycheck sweep",
+  "@logPaymentNoteHint": {
+    "description": "Hint text for the optional payment note field."
+  },
+  "logPaymentInfo": "Khoản thanh toán này sẽ lưu lại số dư trước và sau, rồi cập nhật kế hoạch ngay sau khi lưu.",
+  "@logPaymentInfo": {
+    "description": "Info card text on the log payment page."
+  },
+  "logPaymentInvalidAmount": "Nhập số tiền hợp lệ lớn hơn 0.",
+  "@logPaymentInvalidAmount": {
+    "description": "Inline validation error when the payment amount is invalid."
+  },
+  "logPaymentSavedMessage": "Đã lưu thanh toán và cập nhật kế hoạch.",
+  "@logPaymentSavedMessage": {
+    "description": "Snackbar shown after manually logging a payment."
+  },
+  "pricingBody": "Bản MVP hiện tại vẫn giữ đầy đủ core payoff flow miễn phí. Premium là lộ trình tiếp theo cho cloud backup, PDF report và shared planning.",
+  "@pricingBody": {
+    "description": "Body copy on the pricing page."
+  },
+  "pricingContinueFree": "Tiếp tục với bản miễn phí",
+  "@pricingContinueFree": {
+    "description": "Primary CTA on the pricing page."
+  },
+  "pricingFreeBulletExport": "CSV export + local backup/restore + clear all",
+  "@pricingFreeBulletExport": {
+    "description": "Free tier bullet describing export and backup support."
+  },
+  "pricingFreeBulletPayments": "Payment logging + monthly action view",
+  "@pricingFreeBulletPayments": {
+    "description": "Free tier bullet describing payment logging features."
+  },
+  "pricingFreeBulletStrategies": "Snowball / Avalanche + living timeline",
+  "@pricingFreeBulletStrategies": {
+    "description": "Free tier bullet describing strategy and timeline features."
+  },
+  "pricingFreeBulletUnlimitedDebts": "Nhập và chỉnh sửa không giới hạn khoản nợ",
+  "@pricingFreeBulletUnlimitedDebts": {
+    "description": "Free tier bullet describing unlimited debt management."
+  },
+  "pricingFreeSubtitle": "Có sẵn trong MVP",
+  "@pricingFreeSubtitle": {
+    "description": "Subtitle for the free tier card."
+  },
+  "pricingFreeTitle": "Free",
+  "@pricingFreeTitle": {
+    "description": "Title for the free tier card."
+  },
+  "pricingHeadline": "Local-first trước. Premium chỉ mở khi thật sự thêm giá trị.",
+  "@pricingHeadline": {
+    "description": "Headline on the pricing page."
+  },
+  "pricingMvpNotice": "Premium chưa mở trong bản MVP này.",
+  "@pricingMvpNotice": {
+    "description": "Notice below the pricing CTA."
+  },
+  "pricingPageTitle": "Free vs Premium",
+  "@pricingPageTitle": {
+    "description": "App bar title on the pricing page."
+  },
+  "pricingPremiumBulletCloud": "Cloud backup giữa nhiều thiết bị",
+  "@pricingPremiumBulletCloud": {
+    "description": "Premium tier bullet describing cloud backup."
+  },
+  "pricingPremiumBulletPdf": "PDF report để in hoặc gửi cố vấn tài chính",
+  "@pricingPremiumBulletPdf": {
+    "description": "Premium tier bullet describing PDF reports."
+  },
+  "pricingPremiumBulletPricing": "Pricing minh bạch, không trial mập mờ",
+  "@pricingPremiumBulletPricing": {
+    "description": "Premium tier bullet describing pricing philosophy."
+  },
+  "pricingPremiumBulletSharing": "Partner sharing và scenario comparison",
+  "@pricingPremiumBulletSharing": {
+    "description": "Premium tier bullet describing sharing features."
+  },
+  "pricingPremiumSubtitle": "Stub để chuẩn bị monetization, chưa có IAP",
+  "@pricingPremiumSubtitle": {
+    "description": "Subtitle for the premium tier card."
+  },
+  "pricingPremiumTitle": "Premium",
+  "@pricingPremiumTitle": {
+    "description": "Title for the premium tier card."
+  },
+  "pricingTrustMessage": "Cam kết trust không đổi khi lên Premium: không bank linking, không auto-charge mập mờ, và local export vẫn luôn khả dụng.",
+  "@pricingTrustMessage": {
+    "description": "Trust reassurance card copy on the pricing page."
+  },
+  "settingsCancel": "Hủy",
+  "@settingsCancel": {
+    "description": "Generic cancel action in settings dialogs."
+  },
+  "settingsClearAllDialogBody": "Thao tác này sẽ xóa toàn bộ dữ liệu local và đưa app về trạng thái lần đầu mở.",
+  "@settingsClearAllDialogBody": {
+    "description": "Body text for the first clear-all confirmation dialog."
+  },
+  "settingsClearAllDialogTitle": "Xóa toàn bộ dữ liệu?",
+  "@settingsClearAllDialogTitle": {
+    "description": "Title for the first clear-all confirmation dialog."
+  },
+  "settingsClearAllSubtitle": "Chỉ reset dữ liệu trên thiết bị này. Cloud chưa bật ở Level 0.",
+  "@settingsClearAllSubtitle": {
+    "description": "Subtitle for the clear-all settings tile."
+  },
+  "settingsClearAllTitle": "Xóa toàn bộ dữ liệu",
+  "@settingsClearAllTitle": {
+    "description": "Title for the clear-all settings tile."
+  },
+  "settingsCloudBackupTitle": "Sao lưu đám mây",
+  "@settingsCloudBackupTitle": {
+    "description": "Title for the cloud backup settings tile."
+  },
+  "settingsContinue": "Tiếp tục",
+  "@settingsContinue": {
+    "description": "Continue action in settings dialogs."
+  },
+  "settingsCopyrightFooter": "© 2026 Debt Payoff X",
+  "@settingsCopyrightFooter": {
+    "description": "Footer copyright label on the settings page."
+  },
+  "settingsCurrencySubtitle": "Hiện tại chỉ dùng cho format hiển thị.",
+  "@settingsCurrencySubtitle": {
+    "description": "Subtitle for the currency settings tile."
+  },
+  "settingsCurrencyTitle": "Loại tiền tệ",
+  "@settingsCurrencyTitle": {
+    "description": "Title for the currency settings tile."
+  },
+  "settingsDataBannerLocalBody": "Dữ liệu hiện nằm trên thiết bị này. Bạn luôn có CSV export, local backup/restore và clear all mà không cần tài khoản hoặc bank linking.",
+  "@settingsDataBannerLocalBody": {
+    "description": "Body text for the local-only trust banner in settings."
+  },
+  "settingsDataBannerLocalTitle": "Local-first đang bật",
+  "@settingsDataBannerLocalTitle": {
+    "description": "Title for the local-only trust banner in settings."
+  },
+  "settingsDataBannerTrustBody": "Bạn đang ở trust level > 0. Local export vẫn còn, nhưng các thao tác reset cần cẩn thận hơn vì có thể liên quan tới cloud semantics.",
+  "@settingsDataBannerTrustBody": {
+    "description": "Body text for the elevated trust banner in settings."
+  },
+  "settingsDataBannerTrustTitle": "Trust mode nâng cao đang bật",
+  "@settingsDataBannerTrustTitle": {
+    "description": "Title for the elevated trust banner in settings."
+  },
+  "settingsDeleteAllConfirm": "Xóa sạch",
+  "@settingsDeleteAllConfirm": {
+    "description": "Final destructive confirmation button for clear-all."
+  },
+  "settingsExportCsvSubtitle": "ZIP gồm nhiều file CSV + manifest để bạn tự kiểm tra từng bảng.",
+  "@settingsExportCsvSubtitle": {
+    "description": "Subtitle for the CSV export settings tile."
+  },
+  "settingsExportCsvTitle": "Xuất dữ liệu (CSV)",
+  "@settingsExportCsvTitle": {
+    "description": "Title for the CSV export settings tile."
+  },
+  "settingsExtraMonthlySubtitle": "Đang lưu trong kế hoạch chính của bạn.",
+  "@settingsExtraMonthlySubtitle": {
+    "description": "Subtitle for the extra monthly amount settings tile."
+  },
+  "settingsExtraMonthlyTitle": "Trả thêm hàng tháng",
+  "@settingsExtraMonthlyTitle": {
+    "description": "Title for the extra monthly amount settings tile."
+  },
+  "settingsFinalConfirmBody": "Bạn sẽ mất toàn bộ debts, payments, milestones và backup local hiện tại trong app này.",
+  "@settingsFinalConfirmBody": {
+    "description": "Body text for the final clear-all confirmation dialog."
+  },
+  "settingsFinalConfirmTitle": "Xác nhận lần cuối",
+  "@settingsFinalConfirmTitle": {
+    "description": "Title for the final clear-all confirmation dialog."
+  },
+  "settingsGoBack": "Quay lại",
+  "@settingsGoBack": {
+    "description": "Go back action in the final clear-all confirmation dialog."
+  },
+  "settingsCurrentStrategySubtitle": "Mở tab Kế hoạch để xem thứ tự ưu tiên chi tiết.",
+  "@settingsCurrentStrategySubtitle": {
+    "description": "Subtitle for the current strategy settings tile."
+  },
+  "settingsCurrentStrategyTitle": "Chiến lược hiện tại",
+  "@settingsCurrentStrategyTitle": {
+    "description": "Title for the current strategy settings tile."
+  },
+  "settingsLocaleSheetTitle": "Chọn ngôn ngữ",
+  "@settingsLocaleSheetTitle": {
+    "description": "Title for the settings locale picker sheet."
+  },
+  "settingsLocaleSubtitle": "Ảnh hưởng tới ngôn ngữ hiển thị và format ngày.",
+  "@settingsLocaleSubtitle": {
+    "description": "Subtitle for the language settings tile."
+  },
+  "settingsLocaleTitle": "Ngôn ngữ",
+  "@settingsLocaleTitle": {
+    "description": "Title for the language settings tile."
+  },
+  "settingsLocalBackupSubtitle": "Tạo JSON backup ZIP đầy đủ để lưu sang Files, Drive hoặc ổ đĩa ngoài.",
+  "@settingsLocalBackupSubtitle": {
+    "description": "Subtitle for the local backup settings tile."
+  },
+  "settingsLocalBackupTitle": "Sao lưu cục bộ",
+  "@settingsLocalBackupTitle": {
+    "description": "Title for the local backup settings tile."
+  },
+  "settingsMonthlyLogSubtitle": "Dùng cho monthly log summary khi flow này được mở.",
+  "@settingsMonthlyLogSubtitle": {
+    "description": "Subtitle for the monthly log settings toggle."
+  },
+  "settingsMonthlyLogTitle": "Nhật ký hàng tháng",
+  "@settingsMonthlyLogTitle": {
+    "description": "Title for the monthly log settings toggle."
+  },
+  "settingsPageTitle": "Cài đặt",
+  "@settingsPageTitle": {
+    "description": "App bar title for the settings page."
+  },
+  "settingsPaymentReminderSubtitle": "App sẽ dùng cài đặt này khi payment reminders được bật.",
+  "@settingsPaymentReminderSubtitle": {
+    "description": "Subtitle for the payment reminders settings toggle."
+  },
+  "settingsPaymentReminderTitle": "Nhắc nhở thanh toán",
+  "@settingsPaymentReminderTitle": {
+    "description": "Title for the payment reminders settings toggle."
+  },
+  "settingsResetAction": "Reset",
+  "@settingsResetAction": {
+    "description": "Short trailing action label for reset on the clear-all tile."
+  },
+  "settingsRestoreAction": "Khôi phục",
+  "@settingsRestoreAction": {
+    "description": "Short trailing action label for restore on the restore tile."
+  },
+  "settingsRestoreConfirm": "Khôi phục",
+  "@settingsRestoreConfirm": {
+    "description": "Confirmation button label for the restore dialog."
+  },
+  "settingsRestoreDialogDataHeader": "Dữ liệu trong backup:",
+  "@settingsRestoreDialogDataHeader": {
+    "description": "Header introducing backup row counts in the restore dialog."
+  },
+  "settingsRestoreDialogExportedAtLabel": "Xuất lúc",
+  "@settingsRestoreDialogExportedAtLabel": {
+    "description": "Label for the exported-at timestamp in the restore dialog."
+  },
+  "settingsRestoreDialogFileLabel": "File",
+  "@settingsRestoreDialogFileLabel": {
+    "description": "Label for the file name in the restore dialog."
+  },
+  "settingsRestoreDialogTitle": "Khôi phục từ bản sao lưu?",
+  "@settingsRestoreDialogTitle": {
+    "description": "Title for the restore confirmation dialog."
+  },
+  "settingsRestoreDialogTotalRecordsLabel": "Tổng bản ghi",
+  "@settingsRestoreDialogTotalRecordsLabel": {
+    "description": "Label for the total records count in the restore dialog."
+  },
+  "settingsRestoreDialogWarning": "Toàn bộ dữ liệu local hiện tại sẽ bị thay thế.",
+  "@settingsRestoreDialogWarning": {
+    "description": "Warning shown in the restore confirmation dialog."
+  },
+  "settingsRestoreSubtitle": "Đọc preview manifest và số bản ghi trước khi thay thế dữ liệu local.",
+  "@settingsRestoreSubtitle": {
+    "description": "Subtitle for the restore settings tile."
+  },
+  "settingsRestoreSuccess": "Đã khôi phục dữ liệu local từ bản sao lưu đã chọn.",
+  "@settingsRestoreSuccess": {
+    "description": "Snackbar message shown after a successful local restore."
+  },
+  "settingsRestoreTitle": "Khôi phục từ bản sao lưu",
+  "@settingsRestoreTitle": {
+    "description": "Title for the restore settings tile."
+  },
+  "settingsSectionData": "DỮ LIỆU",
+  "@settingsSectionData": {
+    "description": "Section header for data settings."
+  },
+  "settingsSectionOptions": "TUỲ CHỌN",
+  "@settingsSectionOptions": {
+    "description": "Section header for general options in settings."
+  },
+  "settingsSectionPlan": "KẾ HOẠCH TRẢ NỢ",
+  "@settingsSectionPlan": {
+    "description": "Section header for plan-related settings."
+  },
+  "settingsSectionReminders": "NHẮC NHỞ",
+  "@settingsSectionReminders": {
+    "description": "Section header for reminders in settings."
+  },
+  "settingsStrategyAvalanche": "Avalanche",
+  "@settingsStrategyAvalanche": {
+    "description": "Localized label for the avalanche payoff strategy."
+  },
+  "settingsStrategyCustom": "Custom",
+  "@settingsStrategyCustom": {
+    "description": "Localized label for the custom payoff strategy."
+  },
+  "settingsStrategySnowball": "Snowball",
+  "@settingsStrategySnowball": {
+    "description": "Localized label for the snowball payoff strategy."
+  },
+  "settingsTrustLevelLocalOnlyBody": "Hiện tại bạn đang ở local-only. Cloud backup là roadmap tiếp theo, không phải yêu cầu để dùng app.",
+  "@settingsTrustLevelLocalOnlyBody": {
+    "description": "Subtitle copy for cloud backup when trust level is local-only."
+  },
+  "settingsTrustLevelLocalOnlyLabel": "Local only",
+  "@settingsTrustLevelLocalOnlyLabel": {
+    "description": "Trailing label for cloud backup when trust level is local-only."
+  },
+  "settingsTrustLevelOneBody": "Cloud backup cơ bản đã bật. Local export vẫn luôn khả dụng.",
+  "@settingsTrustLevelOneBody": {
+    "description": "Subtitle copy for cloud backup when trust level is 1."
+  },
+  "settingsTrustLevelOneLabel": "Trust 1",
+  "@settingsTrustLevelOneLabel": {
+    "description": "Trailing label for cloud backup when trust level is 1."
+  },
+  "settingsTrustLevelTwoBody": "Đang dùng trust mode cao hơn. Hãy kiểm tra quyền chia sẻ trước khi reset local.",
+  "@settingsTrustLevelTwoBody": {
+    "description": "Subtitle copy for cloud backup when trust level is 2."
+  },
+  "settingsTrustLevelTwoLabel": "Trust 2",
+  "@settingsTrustLevelTwoLabel": {
+    "description": "Trailing label for cloud backup when trust level is 2."
+  },
+  "settingsVersionFooter": "Phiên bản 1.0.0 (MVP)",
+  "@settingsVersionFooter": {
+    "description": "Version footer on the settings page."
+  },
+  "settingsZipLabel": "ZIP",
+  "@settingsZipLabel": {
+    "description": "Short trailing label for ZIP-based data actions."
+  },
+  "syncBackupBody": "Hiện tại app của bạn đang ở chế độ local-only. Bạn vẫn có đầy đủ export, local backup và restore mà không cần tài khoản.",
+  "@syncBackupBody": {
+    "description": "Body copy on the sync backup page."
+  },
+  "syncBackupContinueLocal": "Tiếp tục dùng local-only",
+  "@syncBackupContinueLocal": {
+    "description": "Secondary CTA on the sync backup page."
+  },
+  "syncBackupFreeBulletBackup": "Local backup ZIP để lưu thủ công sang Files hoặc Drive",
+  "@syncBackupFreeBulletBackup": {
+    "description": "Free bullet on the sync backup page describing local backup."
+  },
+  "syncBackupFreeBulletCsv": "CSV export đầy đủ để mở trong Excel hoặc Numbers",
+  "@syncBackupFreeBulletCsv": {
+    "description": "Free bullet on the sync backup page describing CSV export."
+  },
+  "syncBackupFreeBulletPreview": "Restore có preview trước khi thay thế dữ liệu local",
+  "@syncBackupFreeBulletPreview": {
+    "description": "Free bullet on the sync backup page describing restore preview."
+  },
+  "syncBackupFreeBulletReset": "Clear all / factory reset mà không khóa quyền truy cập dữ liệu",
+  "@syncBackupFreeBulletReset": {
+    "description": "Free bullet on the sync backup page describing reset controls."
+  },
+  "syncBackupFreeTitle": "Bạn đã có trong bản miễn phí",
+  "@syncBackupFreeTitle": {
+    "description": "Title for the free capability card on the sync backup page."
+  },
+  "syncBackupHeadline": "Sao lưu đám mây là bước tiếp theo, không phải điều kiện để dùng app.",
+  "@syncBackupHeadline": {
+    "description": "Headline on the sync backup page."
+  },
+  "syncBackupPremiumBulletCloud": "Cloud backup giữa nhiều thiết bị",
+  "@syncBackupPremiumBulletCloud": {
+    "description": "Premium bullet on the sync backup page describing cloud backup."
+  },
+  "syncBackupPremiumBulletPdf": "PDF report để in hoặc gửi cố vấn tài chính",
+  "@syncBackupPremiumBulletPdf": {
+    "description": "Premium bullet on the sync backup page describing PDF reports."
+  },
+  "syncBackupPremiumBulletPricing": "Pricing minh bạch, không trial mập mờ",
+  "@syncBackupPremiumBulletPricing": {
+    "description": "Premium bullet on the sync backup page describing pricing philosophy."
+  },
+  "syncBackupPremiumBulletSharing": "Partner sharing và scenario comparison",
+  "@syncBackupPremiumBulletSharing": {
+    "description": "Premium bullet on the sync backup page describing sharing features."
+  },
+  "syncBackupPremiumTitle": "Premium sau này sẽ thêm",
+  "@syncBackupPremiumTitle": {
+    "description": "Title for the premium capability card on the sync backup page."
+  },
+  "syncBackupTrustMessage": "Cam kết trust không đổi: dữ liệu khởi đầu nằm trên thiết bị, không bank linking, và export local vẫn luôn mở ngay cả khi Premium xuất hiện.",
+  "@syncBackupTrustMessage": {
+    "description": "Trust reassurance card copy on the sync backup page."
+  },
+  "syncBackupViewPricing": "Xem Free vs Premium",
+  "@syncBackupViewPricing": {
+    "description": "Primary CTA on the sync backup page that opens pricing."
+  },
+  "welcomeAddFirstDebt": "Thêm khoản nợ đầu tiên",
+  "@welcomeAddFirstDebt": {
+    "description": "Primary CTA on the welcome page."
+  },
+  "welcomeChangeLanguage": "Đổi ngôn ngữ",
+  "@welcomeChangeLanguage": {
+    "description": "Small text action on the welcome page that opens the language picker."
+  },
+  "welcomeSubtitle": "Tạo kế hoạch trả nợ cá nhân hoá trong 3 phút.\nKhông tài khoản. Không chạm ngân hàng.",
+  "@welcomeSubtitle": {
+    "description": "Subtitle on the welcome page."
+  },
+  "welcomeTitle": "Kiểm soát nợ,\ngiải phóng tương lai.",
+  "@welcomeTitle": {
+    "description": "Headline on the welcome page."
+  },
+  "welcomeTrustFree": "Miễn phí",
+  "@welcomeTrustFree": {
+    "description": "Trust badge label on the welcome page describing free access."
+  },
+  "welcomeTrustLocalFirst": "Local-first",
+  "@welcomeTrustLocalFirst": {
+    "description": "Trust badge label on the welcome page describing local-first behavior."
+  },
+  "welcomeTrustNoBankSync": "Không sync bank",
+  "@welcomeTrustNoBankSync": {
+    "description": "Trust badge label on the welcome page describing no bank connection."
+  }
+}
