@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/extensions/context_extensions.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/di/injection.dart';
@@ -55,9 +56,9 @@ class DebtEntryPage extends StatelessWidget {
               },
               child: DebtFormScaffold(
                 mode: DebtFormMode.onboarding,
-                title: 'Thêm khoản nợ đầu tiên',
-                primaryActionLabel: 'Lưu khoản nợ',
-                progressLabel: 'Bước 1/4',
+                title: context.l10n.onboardingDebtEntryTitle,
+                primaryActionLabel: context.l10n.onboardingDebtEntrySave,
+                progressLabel: context.l10n.onboardingStep1,
                 progressValue: 0.25,
                 backButtonKey: AppTestKeys.onboardingDebtEntryBack,
                 onCancel: () => _handleBack(context),

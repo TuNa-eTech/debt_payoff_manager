@@ -13,6 +13,7 @@ import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_chip.dart';
 import '../../../../core/widgets/empty_state.dart';
 import '../../../../domain/entities/timeline_projection.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../cubit/plan_timeline_cubit.dart';
 import '../../cubit/plan_timeline_state.dart';
 
@@ -51,7 +52,7 @@ class _TimelineViewState extends State<_TimelineView> {
     return BlocBuilder<PlanTimelineCubit, PlanTimelineState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(title: const Text('Kế hoạch')),
+          appBar: AppBar(title: Text(AppLocalizations.of(context)!.planTimelineTitle)),
           body: _buildBody(state),
         );
       },
@@ -64,10 +65,9 @@ class _TimelineViewState extends State<_TimelineView> {
     }
 
     if (!state.hasTrackedDebts) {
-      return const EmptyState(
-        title: 'Chưa có kế hoạch để hiển thị',
-        subtitle:
-            'Thêm ít nhất một khoản nợ để app recast timeline, debt-free date, và projected interest của bạn.',
+      return EmptyState(
+        title: AppLocalizations.of(context)!.planTimelineEmptyTitle,
+        subtitle: AppLocalizations.of(context)!.planTimelineEmptySubtitle,
         icon: LucideIcons.map,
       );
     }
@@ -83,12 +83,11 @@ class _TimelineViewState extends State<_TimelineView> {
           children: [
             _PlanHero(state: state),
             const SizedBox(height: AppDimensions.sectionGap),
-            const AppCard(
+            AppCard(
               color: AppColors.mdSurfaceContainerLow,
               child: EmptyState(
-                title: 'Tất cả khoản nợ đã được trả xong',
-                subtitle:
-                    'Timeline tháng không còn khoản đang hoạt động. App vẫn giữ plan summary cuối cùng để bạn đối chiếu.',
+                title: AppLocalizations.of(context)!.planTimelineAllPaidTitle,
+                subtitle: AppLocalizations.of(context)!.planTimelineAllPaidSubtitle,
                 icon: LucideIcons.partyPopper,
               ),
             ),
@@ -118,10 +117,9 @@ class _TimelineViewState extends State<_TimelineView> {
           const SizedBox(height: AppDimensions.sectionGap),
           _InterestComparisonCard(state: state),
           const SizedBox(height: AppDimensions.sectionGap),
-          const SectionHeader(
-            title: 'Timeline theo tháng',
-            subtitle:
-                'List-first view với payment breakdown, ending balance, và milestone payoff theo projection mới nhất.',
+          SectionHeader(
+            title: AppLocalizations.of(context)!.planTimelineSectionTitle,
+            subtitle: AppLocalizations.of(context)!.planTimelineSectionSubtitle,
           ),
           const SizedBox(height: AppDimensions.md),
           ...state.projection!.months.map(
@@ -162,7 +160,7 @@ class _PlanHero extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Debt-free date',
+            AppLocalizations.of(context)!.planTimelineHeroDebtFree,
             style: AppTextStyles.labelMedium.copyWith(
               color: AppColors.mdPrimaryContainer,
             ),
@@ -170,7 +168,7 @@ class _PlanHero extends StatelessWidget {
           const SizedBox(height: AppDimensions.xs),
           Text(
             payoffDate == null
-                ? 'Đang recast...'
+                ? AppLocalizations.of(context)!.planTimelineRecasting
                 : AppFormatters.formatMonthYear(payoffDate),
             style: AppTextStyles.displaySmall.copyWith(
               color: AppColors.mdOnPrimary,
@@ -181,14 +179,14 @@ class _PlanHero extends StatelessWidget {
             children: [
               Expanded(
                 child: _HeroStat(
-                  label: 'Projected interest',
+                  label: AppLocalizations.of(context)!.planTimelineHeroProjectedInterest,
                   value: AppFormatters.formatCents(projectedInterest),
                 ),
               ),
               const SizedBox(width: AppDimensions.md),
               Expanded(
                 child: _HeroStat(
-                  label: 'Saved vs minimum',
+                  label: AppLocalizations.of(context)!.planTimelineHeroSavedVsMinimum,
                   value: AppFormatters.formatCents(savedInterest),
                 ),
               ),
@@ -197,7 +195,7 @@ class _PlanHero extends StatelessWidget {
           if (plan != null) ...[
             const SizedBox(height: AppDimensions.md),
             Text(
-              '${plan.strategy.label} · Extra ${AppFormatters.formatCents(plan.extraMonthlyAmount)} / tháng · ${projection?.months.length ?? 0} tháng projected',
+              AppLocalizations.of(context)!.planTimelineStrategySummary(plan.strategy.label, AppFormatters.formatCents(plan.extraMonthlyAmount), projection?.months.length ?? 0),
               style: AppTextStyles.bodySmall.copyWith(
                 color: AppColors.mdOnPrimary.withValues(alpha: 0.82),
               ),
@@ -294,7 +292,7 @@ class _DeltaBanner extends StatelessWidget {
           const SizedBox(width: AppDimensions.sm),
           Expanded(
             child: Text(
-              _message(delta),
+              _message(context, delta),
               style: AppTextStyles.bodySmall.copyWith(
                 color: isPositive
                     ? AppColors.mdOnPrimaryContainer
@@ -309,44 +307,45 @@ class _DeltaBanner extends StatelessWidget {
     );
   }
 
-  String _message(RecastDelta delta) {
+  String _message(BuildContext context, RecastDelta delta) {
+    final l10n = AppLocalizations.of(context)!;
     if (delta.hasDebtFreeDateChange &&
         delta.previousDebtFreeDate != null &&
         delta.newDebtFreeDate != null) {
       final monthDelta = delta.debtFreeMonthDelta;
-      return 'Debt-free date: ${AppFormatters.formatMonthYear(delta.previousDebtFreeDate!)} → ${AppFormatters.formatMonthYear(delta.newDebtFreeDate!)}'
-          '${monthDelta == 0
+      final deltaStr = monthDelta == 0
               ? ''
               : monthDelta < 0
-              ? ' (sớm hơn ${monthDelta.abs()} tháng)'
-              : ' (trễ hơn $monthDelta tháng)'}';
+              ? l10n.monthlyActionDeltaSooner(monthDelta.abs())
+              : l10n.monthlyActionDeltaLater(monthDelta);
+      return l10n.monthlyActionRecastDebtFree(AppFormatters.formatMonthYear(delta.previousDebtFreeDate!), AppFormatters.formatMonthYear(delta.newDebtFreeDate!), deltaStr);
     }
 
     if (delta.hasProjectedInterestChange &&
         delta.previousTotalInterestProjected != null &&
         delta.newTotalInterestProjected != null) {
       final projectedDelta = delta.projectedInterestDelta!;
-      return 'Projected interest: ${AppFormatters.formatCents(delta.previousTotalInterestProjected!)} → ${AppFormatters.formatCents(delta.newTotalInterestProjected!)}'
-          '${projectedDelta == 0
+      final deltaStr = projectedDelta == 0
               ? ''
               : projectedDelta < 0
-              ? ' (giảm ${AppFormatters.formatCents(projectedDelta.abs())})'
-              : ' (tăng ${AppFormatters.formatCents(projectedDelta)})'}';
+              ? l10n.monthlyActionDeltaReduced(AppFormatters.formatCents(projectedDelta.abs()))
+              : l10n.monthlyActionDeltaIncreased(AppFormatters.formatCents(projectedDelta));
+      return l10n.monthlyActionRecastProjectedInterest(AppFormatters.formatCents(delta.previousTotalInterestProjected!), AppFormatters.formatCents(delta.newTotalInterestProjected!), deltaStr);
     }
 
     if (delta.hasSavedInterestChange &&
         delta.previousTotalInterestSaved != null &&
         delta.newTotalInterestSaved != null) {
       final savedDelta = delta.savedInterestDelta!;
-      return 'Saved vs minimum: ${AppFormatters.formatCents(delta.previousTotalInterestSaved!)} → ${AppFormatters.formatCents(delta.newTotalInterestSaved!)}'
-          '${savedDelta == 0
+      final deltaStr = savedDelta == 0
               ? ''
               : savedDelta > 0
-              ? ' (tăng ${AppFormatters.formatCents(savedDelta)})'
-              : ' (giảm ${AppFormatters.formatCents(savedDelta.abs())})'}';
+              ? l10n.monthlyActionDeltaIncreased(AppFormatters.formatCents(savedDelta))
+              : l10n.monthlyActionDeltaReduced(AppFormatters.formatCents(savedDelta.abs()));
+      return l10n.monthlyActionRecastSavedInterest(AppFormatters.formatCents(delta.previousTotalInterestSaved!), AppFormatters.formatCents(delta.newTotalInterestSaved!), deltaStr);
     }
 
-    return 'Plan vừa được recast từ dữ liệu mới nhất.';
+    return l10n.planTimelineRecastNeutral;
   }
 }
 
@@ -366,21 +365,21 @@ class _InterestComparisonCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Projected vs minimum-only', style: AppTextStyles.titleSmall),
+          Text(AppLocalizations.of(context)!.planTimelineComparisonTitle, style: AppTextStyles.titleSmall),
           const SizedBox(height: AppDimensions.md),
           _ComparisonRow(
-            label: 'Kế hoạch hiện tại',
+            label: AppLocalizations.of(context)!.planTimelineComparisonCurrent,
             value: AppFormatters.formatCents(projectedInterest),
             valueColor: AppColors.mdPrimary,
           ),
           const SizedBox(height: AppDimensions.sm),
           _ComparisonRow(
-            label: 'Minimum-only baseline',
+            label: AppLocalizations.of(context)!.planTimelineComparisonBaseline,
             value: AppFormatters.formatCents(minimumOnlyInterest),
           ),
           const SizedBox(height: AppDimensions.sm),
           _ComparisonRow(
-            label: 'Tiết kiệm được',
+            label: AppLocalizations.of(context)!.planTimelineComparisonSaved,
             value: AppFormatters.formatCents(savedInterest),
             valueColor: AppColors.mdPrimary,
           ),
@@ -458,7 +457,7 @@ class _MonthCard extends StatelessWidget {
                       style: AppTextStyles.titleMedium,
                     ),
                     Text(
-                      'Payment ${AppFormatters.formatCents(month.totalPaymentThisMonth)} · Interest ${AppFormatters.formatCents(month.totalInterestThisMonth)}',
+                      '${AppLocalizations.of(context)!.planTimelineMonthPaymentLabel} ${AppFormatters.formatCents(month.totalPaymentThisMonth)} · ${AppLocalizations.of(context)!.planTimelineMonthInterestLabel} ${AppFormatters.formatCents(month.totalInterestThisMonth)}',
                       style: AppTextStyles.bodySmall.copyWith(
                         color: AppColors.mdOnSurfaceVariant,
                       ),
@@ -477,7 +476,7 @@ class _MonthCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _MiniStat(
-                  label: 'Ending balance',
+                  label: AppLocalizations.of(context)!.planTimelineMonthEndingBalance,
                   value: AppFormatters.formatCents(
                     month.totalBalanceEndOfMonth,
                   ),
@@ -486,7 +485,7 @@ class _MonthCard extends StatelessWidget {
               const SizedBox(width: AppDimensions.md),
               Expanded(
                 child: _MiniStat(
-                  label: 'Debts paid off',
+                  label: AppLocalizations.of(context)!.planTimelineMonthDebtsPaidOff,
                   value:
                       '${month.entries.where((entry) => entry.isPaidOffThisMonth).length}',
                 ),
@@ -517,26 +516,26 @@ class _MonthCard extends StatelessWidget {
                           ),
                           if (entry.isPaidOffThisMonth)
                             AppChip.status(
-                              label: 'Paid off',
+                              label: AppLocalizations.of(context)!.planTimelinePaidOffBadge,
                               icon: LucideIcons.partyPopper,
                             ),
                         ],
                       ),
                       const SizedBox(height: AppDimensions.sm),
                       _ComparisonRow(
-                        label: 'Starting balance',
+                        label: AppLocalizations.of(context)!.planTimelineMonthStartingBalance,
                         value: AppFormatters.formatCents(entry.startingBalance),
                       ),
                       _ComparisonRow(
-                        label: 'Interest accrued',
+                        label: AppLocalizations.of(context)!.planTimelineMonthInterestAccrued,
                         value: AppFormatters.formatCents(entry.interestAccrued),
                       ),
                       _ComparisonRow(
-                        label: 'Payment applied',
+                        label: AppLocalizations.of(context)!.planTimelineMonthPaymentApplied,
                         value: AppFormatters.formatCents(entry.paymentApplied),
                       ),
                       _ComparisonRow(
-                        label: 'Ending balance',
+                        label: AppLocalizations.of(context)!.planTimelineMonthEndingBalance,
                         value: AppFormatters.formatCents(entry.endingBalance),
                         valueColor: entry.endingBalance == 0
                             ? AppColors.mdPrimary

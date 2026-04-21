@@ -885,6 +885,436 @@
   },
   "welcomeTrustNoBankSync": "Không sync bank",
   "@welcomeTrustNoBankSync": {
-    "description": "Trust badge label on the welcome page describing no bank connection."
+    "description": "Trust badge label on the welcome page describing no bank sync behavior."
+  },
+  "planExtraAmountSheetTitle": "Số tiền trả thêm",
+  "@planExtraAmountSheetTitle": {
+    "description": "Title of the extra amount bottom sheet."
+  },
+  "planExtraAmountSheetSubtitle": "Tăng tiền trả thêm hàng tháng giúp bạn rút ngắn đáng kể thời gian dứt nợ.",
+  "@planExtraAmountSheetSubtitle": {
+    "description": "Subtitle of the extra amount bottom sheet."
+  },
+  "planExtraAmountSheetSave": "Lưu thay đổi",
+  "@planExtraAmountSheetSave": {
+    "description": "Save action in the extra amount bottom sheet."
+  },
+  "planExtraAmountSheetReset": "Về mức $0 (Tối thiểu)",
+  "@planExtraAmountSheetReset": {
+    "description": "Reset action in the extra amount bottom sheet."
+  },
+  "planTimelineTitle": "Kế hoạch",
+  "@planTimelineTitle": {
+    "description": "Title of the timeline page."
+  },
+  "planTimelineEmptyTitle": "Chưa có kế hoạch để hiển thị",
+  "@planTimelineEmptyTitle": {
+    "description": "Empty state title on the timeline page."
+  },
+  "planTimelineEmptySubtitle": "Thêm ít nhất một khoản nợ để app recast timeline, debt-free date, và projected interest của bạn.",
+  "@planTimelineEmptySubtitle": {
+    "description": "Empty state subtitle on the timeline page."
+  },
+  "planTimelineAllPaidTitle": "Tất cả khoản nợ đã được trả xong",
+  "@planTimelineAllPaidTitle": {
+    "description": "Title when all debts are paid off on the timeline page."
+  },
+  "planTimelineAllPaidSubtitle": "Timeline tháng không còn khoản đang hoạt động. App vẫn giữ plan summary cuối cùng để bạn đối chiếu.",
+  "@planTimelineAllPaidSubtitle": {
+    "description": "Subtitle when all debts are paid off on the timeline page."
+  },
+  "planTimelineRecasting": "Đang recast...",
+  "@planTimelineRecasting": {
+    "description": "Text shown when timeline is recalculating."
+  },
+  "planTimelineStrategySummary": "{strategy} · Extra {amount} / tháng · {months} tháng projected",
+  "@planTimelineStrategySummary": {
+    "description": "Summary string showing strategy, extra amount and projected months.",
+    "placeholders": {
+      "strategy": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "planTimelineRecastNeutral": "Plan vừa được recast từ dữ liệu mới nhất.",
+  "@planTimelineRecastNeutral": {
+    "description": "Neutral banner text on timeline page."
+  },
+  "planTimelineComparisonTitle": "Projected vs minimum-only",
+  "@planTimelineComparisonTitle": {
+    "description": "Title of the interest comparison card."
+  },
+  "planTimelineComparisonCurrent": "Kế hoạch hiện tại",
+  "@planTimelineComparisonCurrent": {
+    "description": "Label for the current plan in comparison."
+  },
+  "planTimelineComparisonBaseline": "Minimum-only baseline",
+  "@planTimelineComparisonBaseline": {
+    "description": "Label for the baseline plan in comparison."
+  },
+  "planTimelineComparisonSaved": "Tiết kiệm được",
+  "@planTimelineComparisonSaved": {
+    "description": "Label for saved interest in comparison."
+  },
+  "planTimelineSectionTitle": "Timeline theo tháng",
+  "@planTimelineSectionTitle": {
+    "description": "Title for the monthly timeline section."
+  },
+  "planTimelineSectionSubtitle": "List-first view với payment breakdown, ending balance, và milestone payoff theo projection mới nhất.",
+  "@planTimelineSectionSubtitle": {
+    "description": "Subtitle for the monthly timeline section."
+  },
+  "planTimelineHeroDebtFree": "Debt-free date",
+  "@planTimelineHeroDebtFree": {
+    "description": "Hero stat label for debt-free date."
+  },
+  "planTimelineHeroProjectedInterest": "Projected interest",
+  "@planTimelineHeroProjectedInterest": {
+    "description": "Hero stat label for projected interest."
+  },
+  "planTimelineHeroSavedVsMinimum": "Saved vs minimum",
+  "@planTimelineHeroSavedVsMinimum": {
+    "description": "Hero stat label for saved interest."
+  },
+  "planTimelineMonthEndingBalance": "Ending balance",
+  "@planTimelineMonthEndingBalance": {
+    "description": "Mini stat label for ending balance."
+  },
+  "planTimelineMonthDebtsPaidOff": "Debts paid off",
+  "@planTimelineMonthDebtsPaidOff": {
+    "description": "Mini stat label for debts paid off."
+  },
+  "planTimelineMonthStartingBalance": "Starting balance",
+  "@planTimelineMonthStartingBalance": {
+    "description": "Comparison label for starting balance."
+  },
+  "planTimelineMonthInterestAccrued": "Interest accrued",
+  "@planTimelineMonthInterestAccrued": {
+    "description": "Comparison label for interest accrued."
+  },
+  "planTimelineMonthPaymentApplied": "Payment applied",
+  "@planTimelineMonthPaymentApplied": {
+    "description": "Comparison label for payment applied."
+  },
+  "planTimelineMonthPaymentLabel": "Payment",
+  "@planTimelineMonthPaymentLabel": {
+    "description": "Prefix for monthly payment amount."
+  },
+  "planTimelineMonthInterestLabel": "Interest",
+  "@planTimelineMonthInterestLabel": {
+    "description": "Prefix for monthly interest amount."
+  },
+  "planTimelinePaidOffBadge": "Paid off",
+  "@planTimelinePaidOffBadge": {
+  },
+  "onboardingDebtEntryTitle": "Thêm khoản nợ đầu tiên",
+  "@onboardingDebtEntryTitle": {
+    "description": "Title for debt entry page in onboarding"
+  },
+  "onboardingDebtEntrySave": "Lưu khoản nợ",
+  "@onboardingDebtEntrySave": {
+    "description": "Save action for debt entry page"
+  },
+  "onboardingStep1": "Bước 1/4",
+  "@onboardingStep1": {
+    "description": "Step 1 progress label"
+  },
+  "onboardingAddAnotherTitle": "Kiểm tra lại khoản nợ",
+  "@onboardingAddAnotherTitle": {
+    "description": "Title for add another debt page"
+  },
+  "onboardingStep2": "Bước 2/4",
+  "@onboardingStep2": {
+    "description": "Step 2 progress label"
+  },
+  "onboardingAddAnotherEmpty": "Bạn chưa lưu khoản nợ nào.",
+  "@onboardingAddAnotherEmpty": {
+    "description": "Empty state text for add another debt page"
+  },
+  "onboardingAddAnotherCount": "Bạn đã lưu {count} khoản nợ. Có thể thêm tiếp hoặc sang bước chọn chiến lược.",
+  "@onboardingAddAnotherCount": {
+    "description": "Text showing count of saved debts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingAddAnotherRequirement": "Hãy thêm ít nhất 1 khoản nợ để app có thể tiếp tục onboarding.",
+  "@onboardingAddAnotherRequirement": {
+    "description": "Requirement text for adding debt"
+  },
+  "onboardingAddAnotherContinue": "Sang bước chọn chiến lược",
+  "@onboardingAddAnotherContinue": {
+    "description": "Continue action to strategy selection"
+  },
+  "onboardingAddAnotherAddMore": "Thêm một khoản nợ nữa",
+  "@onboardingAddAnotherAddMore": {
+    "description": "Action to add another debt"
+  },
+  "onboardingStrategyTitle": "Chọn chiến lược",
+  "@onboardingStrategyTitle": {
+    "description": "Title for strategy selection page"
+  },
+  "onboardingStep3": "Bước 3/4",
+  "@onboardingStep3": {
+    "description": "Step 3 progress label"
+  },
+  "onboardingStrategySubtitle": "Chọn cách app ưu tiên khoản nợ khi bạn bắt đầu trả thêm.",
+  "@onboardingStrategySubtitle": {
+    "description": "Subtitle for strategy selection"
+  },
+  "onboardingStrategyRequirement": "Bạn cần ít nhất một khoản nợ để chọn chiến lược.",
+  "@onboardingStrategyRequirement": {
+    "description": "Requirement text for strategy selection"
+  },
+  "onboardingStrategyDescription": "App đang so projection thật của Snowball và Avalanche từ dữ liệu khoản nợ hiện tại của bạn.",
+  "@onboardingStrategyDescription": {
+    "description": "Description of strategy preview"
+  },
+  "onboardingStrategyEmptyTitle": "Chưa có khoản nợ để áp dụng chiến lược",
+  "@onboardingStrategyEmptyTitle": {
+    "description": "Empty state title for strategy selection"
+  },
+  "onboardingStrategyEmptySubtitle": "Hãy thêm ít nhất một khoản nợ trước khi tiếp tục.",
+  "@onboardingStrategyEmptySubtitle": {
+    "description": "Empty state subtitle for strategy selection"
+  },
+  "onboardingStrategyBackToAdd": "Quay lại thêm khoản nợ",
+  "@onboardingStrategyBackToAdd": {
+    "description": "Action to go back and add debt"
+  },
+  "onboardingStrategySnowballFallback": "Ưu tiên khoản có số dư nhỏ nhất.",
+  "@onboardingStrategySnowballFallback": {
+    "description": "Fallback text for snowball strategy"
+  },
+  "onboardingStrategyAvalancheFallback": "Ưu tiên APR cao nhất để giảm lãi.",
+  "@onboardingStrategyAvalancheFallback": {
+    "description": "Fallback text for avalanche strategy"
+  },
+  "onboardingStrategyChangeNote": "Bạn có thể đổi chiến lược bất kỳ lúc nào sau onboarding. Mỗi lần đổi, plan summary và timeline cache sẽ recast lại.",
+  "@onboardingStrategyChangeNote": {
+    "description": "Note about changing strategy later"
+  },
+  "onboardingStrategyContinue": "Lưu chiến lược và tiếp tục",
+  "@onboardingStrategyContinue": {
+    "description": "Action to save strategy and continue"
+  },
+  "onboardingStrategyTopPriorityExcluded": "Mọi khoản đang được exclude khỏi strategy.",
+  "@onboardingStrategyTopPriorityExcluded": {
+    "description": "Text when all debts are excluded from strategy"
+  },
+  "onboardingStrategyTopPriority": "Bắt đầu với {name}",
+  "@onboardingStrategyTopPriority": {
+    "description": "Text showing top priority debt",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingStrategyPreviewCalculating": "Đang tính payoff date và projected interest từ dữ liệu hiện tại...",
+  "@onboardingStrategyPreviewCalculating": {
+    "description": "Text when preview is calculating"
+  },
+  "onboardingStrategyPreviewRecasting": "Đang recast",
+  "@onboardingStrategyPreviewRecasting": {
+    "description": "Text when preview is recasting"
+  },
+  "onboardingStrategyPreviewSummary": "Debt-free {date} · {duration} · lãi {interest}",
+  "@onboardingStrategyPreviewSummary": {
+    "description": "Summary of strategy preview",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      },
+      "interest": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingStrategyPreviewSaved": "Tiết kiệm {saved} vs minimum-only",
+  "@onboardingStrategyPreviewSaved": {
+    "description": "Text showing saved interest in preview",
+    "placeholders": {
+      "saved": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingStrategyError": "Không thể lưu chiến lược. Vui lòng thử lại.",
+  "@onboardingStrategyError": {
+    "description": "Error message when saving strategy fails"
+  },
+  "onboardingStrategyPreviewTitle": "Preview hiện tại",
+  "@onboardingStrategyPreviewTitle": {
+    "description": "Title for strategy preview"
+  },
+  "onboardingExtraTitle": "Ngân sách thêm",
+  "@onboardingExtraTitle": {
+    "description": "Title for extra amount page"
+  },
+  "onboardingStep4": "Bước 4/4",
+  "@onboardingStep4": {
+    "description": "Step 4 progress label"
+  },
+  "onboardingExtraSubtitle": "Ngoài khoản tối thiểu, bạn muốn để thêm bao nhiêu mỗi tháng?",
+  "@onboardingExtraSubtitle": {
+    "description": "Subtitle for extra amount page"
+  },
+  "onboardingExtraDescription": "Mặc định là $0. Preview sẽ recast live sau 300ms để cho bạn thấy debt-free date và lãi tiết kiệm thật.",
+  "@onboardingExtraDescription": {
+    "description": "Description for extra amount"
+  },
+  "onboardingExtraMonthlyLabel": "Extra payment mỗi tháng",
+  "@onboardingExtraMonthlyLabel": {
+    "description": "Label for extra monthly payment"
+  },
+  "onboardingExtraTrackedCount": "{strategy} · {count} khoản đang theo dõi",
+  "@onboardingExtraTrackedCount": {
+    "description": "Text showing strategy and tracked count",
+    "placeholders": {
+      "strategy": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingExtraMaxLabel": "Max",
+  "@onboardingExtraMaxLabel": {
+    "description": "Label for max extra amount"
+  },
+  "onboardingExtraWhatsNextTitle": "Điều gì xảy ra tiếp theo?",
+  "@onboardingExtraWhatsNextTitle": {
+    "description": "Title for what's next section"
+  },
+  "onboardingExtraWhatsNextDescription": "Khoản extra này sẽ được dùng làm ngân sách trả thêm mỗi tháng. Khi bạn bấm lưu, plan summary và timeline cache sẽ recast ngay.",
+  "@onboardingExtraWhatsNextDescription": {
+    "description": "Description for what's next"
+  },
+  "onboardingExtraSave": "Lưu và xem tóm tắt",
+  "@onboardingExtraSave": {
+    "description": "Save action for extra amount"
+  },
+  "onboardingExtraUseZero": "Dùng $0 lúc này",
+  "@onboardingExtraUseZero": {
+    "description": "Action to use zero extra amount"
+  },
+  "onboardingExtraError": "Không thể lưu ngân sách thêm. Vui lòng thử lại.",
+  "@onboardingExtraError": {
+    "description": "Error message when saving extra amount fails"
+  },
+  "onboardingExtraPreviewEmpty": "Thêm ít nhất một khoản nợ để xem preview payoff thật.",
+  "@onboardingExtraPreviewEmpty": {
+    "description": "Empty state text for extra preview"
+  },
+  "onboardingExtraPreviewTitle": "Live preview",
+  "@onboardingExtraPreviewTitle": {
+    "description": "Title for live preview"
+  },
+  "onboardingExtraPreviewRecasting": "Đang recast...",
+  "@onboardingExtraPreviewRecasting": {
+    "description": "Text when extra preview is recasting"
+  },
+  "onboardingExtraPreviewDebtFree": "Debt-free date với extra {extraAmount} / tháng",
+  "@onboardingExtraPreviewDebtFree": {
+    "description": "Text showing debt-free date with extra amount",
+    "placeholders": {
+      "extraAmount": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingExtraPreviewProjectedInterest": "Projected interest",
+  "@onboardingExtraPreviewProjectedInterest": {
+    "description": "Label for projected interest"
+  },
+  "onboardingExtraPreviewSavedVsMinimum": "Saved vs minimum",
+  "@onboardingExtraPreviewSavedVsMinimum": {
+    "description": "Label for saved vs minimum"
+  },
+  "onboardingAhaEmpty": "Bạn chưa có khoản nợ nào trong kế hoạch.",
+  "@onboardingAhaEmpty": {
+    "description": "Empty state text for aha moment"
+  },
+  "onboardingAhaRecasting": "Kế hoạch của bạn đang recast.",
+  "@onboardingAhaRecasting": {
+    "description": "Text when aha moment is recasting"
+  },
+  "onboardingAhaDebtFree": "Bạn có thể debt-free vào {date}.",
+  "@onboardingAhaDebtFree": {
+    "description": "Text showing debt-free date in aha moment",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingAhaEmptySubtitle": "Hãy quay lại bước trước để thêm ít nhất một khoản nợ.",
+  "@onboardingAhaEmptySubtitle": {
+    "description": "Empty state subtitle for aha moment"
+  },
+  "onboardingAhaReadySubtitle": "Kế hoạch đã được recast. Checklist tháng này đã sẵn sàng.",
+  "@onboardingAhaReadySubtitle": {
+    "description": "Ready subtitle for aha moment"
+  },
+  "onboardingAhaSummaryTitle": "Tóm tắt hiện tại",
+  "@onboardingAhaSummaryTitle": {
+    "description": "Title for aha moment summary"
+  },
+  "onboardingAhaTotalBalance": "Tổng dư nợ",
+  "@onboardingAhaTotalBalance": {
+    "description": "Label for total balance"
+  },
+  "onboardingAhaTrackedCount": "Khoản theo dõi",
+  "@onboardingAhaTrackedCount": {
+    "description": "Label for tracked count"
+  },
+  "onboardingAhaDataCompact": "Dữ liệu lưu local. Không cần tài khoản.",
+  "@onboardingAhaDataCompact": {
+    "description": "Compact text for local data"
+  },
+  "onboardingAhaDataFull": "Dữ liệu của bạn đã được lưu local trên thiết bị. Từ đây bạn có thể vào Monthly Action View để check off payment thật và xem timeline recast ngay.",
+  "@onboardingAhaDataFull": {
+    "description": "Full text for local data"
+  },
+  "onboardingAhaBackToAdd": "Quay lại thêm khoản nợ",
+  "@onboardingAhaBackToAdd": {
+    "description": "Action to go back and add debt"
+  },
+  "onboardingAhaOpenMonthly": "Mở Monthly Action View",
+  "@onboardingAhaOpenMonthly": {
+    "description": "Action to open monthly view"
+  },
+  "onboardingAhaRecastingShort": "Đang recast",
+  "@onboardingAhaRecastingShort": {
+    "description": "Short text for recasting"
+  },
+  "onboardingAhaDebtFreeDate": "Debt-free date",
+  "@onboardingAhaDebtFreeDate": {
+    "description": "Label for debt-free date in aha moment"
+  },
+  "onboardingAhaExtraMonthly": "Extra / tháng",
+  "@onboardingAhaExtraMonthly": {
+    "description": "Label for extra monthly amount in aha moment"
+  },
+  "onboardingAhaProjectedInterest": "Projected interest",
+  "@onboardingAhaProjectedInterest": {
+    "description": "Label for projected interest in aha moment"
+  },
+  "onboardingAhaSavedVsMinimum": "Saved vs minimum",
+  "@onboardingAhaSavedVsMinimum": {
+    "description": "Label for saved vs minimum in aha moment"
   }
 }

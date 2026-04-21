@@ -1,5 +1,7 @@
+import 'package:debt_payoff_manager/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
@@ -46,7 +48,7 @@ class AddAnotherDebtPage extends StatelessWidget {
               icon: const Icon(LucideIcons.arrowLeft),
               onPressed: () => _handleBack(context),
             ),
-            title: const Text('Kiểm tra lại khoản nợ'),
+            title: Text(context.l10n.onboardingAddAnotherTitle),
             centerTitle: false,
           ),
           body: SafeArea(
@@ -65,7 +67,7 @@ class AddAnotherDebtPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Bước 2/4',
+                              context.l10n.onboardingStep2,
                               style: AppTextStyles.labelMedium.copyWith(
                                 color: AppColors.mdOnSurfaceVariant,
                               ),
@@ -82,8 +84,8 @@ class AddAnotherDebtPage extends StatelessWidget {
                             const SizedBox(height: 24),
                             Text(
                               debts.isEmpty
-                                  ? 'Bạn chưa lưu khoản nợ nào.'
-                                  : 'Bạn đã lưu ${debts.length} khoản nợ. Có thể thêm tiếp hoặc sang bước chọn chiến lược.',
+                                  ? context.l10n.onboardingAddAnotherEmpty
+                                  : context.l10n.onboardingAddAnotherCount(debts.length),
                               style: AppTextStyles.bodyMedium.copyWith(
                                 color: AppColors.mdOnSurfaceVariant,
                               ),
@@ -102,7 +104,7 @@ class AddAnotherDebtPage extends StatelessWidget {
                                   ),
                                 ),
                                 child: Text(
-                                  'Hãy thêm ít nhất 1 khoản nợ để app có thể tiếp tục onboarding.',
+                                  context.l10n.onboardingAddAnotherRequirement,
                                   style: AppTextStyles.bodyMedium,
                                 ),
                               )
@@ -185,7 +187,7 @@ class AddAnotherDebtPage extends StatelessWidget {
                           return SizedBox(
                             key: AppTestKeys.onboardingAddAnotherContinue,
                             child: AppButton.filledLg(
-                              label: 'Sang bước chọn chiến lược',
+                              label: context.l10n.onboardingAddAnotherContinue,
                               trailingIcon: LucideIcons.arrowRight,
                               fullWidth: true,
                               onPressed: state.debts.isEmpty
@@ -203,7 +205,7 @@ class AddAnotherDebtPage extends StatelessWidget {
                       SizedBox(
                         key: AppTestKeys.onboardingAddAnotherDebt,
                         child: AppButton.outlined(
-                          label: 'Thêm một khoản nợ nữa',
+                          label: context.l10n.onboardingAddAnotherAddMore,
                           fullWidth: true,
                           onPressed: () => navigateToOnboardingStep(
                             context,

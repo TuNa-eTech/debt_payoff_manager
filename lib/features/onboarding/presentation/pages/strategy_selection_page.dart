@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/extensions/context_extensions.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:uuid/uuid.dart';
@@ -92,7 +93,7 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
               icon: const Icon(LucideIcons.arrowLeft),
               onPressed: _handleBack,
             ),
-            title: const Text('Chọn chiến lược'),
+            title: Text(context.l10n.onboardingStrategyTitle),
           ),
           body: SafeArea(
             child: BlocBuilder<DebtsCubit, DebtsState>(
@@ -118,7 +119,7 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Bước 3/4',
+                              context.l10n.onboardingStep3,
                               style: AppTextStyles.labelMedium.copyWith(
                                 color: AppColors.mdOnSurfaceVariant,
                               ),
@@ -136,14 +137,14 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                             ),
                             const SizedBox(height: AppDimensions.xl),
                             Text(
-                              'Chọn cách app ưu tiên khoản nợ khi bạn bắt đầu trả thêm.',
+                              context.l10n.onboardingStrategySubtitle,
                               style: AppTextStyles.headlineSmall,
                             ),
                             const SizedBox(height: AppDimensions.sm),
                             Text(
                               trackedDebts.isEmpty
-                                  ? 'Bạn cần ít nhất một khoản nợ để chọn chiến lược.'
-                                  : 'App đang so projection thật của Snowball và Avalanche từ dữ liệu khoản nợ hiện tại của bạn.',
+                                  ? context.l10n.onboardingStrategyRequirement
+                                  : context.l10n.onboardingStrategyDescription,
                               style: AppTextStyles.bodyMedium.copyWith(
                                 color: AppColors.mdOnSurfaceVariant,
                               ),
@@ -156,17 +157,17 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Chưa có khoản nợ để áp dụng chiến lược',
+                                      context.l10n.onboardingStrategyEmptyTitle,
                                       style: AppTextStyles.titleMedium,
                                     ),
                                     const SizedBox(height: AppDimensions.sm),
                                     Text(
-                                      'Hãy thêm ít nhất một khoản nợ trước khi tiếp tục.',
+                                      context.l10n.onboardingStrategyEmptySubtitle,
                                       style: AppTextStyles.bodyMedium,
                                     ),
                                     const SizedBox(height: AppDimensions.md),
                                     AppButton.outlined(
-                                      label: 'Quay lại thêm khoản nợ',
+                                      label: context.l10n.onboardingStrategyBackToAdd,
                                       icon: LucideIcons.plus,
                                       onPressed: () => navigateToOnboardingStep(
                                         context,
@@ -182,15 +183,18 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                                 key: AppTestKeys.onboardingStrategySnowball,
                                 title: 'Snowball',
                                 subtitle: _topPriorityText(
+                                  context,
                                   strategy: Strategy.snowball,
                                   debts: trackedDebts,
                                 ),
                                 detail: _previewDetail(
+                                  context,
                                   _previews[Strategy.snowball],
                                 ),
                                 badgeText: _previewBadgeText(
+                                  context,
                                   _previews[Strategy.snowball],
-                                  fallback: 'Ưu tiên khoản có số dư nhỏ nhất.',
+                                  fallback: context.l10n.onboardingStrategySnowballFallback,
                                 ),
                                 badgeColor: AppColors.mdPrimaryContainer,
                                 badgeTextColor: AppColors.mdOnPrimaryContainer,
@@ -208,15 +212,18 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                                 key: AppTestKeys.onboardingStrategyAvalanche,
                                 title: 'Avalanche',
                                 subtitle: _topPriorityText(
+                                  context,
                                   strategy: Strategy.avalanche,
                                   debts: trackedDebts,
                                 ),
                                 detail: _previewDetail(
+                                  context,
                                   _previews[Strategy.avalanche],
                                 ),
                                 badgeText: _previewBadgeText(
+                                  context,
                                   _previews[Strategy.avalanche],
-                                  fallback: 'Ưu tiên APR cao nhất để giảm lãi.',
+                                  fallback: context.l10n.onboardingStrategyAvalancheFallback,
                                 ),
                                 badgeColor: AppColors.mdSecondaryContainer,
                                 badgeTextColor:
@@ -253,7 +260,7 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                                     const SizedBox(width: AppDimensions.sm),
                                     Expanded(
                                       child: Text(
-                                        'Bạn có thể đổi chiến lược bất kỳ lúc nào sau onboarding. Mỗi lần đổi, plan summary và timeline cache sẽ recast lại.',
+                                        context.l10n.onboardingStrategyChangeNote,
                                         style: AppTextStyles.bodySmall.copyWith(
                                           color: AppColors.mdOnSurfaceVariant,
                                         ),
@@ -278,7 +285,7 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                       child: SizedBox(
                         key: AppTestKeys.onboardingStrategyContinue,
                         child: AppButton.filledLg(
-                          label: 'Lưu chiến lược và tiếp tục',
+                          label: context.l10n.onboardingStrategyContinue,
                           trailingIcon: LucideIcons.arrowRight,
                           fullWidth: true,
                           loading: _isSaving,
@@ -364,7 +371,8 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
     return buffer.toString();
   }
 
-  String _topPriorityText({
+  String _topPriorityText(
+    BuildContext context, {
     required Strategy strategy,
     required List<Debt> debts,
   }) {
@@ -372,30 +380,37 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
         .where((debt) => !debt.excludeFromStrategy)
         .toList(growable: false);
     if (candidates.isEmpty) {
-      return 'Mọi khoản đang được exclude khỏi strategy.';
+      return context.l10n.onboardingStrategyTopPriorityExcluded;
     }
 
     final ordered = StrategySorter.sort(candidates, strategy);
-    return 'Bắt đầu với ${ordered.first.name}';
+    return context.l10n.onboardingStrategyTopPriority(ordered.first.name);
   }
 
-  String _previewDetail(StrategyPreview? preview) {
+  String _previewDetail(BuildContext context, StrategyPreview? preview) {
     if (preview == null) {
-      return 'Đang tính payoff date và projected interest từ dữ liệu hiện tại...';
+      return context.l10n.onboardingStrategyPreviewCalculating;
     }
 
     final payoffDate = preview.projectedDebtFreeDate == null
-        ? 'Đang recast'
+        ? context.l10n.onboardingStrategyPreviewRecasting
         : AppFormatters.formatMonthYear(preview.projectedDebtFreeDate!);
-    return 'Debt-free $payoffDate · ${AppFormatters.formatMonthsDuration(preview.projectedMonths)} · lãi ${AppFormatters.formatCents(preview.totalInterestProjected)}';
+    return context.l10n.onboardingStrategyPreviewSummary(
+      payoffDate,
+      AppFormatters.formatMonthsDuration(preview.projectedMonths),
+      AppFormatters.formatCents(preview.totalInterestProjected),
+    );
   }
 
   String _previewBadgeText(
+    BuildContext context,
     StrategyPreview? preview, {
     required String fallback,
   }) {
     if (preview == null) return fallback;
-    return 'Tiết kiệm ${AppFormatters.formatCents(preview.totalInterestSaved)} vs minimum-only';
+    return context.l10n.onboardingStrategyPreviewSaved(
+      AppFormatters.formatCents(preview.totalInterestSaved),
+    );
   }
 
   Future<void> _saveAndContinue() async {
@@ -419,8 +434,8 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Không thể lưu chiến lược. Vui lòng thử lại.'),
+        SnackBar(
+          content: Text(context.l10n.onboardingStrategyError),
         ),
       );
     } finally {
@@ -473,7 +488,7 @@ class _SelectedStrategyPreviewCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text('Preview hiện tại', style: AppTextStyles.titleSmall),
+              Text(context.l10n.onboardingStrategyPreviewTitle, style: AppTextStyles.titleSmall),
               const Spacer(),
               AppChip.status(label: strategy.label, icon: LucideIcons.sparkles),
             ],
@@ -485,7 +500,7 @@ class _SelectedStrategyPreviewCard extends StatelessWidget {
                 child: _PreviewStat(
                   label: 'Debt-free date',
                   value: preview?.projectedDebtFreeDate == null
-                      ? 'Đang recast'
+                      ? context.l10n.onboardingStrategyPreviewRecasting
                       : AppFormatters.formatShortMonthYear(
                           preview!.projectedDebtFreeDate!,
                         ),

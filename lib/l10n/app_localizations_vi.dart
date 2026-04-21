@@ -692,4 +692,336 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get welcomeTrustNoBankSync => 'Không sync bank';
+
+  @override
+  String get planExtraAmountSheetTitle => 'Số tiền trả thêm';
+
+  @override
+  String get planExtraAmountSheetSubtitle =>
+      'Tăng tiền trả thêm hàng tháng giúp bạn rút ngắn đáng kể thời gian dứt nợ.';
+
+  @override
+  String get planExtraAmountSheetSave => 'Lưu thay đổi';
+
+  @override
+  String get planExtraAmountSheetReset => 'Về mức \$0 (Tối thiểu)';
+
+  @override
+  String get planTimelineTitle => 'Kế hoạch';
+
+  @override
+  String get planTimelineEmptyTitle => 'Chưa có kế hoạch để hiển thị';
+
+  @override
+  String get planTimelineEmptySubtitle =>
+      'Thêm ít nhất một khoản nợ để app recast timeline, debt-free date, và projected interest của bạn.';
+
+  @override
+  String get planTimelineAllPaidTitle => 'Tất cả khoản nợ đã được trả xong';
+
+  @override
+  String get planTimelineAllPaidSubtitle =>
+      'Timeline tháng không còn khoản đang hoạt động. App vẫn giữ plan summary cuối cùng để bạn đối chiếu.';
+
+  @override
+  String get planTimelineRecasting => 'Đang recast...';
+
+  @override
+  String planTimelineStrategySummary(
+    String strategy,
+    String amount,
+    int months,
+  ) {
+    return '$strategy · Extra $amount / tháng · $months tháng projected';
+  }
+
+  @override
+  String get planTimelineRecastNeutral =>
+      'Plan vừa được recast từ dữ liệu mới nhất.';
+
+  @override
+  String get planTimelineComparisonTitle => 'Projected vs minimum-only';
+
+  @override
+  String get planTimelineComparisonCurrent => 'Kế hoạch hiện tại';
+
+  @override
+  String get planTimelineComparisonBaseline => 'Minimum-only baseline';
+
+  @override
+  String get planTimelineComparisonSaved => 'Tiết kiệm được';
+
+  @override
+  String get planTimelineSectionTitle => 'Timeline theo tháng';
+
+  @override
+  String get planTimelineSectionSubtitle =>
+      'List-first view với payment breakdown, ending balance, và milestone payoff theo projection mới nhất.';
+
+  @override
+  String get planTimelineHeroDebtFree => 'Debt-free date';
+
+  @override
+  String get planTimelineHeroProjectedInterest => 'Projected interest';
+
+  @override
+  String get planTimelineHeroSavedVsMinimum => 'Saved vs minimum';
+
+  @override
+  String get planTimelineMonthEndingBalance => 'Ending balance';
+
+  @override
+  String get planTimelineMonthDebtsPaidOff => 'Debts paid off';
+
+  @override
+  String get planTimelineMonthStartingBalance => 'Starting balance';
+
+  @override
+  String get planTimelineMonthInterestAccrued => 'Interest accrued';
+
+  @override
+  String get planTimelineMonthPaymentApplied => 'Payment applied';
+
+  @override
+  String get planTimelineMonthPaymentLabel => 'Payment';
+
+  @override
+  String get planTimelineMonthInterestLabel => 'Interest';
+
+  @override
+  String get planTimelinePaidOffBadge => 'Paid off';
+
+  @override
+  String get onboardingDebtEntryTitle => 'Thêm khoản nợ đầu tiên';
+
+  @override
+  String get onboardingDebtEntrySave => 'Lưu khoản nợ';
+
+  @override
+  String get onboardingStep1 => 'Bước 1/4';
+
+  @override
+  String get onboardingAddAnotherTitle => 'Kiểm tra lại khoản nợ';
+
+  @override
+  String get onboardingStep2 => 'Bước 2/4';
+
+  @override
+  String get onboardingAddAnotherEmpty => 'Bạn chưa lưu khoản nợ nào.';
+
+  @override
+  String onboardingAddAnotherCount(int count) {
+    return 'Bạn đã lưu $count khoản nợ. Có thể thêm tiếp hoặc sang bước chọn chiến lược.';
+  }
+
+  @override
+  String get onboardingAddAnotherRequirement =>
+      'Hãy thêm ít nhất 1 khoản nợ để app có thể tiếp tục onboarding.';
+
+  @override
+  String get onboardingAddAnotherContinue => 'Sang bước chọn chiến lược';
+
+  @override
+  String get onboardingAddAnotherAddMore => 'Thêm một khoản nợ nữa';
+
+  @override
+  String get onboardingStrategyTitle => 'Chọn chiến lược';
+
+  @override
+  String get onboardingStep3 => 'Bước 3/4';
+
+  @override
+  String get onboardingStrategySubtitle =>
+      'Chọn cách app ưu tiên khoản nợ khi bạn bắt đầu trả thêm.';
+
+  @override
+  String get onboardingStrategyRequirement =>
+      'Bạn cần ít nhất một khoản nợ để chọn chiến lược.';
+
+  @override
+  String get onboardingStrategyDescription =>
+      'App đang so projection thật của Snowball và Avalanche từ dữ liệu khoản nợ hiện tại của bạn.';
+
+  @override
+  String get onboardingStrategyEmptyTitle =>
+      'Chưa có khoản nợ để áp dụng chiến lược';
+
+  @override
+  String get onboardingStrategyEmptySubtitle =>
+      'Hãy thêm ít nhất một khoản nợ trước khi tiếp tục.';
+
+  @override
+  String get onboardingStrategyBackToAdd => 'Quay lại thêm khoản nợ';
+
+  @override
+  String get onboardingStrategySnowballFallback =>
+      'Ưu tiên khoản có số dư nhỏ nhất.';
+
+  @override
+  String get onboardingStrategyAvalancheFallback =>
+      'Ưu tiên APR cao nhất để giảm lãi.';
+
+  @override
+  String get onboardingStrategyChangeNote =>
+      'Bạn có thể đổi chiến lược bất kỳ lúc nào sau onboarding. Mỗi lần đổi, plan summary và timeline cache sẽ recast lại.';
+
+  @override
+  String get onboardingStrategyContinue => 'Lưu chiến lược và tiếp tục';
+
+  @override
+  String get onboardingStrategyTopPriorityExcluded =>
+      'Mọi khoản đang được exclude khỏi strategy.';
+
+  @override
+  String onboardingStrategyTopPriority(String name) {
+    return 'Bắt đầu với $name';
+  }
+
+  @override
+  String get onboardingStrategyPreviewCalculating =>
+      'Đang tính payoff date và projected interest từ dữ liệu hiện tại...';
+
+  @override
+  String get onboardingStrategyPreviewRecasting => 'Đang recast';
+
+  @override
+  String onboardingStrategyPreviewSummary(
+    String date,
+    String duration,
+    String interest,
+  ) {
+    return 'Debt-free $date · $duration · lãi $interest';
+  }
+
+  @override
+  String onboardingStrategyPreviewSaved(String saved) {
+    return 'Tiết kiệm $saved vs minimum-only';
+  }
+
+  @override
+  String get onboardingStrategyError =>
+      'Không thể lưu chiến lược. Vui lòng thử lại.';
+
+  @override
+  String get onboardingStrategyPreviewTitle => 'Preview hiện tại';
+
+  @override
+  String get onboardingExtraTitle => 'Ngân sách thêm';
+
+  @override
+  String get onboardingStep4 => 'Bước 4/4';
+
+  @override
+  String get onboardingExtraSubtitle =>
+      'Ngoài khoản tối thiểu, bạn muốn để thêm bao nhiêu mỗi tháng?';
+
+  @override
+  String get onboardingExtraDescription =>
+      'Mặc định là \$0. Preview sẽ recast live sau 300ms để cho bạn thấy debt-free date và lãi tiết kiệm thật.';
+
+  @override
+  String get onboardingExtraMonthlyLabel => 'Extra payment mỗi tháng';
+
+  @override
+  String onboardingExtraTrackedCount(String strategy, int count) {
+    return '$strategy · $count khoản đang theo dõi';
+  }
+
+  @override
+  String get onboardingExtraMaxLabel => 'Max';
+
+  @override
+  String get onboardingExtraWhatsNextTitle => 'Điều gì xảy ra tiếp theo?';
+
+  @override
+  String get onboardingExtraWhatsNextDescription =>
+      'Khoản extra này sẽ được dùng làm ngân sách trả thêm mỗi tháng. Khi bạn bấm lưu, plan summary và timeline cache sẽ recast ngay.';
+
+  @override
+  String get onboardingExtraSave => 'Lưu và xem tóm tắt';
+
+  @override
+  String get onboardingExtraUseZero => 'Dùng \$0 lúc này';
+
+  @override
+  String get onboardingExtraError =>
+      'Không thể lưu ngân sách thêm. Vui lòng thử lại.';
+
+  @override
+  String get onboardingExtraPreviewEmpty =>
+      'Thêm ít nhất một khoản nợ để xem preview payoff thật.';
+
+  @override
+  String get onboardingExtraPreviewTitle => 'Live preview';
+
+  @override
+  String get onboardingExtraPreviewRecasting => 'Đang recast...';
+
+  @override
+  String onboardingExtraPreviewDebtFree(String extraAmount) {
+    return 'Debt-free date với extra $extraAmount / tháng';
+  }
+
+  @override
+  String get onboardingExtraPreviewProjectedInterest => 'Projected interest';
+
+  @override
+  String get onboardingExtraPreviewSavedVsMinimum => 'Saved vs minimum';
+
+  @override
+  String get onboardingAhaEmpty => 'Bạn chưa có khoản nợ nào trong kế hoạch.';
+
+  @override
+  String get onboardingAhaRecasting => 'Kế hoạch của bạn đang recast.';
+
+  @override
+  String onboardingAhaDebtFree(String date) {
+    return 'Bạn có thể debt-free vào $date.';
+  }
+
+  @override
+  String get onboardingAhaEmptySubtitle =>
+      'Hãy quay lại bước trước để thêm ít nhất một khoản nợ.';
+
+  @override
+  String get onboardingAhaReadySubtitle =>
+      'Kế hoạch đã được recast. Checklist tháng này đã sẵn sàng.';
+
+  @override
+  String get onboardingAhaSummaryTitle => 'Tóm tắt hiện tại';
+
+  @override
+  String get onboardingAhaTotalBalance => 'Tổng dư nợ';
+
+  @override
+  String get onboardingAhaTrackedCount => 'Khoản theo dõi';
+
+  @override
+  String get onboardingAhaDataCompact =>
+      'Dữ liệu lưu local. Không cần tài khoản.';
+
+  @override
+  String get onboardingAhaDataFull =>
+      'Dữ liệu của bạn đã được lưu local trên thiết bị. Từ đây bạn có thể vào Monthly Action View để check off payment thật và xem timeline recast ngay.';
+
+  @override
+  String get onboardingAhaBackToAdd => 'Quay lại thêm khoản nợ';
+
+  @override
+  String get onboardingAhaOpenMonthly => 'Mở Monthly Action View';
+
+  @override
+  String get onboardingAhaRecastingShort => 'Đang recast';
+
+  @override
+  String get onboardingAhaDebtFreeDate => 'Debt-free date';
+
+  @override
+  String get onboardingAhaExtraMonthly => 'Extra / tháng';
+
+  @override
+  String get onboardingAhaProjectedInterest => 'Projected interest';
+
+  @override
+  String get onboardingAhaSavedVsMinimum => 'Saved vs minimum';
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/extensions/context_extensions.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -147,10 +148,10 @@ class AhaMomentPage extends StatelessWidget {
                                 SizedBox(height: isCompact ? AppDimensions.sm : AppDimensions.md),
                                 Text(
                                   trackedDebts.isEmpty
-                                      ? 'Bạn chưa có khoản nợ nào trong kế hoạch.'
+                                      ? context.l10n.onboardingAhaEmpty
                                       : payoffDate == null
-                                      ? 'Kế hoạch của bạn đang recast.'
-                                      : 'Bạn có thể debt-free vào ${AppFormatters.formatMonthYear(payoffDate)}.',
+                                      ? context.l10n.onboardingAhaRecasting
+                                      : context.l10n.onboardingAhaDebtFree(AppFormatters.formatMonthYear(payoffDate)),
                                   style: (isCompact
                                           ? AppTextStyles.headlineSmall
                                           : AppTextStyles.headlineMedium)
@@ -163,8 +164,8 @@ class AhaMomentPage extends StatelessWidget {
                                   const SizedBox(height: AppDimensions.sm),
                                   Text(
                                     trackedDebts.isEmpty
-                                        ? 'Hãy quay lại bước trước để thêm ít nhất một khoản nợ.'
-                                        : 'Kế hoạch đã được recast. Checklist tháng này đã sẵn sàng.',
+                                        ? context.l10n.onboardingAhaEmptySubtitle
+                                        : context.l10n.onboardingAhaReadySubtitle,
                                     style: AppTextStyles.bodyLarge.copyWith(
                                       color: AppColors.mdOnPrimary.withValues(
                                         alpha: 0.84,
@@ -187,7 +188,7 @@ class AhaMomentPage extends StatelessWidget {
                                       Row(
                                         children: [
                                           Text(
-                                            'Tóm tắt hiện tại',
+                                            context.l10n.onboardingAhaSummaryTitle,
                                             style: AppTextStyles.titleMedium,
                                           ),
                                           const Spacer(),
@@ -203,7 +204,7 @@ class AhaMomentPage extends StatelessWidget {
                                         children: [
                                           Expanded(
                                             child: _SummaryStat(
-                                              label: 'Tổng dư nợ',
+                                              label: context.l10n.onboardingAhaTotalBalance,
                                               value: AppFormatters.formatCents(
                                                 totalBalance,
                                               ),
@@ -212,9 +213,9 @@ class AhaMomentPage extends StatelessWidget {
                                           ),
                                           Expanded(
                                             child: _SummaryStat(
-                                              label: 'Debt-free date',
+                                              label: context.l10n.onboardingAhaDebtFreeDate,
                                               value: payoffDate == null
-                                                  ? 'Đang recast'
+                                                  ? context.l10n.onboardingAhaRecasting
                                                   : AppFormatters.formatShortMonthYear(
                                                       payoffDate,
                                                     ),
@@ -228,14 +229,14 @@ class AhaMomentPage extends StatelessWidget {
                                         children: [
                                           Expanded(
                                             child: _SummaryStat(
-                                              label: 'Khoản theo dõi',
+                                              label: context.l10n.onboardingAhaTrackedCount,
                                               value: '${trackedDebts.length}',
                                               isCompact: isCompact,
                                             ),
                                           ),
                                           Expanded(
                                             child: _SummaryStat(
-                                              label: 'Extra / tháng',
+                                              label: context.l10n.onboardingAhaExtraMonthly,
                                               value: AppFormatters.formatCents(
                                                 plan?.extraMonthlyAmount ?? 0,
                                               ),
@@ -249,7 +250,7 @@ class AhaMomentPage extends StatelessWidget {
                                         children: [
                                           Expanded(
                                             child: _SummaryStat(
-                                              label: 'Projected interest',
+                                              label: context.l10n.onboardingAhaProjectedInterest,
                                               value: AppFormatters.formatCents(
                                                 projectedInterest,
                                               ),
@@ -258,7 +259,7 @@ class AhaMomentPage extends StatelessWidget {
                                           ),
                                           Expanded(
                                             child: _SummaryStat(
-                                              label: 'Saved vs minimum',
+                                              label: context.l10n.onboardingAhaSavedVsMinimum,
                                               value: AppFormatters.formatCents(
                                                 interestSaved,
                                               ),
@@ -295,8 +296,8 @@ class AhaMomentPage extends StatelessWidget {
                                             Expanded(
                                               child: Text(
                                                 isCompact
-                                                    ? 'Dữ liệu lưu local. Không cần tài khoản.'
-                                                    : 'Dữ liệu của bạn đã được lưu local trên thiết bị. Từ đây bạn có thể vào Monthly Action View để check off payment thật và xem timeline recast ngay.',
+                                                    ? context.l10n.onboardingAhaDataCompact
+                                                    : context.l10n.onboardingAhaDataFull,
                                                 style: AppTextStyles.bodySmall
                                                     .copyWith(
                                                       color: AppColors
@@ -325,8 +326,8 @@ class AhaMomentPage extends StatelessWidget {
                             key: AppTestKeys.onboardingComplete,
                             child: AppButton.filledLg(
                               label: trackedDebts.isEmpty
-                                  ? 'Quay lại thêm khoản nợ'
-                                  : 'Mở Monthly Action View',
+                                  ? context.l10n.onboardingAhaBackToAdd
+                                  : context.l10n.onboardingAhaOpenMonthly,
                               trailingIcon: trackedDebts.isEmpty
                                   ? null
                                   : LucideIcons.arrowRight,

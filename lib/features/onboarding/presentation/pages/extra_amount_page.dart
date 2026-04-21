@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/extensions/context_extensions.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:uuid/uuid.dart';
@@ -97,7 +98,7 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
               icon: const Icon(LucideIcons.arrowLeft),
               onPressed: _handleBack,
             ),
-            title: const Text('Ngân sách thêm'),
+            title: Text(context.l10n.onboardingExtraTitle),
           ),
           body: SafeArea(
             child: BlocBuilder<DebtsCubit, DebtsState>(
@@ -127,7 +128,7 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Bước 4/4',
+                              context.l10n.onboardingStep4,
                               style: AppTextStyles.labelMedium.copyWith(
                                 color: AppColors.mdPrimary,
                               ),
@@ -145,12 +146,12 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                             ),
                             const SizedBox(height: AppDimensions.xl),
                             Text(
-                              'Ngoài khoản tối thiểu, bạn muốn để thêm bao nhiêu mỗi tháng?',
+                              context.l10n.onboardingExtraSubtitle,
                               style: AppTextStyles.headlineSmall,
                             ),
                             const SizedBox(height: AppDimensions.sm),
                             Text(
-                              'Mặc định là \$0. Preview sẽ recast live sau 300ms để cho bạn thấy debt-free date và lãi tiết kiệm thật.',
+                              context.l10n.onboardingExtraDescription,
                               style: AppTextStyles.bodyMedium.copyWith(
                                 color: AppColors.mdOnSurfaceVariant,
                               ),
@@ -172,7 +173,7 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                               child: Column(
                                 children: [
                                   Text(
-                                    'Extra payment mỗi tháng',
+                                    context.l10n.onboardingExtraMonthlyLabel,
                                     style: AppTextStyles.labelMedium.copyWith(
                                       color: AppColors.mdOnPrimaryContainer,
                                     ),
@@ -186,7 +187,7 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                                   ),
                                   const SizedBox(height: AppDimensions.sm),
                                   Text(
-                                    '$strategyLabel · $trackedCount khoản đang theo dõi',
+                                    context.l10n.onboardingExtraTrackedCount(strategyLabel, trackedCount),
                                     style: AppTextStyles.bodySmall.copyWith(
                                       color: AppColors.mdOnPrimaryContainer
                                           .withValues(alpha: 0.82),
@@ -268,7 +269,7 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                                   ),
                                 ),
                                 _AmountChip(
-                                  label: 'Max',
+                                  label: context.l10n.onboardingExtraMaxLabel,
                                   onTap: () => _setExtraAmount(
                                     1000,
                                     trackedDebts: trackedDebts,
@@ -299,14 +300,14 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                                       ),
                                       const SizedBox(width: AppDimensions.sm),
                                       Text(
-                                        'Điều gì xảy ra tiếp theo?',
+                                        context.l10n.onboardingExtraWhatsNextTitle,
                                         style: AppTextStyles.titleSmall,
                                       ),
                                     ],
                                   ),
                                   const SizedBox(height: AppDimensions.sm),
                                   Text(
-                                    'Khoản extra này sẽ được dùng làm ngân sách trả thêm mỗi tháng. Khi bạn bấm lưu, plan summary và timeline cache sẽ recast ngay.',
+                                    context.l10n.onboardingExtraWhatsNextDescription,
                                     style: AppTextStyles.bodyMedium.copyWith(
                                       color: AppColors.mdOnSurfaceVariant,
                                     ),
@@ -332,7 +333,7 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                           SizedBox(
                             key: AppTestKeys.onboardingExtraContinue,
                             child: AppButton.filledLg(
-                              label: 'Lưu và xem tóm tắt',
+                              label: context.l10n.onboardingExtraSave,
                               trailingIcon: LucideIcons.arrowRight,
                               fullWidth: true,
                               loading: _isSaving,
@@ -343,7 +344,7 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                           ),
                           const SizedBox(height: AppDimensions.md),
                           AppButton.text(
-                            label: 'Dùng \$0 lúc này',
+                            label: context.l10n.onboardingExtraUseZero,
                             onPressed: _isSaving
                                 ? null
                                 : () => _saveAndContinue(amountCents: 0),
@@ -454,8 +455,8 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Không thể lưu ngân sách thêm. Vui lòng thử lại.'),
+        SnackBar(
+          content: Text(context.l10n.onboardingExtraError),
         ),
       );
     } finally {
@@ -509,7 +510,7 @@ class _ExtraPreviewCard extends StatelessWidget {
       return AppCard(
         color: AppColors.mdSurfaceContainerLow,
         child: Text(
-          'Thêm ít nhất một khoản nợ để xem preview payoff thật.',
+          context.l10n.onboardingExtraPreviewEmpty,
           style: AppTextStyles.bodyMedium,
         ),
       );
@@ -532,7 +533,7 @@ class _ExtraPreviewCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text('Live preview', style: AppTextStyles.titleSmall),
+              Text(context.l10n.onboardingExtraPreviewTitle, style: AppTextStyles.titleSmall),
               const SizedBox(width: AppDimensions.sm),
               AppChip.status(label: strategyLabel, icon: LucideIcons.zap),
             ],
@@ -540,7 +541,7 @@ class _ExtraPreviewCard extends StatelessWidget {
           const SizedBox(height: AppDimensions.md),
           Text(
             preview?.projectedDebtFreeDate == null
-                ? 'Đang recast...'
+                ? context.l10n.onboardingExtraPreviewRecasting
                 : AppFormatters.formatMonthYear(
                     preview!.projectedDebtFreeDate!,
                   ),
@@ -550,7 +551,7 @@ class _ExtraPreviewCard extends StatelessWidget {
           ),
           const SizedBox(height: AppDimensions.xs),
           Text(
-            'Debt-free date với extra ${AppFormatters.formatCents(extraMonthlyAmount)} / tháng',
+            context.l10n.onboardingExtraPreviewDebtFree(AppFormatters.formatCents(extraMonthlyAmount)),
             style: AppTextStyles.bodySmall.copyWith(
               color: AppColors.mdOnSurfaceVariant,
             ),
@@ -560,7 +561,7 @@ class _ExtraPreviewCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _PreviewStat(
-                  label: 'Projected interest',
+                  label: context.l10n.onboardingExtraPreviewProjectedInterest,
                   value: preview == null
                       ? '--'
                       : AppFormatters.formatCents(
@@ -571,7 +572,7 @@ class _ExtraPreviewCard extends StatelessWidget {
               const SizedBox(width: AppDimensions.md),
               Expanded(
                 child: _PreviewStat(
-                  label: 'Saved vs minimum',
+                  label: context.l10n.onboardingExtraPreviewSavedVsMinimum,
                   value: preview == null
                       ? '--'
                       : AppFormatters.formatCents(preview!.totalInterestSaved),

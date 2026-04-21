@@ -885,6 +885,436 @@
   },
   "welcomeTrustNoBankSync": "No bank sync",
   "@welcomeTrustNoBankSync": {
-    "description": "Trust badge label on the welcome page describing no bank connection."
+    "description": "Trust badge label on the welcome page describing no bank sync behavior."
+  },
+  "planExtraAmountSheetTitle": "Extra amount",
+  "@planExtraAmountSheetTitle": {
+    "description": "Title of the extra amount bottom sheet."
+  },
+  "planExtraAmountSheetSubtitle": "Increasing your extra monthly payment helps you shorten your debt-free timeline significantly.",
+  "@planExtraAmountSheetSubtitle": {
+    "description": "Subtitle of the extra amount bottom sheet."
+  },
+  "planExtraAmountSheetSave": "Save changes",
+  "@planExtraAmountSheetSave": {
+    "description": "Save action in the extra amount bottom sheet."
+  },
+  "planExtraAmountSheetReset": "Reset to $0 (Minimum)",
+  "@planExtraAmountSheetReset": {
+    "description": "Reset action in the extra amount bottom sheet."
+  },
+  "planTimelineTitle": "Plan",
+  "@planTimelineTitle": {
+    "description": "Title of the timeline page."
+  },
+  "planTimelineEmptyTitle": "No plan to show yet",
+  "@planTimelineEmptyTitle": {
+    "description": "Empty state title on the timeline page."
+  },
+  "planTimelineEmptySubtitle": "Add at least one debt so the app can recast your timeline, debt-free date, and projected interest.",
+  "@planTimelineEmptySubtitle": {
+    "description": "Empty state subtitle on the timeline page."
+  },
+  "planTimelineAllPaidTitle": "All debts are paid off",
+  "@planTimelineAllPaidTitle": {
+    "description": "Title when all debts are paid off on the timeline page."
+  },
+  "planTimelineAllPaidSubtitle": "Monthly timeline has no active debts. The app keeps your last plan summary for reference.",
+  "@planTimelineAllPaidSubtitle": {
+    "description": "Subtitle when all debts are paid off on the timeline page."
+  },
+  "planTimelineRecasting": "Recasting...",
+  "@planTimelineRecasting": {
+    "description": "Text shown when timeline is recalculating."
+  },
+  "planTimelineStrategySummary": "{strategy} · Extra {amount} / month · {months} months projected",
+  "@planTimelineStrategySummary": {
+    "description": "Summary string showing strategy, extra amount and projected months.",
+    "placeholders": {
+      "strategy": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "planTimelineRecastNeutral": "Plan was just recast from latest data.",
+  "@planTimelineRecastNeutral": {
+    "description": "Neutral banner text on timeline page."
+  },
+  "planTimelineComparisonTitle": "Projected vs minimum-only",
+  "@planTimelineComparisonTitle": {
+    "description": "Title of the interest comparison card."
+  },
+  "planTimelineComparisonCurrent": "Current plan",
+  "@planTimelineComparisonCurrent": {
+    "description": "Label for the current plan in comparison."
+  },
+  "planTimelineComparisonBaseline": "Minimum-only baseline",
+  "@planTimelineComparisonBaseline": {
+    "description": "Label for the baseline plan in comparison."
+  },
+  "planTimelineComparisonSaved": "Saved interest",
+  "@planTimelineComparisonSaved": {
+    "description": "Label for saved interest in comparison."
+  },
+  "planTimelineSectionTitle": "Monthly timeline",
+  "@planTimelineSectionTitle": {
+    "description": "Title for the monthly timeline section."
+  },
+  "planTimelineSectionSubtitle": "List-first view with payment breakdown, ending balance, and milestone payoff based on the latest projection.",
+  "@planTimelineSectionSubtitle": {
+    "description": "Subtitle for the monthly timeline section."
+  },
+  "planTimelineHeroDebtFree": "Debt-free date",
+  "@planTimelineHeroDebtFree": {
+    "description": "Hero stat label for debt-free date."
+  },
+  "planTimelineHeroProjectedInterest": "Projected interest",
+  "@planTimelineHeroProjectedInterest": {
+    "description": "Hero stat label for projected interest."
+  },
+  "planTimelineHeroSavedVsMinimum": "Saved vs minimum",
+  "@planTimelineHeroSavedVsMinimum": {
+    "description": "Hero stat label for saved interest."
+  },
+  "planTimelineMonthEndingBalance": "Ending balance",
+  "@planTimelineMonthEndingBalance": {
+    "description": "Mini stat label for ending balance."
+  },
+  "planTimelineMonthDebtsPaidOff": "Debts paid off",
+  "@planTimelineMonthDebtsPaidOff": {
+    "description": "Mini stat label for debts paid off."
+  },
+  "planTimelineMonthStartingBalance": "Starting balance",
+  "@planTimelineMonthStartingBalance": {
+    "description": "Comparison label for starting balance."
+  },
+  "planTimelineMonthInterestAccrued": "Interest accrued",
+  "@planTimelineMonthInterestAccrued": {
+    "description": "Comparison label for interest accrued."
+  },
+  "planTimelineMonthPaymentApplied": "Payment applied",
+  "@planTimelineMonthPaymentApplied": {
+    "description": "Comparison label for payment applied."
+  },
+  "planTimelineMonthPaymentLabel": "Payment",
+  "@planTimelineMonthPaymentLabel": {
+    "description": "Prefix for monthly payment amount."
+  },
+  "planTimelineMonthInterestLabel": "Interest",
+  "@planTimelineMonthInterestLabel": {
+    "description": "Prefix for monthly interest amount."
+  },
+  "planTimelinePaidOffBadge": "Paid off",
+  "@planTimelinePaidOffBadge": {
+  },
+  "onboardingDebtEntryTitle": "Add Your First Debt",
+  "@onboardingDebtEntryTitle": {
+    "description": "Title for debt entry page in onboarding"
+  },
+  "onboardingDebtEntrySave": "Save Debt",
+  "@onboardingDebtEntrySave": {
+    "description": "Save action for debt entry page"
+  },
+  "onboardingStep1": "Step 1/4",
+  "@onboardingStep1": {
+    "description": "Step 1 progress label"
+  },
+  "onboardingAddAnotherTitle": "Review Your Debts",
+  "@onboardingAddAnotherTitle": {
+    "description": "Title for add another debt page"
+  },
+  "onboardingStep2": "Step 2/4",
+  "@onboardingStep2": {
+    "description": "Step 2 progress label"
+  },
+  "onboardingAddAnotherEmpty": "You haven't saved any debts yet.",
+  "@onboardingAddAnotherEmpty": {
+    "description": "Empty state text for add another debt page"
+  },
+  "onboardingAddAnotherCount": "You have saved {count} debts. You can add more or continue to strategy selection.",
+  "@onboardingAddAnotherCount": {
+    "description": "Text showing count of saved debts",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingAddAnotherRequirement": "Please add at least 1 debt to continue onboarding.",
+  "@onboardingAddAnotherRequirement": {
+    "description": "Requirement text for adding debt"
+  },
+  "onboardingAddAnotherContinue": "Choose Strategy",
+  "@onboardingAddAnotherContinue": {
+    "description": "Continue action to strategy selection"
+  },
+  "onboardingAddAnotherAddMore": "Add Another Debt",
+  "@onboardingAddAnotherAddMore": {
+    "description": "Action to add another debt"
+  },
+  "onboardingStrategyTitle": "Choose Strategy",
+  "@onboardingStrategyTitle": {
+    "description": "Title for strategy selection page"
+  },
+  "onboardingStep3": "Step 3/4",
+  "@onboardingStep3": {
+    "description": "Step 3 progress label"
+  },
+  "onboardingStrategySubtitle": "Choose how the app prioritizes debts when you pay extra.",
+  "@onboardingStrategySubtitle": {
+    "description": "Subtitle for strategy selection"
+  },
+  "onboardingStrategyRequirement": "You need at least one debt to choose a strategy.",
+  "@onboardingStrategyRequirement": {
+    "description": "Requirement text for strategy selection"
+  },
+  "onboardingStrategyDescription": "The app is comparing live projections of Snowball and Avalanche based on your current debts.",
+  "@onboardingStrategyDescription": {
+    "description": "Description of strategy preview"
+  },
+  "onboardingStrategyEmptyTitle": "No debts to apply strategy",
+  "@onboardingStrategyEmptyTitle": {
+    "description": "Empty state title for strategy selection"
+  },
+  "onboardingStrategyEmptySubtitle": "Please add at least one debt before continuing.",
+  "@onboardingStrategyEmptySubtitle": {
+    "description": "Empty state subtitle for strategy selection"
+  },
+  "onboardingStrategyBackToAdd": "Go back and add debt",
+  "@onboardingStrategyBackToAdd": {
+    "description": "Action to go back and add debt"
+  },
+  "onboardingStrategySnowballFallback": "Prioritize the smallest balance.",
+  "@onboardingStrategySnowballFallback": {
+    "description": "Fallback text for snowball strategy"
+  },
+  "onboardingStrategyAvalancheFallback": "Prioritize the highest APR to reduce interest.",
+  "@onboardingStrategyAvalancheFallback": {
+    "description": "Fallback text for avalanche strategy"
+  },
+  "onboardingStrategyChangeNote": "You can change your strategy anytime after onboarding. The plan summary and timeline will recast automatically.",
+  "@onboardingStrategyChangeNote": {
+    "description": "Note about changing strategy later"
+  },
+  "onboardingStrategyContinue": "Save Strategy & Continue",
+  "@onboardingStrategyContinue": {
+    "description": "Action to save strategy and continue"
+  },
+  "onboardingStrategyTopPriorityExcluded": "All debts are currently excluded from the strategy.",
+  "@onboardingStrategyTopPriorityExcluded": {
+    "description": "Text when all debts are excluded from strategy"
+  },
+  "onboardingStrategyTopPriority": "Start with {name}",
+  "@onboardingStrategyTopPriority": {
+    "description": "Text showing top priority debt",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingStrategyPreviewCalculating": "Calculating payoff date and projected interest from current data...",
+  "@onboardingStrategyPreviewCalculating": {
+    "description": "Text when preview is calculating"
+  },
+  "onboardingStrategyPreviewRecasting": "Recasting",
+  "@onboardingStrategyPreviewRecasting": {
+    "description": "Text when preview is recasting"
+  },
+  "onboardingStrategyPreviewSummary": "Debt-free {date} · {duration} · interest {interest}",
+  "@onboardingStrategyPreviewSummary": {
+    "description": "Summary of strategy preview",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      },
+      "interest": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingStrategyPreviewSaved": "Save {saved} vs minimum-only",
+  "@onboardingStrategyPreviewSaved": {
+    "description": "Text showing saved interest in preview",
+    "placeholders": {
+      "saved": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingStrategyError": "Could not save strategy. Please try again.",
+  "@onboardingStrategyError": {
+    "description": "Error message when saving strategy fails"
+  },
+  "onboardingStrategyPreviewTitle": "Current Preview",
+  "@onboardingStrategyPreviewTitle": {
+    "description": "Title for strategy preview"
+  },
+  "onboardingExtraTitle": "Extra Budget",
+  "@onboardingExtraTitle": {
+    "description": "Title for extra amount page"
+  },
+  "onboardingStep4": "Step 4/4",
+  "@onboardingStep4": {
+    "description": "Step 4 progress label"
+  },
+  "onboardingExtraSubtitle": "Besides the minimum, how much extra do you want to pay each month?",
+  "@onboardingExtraSubtitle": {
+    "description": "Subtitle for extra amount page"
+  },
+  "onboardingExtraDescription": "Default is $0. Preview will live recast after 300ms to show your actual debt-free date and saved interest.",
+  "@onboardingExtraDescription": {
+    "description": "Description for extra amount"
+  },
+  "onboardingExtraMonthlyLabel": "Extra payment per month",
+  "@onboardingExtraMonthlyLabel": {
+    "description": "Label for extra monthly payment"
+  },
+  "onboardingExtraTrackedCount": "{strategy} · Tracking {count} debts",
+  "@onboardingExtraTrackedCount": {
+    "description": "Text showing strategy and tracked count",
+    "placeholders": {
+      "strategy": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "onboardingExtraMaxLabel": "Max",
+  "@onboardingExtraMaxLabel": {
+    "description": "Label for max extra amount"
+  },
+  "onboardingExtraWhatsNextTitle": "What happens next?",
+  "@onboardingExtraWhatsNextTitle": {
+    "description": "Title for what's next section"
+  },
+  "onboardingExtraWhatsNextDescription": "This extra amount will be used as additional budget each month. When you save, your plan summary and timeline cache will recast immediately.",
+  "@onboardingExtraWhatsNextDescription": {
+    "description": "Description for what's next"
+  },
+  "onboardingExtraSave": "Save and view summary",
+  "@onboardingExtraSave": {
+    "description": "Save action for extra amount"
+  },
+  "onboardingExtraUseZero": "Use $0 for now",
+  "@onboardingExtraUseZero": {
+    "description": "Action to use zero extra amount"
+  },
+  "onboardingExtraError": "Could not save extra budget. Please try again.",
+  "@onboardingExtraError": {
+    "description": "Error message when saving extra amount fails"
+  },
+  "onboardingExtraPreviewEmpty": "Add at least one debt to see the actual payoff preview.",
+  "@onboardingExtraPreviewEmpty": {
+    "description": "Empty state text for extra preview"
+  },
+  "onboardingExtraPreviewTitle": "Live preview",
+  "@onboardingExtraPreviewTitle": {
+    "description": "Title for live preview"
+  },
+  "onboardingExtraPreviewRecasting": "Recasting...",
+  "@onboardingExtraPreviewRecasting": {
+    "description": "Text when extra preview is recasting"
+  },
+  "onboardingExtraPreviewDebtFree": "Debt-free date with extra {extraAmount} / month",
+  "@onboardingExtraPreviewDebtFree": {
+    "description": "Text showing debt-free date with extra amount",
+    "placeholders": {
+      "extraAmount": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingExtraPreviewProjectedInterest": "Projected interest",
+  "@onboardingExtraPreviewProjectedInterest": {
+    "description": "Label for projected interest"
+  },
+  "onboardingExtraPreviewSavedVsMinimum": "Saved vs minimum",
+  "@onboardingExtraPreviewSavedVsMinimum": {
+    "description": "Label for saved vs minimum"
+  },
+  "onboardingAhaEmpty": "You have no debts in your plan yet.",
+  "@onboardingAhaEmpty": {
+    "description": "Empty state text for aha moment"
+  },
+  "onboardingAhaRecasting": "Your plan is recasting.",
+  "@onboardingAhaRecasting": {
+    "description": "Text when aha moment is recasting"
+  },
+  "onboardingAhaDebtFree": "You can be debt-free by {date}.",
+  "@onboardingAhaDebtFree": {
+    "description": "Text showing debt-free date in aha moment",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingAhaEmptySubtitle": "Please go back to the previous step and add at least one debt.",
+  "@onboardingAhaEmptySubtitle": {
+    "description": "Empty state subtitle for aha moment"
+  },
+  "onboardingAhaReadySubtitle": "Plan has been recast. Your monthly checklist is ready.",
+  "@onboardingAhaReadySubtitle": {
+    "description": "Ready subtitle for aha moment"
+  },
+  "onboardingAhaSummaryTitle": "Current Summary",
+  "@onboardingAhaSummaryTitle": {
+    "description": "Title for aha moment summary"
+  },
+  "onboardingAhaTotalBalance": "Total Balance",
+  "@onboardingAhaTotalBalance": {
+    "description": "Label for total balance"
+  },
+  "onboardingAhaTrackedCount": "Tracked Debts",
+  "@onboardingAhaTrackedCount": {
+    "description": "Label for tracked count"
+  },
+  "onboardingAhaDataCompact": "Data saved locally. No account needed.",
+  "@onboardingAhaDataCompact": {
+    "description": "Compact text for local data"
+  },
+  "onboardingAhaDataFull": "Your data is saved locally on your device. From here you can open the Monthly Action View to check off actual payments and watch the timeline recast instantly.",
+  "@onboardingAhaDataFull": {
+    "description": "Full text for local data"
+  },
+  "onboardingAhaBackToAdd": "Go back to add debt",
+  "@onboardingAhaBackToAdd": {
+    "description": "Action to go back and add debt"
+  },
+  "onboardingAhaOpenMonthly": "Open Monthly Action View",
+  "@onboardingAhaOpenMonthly": {
+    "description": "Action to open monthly view"
+  },
+  "onboardingAhaRecastingShort": "Recasting",
+  "@onboardingAhaRecastingShort": {
+    "description": "Short text for recasting"
+  },
+  "onboardingAhaDebtFreeDate": "Debt-free date",
+  "@onboardingAhaDebtFreeDate": {
+    "description": "Label for debt-free date in aha moment"
+  },
+  "onboardingAhaExtraMonthly": "Extra / month",
+  "@onboardingAhaExtraMonthly": {
+    "description": "Label for extra monthly amount in aha moment"
+  },
+  "onboardingAhaProjectedInterest": "Projected interest",
+  "@onboardingAhaProjectedInterest": {
+    "description": "Label for projected interest in aha moment"
+  },
+  "onboardingAhaSavedVsMinimum": "Saved vs minimum",
+  "@onboardingAhaSavedVsMinimum": {
+    "description": "Label for saved vs minimum in aha moment"
   }
 }

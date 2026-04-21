@@ -1256,11 +1256,583 @@ abstract class AppLocalizations {
   /// **'Local-first'**
   String get welcomeTrustLocalFirst;
 
-  /// Trust badge label on the welcome page describing no bank connection.
+  /// Trust badge label on the welcome page describing no bank sync behavior.
   ///
   /// In en, this message translates to:
   /// **'No bank sync'**
   String get welcomeTrustNoBankSync;
+
+  /// Title of the extra amount bottom sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra amount'**
+  String get planExtraAmountSheetTitle;
+
+  /// Subtitle of the extra amount bottom sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Increasing your extra monthly payment helps you shorten your debt-free timeline significantly.'**
+  String get planExtraAmountSheetSubtitle;
+
+  /// Save action in the extra amount bottom sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get planExtraAmountSheetSave;
+
+  /// Reset action in the extra amount bottom sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset to \$0 (Minimum)'**
+  String get planExtraAmountSheetReset;
+
+  /// Title of the timeline page.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan'**
+  String get planTimelineTitle;
+
+  /// Empty state title on the timeline page.
+  ///
+  /// In en, this message translates to:
+  /// **'No plan to show yet'**
+  String get planTimelineEmptyTitle;
+
+  /// Empty state subtitle on the timeline page.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one debt so the app can recast your timeline, debt-free date, and projected interest.'**
+  String get planTimelineEmptySubtitle;
+
+  /// Title when all debts are paid off on the timeline page.
+  ///
+  /// In en, this message translates to:
+  /// **'All debts are paid off'**
+  String get planTimelineAllPaidTitle;
+
+  /// Subtitle when all debts are paid off on the timeline page.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly timeline has no active debts. The app keeps your last plan summary for reference.'**
+  String get planTimelineAllPaidSubtitle;
+
+  /// Text shown when timeline is recalculating.
+  ///
+  /// In en, this message translates to:
+  /// **'Recasting...'**
+  String get planTimelineRecasting;
+
+  /// Summary string showing strategy, extra amount and projected months.
+  ///
+  /// In en, this message translates to:
+  /// **'{strategy} · Extra {amount} / month · {months} months projected'**
+  String planTimelineStrategySummary(
+    String strategy,
+    String amount,
+    int months,
+  );
+
+  /// Neutral banner text on timeline page.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan was just recast from latest data.'**
+  String get planTimelineRecastNeutral;
+
+  /// Title of the interest comparison card.
+  ///
+  /// In en, this message translates to:
+  /// **'Projected vs minimum-only'**
+  String get planTimelineComparisonTitle;
+
+  /// Label for the current plan in comparison.
+  ///
+  /// In en, this message translates to:
+  /// **'Current plan'**
+  String get planTimelineComparisonCurrent;
+
+  /// Label for the baseline plan in comparison.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum-only baseline'**
+  String get planTimelineComparisonBaseline;
+
+  /// Label for saved interest in comparison.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved interest'**
+  String get planTimelineComparisonSaved;
+
+  /// Title for the monthly timeline section.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly timeline'**
+  String get planTimelineSectionTitle;
+
+  /// Subtitle for the monthly timeline section.
+  ///
+  /// In en, this message translates to:
+  /// **'List-first view with payment breakdown, ending balance, and milestone payoff based on the latest projection.'**
+  String get planTimelineSectionSubtitle;
+
+  /// Hero stat label for debt-free date.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt-free date'**
+  String get planTimelineHeroDebtFree;
+
+  /// Hero stat label for projected interest.
+  ///
+  /// In en, this message translates to:
+  /// **'Projected interest'**
+  String get planTimelineHeroProjectedInterest;
+
+  /// Hero stat label for saved interest.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved vs minimum'**
+  String get planTimelineHeroSavedVsMinimum;
+
+  /// Mini stat label for ending balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Ending balance'**
+  String get planTimelineMonthEndingBalance;
+
+  /// Mini stat label for debts paid off.
+  ///
+  /// In en, this message translates to:
+  /// **'Debts paid off'**
+  String get planTimelineMonthDebtsPaidOff;
+
+  /// Comparison label for starting balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting balance'**
+  String get planTimelineMonthStartingBalance;
+
+  /// Comparison label for interest accrued.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest accrued'**
+  String get planTimelineMonthInterestAccrued;
+
+  /// Comparison label for payment applied.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment applied'**
+  String get planTimelineMonthPaymentApplied;
+
+  /// Prefix for monthly payment amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get planTimelineMonthPaymentLabel;
+
+  /// Prefix for monthly interest amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest'**
+  String get planTimelineMonthInterestLabel;
+
+  /// No description provided for @planTimelinePaidOffBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid off'**
+  String get planTimelinePaidOffBadge;
+
+  /// Title for debt entry page in onboarding
+  ///
+  /// In en, this message translates to:
+  /// **'Add Your First Debt'**
+  String get onboardingDebtEntryTitle;
+
+  /// Save action for debt entry page
+  ///
+  /// In en, this message translates to:
+  /// **'Save Debt'**
+  String get onboardingDebtEntrySave;
+
+  /// Step 1 progress label
+  ///
+  /// In en, this message translates to:
+  /// **'Step 1/4'**
+  String get onboardingStep1;
+
+  /// Title for add another debt page
+  ///
+  /// In en, this message translates to:
+  /// **'Review Your Debts'**
+  String get onboardingAddAnotherTitle;
+
+  /// Step 2 progress label
+  ///
+  /// In en, this message translates to:
+  /// **'Step 2/4'**
+  String get onboardingStep2;
+
+  /// Empty state text for add another debt page
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t saved any debts yet.'**
+  String get onboardingAddAnotherEmpty;
+
+  /// Text showing count of saved debts
+  ///
+  /// In en, this message translates to:
+  /// **'You have saved {count} debts. You can add more or continue to strategy selection.'**
+  String onboardingAddAnotherCount(int count);
+
+  /// Requirement text for adding debt
+  ///
+  /// In en, this message translates to:
+  /// **'Please add at least 1 debt to continue onboarding.'**
+  String get onboardingAddAnotherRequirement;
+
+  /// Continue action to strategy selection
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Strategy'**
+  String get onboardingAddAnotherContinue;
+
+  /// Action to add another debt
+  ///
+  /// In en, this message translates to:
+  /// **'Add Another Debt'**
+  String get onboardingAddAnotherAddMore;
+
+  /// Title for strategy selection page
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Strategy'**
+  String get onboardingStrategyTitle;
+
+  /// Step 3 progress label
+  ///
+  /// In en, this message translates to:
+  /// **'Step 3/4'**
+  String get onboardingStep3;
+
+  /// Subtitle for strategy selection
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how the app prioritizes debts when you pay extra.'**
+  String get onboardingStrategySubtitle;
+
+  /// Requirement text for strategy selection
+  ///
+  /// In en, this message translates to:
+  /// **'You need at least one debt to choose a strategy.'**
+  String get onboardingStrategyRequirement;
+
+  /// Description of strategy preview
+  ///
+  /// In en, this message translates to:
+  /// **'The app is comparing live projections of Snowball and Avalanche based on your current debts.'**
+  String get onboardingStrategyDescription;
+
+  /// Empty state title for strategy selection
+  ///
+  /// In en, this message translates to:
+  /// **'No debts to apply strategy'**
+  String get onboardingStrategyEmptyTitle;
+
+  /// Empty state subtitle for strategy selection
+  ///
+  /// In en, this message translates to:
+  /// **'Please add at least one debt before continuing.'**
+  String get onboardingStrategyEmptySubtitle;
+
+  /// Action to go back and add debt
+  ///
+  /// In en, this message translates to:
+  /// **'Go back and add debt'**
+  String get onboardingStrategyBackToAdd;
+
+  /// Fallback text for snowball strategy
+  ///
+  /// In en, this message translates to:
+  /// **'Prioritize the smallest balance.'**
+  String get onboardingStrategySnowballFallback;
+
+  /// Fallback text for avalanche strategy
+  ///
+  /// In en, this message translates to:
+  /// **'Prioritize the highest APR to reduce interest.'**
+  String get onboardingStrategyAvalancheFallback;
+
+  /// Note about changing strategy later
+  ///
+  /// In en, this message translates to:
+  /// **'You can change your strategy anytime after onboarding. The plan summary and timeline will recast automatically.'**
+  String get onboardingStrategyChangeNote;
+
+  /// Action to save strategy and continue
+  ///
+  /// In en, this message translates to:
+  /// **'Save Strategy & Continue'**
+  String get onboardingStrategyContinue;
+
+  /// Text when all debts are excluded from strategy
+  ///
+  /// In en, this message translates to:
+  /// **'All debts are currently excluded from the strategy.'**
+  String get onboardingStrategyTopPriorityExcluded;
+
+  /// Text showing top priority debt
+  ///
+  /// In en, this message translates to:
+  /// **'Start with {name}'**
+  String onboardingStrategyTopPriority(String name);
+
+  /// Text when preview is calculating
+  ///
+  /// In en, this message translates to:
+  /// **'Calculating payoff date and projected interest from current data...'**
+  String get onboardingStrategyPreviewCalculating;
+
+  /// Text when preview is recasting
+  ///
+  /// In en, this message translates to:
+  /// **'Recasting'**
+  String get onboardingStrategyPreviewRecasting;
+
+  /// Summary of strategy preview
+  ///
+  /// In en, this message translates to:
+  /// **'Debt-free {date} · {duration} · interest {interest}'**
+  String onboardingStrategyPreviewSummary(
+    String date,
+    String duration,
+    String interest,
+  );
+
+  /// Text showing saved interest in preview
+  ///
+  /// In en, this message translates to:
+  /// **'Save {saved} vs minimum-only'**
+  String onboardingStrategyPreviewSaved(String saved);
+
+  /// Error message when saving strategy fails
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save strategy. Please try again.'**
+  String get onboardingStrategyError;
+
+  /// Title for strategy preview
+  ///
+  /// In en, this message translates to:
+  /// **'Current Preview'**
+  String get onboardingStrategyPreviewTitle;
+
+  /// Title for extra amount page
+  ///
+  /// In en, this message translates to:
+  /// **'Extra Budget'**
+  String get onboardingExtraTitle;
+
+  /// Step 4 progress label
+  ///
+  /// In en, this message translates to:
+  /// **'Step 4/4'**
+  String get onboardingStep4;
+
+  /// Subtitle for extra amount page
+  ///
+  /// In en, this message translates to:
+  /// **'Besides the minimum, how much extra do you want to pay each month?'**
+  String get onboardingExtraSubtitle;
+
+  /// Description for extra amount
+  ///
+  /// In en, this message translates to:
+  /// **'Default is \$0. Preview will live recast after 300ms to show your actual debt-free date and saved interest.'**
+  String get onboardingExtraDescription;
+
+  /// Label for extra monthly payment
+  ///
+  /// In en, this message translates to:
+  /// **'Extra payment per month'**
+  String get onboardingExtraMonthlyLabel;
+
+  /// Text showing strategy and tracked count
+  ///
+  /// In en, this message translates to:
+  /// **'{strategy} · Tracking {count} debts'**
+  String onboardingExtraTrackedCount(String strategy, int count);
+
+  /// Label for max extra amount
+  ///
+  /// In en, this message translates to:
+  /// **'Max'**
+  String get onboardingExtraMaxLabel;
+
+  /// Title for what's next section
+  ///
+  /// In en, this message translates to:
+  /// **'What happens next?'**
+  String get onboardingExtraWhatsNextTitle;
+
+  /// Description for what's next
+  ///
+  /// In en, this message translates to:
+  /// **'This extra amount will be used as additional budget each month. When you save, your plan summary and timeline cache will recast immediately.'**
+  String get onboardingExtraWhatsNextDescription;
+
+  /// Save action for extra amount
+  ///
+  /// In en, this message translates to:
+  /// **'Save and view summary'**
+  String get onboardingExtraSave;
+
+  /// Action to use zero extra amount
+  ///
+  /// In en, this message translates to:
+  /// **'Use \$0 for now'**
+  String get onboardingExtraUseZero;
+
+  /// Error message when saving extra amount fails
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save extra budget. Please try again.'**
+  String get onboardingExtraError;
+
+  /// Empty state text for extra preview
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one debt to see the actual payoff preview.'**
+  String get onboardingExtraPreviewEmpty;
+
+  /// Title for live preview
+  ///
+  /// In en, this message translates to:
+  /// **'Live preview'**
+  String get onboardingExtraPreviewTitle;
+
+  /// Text when extra preview is recasting
+  ///
+  /// In en, this message translates to:
+  /// **'Recasting...'**
+  String get onboardingExtraPreviewRecasting;
+
+  /// Text showing debt-free date with extra amount
+  ///
+  /// In en, this message translates to:
+  /// **'Debt-free date with extra {extraAmount} / month'**
+  String onboardingExtraPreviewDebtFree(String extraAmount);
+
+  /// Label for projected interest
+  ///
+  /// In en, this message translates to:
+  /// **'Projected interest'**
+  String get onboardingExtraPreviewProjectedInterest;
+
+  /// Label for saved vs minimum
+  ///
+  /// In en, this message translates to:
+  /// **'Saved vs minimum'**
+  String get onboardingExtraPreviewSavedVsMinimum;
+
+  /// Empty state text for aha moment
+  ///
+  /// In en, this message translates to:
+  /// **'You have no debts in your plan yet.'**
+  String get onboardingAhaEmpty;
+
+  /// Text when aha moment is recasting
+  ///
+  /// In en, this message translates to:
+  /// **'Your plan is recasting.'**
+  String get onboardingAhaRecasting;
+
+  /// Text showing debt-free date in aha moment
+  ///
+  /// In en, this message translates to:
+  /// **'You can be debt-free by {date}.'**
+  String onboardingAhaDebtFree(String date);
+
+  /// Empty state subtitle for aha moment
+  ///
+  /// In en, this message translates to:
+  /// **'Please go back to the previous step and add at least one debt.'**
+  String get onboardingAhaEmptySubtitle;
+
+  /// Ready subtitle for aha moment
+  ///
+  /// In en, this message translates to:
+  /// **'Plan has been recast. Your monthly checklist is ready.'**
+  String get onboardingAhaReadySubtitle;
+
+  /// Title for aha moment summary
+  ///
+  /// In en, this message translates to:
+  /// **'Current Summary'**
+  String get onboardingAhaSummaryTitle;
+
+  /// Label for total balance
+  ///
+  /// In en, this message translates to:
+  /// **'Total Balance'**
+  String get onboardingAhaTotalBalance;
+
+  /// Label for tracked count
+  ///
+  /// In en, this message translates to:
+  /// **'Tracked Debts'**
+  String get onboardingAhaTrackedCount;
+
+  /// Compact text for local data
+  ///
+  /// In en, this message translates to:
+  /// **'Data saved locally. No account needed.'**
+  String get onboardingAhaDataCompact;
+
+  /// Full text for local data
+  ///
+  /// In en, this message translates to:
+  /// **'Your data is saved locally on your device. From here you can open the Monthly Action View to check off actual payments and watch the timeline recast instantly.'**
+  String get onboardingAhaDataFull;
+
+  /// Action to go back and add debt
+  ///
+  /// In en, this message translates to:
+  /// **'Go back to add debt'**
+  String get onboardingAhaBackToAdd;
+
+  /// Action to open monthly view
+  ///
+  /// In en, this message translates to:
+  /// **'Open Monthly Action View'**
+  String get onboardingAhaOpenMonthly;
+
+  /// Short text for recasting
+  ///
+  /// In en, this message translates to:
+  /// **'Recasting'**
+  String get onboardingAhaRecastingShort;
+
+  /// Label for debt-free date in aha moment
+  ///
+  /// In en, this message translates to:
+  /// **'Debt-free date'**
+  String get onboardingAhaDebtFreeDate;
+
+  /// Label for extra monthly amount in aha moment
+  ///
+  /// In en, this message translates to:
+  /// **'Extra / month'**
+  String get onboardingAhaExtraMonthly;
+
+  /// Label for projected interest in aha moment
+  ///
+  /// In en, this message translates to:
+  /// **'Projected interest'**
+  String get onboardingAhaProjectedInterest;
+
+  /// Label for saved vs minimum in aha moment
+  ///
+  /// In en, this message translates to:
+  /// **'Saved vs minimum'**
+  String get onboardingAhaSavedVsMinimum;
 }
 
 class _AppLocalizationsDelegate

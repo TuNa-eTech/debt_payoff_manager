@@ -688,4 +688,335 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeTrustNoBankSync => 'No bank sync';
+
+  @override
+  String get planExtraAmountSheetTitle => 'Extra amount';
+
+  @override
+  String get planExtraAmountSheetSubtitle =>
+      'Increasing your extra monthly payment helps you shorten your debt-free timeline significantly.';
+
+  @override
+  String get planExtraAmountSheetSave => 'Save changes';
+
+  @override
+  String get planExtraAmountSheetReset => 'Reset to \$0 (Minimum)';
+
+  @override
+  String get planTimelineTitle => 'Plan';
+
+  @override
+  String get planTimelineEmptyTitle => 'No plan to show yet';
+
+  @override
+  String get planTimelineEmptySubtitle =>
+      'Add at least one debt so the app can recast your timeline, debt-free date, and projected interest.';
+
+  @override
+  String get planTimelineAllPaidTitle => 'All debts are paid off';
+
+  @override
+  String get planTimelineAllPaidSubtitle =>
+      'Monthly timeline has no active debts. The app keeps your last plan summary for reference.';
+
+  @override
+  String get planTimelineRecasting => 'Recasting...';
+
+  @override
+  String planTimelineStrategySummary(
+    String strategy,
+    String amount,
+    int months,
+  ) {
+    return '$strategy · Extra $amount / month · $months months projected';
+  }
+
+  @override
+  String get planTimelineRecastNeutral =>
+      'Plan was just recast from latest data.';
+
+  @override
+  String get planTimelineComparisonTitle => 'Projected vs minimum-only';
+
+  @override
+  String get planTimelineComparisonCurrent => 'Current plan';
+
+  @override
+  String get planTimelineComparisonBaseline => 'Minimum-only baseline';
+
+  @override
+  String get planTimelineComparisonSaved => 'Saved interest';
+
+  @override
+  String get planTimelineSectionTitle => 'Monthly timeline';
+
+  @override
+  String get planTimelineSectionSubtitle =>
+      'List-first view with payment breakdown, ending balance, and milestone payoff based on the latest projection.';
+
+  @override
+  String get planTimelineHeroDebtFree => 'Debt-free date';
+
+  @override
+  String get planTimelineHeroProjectedInterest => 'Projected interest';
+
+  @override
+  String get planTimelineHeroSavedVsMinimum => 'Saved vs minimum';
+
+  @override
+  String get planTimelineMonthEndingBalance => 'Ending balance';
+
+  @override
+  String get planTimelineMonthDebtsPaidOff => 'Debts paid off';
+
+  @override
+  String get planTimelineMonthStartingBalance => 'Starting balance';
+
+  @override
+  String get planTimelineMonthInterestAccrued => 'Interest accrued';
+
+  @override
+  String get planTimelineMonthPaymentApplied => 'Payment applied';
+
+  @override
+  String get planTimelineMonthPaymentLabel => 'Payment';
+
+  @override
+  String get planTimelineMonthInterestLabel => 'Interest';
+
+  @override
+  String get planTimelinePaidOffBadge => 'Paid off';
+
+  @override
+  String get onboardingDebtEntryTitle => 'Add Your First Debt';
+
+  @override
+  String get onboardingDebtEntrySave => 'Save Debt';
+
+  @override
+  String get onboardingStep1 => 'Step 1/4';
+
+  @override
+  String get onboardingAddAnotherTitle => 'Review Your Debts';
+
+  @override
+  String get onboardingStep2 => 'Step 2/4';
+
+  @override
+  String get onboardingAddAnotherEmpty => 'You haven\'t saved any debts yet.';
+
+  @override
+  String onboardingAddAnotherCount(int count) {
+    return 'You have saved $count debts. You can add more or continue to strategy selection.';
+  }
+
+  @override
+  String get onboardingAddAnotherRequirement =>
+      'Please add at least 1 debt to continue onboarding.';
+
+  @override
+  String get onboardingAddAnotherContinue => 'Choose Strategy';
+
+  @override
+  String get onboardingAddAnotherAddMore => 'Add Another Debt';
+
+  @override
+  String get onboardingStrategyTitle => 'Choose Strategy';
+
+  @override
+  String get onboardingStep3 => 'Step 3/4';
+
+  @override
+  String get onboardingStrategySubtitle =>
+      'Choose how the app prioritizes debts when you pay extra.';
+
+  @override
+  String get onboardingStrategyRequirement =>
+      'You need at least one debt to choose a strategy.';
+
+  @override
+  String get onboardingStrategyDescription =>
+      'The app is comparing live projections of Snowball and Avalanche based on your current debts.';
+
+  @override
+  String get onboardingStrategyEmptyTitle => 'No debts to apply strategy';
+
+  @override
+  String get onboardingStrategyEmptySubtitle =>
+      'Please add at least one debt before continuing.';
+
+  @override
+  String get onboardingStrategyBackToAdd => 'Go back and add debt';
+
+  @override
+  String get onboardingStrategySnowballFallback =>
+      'Prioritize the smallest balance.';
+
+  @override
+  String get onboardingStrategyAvalancheFallback =>
+      'Prioritize the highest APR to reduce interest.';
+
+  @override
+  String get onboardingStrategyChangeNote =>
+      'You can change your strategy anytime after onboarding. The plan summary and timeline will recast automatically.';
+
+  @override
+  String get onboardingStrategyContinue => 'Save Strategy & Continue';
+
+  @override
+  String get onboardingStrategyTopPriorityExcluded =>
+      'All debts are currently excluded from the strategy.';
+
+  @override
+  String onboardingStrategyTopPriority(String name) {
+    return 'Start with $name';
+  }
+
+  @override
+  String get onboardingStrategyPreviewCalculating =>
+      'Calculating payoff date and projected interest from current data...';
+
+  @override
+  String get onboardingStrategyPreviewRecasting => 'Recasting';
+
+  @override
+  String onboardingStrategyPreviewSummary(
+    String date,
+    String duration,
+    String interest,
+  ) {
+    return 'Debt-free $date · $duration · interest $interest';
+  }
+
+  @override
+  String onboardingStrategyPreviewSaved(String saved) {
+    return 'Save $saved vs minimum-only';
+  }
+
+  @override
+  String get onboardingStrategyError =>
+      'Could not save strategy. Please try again.';
+
+  @override
+  String get onboardingStrategyPreviewTitle => 'Current Preview';
+
+  @override
+  String get onboardingExtraTitle => 'Extra Budget';
+
+  @override
+  String get onboardingStep4 => 'Step 4/4';
+
+  @override
+  String get onboardingExtraSubtitle =>
+      'Besides the minimum, how much extra do you want to pay each month?';
+
+  @override
+  String get onboardingExtraDescription =>
+      'Default is \$0. Preview will live recast after 300ms to show your actual debt-free date and saved interest.';
+
+  @override
+  String get onboardingExtraMonthlyLabel => 'Extra payment per month';
+
+  @override
+  String onboardingExtraTrackedCount(String strategy, int count) {
+    return '$strategy · Tracking $count debts';
+  }
+
+  @override
+  String get onboardingExtraMaxLabel => 'Max';
+
+  @override
+  String get onboardingExtraWhatsNextTitle => 'What happens next?';
+
+  @override
+  String get onboardingExtraWhatsNextDescription =>
+      'This extra amount will be used as additional budget each month. When you save, your plan summary and timeline cache will recast immediately.';
+
+  @override
+  String get onboardingExtraSave => 'Save and view summary';
+
+  @override
+  String get onboardingExtraUseZero => 'Use \$0 for now';
+
+  @override
+  String get onboardingExtraError =>
+      'Could not save extra budget. Please try again.';
+
+  @override
+  String get onboardingExtraPreviewEmpty =>
+      'Add at least one debt to see the actual payoff preview.';
+
+  @override
+  String get onboardingExtraPreviewTitle => 'Live preview';
+
+  @override
+  String get onboardingExtraPreviewRecasting => 'Recasting...';
+
+  @override
+  String onboardingExtraPreviewDebtFree(String extraAmount) {
+    return 'Debt-free date with extra $extraAmount / month';
+  }
+
+  @override
+  String get onboardingExtraPreviewProjectedInterest => 'Projected interest';
+
+  @override
+  String get onboardingExtraPreviewSavedVsMinimum => 'Saved vs minimum';
+
+  @override
+  String get onboardingAhaEmpty => 'You have no debts in your plan yet.';
+
+  @override
+  String get onboardingAhaRecasting => 'Your plan is recasting.';
+
+  @override
+  String onboardingAhaDebtFree(String date) {
+    return 'You can be debt-free by $date.';
+  }
+
+  @override
+  String get onboardingAhaEmptySubtitle =>
+      'Please go back to the previous step and add at least one debt.';
+
+  @override
+  String get onboardingAhaReadySubtitle =>
+      'Plan has been recast. Your monthly checklist is ready.';
+
+  @override
+  String get onboardingAhaSummaryTitle => 'Current Summary';
+
+  @override
+  String get onboardingAhaTotalBalance => 'Total Balance';
+
+  @override
+  String get onboardingAhaTrackedCount => 'Tracked Debts';
+
+  @override
+  String get onboardingAhaDataCompact =>
+      'Data saved locally. No account needed.';
+
+  @override
+  String get onboardingAhaDataFull =>
+      'Your data is saved locally on your device. From here you can open the Monthly Action View to check off actual payments and watch the timeline recast instantly.';
+
+  @override
+  String get onboardingAhaBackToAdd => 'Go back to add debt';
+
+  @override
+  String get onboardingAhaOpenMonthly => 'Open Monthly Action View';
+
+  @override
+  String get onboardingAhaRecastingShort => 'Recasting';
+
+  @override
+  String get onboardingAhaDebtFreeDate => 'Debt-free date';
+
+  @override
+  String get onboardingAhaExtraMonthly => 'Extra / month';
+
+  @override
+  String get onboardingAhaProjectedInterest => 'Projected interest';
+
+  @override
+  String get onboardingAhaSavedVsMinimum => 'Saved vs minimum';
 }
