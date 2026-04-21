@@ -158,6 +158,18 @@ abstract class AppLocalizations {
   /// **'View all'**
   String get commonViewAll;
 
+  /// Short label for features that are not available yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get commonComingSoon;
+
+  /// Snackbar message shown when a feature is not part of the current MVP.
+  ///
+  /// In en, this message translates to:
+  /// **'{feature} is coming soon.'**
+  String commonComingSoonFeature(String feature);
+
   /// Action to switch from a suggested amount to a custom amount.
   ///
   /// In en, this message translates to:

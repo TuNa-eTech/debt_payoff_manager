@@ -40,6 +40,19 @@
   "@commonViewAll": {
     "description": "Generic action to view all items in a list."
   },
+  "commonComingSoon": "Sắp ra mắt",
+  "@commonComingSoon": {
+    "description": "Short label for features that are not available yet."
+  },
+  "commonComingSoonFeature": "{feature} sẽ có trong bản cập nhật sắp tới.",
+  "@commonComingSoonFeature": {
+    "description": "Snackbar message shown when a feature is not part of the current MVP.",
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
   "commonRecordAnotherAmount": "Ghi số khác",
   "@commonRecordAnotherAmount": {
     "description": "Action to switch from a suggested amount to a custom amount."

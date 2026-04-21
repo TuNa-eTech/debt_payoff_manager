@@ -274,46 +274,42 @@ void main() {
       },
     );
 
-    testWidgets('settings trust flow opens sync details and pricing stub', (
-      tester,
-    ) async {
-      final harness = await TestAppHarness.create();
-      addTearDown(() => harness.disposeWidgetTest(tester));
+    testWidgets(
+      'settings blocks outside-MVP features with coming soon feedback',
+      (tester) async {
+        final harness = await TestAppHarness.create();
+        addTearDown(() => harness.disposeWidgetTest(tester));
 
-      await harness.onboardingCubit.completeOnboarding();
-      await harness.pumpApp(tester);
-      await _pumpUntilLocation(tester, harness, AppRoutes.home);
+        await harness.onboardingCubit.completeOnboarding();
+        await harness.pumpApp(tester);
+        await _pumpUntilLocation(tester, harness, AppRoutes.home);
 
-      harness.router.go(AppRoutes.settings);
-      await _pumpUntilLocation(tester, harness, AppRoutes.settings);
+        harness.router.go(AppRoutes.settings);
+        await _pumpUntilLocation(tester, harness, AppRoutes.settings);
 
-      final syncTile = find.byKey(AppTestKeys.settingsCloudBackup);
-      await tester.pumpUntilVisible(syncTile);
-      await tester.ensureVisible(syncTile);
-      await tester.tap(syncTile);
-      await tester.pumpRouterIdle();
+        final syncTile = find.byKey(AppTestKeys.settingsCloudBackup);
+        await tester.pumpUntilVisible(syncTile);
+        await tester.ensureVisible(syncTile);
+        await tester.tap(syncTile);
+        await tester.pump();
+        await tester.pumpRouterIdle();
 
-      final pricingCta = find.byKey(AppTestKeys.syncBackupViewPricing);
-      await tester.scrollUntilVisible(
-        pricingCta,
-        200,
-        scrollable: find.byType(Scrollable).last,
-      );
-      await tester.pumpRouterIdle();
-      await tester.tap(pricingCta);
-      await tester.pumpRouterIdle();
+        expect(harness.router.state.matchedLocation, AppRoutes.settings);
+        expect(find.byType(SnackBar), findsOneWidget);
 
-      final continueFree = find.byKey(AppTestKeys.pricingContinueFree);
-      await tester.scrollUntilVisible(
-        continueFree,
-        200,
-        scrollable: find.byType(Scrollable).last,
-      );
-      await tester.pumpRouterIdle();
-      await tester.tap(continueFree);
-      await tester.pumpRouterIdle();
-      await _pumpUntilLocation(tester, harness, AppRoutes.settings);
-    });
+        final reminderTile = find.byKey(AppTestKeys.settingsPaymentReminders);
+        await tester.pumpUntilVisible(reminderTile);
+        await tester.ensureVisible(reminderTile);
+        await tester.tap(reminderTile);
+        await tester.pump();
+        await tester.pumpRouterIdle();
+
+        expect(harness.router.state.matchedLocation, AppRoutes.settings);
+        expect(find.byType(SnackBar), findsOneWidget);
+
+        await _pumpUntilLocation(tester, harness, AppRoutes.settings);
+      },
+    );
 
     testWidgets('archive and unarchive respect paid-off only semantics', (
       tester,

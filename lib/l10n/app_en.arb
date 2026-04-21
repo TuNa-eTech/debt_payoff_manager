@@ -40,6 +40,19 @@
   "@commonViewAll": {
     "description": "Generic action to view all items in a list."
   },
+  "commonComingSoon": "Coming soon",
+  "@commonComingSoon": {
+    "description": "Short label for features that are not available yet."
+  },
+  "commonComingSoonFeature": "{feature} is coming soon.",
+  "@commonComingSoonFeature": {
+    "description": "Snackbar message shown when a feature is not part of the current MVP.",
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
   "commonRecordAnotherAmount": "Enter another amount",
   "@commonRecordAnotherAmount": {
     "description": "Action to switch from a suggested amount to a custom amount."

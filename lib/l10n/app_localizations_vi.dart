@@ -39,6 +39,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get commonViewAll => 'Xem tất cả';
 
   @override
+  String get commonComingSoon => 'Sắp ra mắt';
+
+  @override
+  String commonComingSoonFeature(String feature) {
+    return '$feature sẽ có trong bản cập nhật sắp tới.';
+  }
+
+  @override
   String get commonRecordAnotherAmount => 'Ghi số khác';
 
   @override

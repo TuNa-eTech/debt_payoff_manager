@@ -39,6 +39,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonViewAll => 'View all';
 
   @override
+  String get commonComingSoon => 'Coming soon';
+
+  @override
+  String commonComingSoonFeature(String feature) {
+    return '$feature is coming soon.';
+  }
+
+  @override
   String get commonRecordAnotherAmount => 'Enter another amount';
 
   @override

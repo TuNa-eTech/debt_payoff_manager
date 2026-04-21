@@ -97,22 +97,23 @@ class _SettingsPageState extends State<SettingsPage> {
                     _buildSection(
                       title: l10n.settingsSectionReminders,
                       children: [
-                        _buildSwitchTile(
+                        _buildListTile(
+                          key: AppTestKeys.settingsPaymentReminders,
                           title: l10n.settingsPaymentReminderTitle,
                           subtitle: l10n.settingsPaymentReminderSubtitle,
-                          value: settings.notifPaymentReminder,
-                          onChanged: (value) => _updateSettings(
-                            settings.copyWith(notifPaymentReminder: value),
+                          trailingText: l10n.commonComingSoon,
+                          onTap: () => _showComingSoon(
+                            l10n.settingsPaymentReminderTitle,
                           ),
                         ),
                         _buildDivider(),
-                        _buildSwitchTile(
+                        _buildListTile(
+                          key: AppTestKeys.settingsMonthlyLog,
                           title: l10n.settingsMonthlyLogTitle,
                           subtitle: l10n.settingsMonthlyLogSubtitle,
-                          value: settings.notifMonthlyLog,
-                          onChanged: (value) => _updateSettings(
-                            settings.copyWith(notifMonthlyLog: value),
-                          ),
+                          trailingText: l10n.commonComingSoon,
+                          onTap: () =>
+                              _showComingSoon(l10n.settingsMonthlyLogTitle),
                         ),
                       ],
                     ),
@@ -147,9 +148,13 @@ class _SettingsPageState extends State<SettingsPage> {
                           key: AppTestKeys.settingsCloudBackup,
                           title: l10n.settingsCloudBackupTitle,
                           subtitle: _trustLevelCopy(settings.trustLevel),
-                          trailingText: _trustLevelLabel(settings.trustLevel),
+                          trailingText: l10n.commonComingSoon,
                           enabled: !_isDataActionPending,
-                          onTap: () => context.push(AppRoutes.syncBackup),
+                          onTap: _isDataActionPending
+                              ? null
+                              : () => _showComingSoon(
+                                  l10n.settingsCloudBackupTitle,
+                                ),
                         ),
                         _buildDivider(),
                         _buildListTile(
@@ -435,6 +440,10 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  void _showComingSoon(String featureName) {
+    context.showSnackBar(context.l10n.commonComingSoonFeature(featureName));
+  }
+
   String _strategyLabel(Strategy strategy) {
     final l10n = context.l10n;
     switch (strategy) {
@@ -444,19 +453,6 @@ class _SettingsPageState extends State<SettingsPage> {
         return l10n.settingsStrategyCustom;
       case Strategy.snowball:
         return l10n.settingsStrategySnowball;
-    }
-  }
-
-  String _trustLevelLabel(int trustLevel) {
-    final l10n = context.l10n;
-    switch (trustLevel) {
-      case 1:
-        return l10n.settingsTrustLevelOneLabel;
-      case 2:
-        return l10n.settingsTrustLevelTwoLabel;
-      case 0:
-      default:
-        return l10n.settingsTrustLevelLocalOnlyLabel;
     }
   }
 
@@ -645,30 +641,6 @@ class _SettingsPageState extends State<SettingsPage> {
     }
 
     return InkWell(key: key, onTap: onTap, child: content);
-  }
-
-  Widget _buildSwitchTile({
-    required String title,
-    required String subtitle,
-    required bool value,
-    required ValueChanged<bool> onChanged,
-  }) {
-    return SwitchListTile(
-      value: value,
-      onChanged: onChanged,
-      activeThumbColor: AppColors.mdPrimary,
-      activeTrackColor: AppColors.mdPrimaryContainer,
-      title: Text(title, style: AppTextStyles.bodyLarge),
-      subtitle: Text(
-        subtitle,
-        style: AppTextStyles.bodySmall.copyWith(
-          color: AppColors.mdOnSurfaceVariant,
-        ),
-      ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: AppDimensions.pagePaddingH,
-      ),
-    );
   }
 
   Widget _buildDivider() {

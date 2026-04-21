@@ -75,6 +75,10 @@ class AppTestKeys {
   static const settingsCloudBackup = ValueKey<String>(
     'settings:data-cloud-backup',
   );
+  static const settingsPaymentReminders = ValueKey<String>(
+    'settings:payment-reminders',
+  );
+  static const settingsMonthlyLog = ValueKey<String>('settings:monthly-log');
   static const settingsLocale = ValueKey<String>('settings:locale');
   static const settingsLocaleOptionEnglish = ValueKey<String>(
     'settings:locale-option-english',
