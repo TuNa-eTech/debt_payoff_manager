@@ -22486,7 +22486,7 @@
                                       "id": "qnjE2",
                                       "name": "card1Name",
                                       "fill": "$md-on-surface",
-                                      "content": "Chase Sapphire",
+                                      "content": "Credit Card",
                                       "fontFamily": "Roboto",
                                       "fontSize": 14,
                                       "fontWeight": "500"
@@ -22548,7 +22548,7 @@
                                   "id": "dXLXH",
                                   "name": "card1ProgLbl",
                                   "fill": "$md-on-surface-variant",
-                                  "content": "Đã trả $2,800 / $8,000",
+                                  "content": "Paid $2,800 / $8,000",
                                   "fontFamily": "Roboto",
                                   "fontSize": 11,
                                   "fontWeight": "normal"
@@ -22646,7 +22646,7 @@
                                       "id": "UKJan",
                                       "name": "card2Name",
                                       "fill": "$md-on-surface",
-                                      "content": "Toyota Car Loan",
+                                      "content": "Car Loan",
                                       "fontFamily": "Roboto",
                                       "fontSize": 14,
                                       "fontWeight": "500"
@@ -22708,7 +22708,7 @@
                                   "id": "T4UJ7",
                                   "name": "card2ProgLbl",
                                   "fill": "$md-on-surface-variant",
-                                  "content": "Đã trả $6,900 / $15,000",
+                                  "content": "Paid $6,900 / $15,000",
                                   "fontFamily": "Roboto",
                                   "fontSize": 11,
                                   "fontWeight": "normal"
@@ -22882,7 +22882,7 @@
                                   "id": "qCEn9",
                                   "name": "card3ProgLbl",
                                   "fill": "$md-on-error-container",
-                                  "content": "Đã trả $600 / $10,000",
+                                  "content": "Paid $600 / $10,000",
                                   "fontFamily": "Roboto",
                                   "fontSize": 11,
                                   "fontWeight": "normal"
@@ -22978,7 +22978,7 @@
                                   "id": "EwGLv",
                                   "name": "card4Sub",
                                   "fill": "$md-primary",
-                                  "content": "Đã trả xong · Tháng 2/2026",
+                                  "content": "Paid off · Feb 2026",
                                   "fontFamily": "Roboto",
                                   "fontSize": 12,
                                   "fontWeight": "normal"
@@ -24348,7 +24348,7 @@
                           "fill": "$md-on-secondary-container",
                           "textGrowth": "fixed-width",
                           "width": "fill_container",
-                          "content": "Snowball pays off Chase Sapphire in 4 months — creating early momentum for your journey.",
+                          "content": "Snowball pays off your Credit Card in 4 months — creating early momentum for your journey.",
                           "fontFamily": "Roboto",
                           "fontSize": 13,
                           "fontWeight": "normal"
@@ -27258,7 +27258,7 @@
                                           "type": "text",
                                           "id": "kLNrG",
                                           "fill": "$md-on-surface",
-                                          "content": "💳 Techcombank Credit Card",
+                                          "content": "💳 Credit Card",
                                           "fontFamily": "Geist",
                                           "fontSize": 15,
                                           "fontWeight": "600"
@@ -27311,7 +27311,7 @@
                                           "type": "text",
                                           "id": "pmUy4",
                                           "fill": "$md-on-surface-variant",
-                                          "content": "Techcombank Credit Card",
+                                          "content": "Credit Card",
                                           "fontFamily": "Roboto",
                                           "fontSize": 12,
                                           "fontWeight": "normal"
@@ -27341,7 +27341,7 @@
                                               "type": "text",
                                               "id": "0uz71",
                                               "fill": "$md-on-error-container",
-                                              "content": "Quá hạn",
+                                              "content": "Overdue",
                                               "fontFamily": "Inter",
                                               "fontSize": 10,
                                               "fontWeight": "500"
@@ -27469,7 +27469,7 @@
                                               "type": "text",
                                               "id": "Pka3u",
                                               "fill": "$md-on-secondary-container",
-                                              "content": "Ưu tiên #1",
+                                              "content": "Priority #1",
                                               "fontFamily": "Inter",
                                               "fontSize": 10,
                                               "fontWeight": "500"
@@ -27578,7 +27578,7 @@
                                           "type": "text",
                                           "id": "FlUnt",
                                           "fill": "$md-on-surface",
-                                          "content": "🚗 VPBank Car Loan",
+                                          "content": "🚗 Car Loan",
                                           "fontFamily": "Geist",
                                           "fontSize": 15,
                                           "fontWeight": "600"
@@ -27664,7 +27664,7 @@
                                           "type": "text",
                                           "id": "gTBom",
                                           "fill": "$md-on-surface-variant",
-                                          "content": "VPBank Car Loan",
+                                          "content": "Car Loan",
                                           "fontFamily": "Roboto",
                                           "fontSize": 12,
                                           "fontWeight": "normal"
@@ -27724,7 +27724,7 @@
                                               "type": "text",
                                               "id": "UMFfj",
                                               "fill": "$md-on-secondary-container",
-                                              "content": "Đã log",
+                                              "content": "Logged",
                                               "fontFamily": "Inter",
                                               "fontSize": 14,
                                               "fontWeight": "500"
@@ -28668,7 +28668,7 @@
                                           "id": "HjER4",
                                           "name": "card1Name",
                                           "fill": "$md-on-surface",
-                                          "content": "💳 Techcombank Credit Card",
+                                          "content": "💳 Credit Card",
                                           "fontFamily": "Geist",
                                           "fontSize": 14,
                                           "fontWeight": "600"
@@ -28828,7 +28828,7 @@
                                           "id": "Un1BU",
                                           "name": "card2Name",
                                           "fill": "$md-on-surface",
-                                          "content": "🚗 VPBank Car Loan",
+                                          "content": "🚗 Car Loan",
                                           "fontFamily": "Geist",
                                           "fontSize": 14,
                                           "fontWeight": "600"
@@ -28988,7 +28988,7 @@
                                           "id": "6FNKx",
                                           "name": "card3Name",
                                           "fill": "$md-on-error-container",
-                                          "content": "🏠 VietinBank Home Loan",
+                                          "content": "🏠 Home Mortgage",
                                           "fontFamily": "Geist",
                                           "fontSize": 14,
                                           "fontWeight": "600"
@@ -29150,7 +29150,7 @@
                                       "id": "XjrpQ",
                                       "name": "card4Name",
                                       "fill": "$md-on-surface-variant",
-                                      "content": "💊 Agribank Personal Loan",
+                                      "content": "💊 Personal Loan",
                                       "fontFamily": "Geist",
                                       "fontSize": 14,
                                       "fontWeight": "500"
@@ -30604,7 +30604,7 @@
                               "fill": "$md-on-secondary-container",
                               "textGrowth": "fixed-width",
                               "width": "fill_container",
-                              "content": "Snowball pays off Techcombank in 4 mos — save extra $6.6K.",
+                              "content": "Snowball pays off your Credit Card in 4 mos — save extra $6.6K.",
                               "fontFamily": "Roboto",
                               "fontSize": 13,
                               "fontWeight": "500"
@@ -31153,7 +31153,7 @@
                                           "id": "eL8sO",
                                           "name": "heroDebtName",
                                           "fill": "$md-on-primary",
-                                          "content": "💳 Techcombank Credit Card",
+                                          "content": "💳 Credit Card",
                                           "fontFamily": "Geist",
                                           "fontSize": 15,
                                           "fontWeight": "700"
@@ -33931,7 +33931,7 @@
                                               "id": "DxR5m",
                                               "name": "cli1txt",
                                               "fill": "$md-on-surface",
-                                              "content": "Pay Citi Credit Card",
+                                              "content": "Pay Credit Card",
                                               "fontFamily": "Roboto",
                                               "fontSize": 13,
                                               "fontWeight": "500"
@@ -34783,7 +34783,7 @@
                                               "id": "faZJ8",
                                               "name": "c3aName",
                                               "fill": "$md-on-surface",
-                                              "content": "Home Loan — Chase",
+                                              "content": "Home Loan",
                                               "fontFamily": "Geist",
                                               "fontSize": 16,
                                               "fontWeight": "600"
@@ -34962,7 +34962,7 @@
                                               "id": "zRoPC",
                                               "name": "c3bName",
                                               "fill": "$md-on-surface",
-                                              "content": "Credit Card — Citi",
+                                              "content": "Credit Card",
                                               "fontFamily": "Geist",
                                               "fontSize": 16,
                                               "fontWeight": "600"
@@ -35141,7 +35141,7 @@
                                               "id": "VZyQg",
                                               "name": "c3cName",
                                               "fill": "$md-on-surface",
-                                              "content": "Car Loan — Toyota",
+                                              "content": "Car Loan",
                                               "fontFamily": "Geist",
                                               "fontSize": 16,
                                               "fontWeight": "600"
@@ -36252,7 +36252,7 @@
                                       "fill": "$md-on-secondary-container",
                                       "textGrowth": "fixed-width",
                                       "width": 520,
-                                      "content": "Snowball pays off Techcombank in 4 months — creating early momentum to keep you going.",
+                                      "content": "Snowball pays off your Credit Card in 4 months — creating early momentum to keep you going.",
                                       "fontFamily": "Roboto",
                                       "fontSize": 13,
                                       "fontWeight": "normal"
