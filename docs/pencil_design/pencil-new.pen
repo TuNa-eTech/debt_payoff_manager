@@ -21633,73 +21633,6 @@
                     },
                     {
                       "type": "frame",
-                      "id": "FeZLa",
-                      "x": 0,
-                      "y": 0,
-                      "name": "Status Bar",
-                      "width": 390,
-                      "height": 44,
-                      "fill": "$md-surface",
-                      "padding": [
-                        0,
-                        20
-                      ],
-                      "justifyContent": "space_between",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "OsAsW",
-                          "name": "sbTime",
-                          "fill": "$md-on-surface",
-                          "content": "9:41",
-                          "fontFamily": "Roboto",
-                          "fontSize": 14,
-                          "fontWeight": "500"
-                        },
-                        {
-                          "type": "frame",
-                          "id": "YS8J9",
-                          "name": "sbIcons",
-                          "gap": 4,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon_font",
-                              "id": "0Ver2",
-                              "name": "sbI1",
-                              "width": 14,
-                              "height": 14,
-                              "iconFontName": "signal",
-                              "iconFontFamily": "lucide",
-                              "fill": "$md-on-surface"
-                            },
-                            {
-                              "type": "icon_font",
-                              "id": "wxHhj",
-                              "name": "sbI2",
-                              "width": 14,
-                              "height": 14,
-                              "iconFontName": "wifi",
-                              "iconFontFamily": "lucide",
-                              "fill": "$md-on-surface"
-                            },
-                            {
-                              "type": "icon_font",
-                              "id": "GPCt5",
-                              "name": "sbI3",
-                              "width": 14,
-                              "height": 14,
-                              "iconFontName": "battery-full",
-                              "iconFontFamily": "lucide",
-                              "fill": "$md-on-surface"
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
                       "id": "xc9KD",
                       "x": 0,
                       "y": 44,
@@ -21707,10 +21640,7 @@
                       "width": 390,
                       "height": 64,
                       "fill": "$md-surface",
-                      "padding": [
-                        0,
-                        4
-                      ],
+                      "padding": 4,
                       "justifyContent": "space_between",
                       "alignItems": "center",
                       "children": [
@@ -23034,73 +22964,6 @@
                     },
                     {
                       "type": "frame",
-                      "id": "hJBs0",
-                      "x": 0,
-                      "y": 0,
-                      "name": "Status Bar",
-                      "width": 390,
-                      "height": 44,
-                      "fill": "$md-surface",
-                      "padding": [
-                        0,
-                        20
-                      ],
-                      "justifyContent": "space_between",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "wR6eR",
-                          "name": "sbTime",
-                          "fill": "$md-on-surface",
-                          "content": "9:41",
-                          "fontFamily": "Roboto",
-                          "fontSize": 14,
-                          "fontWeight": "500"
-                        },
-                        {
-                          "type": "frame",
-                          "id": "21Rdl",
-                          "name": "sbIcons",
-                          "gap": 4,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon_font",
-                              "id": "Wv7Br",
-                              "name": "sbI1",
-                              "width": 14,
-                              "height": 14,
-                              "iconFontName": "signal",
-                              "iconFontFamily": "lucide",
-                              "fill": "$md-on-surface"
-                            },
-                            {
-                              "type": "icon_font",
-                              "id": "MP58B",
-                              "name": "sbI2",
-                              "width": 14,
-                              "height": 14,
-                              "iconFontName": "wifi",
-                              "iconFontFamily": "lucide",
-                              "fill": "$md-on-surface"
-                            },
-                            {
-                              "type": "icon_font",
-                              "id": "3f3Vd",
-                              "name": "sbI3",
-                              "width": 14,
-                              "height": 14,
-                              "iconFontName": "battery-full",
-                              "iconFontFamily": "lucide",
-                              "fill": "$md-on-surface"
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
                       "id": "YvXjI",
                       "x": 0,
                       "y": 108,
@@ -23559,73 +23422,6 @@
                   "fill": "$md-surface",
                   "layout": "none",
                   "children": [
-                    {
-                      "type": "frame",
-                      "id": "dFwTW",
-                      "x": 0,
-                      "y": 0,
-                      "name": "sb",
-                      "width": 390,
-                      "height": 44,
-                      "fill": "$md-surface",
-                      "padding": [
-                        0,
-                        20
-                      ],
-                      "justifyContent": "space_between",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "Kd5VS",
-                          "name": "sbTime",
-                          "fill": "$md-on-surface",
-                          "content": "9:41",
-                          "fontFamily": "Roboto",
-                          "fontSize": 14,
-                          "fontWeight": "500"
-                        },
-                        {
-                          "type": "frame",
-                          "id": "b0oLS",
-                          "name": "sbIcons",
-                          "gap": 4,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon_font",
-                              "id": "o5uaJ",
-                              "name": "sbI1",
-                              "width": 14,
-                              "height": 14,
-                              "iconFontName": "signal",
-                              "iconFontFamily": "lucide",
-                              "fill": "$md-on-surface"
-                            },
-                            {
-                              "type": "icon_font",
-                              "id": "hOZcy",
-                              "name": "sbI2",
-                              "width": 14,
-                              "height": 14,
-                              "iconFontName": "wifi",
-                              "iconFontFamily": "lucide",
-                              "fill": "$md-on-surface"
-                            },
-                            {
-                              "type": "icon_font",
-                              "id": "5fEhD",
-                              "name": "sbI3",
-                              "width": 14,
-                              "height": 14,
-                              "iconFontName": "battery-full",
-                              "iconFontFamily": "lucide",
-                              "fill": "$md-on-surface"
-                            }
-                          ]
-                        }
-                      ]
-                    },
                     {
                       "type": "frame",
                       "id": "Bol9q",
@@ -25551,73 +25347,6 @@
                     },
                     {
                       "type": "frame",
-                      "id": "HU8TO",
-                      "x": 0,
-                      "y": 0,
-                      "name": "Status Bar",
-                      "width": 390,
-                      "height": 44,
-                      "fill": "$md-surface",
-                      "padding": [
-                        0,
-                        20
-                      ],
-                      "justifyContent": "space_between",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "j3ONi",
-                          "name": "sbTime",
-                          "fill": "$md-on-surface",
-                          "content": "9:41",
-                          "fontFamily": "Roboto",
-                          "fontSize": 14,
-                          "fontWeight": "500"
-                        },
-                        {
-                          "type": "frame",
-                          "id": "3XItk",
-                          "name": "sbIcons",
-                          "gap": 4,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon_font",
-                              "id": "bEHD3",
-                              "name": "sbI1",
-                              "width": 14,
-                              "height": 14,
-                              "iconFontName": "signal",
-                              "iconFontFamily": "lucide",
-                              "fill": "$md-on-surface"
-                            },
-                            {
-                              "type": "icon_font",
-                              "id": "U51lK",
-                              "name": "sbI2",
-                              "width": 14,
-                              "height": 14,
-                              "iconFontName": "wifi",
-                              "iconFontFamily": "lucide",
-                              "fill": "$md-on-surface"
-                            },
-                            {
-                              "type": "icon_font",
-                              "id": "qRobM",
-                              "name": "sbI3",
-                              "width": 14,
-                              "height": 14,
-                              "iconFontName": "battery-full",
-                              "iconFontFamily": "lucide",
-                              "fill": "$md-on-surface"
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
                       "id": "LcB2N",
                       "x": 0,
                       "y": 44,
@@ -26793,9 +26522,9 @@
                   "layout": "vertical",
                   "gap": 14,
                   "padding": [
-                    48,
+                    28,
                     30,
-                    20,
+                    16,
                     30
                   ],
                   "alignItems": "center",
@@ -26850,7 +26579,7 @@
                       "lineHeight": 1.1,
                       "textAlign": "center",
                       "fontFamily": "Geist",
-                      "fontSize": 40,
+                      "fontSize": 34,
                       "fontWeight": "900"
                     },
                     {
@@ -26864,7 +26593,7 @@
                       "lineHeight": 1.5,
                       "textAlign": "center",
                       "fontFamily": "Roboto",
-                      "fontSize": 16,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -26919,7 +26648,7 @@
                           "type": "frame",
                           "id": "bC3NI",
                           "x": 0,
-                          "y": 110,
+                          "y": 93,
                           "name": "homeScroll",
                           "width": 390,
                           "layout": "vertical",
@@ -27741,83 +27470,18 @@
                         },
                         {
                           "type": "frame",
-                          "id": "I9um3",
-                          "x": 0,
-                          "y": 0,
-                          "name": "Status Bar",
-                          "width": 390,
-                          "height": 44,
-                          "fill": "$md-surface",
-                          "padding": [
-                            0,
-                            20
-                          ],
-                          "justifyContent": "space_between",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "hqVvf",
-                              "name": "sbTime",
-                              "fill": "$md-on-surface",
-                              "content": "9:41",
-                              "fontFamily": "Roboto",
-                              "fontSize": 14,
-                              "fontWeight": "500"
-                            },
-                            {
-                              "type": "frame",
-                              "id": "Vcgle",
-                              "name": "sbIcons",
-                              "gap": 4,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon_font",
-                                  "id": "wjcKv",
-                                  "name": "sbI1",
-                                  "width": 14,
-                                  "height": 14,
-                                  "iconFontName": "signal",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "abWr8",
-                                  "name": "sbI2",
-                                  "width": 14,
-                                  "height": 14,
-                                  "iconFontName": "wifi",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "7yqEr",
-                                  "name": "sbI3",
-                                  "width": 14,
-                                  "height": 14,
-                                  "iconFontName": "battery-full",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
                           "id": "il8rn",
                           "x": 0,
-                          "y": 44,
+                          "y": 0,
                           "name": "Top App Bar",
                           "width": 390,
-                          "height": 64,
+                          "height": 92,
                           "fill": "$md-surface",
                           "padding": [
+                            44,
+                            16,
                             0,
-                            4
+                            16
                           ],
                           "justifyContent": "space_between",
                           "alignItems": "center",
@@ -27878,7 +27542,7 @@
                           "type": "frame",
                           "id": "elmAC",
                           "x": 0,
-                          "y": 108,
+                          "y": 92,
                           "name": "Divider",
                           "width": 390,
                           "height": 1,
@@ -28189,9 +27853,9 @@
                   "layout": "vertical",
                   "gap": 14,
                   "padding": [
-                    48,
+                    28,
                     30,
-                    20,
+                    16,
                     30
                   ],
                   "alignItems": "center",
@@ -28246,7 +27910,7 @@
                       "lineHeight": 1.1,
                       "textAlign": "center",
                       "fontFamily": "Geist",
-                      "fontSize": 40,
+                      "fontSize": 34,
                       "fontWeight": "900"
                     },
                     {
@@ -28260,7 +27924,7 @@
                       "lineHeight": 1.5,
                       "textAlign": "center",
                       "fontFamily": "Roboto",
-                      "fontSize": 16,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -28315,7 +27979,7 @@
                           "type": "frame",
                           "id": "SAHhb",
                           "x": 0,
-                          "y": 110,
+                          "y": 93,
                           "name": "listScroll",
                           "width": 390,
                           "layout": "vertical",
@@ -29216,76 +28880,9 @@
                         },
                         {
                           "type": "frame",
-                          "id": "rj2HU",
-                          "x": 0,
-                          "y": 0,
-                          "name": "Status Bar",
-                          "width": 390,
-                          "height": 44,
-                          "fill": "$md-surface",
-                          "padding": [
-                            0,
-                            20
-                          ],
-                          "justifyContent": "space_between",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "Mttnd",
-                              "name": "sbTime",
-                              "fill": "$md-on-surface",
-                              "content": "9:41",
-                              "fontFamily": "Roboto",
-                              "fontSize": 14,
-                              "fontWeight": "500"
-                            },
-                            {
-                              "type": "frame",
-                              "id": "D9ugi",
-                              "name": "sbIcons",
-                              "gap": 4,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon_font",
-                                  "id": "Idz2E",
-                                  "name": "sbI1",
-                                  "width": 14,
-                                  "height": 14,
-                                  "iconFontName": "signal",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "LUyU7",
-                                  "name": "sbI2",
-                                  "width": 14,
-                                  "height": 14,
-                                  "iconFontName": "wifi",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "B5S4b",
-                                  "name": "sbI3",
-                                  "width": 14,
-                                  "height": 14,
-                                  "iconFontName": "battery-full",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
                           "id": "W9wiv",
                           "x": 0,
-                          "y": 108,
+                          "y": 92,
                           "name": "divider",
                           "width": 390,
                           "height": 1,
@@ -29296,7 +28893,7 @@
                           "id": "nighy",
                           "layoutPosition": "absolute",
                           "x": 214,
-                          "y": 944,
+                          "y": 900,
                           "name": "Extended FAB",
                           "width": 160,
                           "height": 56,
@@ -29360,7 +28957,7 @@
                           "type": "frame",
                           "id": "RLIUI",
                           "x": 0,
-                          "y": 1020,
+                          "y": 976,
                           "name": "Nav Bar",
                           "width": 390,
                           "height": 80,
@@ -29629,16 +29226,16 @@
                           "type": "frame",
                           "id": "ysrtH",
                           "x": 0,
-                          "y": 44,
+                          "y": 0,
                           "name": "Top App Bar",
                           "width": 390,
-                          "height": 64,
+                          "height": 92,
                           "fill": "$md-surface",
                           "padding": [
-                            0,
+                            44,
                             16,
                             0,
-                            4
+                            16
                           ],
                           "alignItems": "center",
                           "children": [
@@ -29692,9 +29289,9 @@
                   "layout": "vertical",
                   "gap": 14,
                   "padding": [
-                    48,
+                    28,
                     30,
-                    20,
+                    16,
                     30
                   ],
                   "alignItems": "center",
@@ -29749,7 +29346,7 @@
                       "lineHeight": 1.1,
                       "textAlign": "center",
                       "fontFamily": "Geist",
-                      "fontSize": 38,
+                      "fontSize": 34,
                       "fontWeight": "900"
                     },
                     {
@@ -29763,7 +29360,7 @@
                       "lineHeight": 1.5,
                       "textAlign": "center",
                       "fontFamily": "Roboto",
-                      "fontSize": 16,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -29817,85 +29414,18 @@
                       "children": [
                         {
                           "type": "frame",
-                          "id": "3qiGJ",
-                          "x": 0,
-                          "y": 0,
-                          "name": "sb",
-                          "width": 390,
-                          "height": 44,
-                          "fill": "$md-surface",
-                          "padding": [
-                            0,
-                            20
-                          ],
-                          "justifyContent": "space_between",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "q7PwU",
-                              "name": "sbTime",
-                              "fill": "$md-on-surface",
-                              "content": "9:41",
-                              "fontFamily": "Roboto",
-                              "fontSize": 14,
-                              "fontWeight": "500"
-                            },
-                            {
-                              "type": "frame",
-                              "id": "5S9MR",
-                              "name": "sbIcons",
-                              "gap": 4,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon_font",
-                                  "id": "YQw2i",
-                                  "name": "sbI1",
-                                  "width": 14,
-                                  "height": 14,
-                                  "iconFontName": "signal",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "tXsnv",
-                                  "name": "sbI2",
-                                  "width": 14,
-                                  "height": 14,
-                                  "iconFontName": "wifi",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "F4Ogc",
-                                  "name": "sbI3",
-                                  "width": 14,
-                                  "height": 14,
-                                  "iconFontName": "battery-full",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
                           "id": "YVTNJ",
                           "x": 0,
-                          "y": 44,
+                          "y": 0,
                           "name": "topBar",
                           "width": 390,
-                          "height": 64,
+                          "height": 92,
                           "fill": "$md-surface",
                           "padding": [
-                            0,
+                            44,
                             16,
                             0,
-                            4
+                            16
                           ],
                           "alignItems": "center",
                           "children": [
@@ -29939,7 +29469,7 @@
                           "type": "frame",
                           "id": "HXDHV",
                           "x": 0,
-                          "y": 108,
+                          "y": 92,
                           "name": "divider",
                           "width": 390,
                           "height": 1,
@@ -29949,7 +29479,7 @@
                           "type": "frame",
                           "id": "z4EXH",
                           "x": 16,
-                          "y": 120,
+                          "y": 104,
                           "name": "Extra Amount Section",
                           "width": 358,
                           "layout": "vertical",
@@ -30046,7 +29576,7 @@
                           "type": "frame",
                           "id": "3Jksz",
                           "x": 16,
-                          "y": 272,
+                          "y": 256,
                           "name": "Strategy Label",
                           "width": 358,
                           "justifyContent": "space_between",
@@ -30078,7 +29608,7 @@
                           "type": "frame",
                           "id": "Ky86l",
                           "x": 16,
-                          "y": 300,
+                          "y": 284,
                           "name": "Snowball Card - Selected",
                           "width": 358,
                           "fill": "$md-surface-container-lowest",
@@ -30337,7 +29867,7 @@
                           "type": "frame",
                           "id": "VlSZ4",
                           "x": 16,
-                          "y": 448,
+                          "y": 432,
                           "name": "Avalanche Card",
                           "width": 358,
                           "fill": "$md-surface-container-lowest",
@@ -30575,7 +30105,7 @@
                           "type": "frame",
                           "id": "qx0EY",
                           "x": 16,
-                          "y": 596,
+                          "y": 580,
                           "name": "Insight Banner",
                           "width": 358,
                           "fill": "$md-secondary-container",
@@ -30615,7 +30145,7 @@
                           "type": "frame",
                           "id": "SyY8H",
                           "x": 16,
-                          "y": 672,
+                          "y": 656,
                           "name": "CTA Button",
                           "width": 358,
                           "height": 56,
@@ -30651,7 +30181,7 @@
                           "type": "frame",
                           "id": "H3rRE",
                           "x": 0,
-                          "y": 764,
+                          "y": 720,
                           "name": "Nav Bar",
                           "width": 390,
                           "height": 80,
@@ -30963,9 +30493,9 @@
                   "layout": "vertical",
                   "gap": 14,
                   "padding": [
-                    48,
+                    28,
                     30,
-                    20,
+                    16,
                     30
                   ],
                   "alignItems": "center",
@@ -31020,7 +30550,7 @@
                       "lineHeight": 1.1,
                       "textAlign": "center",
                       "fontFamily": "Geist",
-                      "fontSize": 40,
+                      "fontSize": 34,
                       "fontWeight": "900"
                     },
                     {
@@ -31034,7 +30564,7 @@
                       "lineHeight": 1.5,
                       "textAlign": "center",
                       "fontFamily": "Roboto",
-                      "fontSize": 16,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -31089,7 +30619,7 @@
                           "type": "frame",
                           "id": "6cy35",
                           "x": 0,
-                          "y": 110,
+                          "y": 93,
                           "name": "detScroll",
                           "width": 390,
                           "layout": "vertical",
@@ -31892,81 +31422,16 @@
                         },
                         {
                           "type": "frame",
-                          "id": "F6bdm",
-                          "x": 0,
-                          "y": 0,
-                          "name": "Status Bar",
-                          "width": 390,
-                          "height": 44,
-                          "fill": "$md-surface",
-                          "padding": [
-                            0,
-                            20
-                          ],
-                          "justifyContent": "space_between",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "bNbTN",
-                              "name": "sbTime",
-                              "fill": "$md-on-surface",
-                              "content": "9:41",
-                              "fontFamily": "Roboto",
-                              "fontSize": 14,
-                              "fontWeight": "500"
-                            },
-                            {
-                              "type": "frame",
-                              "id": "oYWwQ",
-                              "name": "sbIcons",
-                              "gap": 4,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon_font",
-                                  "id": "vHagu",
-                                  "name": "sbI1",
-                                  "width": 14,
-                                  "height": 14,
-                                  "iconFontName": "signal",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "gMSbT",
-                                  "name": "sbI2",
-                                  "width": 14,
-                                  "height": 14,
-                                  "iconFontName": "wifi",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "JCSya",
-                                  "name": "sbI3",
-                                  "width": 14,
-                                  "height": 14,
-                                  "iconFontName": "battery-full",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
                           "id": "Db8xG",
                           "x": 0,
-                          "y": 44,
+                          "y": 0,
                           "name": "Top App Bar",
                           "width": 390,
-                          "height": 64,
+                          "height": 92,
                           "fill": "$md-surface",
                           "padding": [
+                            44,
+                            4,
                             0,
                             4
                           ],
@@ -32056,7 +31521,7 @@
                           "type": "frame",
                           "id": "ih6yt",
                           "x": 0,
-                          "y": 108,
+                          "y": 92,
                           "name": "Divider",
                           "width": 390,
                           "height": 1,
@@ -32109,9 +31574,9 @@
                   "layout": "vertical",
                   "gap": 14,
                   "padding": [
-                    48,
+                    28,
                     30,
-                    20,
+                    16,
                     30
                   ],
                   "alignItems": "center",
@@ -32166,7 +31631,7 @@
                       "lineHeight": 1.1,
                       "textAlign": "center",
                       "fontFamily": "Geist",
-                      "fontSize": 38,
+                      "fontSize": 34,
                       "fontWeight": "900"
                     },
                     {
@@ -32180,7 +31645,7 @@
                       "lineHeight": 1.5,
                       "textAlign": "center",
                       "fontFamily": "Roboto",
-                      "fontSize": 16,
+                      "fontSize": 14,
                       "fontWeight": "normal"
                     }
                   ]
@@ -32280,70 +31745,6 @@
                       "fill": "$md-primary",
                       "layout": "vertical",
                       "children": [
-                        {
-                          "type": "frame",
-                          "id": "3Nb6p",
-                          "name": "statusBar",
-                          "width": "fill_container",
-                          "height": 44,
-                          "padding": [
-                            0,
-                            28
-                          ],
-                          "justifyContent": "space_between",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "vnFHm",
-                              "name": "sb1t",
-                              "fill": "#FFFFFF",
-                              "content": "9:41",
-                              "fontFamily": "Roboto",
-                              "fontSize": 14,
-                              "fontWeight": "600"
-                            },
-                            {
-                              "type": "frame",
-                              "id": "v2NwO",
-                              "name": "sb1r",
-                              "gap": 6,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon_font",
-                                  "id": "R9LRV",
-                                  "name": "sb1sig",
-                                  "width": 16,
-                                  "height": 16,
-                                  "iconFontName": "signal",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "#FFFFFF"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "3pyu8",
-                                  "name": "sb1wifi",
-                                  "width": 16,
-                                  "height": 16,
-                                  "iconFontName": "wifi",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "#FFFFFF"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "OE7wr",
-                                  "name": "sb1bat",
-                                  "width": 18,
-                                  "height": 18,
-                                  "iconFontName": "battery-full",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "#FFFFFF"
-                                }
-                              ]
-                            }
-                          ]
-                        },
                         {
                           "type": "frame",
                           "id": "zQjLg",
@@ -32916,82 +32317,17 @@
                       "children": [
                         {
                           "type": "frame",
-                          "id": "zUuUl",
-                          "x": 0,
-                          "y": 0,
-                          "name": "statusBar",
-                          "width": 900,
-                          "height": 44,
-                          "fill": "$md-surface",
-                          "padding": [
-                            0,
-                            28
-                          ],
-                          "justifyContent": "space_between",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "vtDm8",
-                              "name": "sbt2",
-                              "fill": "$md-on-surface",
-                              "content": "9:41",
-                              "fontFamily": "Roboto",
-                              "fontSize": 14,
-                              "fontWeight": "600"
-                            },
-                            {
-                              "type": "frame",
-                              "id": "9VFe6",
-                              "name": "sbr2",
-                              "gap": 6,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon_font",
-                                  "id": "YFHXG",
-                                  "name": "sbr2s",
-                                  "width": 16,
-                                  "height": 16,
-                                  "iconFontName": "signal",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "V0vTW",
-                                  "name": "sbr2w",
-                                  "width": 16,
-                                  "height": 16,
-                                  "iconFontName": "wifi",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "odBCN",
-                                  "name": "sbr2b",
-                                  "width": 18,
-                                  "height": 18,
-                                  "iconFontName": "battery-full",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
                           "id": "pKPb2",
                           "x": 0,
-                          "y": 44,
+                          "y": 0,
                           "name": "sidebar",
                           "width": 260,
-                          "height": 1016,
+                          "height": 1060,
                           "fill": "$md-surface-container-low",
                           "layout": "vertical",
                           "padding": [
+                            60,
+                            0,
                             16,
                             0
                           ],
@@ -33236,12 +32572,18 @@
                           "type": "frame",
                           "id": "vYaio",
                           "x": 260,
-                          "y": 44,
+                          "y": 0,
                           "name": "mainContent",
                           "width": 640,
-                          "height": 1016,
+                          "height": 1060,
                           "fill": "$md-surface",
                           "layout": "vertical",
+                          "padding": [
+                            44,
+                            0,
+                            0,
+                            0
+                          ],
                           "children": [
                             {
                               "type": "frame",
@@ -34152,82 +33494,17 @@
                       "children": [
                         {
                           "type": "frame",
-                          "id": "UTrtX",
-                          "x": 0,
-                          "y": 0,
-                          "name": "statusBar",
-                          "width": 900,
-                          "height": 44,
-                          "fill": "$md-surface",
-                          "padding": [
-                            0,
-                            28
-                          ],
-                          "justifyContent": "space_between",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "kNUwN",
-                              "name": "sb3t",
-                              "fill": "$md-on-surface",
-                              "content": "9:41",
-                              "fontFamily": "Roboto",
-                              "fontSize": 14,
-                              "fontWeight": "600"
-                            },
-                            {
-                              "type": "frame",
-                              "id": "vvLpb",
-                              "name": "sb3r",
-                              "gap": 6,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon_font",
-                                  "id": "od0YY",
-                                  "name": "sb3s",
-                                  "width": 16,
-                                  "height": 16,
-                                  "iconFontName": "signal",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "irKC4",
-                                  "name": "sb3w",
-                                  "width": 16,
-                                  "height": 16,
-                                  "iconFontName": "wifi",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "iYBbq",
-                                  "name": "sb3b",
-                                  "width": 18,
-                                  "height": 18,
-                                  "iconFontName": "battery-full",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
                           "id": "5ba34",
                           "x": 0,
-                          "y": 44,
+                          "y": 0,
                           "name": "sidebar3",
                           "width": 260,
-                          "height": 1016,
+                          "height": 1060,
                           "fill": "$md-surface-container-low",
                           "layout": "vertical",
                           "padding": [
+                            60,
+                            0,
                             16,
                             0
                           ],
@@ -34429,12 +33706,18 @@
                           "type": "frame",
                           "id": "K1N9Y",
                           "x": 260,
-                          "y": 44,
+                          "y": 0,
                           "name": "main3",
                           "width": 640,
-                          "height": 1016,
+                          "height": 1060,
                           "fill": "$md-surface",
                           "layout": "vertical",
+                          "padding": [
+                            44,
+                            0,
+                            0,
+                            0
+                          ],
                           "children": [
                             {
                               "type": "frame",
@@ -35350,82 +34633,17 @@
                       "children": [
                         {
                           "type": "frame",
-                          "id": "0Nohb",
-                          "x": 0,
-                          "y": 0,
-                          "name": "sb4",
-                          "width": 900,
-                          "height": 44,
-                          "fill": "$md-surface",
-                          "padding": [
-                            0,
-                            28
-                          ],
-                          "justifyContent": "space_between",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "4WyqV",
-                              "name": "sb4t",
-                              "fill": "$md-on-surface",
-                              "content": "9:41",
-                              "fontFamily": "Roboto",
-                              "fontSize": 14,
-                              "fontWeight": "600"
-                            },
-                            {
-                              "type": "frame",
-                              "id": "mMQpv",
-                              "name": "sb4r",
-                              "gap": 6,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon_font",
-                                  "id": "OXmOb",
-                                  "name": "sb4s",
-                                  "width": 16,
-                                  "height": 16,
-                                  "iconFontName": "signal",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "JcBDh",
-                                  "name": "sb4w",
-                                  "width": 16,
-                                  "height": 16,
-                                  "iconFontName": "wifi",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "DuDOv",
-                                  "name": "sb4b",
-                                  "width": 18,
-                                  "height": 18,
-                                  "iconFontName": "battery-full",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
                           "id": "PgdqH",
                           "x": 0,
-                          "y": 44,
+                          "y": 0,
                           "name": "sidebar4",
                           "width": 260,
-                          "height": 1016,
+                          "height": 1060,
                           "fill": "$md-surface-container-low",
                           "layout": "vertical",
                           "padding": [
+                            60,
+                            0,
                             16,
                             0
                           ],
@@ -35627,12 +34845,18 @@
                           "type": "frame",
                           "id": "vBf9L",
                           "x": 260,
-                          "y": 44,
+                          "y": 0,
                           "name": "main4",
                           "width": 640,
-                          "height": 1016,
+                          "height": 1060,
                           "fill": "$md-surface",
                           "layout": "vertical",
+                          "padding": [
+                            44,
+                            0,
+                            0,
+                            0
+                          ],
                           "children": [
                             {
                               "type": "frame",
@@ -36386,79 +35610,12 @@
                       "children": [
                         {
                           "type": "frame",
-                          "id": "fxjFS",
-                          "x": 0,
-                          "y": 0,
-                          "name": "sb5",
-                          "width": 900,
-                          "height": 44,
-                          "fill": "$md-surface",
-                          "padding": [
-                            0,
-                            28
-                          ],
-                          "justifyContent": "space_between",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "iHXFF",
-                              "name": "sb5t",
-                              "fill": "$md-on-surface",
-                              "content": "9:41",
-                              "fontFamily": "Roboto",
-                              "fontSize": 14,
-                              "fontWeight": "600"
-                            },
-                            {
-                              "type": "frame",
-                              "id": "ptk8G",
-                              "name": "sb5r",
-                              "gap": 6,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon_font",
-                                  "id": "ikia1",
-                                  "name": "sb5s",
-                                  "width": 16,
-                                  "height": 16,
-                                  "iconFontName": "signal",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "ureEl",
-                                  "name": "sb5w",
-                                  "width": 16,
-                                  "height": 16,
-                                  "iconFontName": "wifi",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "WgzWD",
-                                  "name": "sb5b",
-                                  "width": 18,
-                                  "height": 18,
-                                  "iconFontName": "battery-full",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$md-on-surface"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
                           "id": "Q8kpz",
                           "x": 0,
-                          "y": 44,
+                          "y": 0,
                           "name": "topBar5",
                           "width": 900,
-                          "height": 64,
+                          "height": 108,
                           "fill": "$md-surface",
                           "stroke": {
                             "thickness": {
@@ -36467,6 +35624,8 @@
                             "fill": "$md-outline-variant"
                           },
                           "padding": [
+                            44,
+                            20,
                             0,
                             20
                           ],
