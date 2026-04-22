@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../utils/currency_input_formatter.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_dimensions.dart';
 import '../theme/app_text_styles.dart';
@@ -188,7 +190,12 @@ class AppTextField extends StatelessWidget {
       textInputAction: textInputAction,
       autofocus: autofocus,
       obscureText: obscureText,
-      inputFormatters: (_isCurrency || _isPercentage)
+      inputFormatters: _isCurrency
+          ? [
+              FilteringTextInputFormatter.allow(RegExp(r'[\d.,]')),
+              CurrencyInputFormatter(),
+            ]
+          : _isPercentage
           ? [FilteringTextInputFormatter.allow(RegExp(r'[\d.]'))]
           : inputFormatters,
       onChanged: onChanged,

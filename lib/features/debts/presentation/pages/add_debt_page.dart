@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/di/injection.dart';
@@ -383,5 +384,14 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
     );
   }
 
-  String _displayCurrency(int cents) => (cents / 100).toStringAsFixed(2);
+  static final _currencyDisplayFormat = NumberFormat('#,##0.##', 'en_US');
+
+  String _displayCurrency(int cents) {
+    final value = cents / 100;
+    // Always show at least 2 decimal places for whole-cent amounts.
+    if (value == value.truncateToDouble()) {
+      return NumberFormat('#,##0.00', 'en_US').format(value);
+    }
+    return _currencyDisplayFormat.format(value);
+  }
 }

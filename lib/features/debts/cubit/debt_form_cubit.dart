@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/extensions/decimal_extensions.dart';
+import '../../../core/utils/currency_input_formatter.dart';
 import '../../../domain/entities/debt.dart';
 import '../../../domain/enums/debt_status.dart';
 import '../../../domain/enums/debt_type.dart';
@@ -705,15 +706,17 @@ class DebtFormCubit extends Cubit<DebtFormState> {
   }
 
   int? _parseCurrency(String raw) {
-    if (raw.trim().isEmpty) return null;
-    final decimal = Decimal.tryParse(raw.trim());
+    final stripped = CurrencyInputFormatter.strip(raw);
+    if (stripped.isEmpty) return null;
+    final decimal = Decimal.tryParse(stripped);
     if (decimal == null) return null;
     return decimal.toCents();
   }
 
   int? _parseOptionalCurrency(String raw) {
-    if (raw.trim().isEmpty) return null;
-    return _parseCurrency(raw);
+    final stripped = CurrencyInputFormatter.strip(raw);
+    if (stripped.isEmpty) return null;
+    return _parseCurrency(stripped);
   }
 
   Decimal? _parseApr(String raw) {
@@ -722,8 +725,9 @@ class DebtFormCubit extends Cubit<DebtFormState> {
   }
 
   Decimal? _parseOptionalApr(String raw) {
-    if (raw.trim().isEmpty) return null;
-    final decimal = Decimal.tryParse(raw.trim());
+    final stripped = CurrencyInputFormatter.strip(raw);
+    if (stripped.isEmpty) return null;
+    final decimal = Decimal.tryParse(stripped);
     if (decimal == null) return null;
     return (decimal / Decimal.fromInt(100))
         .toDecimal(scaleOnInfinitePrecision: 10)
@@ -731,8 +735,9 @@ class DebtFormCubit extends Cubit<DebtFormState> {
   }
 
   Decimal? _parseOptionalPercent(String raw) {
-    if (raw.trim().isEmpty) return null;
-    final decimal = Decimal.tryParse(raw.trim());
+    final stripped = CurrencyInputFormatter.strip(raw);
+    if (stripped.isEmpty) return null;
+    final decimal = Decimal.tryParse(stripped);
     if (decimal == null) return null;
     return (decimal / Decimal.fromInt(100))
         .toDecimal(scaleOnInfinitePrecision: 10)

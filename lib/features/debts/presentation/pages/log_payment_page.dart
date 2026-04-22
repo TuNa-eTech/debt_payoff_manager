@@ -8,6 +8,7 @@ import '../../../../core/services/payment_logging_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/currency_input_formatter.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
@@ -322,9 +323,9 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
   }
 
   int? _parseCurrency(String value) {
-    if (value.isEmpty) return null;
-    final normalized = value.replaceAll(',', '');
-    final parsed = double.tryParse(normalized);
+    final stripped = CurrencyInputFormatter.strip(value);
+    if (stripped.isEmpty) return null;
+    final parsed = double.tryParse(stripped);
     if (parsed == null) return null;
     return (parsed * 100).round();
   }

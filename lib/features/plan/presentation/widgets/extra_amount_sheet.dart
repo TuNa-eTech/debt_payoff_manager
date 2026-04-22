@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/currency_input_formatter.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/extensions/context_extensions.dart';
 
@@ -64,7 +66,11 @@ class ExtraAmountSheet extends StatelessWidget {
                       isDense: true,
                       contentPadding: EdgeInsets.zero,
                     ),
-                    keyboardType: TextInputType.number,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[\d.,]')),
+                      CurrencyInputFormatter(),
+                    ],
                     textAlign: TextAlign.center,
                   ),
                 ),
