@@ -289,15 +289,15 @@
   },
   "monthlyActionOverdueChip": "Overdue",
   "@monthlyActionOverdueChip": {
-    "description": "Status chip for overdue monthly actions."
+    "description": "Chip label"
   },
   "monthlyActionUpcomingChip": "Upcoming",
   "@monthlyActionUpcomingChip": {
-    "description": "Status chip for upcoming monthly actions."
+    "description": "Chip label"
   },
   "monthlyActionPriorityChip": "Priority #{rank}",
   "@monthlyActionPriorityChip": {
-    "description": "Priority chip for optional monthly actions.",
+    "description": "Chip label",
     "placeholders": {
       "rank": {
         "type": "int"
@@ -457,19 +457,19 @@
   },
   "logPaymentTypeLabel": "Payment type",
   "@logPaymentTypeLabel": {
-    "description": "Label above the payment type chips."
+    "description": "Label text."
   },
   "logPaymentDateLabel": "Applied date",
   "@logPaymentDateLabel": {
-    "description": "Label for the payment date field."
+    "description": "Label text."
   },
   "logPaymentNoteLabel": "Note",
   "@logPaymentNoteLabel": {
     "description": "Label for the optional payment note field."
   },
-  "logPaymentNoteHint": "Example: autopay, bonus, paycheck sweep",
+  "logPaymentNoteHint": "E.g. autopay, bonus, extra payment",
   "@logPaymentNoteHint": {
-    "description": "Hint text for the optional payment note field."
+    "description": "Hint text."
   },
   "logPaymentInfo": "This payment will store the before and after balances and refresh your payoff plan right away.",
   "@logPaymentInfo": {
@@ -1011,8 +1011,7 @@
     "description": "Prefix for monthly interest amount."
   },
   "planTimelinePaidOffBadge": "Paid off",
-  "@planTimelinePaidOffBadge": {
-  },
+  "@planTimelinePaidOffBadge": {},
   "onboardingDebtEntryTitle": "Add Your First Debt",
   "@onboardingDebtEntryTitle": {
     "description": "Title for debt entry page in onboarding"
@@ -1316,5 +1315,375 @@
   "onboardingAhaSavedVsMinimum": "Saved vs minimum",
   "@onboardingAhaSavedVsMinimum": {
     "description": "Label for saved vs minimum in aha moment"
+  },
+  "commonCancel": "Cancel",
+  "@commonCancel": {
+    "description": "Generic cancel action."
+  },
+  "commonTotalDebt": "Total Debt",
+  "@commonTotalDebt": {
+    "description": "Label for the total debt amount."
+  },
+  "commonNotes": "Notes",
+  "@commonNotes": {
+    "description": "Label for notes input field."
+  },
+  "debtDetailTitle": "Debt Details",
+  "@debtDetailTitle": {
+    "description": "App bar title on the debt detail page."
+  },
+  "debtDetailInitialPrincipal": "Initial Principal",
+  "@debtDetailInitialPrincipal": {
+    "description": "Label for the initial principal."
+  },
+  "debtDetailApr": "APR",
+  "@debtDetailApr": {
+    "description": "Label for APR."
+  },
+  "debtDetailDueDate": "Due Date",
+  "@debtDetailDueDate": {
+    "description": "Label for due date."
+  },
+  "debtDetailMinimumPayment": "Minimum payment",
+  "@debtDetailMinimumPayment": {
+    "description": "Label for minimum payment."
+  },
+  "debtDetailInterestCalc": "Interest Calculation",
+  "@debtDetailInterestCalc": {
+    "description": "Label for interest calculation type."
+  },
+  "debtDetailLogPayment": "Log payment",
+  "@debtDetailLogPayment": {
+    "description": "Button to log a payment."
+  },
+  "debtDetailViewHistory": "View history",
+  "@debtDetailViewHistory": {
+    "description": "Button to view payment history."
+  },
+  "debtDetailArchiveTitle": "Archive Debt?",
+  "@debtDetailArchiveTitle": {
+    "description": "Title for the archive confirmation."
+  },
+  "debtDetailArchivedMsg": "Debt archived.",
+  "@debtDetailArchivedMsg": {
+    "description": "Snackbar message after archiving a debt."
+  },
+  "debtDetailUnarchivedMsg": "Debt restored to paid list.",
+  "@debtDetailUnarchivedMsg": {
+    "description": "Snackbar message after restoring an archived debt."
+  },
+  "debtDetailDeleteTitle": "Delete Debt?",
+  "@debtDetailDeleteTitle": {
+    "description": "Title for the delete confirmation."
+  },
+  "debtDetailDeletedMsg": "Debt deleted.",
+  "@debtDetailDeletedMsg": {
+    "description": "Snackbar message after deleting a debt."
+  },
+  "debtsListTitle": "Debts",
+  "@debtsListTitle": {
+    "description": "App bar title on the debts list page."
+  },
+  "debtsListFilterAll": "All",
+  "@debtsListFilterAll": {
+    "description": "Filter tab for all debts."
+  },
+  "debtsListFilterActive": "Active",
+  "@debtsListFilterActive": {
+    "description": "Filter tab for active debts."
+  },
+  "debtsListFilterPaid": "Paid",
+  "@debtsListFilterPaid": {
+    "description": "Filter tab for paid debts."
+  },
+  "debtsListFilterArchived": "Archived",
+  "@debtsListFilterArchived": {
+    "description": "Filter tab for archived debts."
+  },
+  "logPaymentNotFound": "This debt no longer exists or has been deleted.",
+  "@logPaymentNotFound": {
+    "description": "Error when debt is not found in log payment."
+  },
+  "paymentHistoryTitle": "Payment History",
+  "@paymentHistoryTitle": {
+    "description": "App bar title on payment history page."
+  },
+  "paymentHistoryNoPayments": "No payments for this filter",
+  "@paymentHistoryNoPayments": {
+    "description": "Empty state when no payments match."
+  },
+  "debtOptionsEdit": "Edit debt",
+  "@debtOptionsEdit": {
+    "description": "Option"
+  },
+  "debtOptionsDelete": "Delete debt",
+  "@debtOptionsDelete": {
+    "description": "Option"
+  },
+  "debtOptionsDeleteSubtitle": "You can restore it right after deleting.",
+  "@debtOptionsDeleteSubtitle": {
+    "description": "Subtitle"
+  },
+  "editDebtTitle": "Edit Debt",
+  "@editDebtTitle": {
+    "description": "App bar title on the edit debt page."
+  },
+  "monthlyActionThisMonth": "This month",
+  "@monthlyActionThisMonth": {
+    "description": "Title"
+  },
+  "monthlyActionNoChecklist": "No checklist for this month",
+  "@monthlyActionNoChecklist": {
+    "description": "Title"
+  },
+  "monthlyActionNeedToPay": "What you need to pay this month",
+  "@monthlyActionNeedToPay": {
+    "description": "Section title"
+  },
+  "monthlyActionTotalThisMonth": "Total this month",
+  "@monthlyActionTotalThisMonth": {
+    "description": "Label"
+  },
+  "monthlyActionCompleted": "Completed",
+  "@monthlyActionCompleted": {
+    "description": "Label"
+  },
+  "progressTitle": "Progress",
+  "@progressTitle": {
+    "description": "App bar title on the progress page."
+  },
+  "progressNoProgress": "No progress to show yet",
+  "@progressNoProgress": {
+    "description": "Empty state for the progress page."
+  },
+  "progressByDebt": "Progress by debt",
+  "@progressByDebt": {
+    "description": "Title for the progress by debt section."
+  },
+  "progressPlanSummary": "Plan summary",
+  "@progressPlanSummary": {
+    "description": "Title for the plan summary section."
+  },
+  "progressDebtFreeDate": "Debt-free date",
+  "@progressDebtFreeDate": {
+    "description": "Label for debt free date."
+  },
+  "progressProjectedInterest": "Projected interest",
+  "@progressProjectedInterest": {
+    "description": "Label for projected interest."
+  },
+  "progressSavedVsMinimum": "Saved vs minimum",
+  "@progressSavedVsMinimum": {
+    "description": "Label for saved vs minimum interest."
+  },
+  "debtDetailInfo": "Debt Info",
+  "@debtDetailInfo": {
+    "description": "Section title."
+  },
+  "debtDetailWarnings": "Data Warnings",
+  "@debtDetailWarnings": {
+    "description": "Section title."
+  },
+  "debtDetailTracking": "Payment Tracking",
+  "@debtDetailTracking": {
+    "description": "Section title."
+  },
+  "debtDetailTrackingHelper": "Log real payments to reduce current balance, create an audit trail, and instantly recast your timeline.",
+  "@debtDetailTrackingHelper": {
+    "description": "Helper text."
+  },
+  "debtDetailArchiveMessage": "This paid-off debt will be moved to the archive.",
+  "@debtDetailArchiveMessage": {
+    "description": "Message in archive dialog."
+  },
+  "debtDetailArchiveConfirm": "Archive",
+  "@debtDetailArchiveConfirm": {
+    "description": "Confirm button."
+  },
+  "debtDetailDeleteMessage": "This debt will be hidden, but you can recover it right after deleting.",
+  "@debtDetailDeleteMessage": {
+    "description": "Message in delete dialog."
+  },
+  "debtDetailDeleteConfirm": "Delete",
+  "@debtDetailDeleteConfirm": {
+    "description": "Confirm button."
+  },
+  "debtsListSectionAll": "All debts",
+  "@debtsListSectionAll": {
+    "description": "Section title."
+  },
+  "debtsListSectionActive": "Active debts",
+  "@debtsListSectionActive": {
+    "description": "Section title."
+  },
+  "debtsListSectionPaidOff": "Paid-off debts",
+  "@debtsListSectionPaidOff": {
+    "description": "Section title."
+  },
+  "debtsListSectionArchived": "Archived debts",
+  "@debtsListSectionArchived": {
+    "description": "Section title."
+  },
+  "debtsListEmptyAll": "You have no debts. Add your first one.",
+  "@debtsListEmptyAll": {
+    "description": "Empty state."
+  },
+  "debtsListEmptyActive": "You have no active debts being tracked.",
+  "@debtsListEmptyActive": {
+    "description": "Empty state."
+  },
+  "debtsListEmptyPaidOff": "You have no paid-off debts.",
+  "@debtsListEmptyPaidOff": {
+    "description": "Empty state."
+  },
+  "debtsListEmptyArchived": "You have no archived debts.",
+  "@debtsListEmptyArchived": {
+    "description": "Empty state."
+  },
+  "logPaymentHelperAmount": "Amount reduces current balance directly (balance-first model).",
+  "@logPaymentHelperAmount": {
+    "description": "Helper text."
+  },
+  "logPaymentAuditHelper": "This payment will create an audit trail with balance before/after and recast timeline immediately after saving.",
+  "@logPaymentAuditHelper": {
+    "description": "Helper text."
+  },
+  "logPaymentErrorInvalidAmount": "Please enter a valid amount greater than 0.",
+  "@logPaymentErrorInvalidAmount": {
+    "description": "Error message."
+  },
+  "monthlyActionNoChecklistSubtitle": "All your tracked debts are paid off or paused. Timeline is still recast from latest data.",
+  "@monthlyActionNoChecklistSubtitle": {
+    "description": "Subtitle"
+  },
+  "monthlyActionChecklistHelper": "This checklist is computed directly from your strategy, timeline cache, and payment history.",
+  "@monthlyActionChecklistHelper": {
+    "description": "Helper text"
+  },
+  "monthlyActionRecasting": "Recasting...",
+  "@monthlyActionRecasting": {
+    "description": "Status"
+  },
+  "monthlyActionInMonth": "In {monthYear}",
+  "@monthlyActionInMonth": {
+    "description": "Label",
+    "placeholders": {
+      "monthYear": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionLogged": "Logged",
+  "@monthlyActionLogged": {
+    "description": "Button label"
+  },
+  "monthlyActionCheckOff": "Check off",
+  "@monthlyActionCheckOff": {
+    "description": "Button label"
+  },
+  "progressEmptySubtitle": "Add your first debt so the app can start tracking your completion.",
+  "@progressEmptySubtitle": {
+    "description": "Empty state subtitle"
+  },
+  "progressPaidSoFar": "Paid so far",
+  "@progressPaidSoFar": {
+    "description": "Label"
+  },
+  "progressRemainingAmount": "Remaining {amount}",
+  "@progressRemainingAmount": {
+    "description": "Label",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "progressOverall": "Overall progress",
+  "@progressOverall": {
+    "description": "Label"
+  },
+  "progressTabHelper": "Progress here combines actual balance and recast plan summary. The previous overview from Home has been moved to this tab.",
+  "@progressTabHelper": {
+    "description": "Helper text"
+  },
+  "progressByDebtHelper": "Based on current balance versus original principal for each debt.",
+  "@progressByDebtHelper": {
+    "description": "Helper text"
+  },
+  "progressDebtPaidOffStatus": "This debt is marked as paid off.",
+  "@progressDebtPaidOffStatus": {
+    "description": "Status text"
+  },
+  "progressDebtPausedStatus": "This debt is paused.",
+  "@progressDebtPausedStatus": {
+    "description": "Status text"
+  },
+  "progressDebtRemainingVsOriginal": "Remaining {current} out of {original} principal",
+  "@progressDebtRemainingVsOriginal": {
+    "description": "Status text",
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "original": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentHistorySubtitle": "{count} payments logged · Current balance {balance}",
+  "@paymentHistorySubtitle": {
+    "description": "Subtitle",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentHistoryByMonth": "By month",
+  "@paymentHistoryByMonth": {
+    "description": "Label"
+  },
+  "paymentHistoryNoPaymentsSubtitle": "Log payments from debt details or Monthly Action View to see actual history.",
+  "@paymentHistoryNoPaymentsSubtitle": {
+    "description": "Subtitle"
+  },
+  "paymentTypeFeeLabel": "Fee adjustment",
+  "@paymentTypeFeeLabel": {
+    "description": "Payment type"
+  },
+  "paymentTypeRefundLabel": "Refund",
+  "@paymentTypeRefundLabel": {
+    "description": "Payment type"
+  },
+  "paymentTypeChargeLabel": "Charge",
+  "@paymentTypeChargeLabel": {
+    "description": "Payment type"
+  },
+  "debtOptionsUnarchive": "Unarchive",
+  "@debtOptionsUnarchive": {
+    "description": "Option"
+  },
+  "debtOptionsArchive": "Archive debt",
+  "@debtOptionsArchive": {
+    "description": "Option"
+  },
+  "addDebtTitle": "Add Debt",
+  "@addDebtTitle": {
+    "description": "Title"
+  },
+  "addDebtSave": "Save debt",
+  "@addDebtSave": {
+    "description": "Action label"
+  },
+  "addDebtSaveChanges": "Save changes",
+  "@addDebtSaveChanges": {
+    "description": "Action label"
+  },
+  "commonMonth": "month",
+  "@commonMonth": {
+    "description": "Common word for month"
   }
 }

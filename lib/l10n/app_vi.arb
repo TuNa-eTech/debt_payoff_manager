@@ -289,15 +289,15 @@
   },
   "monthlyActionOverdueChip": "Quá hạn",
   "@monthlyActionOverdueChip": {
-    "description": "Status chip for overdue monthly actions."
+    "description": "Chip label"
   },
   "monthlyActionUpcomingChip": "Sắp đến hạn",
   "@monthlyActionUpcomingChip": {
-    "description": "Status chip for upcoming monthly actions."
+    "description": "Chip label"
   },
   "monthlyActionPriorityChip": "Ưu tiên #{rank}",
   "@monthlyActionPriorityChip": {
-    "description": "Priority chip for optional monthly actions.",
+    "description": "Chip label",
     "placeholders": {
       "rank": {
         "type": "int"
@@ -457,19 +457,19 @@
   },
   "logPaymentTypeLabel": "Loại thanh toán",
   "@logPaymentTypeLabel": {
-    "description": "Label above the payment type chips."
+    "description": "Label text."
   },
   "logPaymentDateLabel": "Ngày áp dụng",
   "@logPaymentDateLabel": {
-    "description": "Label for the payment date field."
+    "description": "Label text."
   },
   "logPaymentNoteLabel": "Ghi chú",
   "@logPaymentNoteLabel": {
     "description": "Label for the optional payment note field."
   },
-  "logPaymentNoteHint": "Ví dụ: autopay, bonus, paycheck sweep",
+  "logPaymentNoteHint": "Ví dụ: trả tự động, thưởng, trả trước hạn",
   "@logPaymentNoteHint": {
-    "description": "Hint text for the optional payment note field."
+    "description": "Hint text."
   },
   "logPaymentInfo": "Khoản thanh toán này sẽ lưu lại số dư trước và sau, rồi cập nhật kế hoạch ngay sau khi lưu.",
   "@logPaymentInfo": {
@@ -1011,8 +1011,7 @@
     "description": "Prefix for monthly interest amount."
   },
   "planTimelinePaidOffBadge": "Paid off",
-  "@planTimelinePaidOffBadge": {
-  },
+  "@planTimelinePaidOffBadge": {},
   "onboardingDebtEntryTitle": "Thêm khoản nợ đầu tiên",
   "@onboardingDebtEntryTitle": {
     "description": "Title for debt entry page in onboarding"
@@ -1316,5 +1315,375 @@
   "onboardingAhaSavedVsMinimum": "Saved vs minimum",
   "@onboardingAhaSavedVsMinimum": {
     "description": "Label for saved vs minimum in aha moment"
+  },
+  "commonCancel": "Hủy",
+  "@commonCancel": {
+    "description": "Generic cancel action."
+  },
+  "commonTotalDebt": "Tổng dư nợ",
+  "@commonTotalDebt": {
+    "description": "Label for the total debt amount."
+  },
+  "commonNotes": "Ghi chú",
+  "@commonNotes": {
+    "description": "Label for notes input field."
+  },
+  "debtDetailTitle": "Chi tiết khoản nợ",
+  "@debtDetailTitle": {
+    "description": "App bar title on the debt detail page."
+  },
+  "debtDetailInitialPrincipal": "Số gốc ban đầu",
+  "@debtDetailInitialPrincipal": {
+    "description": "Label for the initial principal."
+  },
+  "debtDetailApr": "APR",
+  "@debtDetailApr": {
+    "description": "Label for APR."
+  },
+  "debtDetailDueDate": "Ngày đến hạn",
+  "@debtDetailDueDate": {
+    "description": "Label for due date."
+  },
+  "debtDetailMinimumPayment": "Minimum payment",
+  "@debtDetailMinimumPayment": {
+    "description": "Label for minimum payment."
+  },
+  "debtDetailInterestCalc": "Cách tính lãi",
+  "@debtDetailInterestCalc": {
+    "description": "Label for interest calculation type."
+  },
+  "debtDetailLogPayment": "Log payment",
+  "@debtDetailLogPayment": {
+    "description": "Button to log a payment."
+  },
+  "debtDetailViewHistory": "Xem history",
+  "@debtDetailViewHistory": {
+    "description": "Button to view payment history."
+  },
+  "debtDetailArchiveTitle": "Lưu trữ khoản nợ?",
+  "@debtDetailArchiveTitle": {
+    "description": "Title for the archive confirmation."
+  },
+  "debtDetailArchivedMsg": "Đã lưu trữ khoản nợ.",
+  "@debtDetailArchivedMsg": {
+    "description": "Snackbar message after archiving a debt."
+  },
+  "debtDetailUnarchivedMsg": "Đã đưa khoản nợ trở lại danh sách đã trả.",
+  "@debtDetailUnarchivedMsg": {
+    "description": "Snackbar message after restoring an archived debt."
+  },
+  "debtDetailDeleteTitle": "Xóa khoản nợ?",
+  "@debtDetailDeleteTitle": {
+    "description": "Title for the delete confirmation."
+  },
+  "debtDetailDeletedMsg": "Đã xóa khoản nợ.",
+  "@debtDetailDeletedMsg": {
+    "description": "Snackbar message after deleting a debt."
+  },
+  "debtsListTitle": "Các khoản nợ",
+  "@debtsListTitle": {
+    "description": "App bar title on the debts list page."
+  },
+  "debtsListFilterAll": "Tất cả",
+  "@debtsListFilterAll": {
+    "description": "Filter tab for all debts."
+  },
+  "debtsListFilterActive": "Đang nợ",
+  "@debtsListFilterActive": {
+    "description": "Filter tab for active debts."
+  },
+  "debtsListFilterPaid": "Đã trả",
+  "@debtsListFilterPaid": {
+    "description": "Filter tab for paid debts."
+  },
+  "debtsListFilterArchived": "Đã lưu trữ",
+  "@debtsListFilterArchived": {
+    "description": "Filter tab for archived debts."
+  },
+  "logPaymentNotFound": "Khoản nợ này không còn tồn tại hoặc đã bị xóa.",
+  "@logPaymentNotFound": {
+    "description": "Error when debt is not found in log payment."
+  },
+  "paymentHistoryTitle": "Lịch sử thanh toán",
+  "@paymentHistoryTitle": {
+    "description": "App bar title on payment history page."
+  },
+  "paymentHistoryNoPayments": "Chưa có payment cho bộ lọc này",
+  "@paymentHistoryNoPayments": {
+    "description": "Empty state when no payments match."
+  },
+  "debtOptionsEdit": "Chỉnh sửa khoản nợ",
+  "@debtOptionsEdit": {
+    "description": "Option"
+  },
+  "debtOptionsDelete": "Xóa khoản nợ",
+  "@debtOptionsDelete": {
+    "description": "Option"
+  },
+  "debtOptionsDeleteSubtitle": "Bạn vẫn có thể khôi phục ngay sau khi xóa.",
+  "@debtOptionsDeleteSubtitle": {
+    "description": "Subtitle"
+  },
+  "editDebtTitle": "Chỉnh sửa khoản nợ",
+  "@editDebtTitle": {
+    "description": "App bar title on the edit debt page."
+  },
+  "monthlyActionThisMonth": "Tháng này",
+  "@monthlyActionThisMonth": {
+    "description": "Title"
+  },
+  "monthlyActionNoChecklist": "Không có checklist cho tháng này",
+  "@monthlyActionNoChecklist": {
+    "description": "Title"
+  },
+  "monthlyActionNeedToPay": "Tháng này bạn cần trả",
+  "@monthlyActionNeedToPay": {
+    "description": "Section title"
+  },
+  "monthlyActionTotalThisMonth": "Tổng tháng này",
+  "@monthlyActionTotalThisMonth": {
+    "description": "Label"
+  },
+  "monthlyActionCompleted": "Đã hoàn thành",
+  "@monthlyActionCompleted": {
+    "description": "Label"
+  },
+  "progressTitle": "Tiến độ",
+  "@progressTitle": {
+    "description": "App bar title on the progress page."
+  },
+  "progressNoProgress": "Chưa có tiến độ để hiển thị",
+  "@progressNoProgress": {
+    "description": "Empty state for the progress page."
+  },
+  "progressByDebt": "Tiến độ theo khoản",
+  "@progressByDebt": {
+    "description": "Title for the progress by debt section."
+  },
+  "progressPlanSummary": "Plan summary",
+  "@progressPlanSummary": {
+    "description": "Title for the plan summary section."
+  },
+  "progressDebtFreeDate": "Debt-free date",
+  "@progressDebtFreeDate": {
+    "description": "Label for debt free date."
+  },
+  "progressProjectedInterest": "Projected interest",
+  "@progressProjectedInterest": {
+    "description": "Label for projected interest."
+  },
+  "progressSavedVsMinimum": "Saved vs minimum",
+  "@progressSavedVsMinimum": {
+    "description": "Label for saved vs minimum interest."
+  },
+  "debtDetailInfo": "Thông tin khoản nợ",
+  "@debtDetailInfo": {
+    "description": "Section title."
+  },
+  "debtDetailWarnings": "Lưu ý dữ liệu",
+  "@debtDetailWarnings": {
+    "description": "Section title."
+  },
+  "debtDetailTracking": "Theo dõi thanh toán",
+  "@debtDetailTracking": {
+    "description": "Section title."
+  },
+  "debtDetailTrackingHelper": "Log payment thật để giảm current balance, tạo audit trail trước/sau, và recast timeline ngay lập tức.",
+  "@debtDetailTrackingHelper": {
+    "description": "Helper text."
+  },
+  "debtDetailArchiveMessage": "Khoản nợ đã trả xong này sẽ được chuyển sang danh sách lưu trữ.",
+  "@debtDetailArchiveMessage": {
+    "description": "Message in archive dialog."
+  },
+  "debtDetailArchiveConfirm": "Lưu trữ",
+  "@debtDetailArchiveConfirm": {
+    "description": "Confirm button."
+  },
+  "debtDetailDeleteMessage": "Khoản nợ sẽ bị ẩn khỏi app, nhưng bạn vẫn có thể khôi phục ngay sau khi xóa.",
+  "@debtDetailDeleteMessage": {
+    "description": "Message in delete dialog."
+  },
+  "debtDetailDeleteConfirm": "Xóa",
+  "@debtDetailDeleteConfirm": {
+    "description": "Confirm button."
+  },
+  "debtsListSectionAll": "Tất cả khoản nợ",
+  "@debtsListSectionAll": {
+    "description": "Section title."
+  },
+  "debtsListSectionActive": "Khoản nợ đang theo dõi",
+  "@debtsListSectionActive": {
+    "description": "Section title."
+  },
+  "debtsListSectionPaidOff": "Khoản nợ đã trả xong",
+  "@debtsListSectionPaidOff": {
+    "description": "Section title."
+  },
+  "debtsListSectionArchived": "Khoản nợ đã lưu trữ",
+  "@debtsListSectionArchived": {
+    "description": "Section title."
+  },
+  "debtsListEmptyAll": "Bạn chưa có khoản nợ nào. Hãy thêm khoản đầu tiên.",
+  "@debtsListEmptyAll": {
+    "description": "Empty state."
+  },
+  "debtsListEmptyActive": "Hiện không có khoản nợ nào đang theo dõi.",
+  "@debtsListEmptyActive": {
+    "description": "Empty state."
+  },
+  "debtsListEmptyPaidOff": "Chưa có khoản nợ nào được đánh dấu đã trả xong.",
+  "@debtsListEmptyPaidOff": {
+    "description": "Empty state."
+  },
+  "debtsListEmptyArchived": "Chưa có khoản nợ nào được lưu trữ.",
+  "@debtsListEmptyArchived": {
+    "description": "Empty state."
+  },
+  "logPaymentHelperAmount": "Amount giảm trực tiếp current balance (balance-first model).",
+  "@logPaymentHelperAmount": {
+    "description": "Helper text."
+  },
+  "logPaymentAuditHelper": "Payment này sẽ tạo audit trail với số dư trước/sau và recast timeline ngay sau khi lưu.",
+  "@logPaymentAuditHelper": {
+    "description": "Helper text."
+  },
+  "logPaymentErrorInvalidAmount": "Nhập số tiền hợp lệ lớn hơn 0.",
+  "@logPaymentErrorInvalidAmount": {
+    "description": "Error message."
+  },
+  "monthlyActionNoChecklistSubtitle": "Mọi khoản đang theo dõi của bạn đã trả xong hoặc đang tạm dừng. Timeline vẫn được recast từ dữ liệu mới nhất.",
+  "@monthlyActionNoChecklistSubtitle": {
+    "description": "Subtitle"
+  },
+  "monthlyActionChecklistHelper": "Checklist này được compute trực tiếp từ strategy, timeline cache, và payment history của bạn.",
+  "@monthlyActionChecklistHelper": {
+    "description": "Helper text"
+  },
+  "monthlyActionRecasting": "Đang recast...",
+  "@monthlyActionRecasting": {
+    "description": "Status"
+  },
+  "monthlyActionInMonth": "Trong {monthYear}",
+  "@monthlyActionInMonth": {
+    "description": "Label",
+    "placeholders": {
+      "monthYear": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionLogged": "Đã log",
+  "@monthlyActionLogged": {
+    "description": "Button label"
+  },
+  "monthlyActionCheckOff": "Check off",
+  "@monthlyActionCheckOff": {
+    "description": "Button label"
+  },
+  "progressEmptySubtitle": "Thêm khoản nợ đầu tiên để app bắt đầu theo dõi mức độ hoàn thành của bạn.",
+  "@progressEmptySubtitle": {
+    "description": "Empty state subtitle"
+  },
+  "progressPaidSoFar": "Đã trả được",
+  "@progressPaidSoFar": {
+    "description": "Label"
+  },
+  "progressRemainingAmount": "Còn lại {amount}",
+  "@progressRemainingAmount": {
+    "description": "Label",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "progressOverall": "Tiến độ tổng thể",
+  "@progressOverall": {
+    "description": "Label"
+  },
+  "progressTabHelper": "Tiến độ ở đây kết hợp cả số dư thực tế và plan summary đã recast. Phần overview trước đây ở Home đã được chuyển về tab này.",
+  "@progressTabHelper": {
+    "description": "Helper text"
+  },
+  "progressByDebtHelper": "Dựa trên số dư hiện tại so với gốc ban đầu của từng khoản.",
+  "@progressByDebtHelper": {
+    "description": "Helper text"
+  },
+  "progressDebtPaidOffStatus": "Khoản nợ này đã được đánh dấu trả xong.",
+  "@progressDebtPaidOffStatus": {
+    "description": "Status text"
+  },
+  "progressDebtPausedStatus": "Khoản nợ này đang tạm dừng.",
+  "@progressDebtPausedStatus": {
+    "description": "Status text"
+  },
+  "progressDebtRemainingVsOriginal": "Còn lại {current} trên gốc {original}",
+  "@progressDebtRemainingVsOriginal": {
+    "description": "Status text",
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "original": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentHistorySubtitle": "{count} payment đã log · Current balance {balance}",
+  "@paymentHistorySubtitle": {
+    "description": "Subtitle",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentHistoryByMonth": "Theo tháng",
+  "@paymentHistoryByMonth": {
+    "description": "Label"
+  },
+  "paymentHistoryNoPaymentsSubtitle": "Log payment từ debt detail hoặc Monthly Action View để thấy lịch sử thật.",
+  "@paymentHistoryNoPaymentsSubtitle": {
+    "description": "Subtitle"
+  },
+  "paymentTypeFeeLabel": "Fee adjustment",
+  "@paymentTypeFeeLabel": {
+    "description": "Payment type"
+  },
+  "paymentTypeRefundLabel": "Refund",
+  "@paymentTypeRefundLabel": {
+    "description": "Payment type"
+  },
+  "paymentTypeChargeLabel": "Charge",
+  "@paymentTypeChargeLabel": {
+    "description": "Payment type"
+  },
+  "debtOptionsUnarchive": "Bỏ lưu trữ",
+  "@debtOptionsUnarchive": {
+    "description": "Option"
+  },
+  "debtOptionsArchive": "Lưu trữ khoản nợ",
+  "@debtOptionsArchive": {
+    "description": "Option"
+  },
+  "addDebtTitle": "Thêm khoản nợ",
+  "@addDebtTitle": {
+    "description": "Title"
+  },
+  "addDebtSave": "Lưu khoản nợ",
+  "@addDebtSave": {
+    "description": "Action label"
+  },
+  "addDebtSaveChanges": "Lưu thay đổi",
+  "@addDebtSaveChanges": {
+    "description": "Action label"
+  },
+  "commonMonth": "tháng",
+  "@commonMonth": {
+    "description": "Common word for month"
   }
 }

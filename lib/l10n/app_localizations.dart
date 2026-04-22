@@ -452,19 +452,19 @@ abstract class AppLocalizations {
   /// **'This payment helps shorten your payoff timeline.'**
   String get monthlyActionOptionalHelper;
 
-  /// Status chip for overdue monthly actions.
+  /// Chip label
   ///
   /// In en, this message translates to:
   /// **'Overdue'**
   String get monthlyActionOverdueChip;
 
-  /// Status chip for upcoming monthly actions.
+  /// Chip label
   ///
   /// In en, this message translates to:
   /// **'Upcoming'**
   String get monthlyActionUpcomingChip;
 
-  /// Priority chip for optional monthly actions.
+  /// Chip label
   ///
   /// In en, this message translates to:
   /// **'Priority #{rank}'**
@@ -614,13 +614,13 @@ abstract class AppLocalizations {
   /// **'This amount will be subtracted directly from the current balance.'**
   String get logPaymentAmountHelper;
 
-  /// Label above the payment type chips.
+  /// Label text.
   ///
   /// In en, this message translates to:
   /// **'Payment type'**
   String get logPaymentTypeLabel;
 
-  /// Label for the payment date field.
+  /// Label text.
   ///
   /// In en, this message translates to:
   /// **'Applied date'**
@@ -632,10 +632,10 @@ abstract class AppLocalizations {
   /// **'Note'**
   String get logPaymentNoteLabel;
 
-  /// Hint text for the optional payment note field.
+  /// Hint text.
   ///
   /// In en, this message translates to:
-  /// **'Example: autopay, bonus, paycheck sweep'**
+  /// **'E.g. autopay, bonus, extra payment'**
   String get logPaymentNoteHint;
 
   /// Info card text on the log payment page.
@@ -1833,6 +1833,522 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Saved vs minimum'**
   String get onboardingAhaSavedVsMinimum;
+
+  /// Generic cancel action.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get commonCancel;
+
+  /// Label for the total debt amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Debt'**
+  String get commonTotalDebt;
+
+  /// Label for notes input field.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get commonNotes;
+
+  /// App bar title on the debt detail page.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt Details'**
+  String get debtDetailTitle;
+
+  /// Label for the initial principal.
+  ///
+  /// In en, this message translates to:
+  /// **'Initial Principal'**
+  String get debtDetailInitialPrincipal;
+
+  /// Label for APR.
+  ///
+  /// In en, this message translates to:
+  /// **'APR'**
+  String get debtDetailApr;
+
+  /// Label for due date.
+  ///
+  /// In en, this message translates to:
+  /// **'Due Date'**
+  String get debtDetailDueDate;
+
+  /// Label for minimum payment.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum payment'**
+  String get debtDetailMinimumPayment;
+
+  /// Label for interest calculation type.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest Calculation'**
+  String get debtDetailInterestCalc;
+
+  /// Button to log a payment.
+  ///
+  /// In en, this message translates to:
+  /// **'Log payment'**
+  String get debtDetailLogPayment;
+
+  /// Button to view payment history.
+  ///
+  /// In en, this message translates to:
+  /// **'View history'**
+  String get debtDetailViewHistory;
+
+  /// Title for the archive confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive Debt?'**
+  String get debtDetailArchiveTitle;
+
+  /// Snackbar message after archiving a debt.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt archived.'**
+  String get debtDetailArchivedMsg;
+
+  /// Snackbar message after restoring an archived debt.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt restored to paid list.'**
+  String get debtDetailUnarchivedMsg;
+
+  /// Title for the delete confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Debt?'**
+  String get debtDetailDeleteTitle;
+
+  /// Snackbar message after deleting a debt.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt deleted.'**
+  String get debtDetailDeletedMsg;
+
+  /// App bar title on the debts list page.
+  ///
+  /// In en, this message translates to:
+  /// **'Debts'**
+  String get debtsListTitle;
+
+  /// Filter tab for all debts.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get debtsListFilterAll;
+
+  /// Filter tab for active debts.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get debtsListFilterActive;
+
+  /// Filter tab for paid debts.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get debtsListFilterPaid;
+
+  /// Filter tab for archived debts.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get debtsListFilterArchived;
+
+  /// Error when debt is not found in log payment.
+  ///
+  /// In en, this message translates to:
+  /// **'This debt no longer exists or has been deleted.'**
+  String get logPaymentNotFound;
+
+  /// App bar title on payment history page.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment History'**
+  String get paymentHistoryTitle;
+
+  /// Empty state when no payments match.
+  ///
+  /// In en, this message translates to:
+  /// **'No payments for this filter'**
+  String get paymentHistoryNoPayments;
+
+  /// Option
+  ///
+  /// In en, this message translates to:
+  /// **'Edit debt'**
+  String get debtOptionsEdit;
+
+  /// Option
+  ///
+  /// In en, this message translates to:
+  /// **'Delete debt'**
+  String get debtOptionsDelete;
+
+  /// Subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'You can restore it right after deleting.'**
+  String get debtOptionsDeleteSubtitle;
+
+  /// App bar title on the edit debt page.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Debt'**
+  String get editDebtTitle;
+
+  /// Title
+  ///
+  /// In en, this message translates to:
+  /// **'This month'**
+  String get monthlyActionThisMonth;
+
+  /// Title
+  ///
+  /// In en, this message translates to:
+  /// **'No checklist for this month'**
+  String get monthlyActionNoChecklist;
+
+  /// Section title
+  ///
+  /// In en, this message translates to:
+  /// **'What you need to pay this month'**
+  String get monthlyActionNeedToPay;
+
+  /// Label
+  ///
+  /// In en, this message translates to:
+  /// **'Total this month'**
+  String get monthlyActionTotalThisMonth;
+
+  /// Label
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get monthlyActionCompleted;
+
+  /// App bar title on the progress page.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get progressTitle;
+
+  /// Empty state for the progress page.
+  ///
+  /// In en, this message translates to:
+  /// **'No progress to show yet'**
+  String get progressNoProgress;
+
+  /// Title for the progress by debt section.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress by debt'**
+  String get progressByDebt;
+
+  /// Title for the plan summary section.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan summary'**
+  String get progressPlanSummary;
+
+  /// Label for debt free date.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt-free date'**
+  String get progressDebtFreeDate;
+
+  /// Label for projected interest.
+  ///
+  /// In en, this message translates to:
+  /// **'Projected interest'**
+  String get progressProjectedInterest;
+
+  /// Label for saved vs minimum interest.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved vs minimum'**
+  String get progressSavedVsMinimum;
+
+  /// Section title.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt Info'**
+  String get debtDetailInfo;
+
+  /// Section title.
+  ///
+  /// In en, this message translates to:
+  /// **'Data Warnings'**
+  String get debtDetailWarnings;
+
+  /// Section title.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Tracking'**
+  String get debtDetailTracking;
+
+  /// Helper text.
+  ///
+  /// In en, this message translates to:
+  /// **'Log real payments to reduce current balance, create an audit trail, and instantly recast your timeline.'**
+  String get debtDetailTrackingHelper;
+
+  /// Message in archive dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'This paid-off debt will be moved to the archive.'**
+  String get debtDetailArchiveMessage;
+
+  /// Confirm button.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive'**
+  String get debtDetailArchiveConfirm;
+
+  /// Message in delete dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'This debt will be hidden, but you can recover it right after deleting.'**
+  String get debtDetailDeleteMessage;
+
+  /// Confirm button.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get debtDetailDeleteConfirm;
+
+  /// Section title.
+  ///
+  /// In en, this message translates to:
+  /// **'All debts'**
+  String get debtsListSectionAll;
+
+  /// Section title.
+  ///
+  /// In en, this message translates to:
+  /// **'Active debts'**
+  String get debtsListSectionActive;
+
+  /// Section title.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid-off debts'**
+  String get debtsListSectionPaidOff;
+
+  /// Section title.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived debts'**
+  String get debtsListSectionArchived;
+
+  /// Empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no debts. Add your first one.'**
+  String get debtsListEmptyAll;
+
+  /// Empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no active debts being tracked.'**
+  String get debtsListEmptyActive;
+
+  /// Empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no paid-off debts.'**
+  String get debtsListEmptyPaidOff;
+
+  /// Empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no archived debts.'**
+  String get debtsListEmptyArchived;
+
+  /// Helper text.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount reduces current balance directly (balance-first model).'**
+  String get logPaymentHelperAmount;
+
+  /// Helper text.
+  ///
+  /// In en, this message translates to:
+  /// **'This payment will create an audit trail with balance before/after and recast timeline immediately after saving.'**
+  String get logPaymentAuditHelper;
+
+  /// Error message.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid amount greater than 0.'**
+  String get logPaymentErrorInvalidAmount;
+
+  /// Subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'All your tracked debts are paid off or paused. Timeline is still recast from latest data.'**
+  String get monthlyActionNoChecklistSubtitle;
+
+  /// Helper text
+  ///
+  /// In en, this message translates to:
+  /// **'This checklist is computed directly from your strategy, timeline cache, and payment history.'**
+  String get monthlyActionChecklistHelper;
+
+  /// Status
+  ///
+  /// In en, this message translates to:
+  /// **'Recasting...'**
+  String get monthlyActionRecasting;
+
+  /// Label
+  ///
+  /// In en, this message translates to:
+  /// **'In {monthYear}'**
+  String monthlyActionInMonth(String monthYear);
+
+  /// Button label
+  ///
+  /// In en, this message translates to:
+  /// **'Logged'**
+  String get monthlyActionLogged;
+
+  /// Button label
+  ///
+  /// In en, this message translates to:
+  /// **'Check off'**
+  String get monthlyActionCheckOff;
+
+  /// Empty state subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first debt so the app can start tracking your completion.'**
+  String get progressEmptySubtitle;
+
+  /// Label
+  ///
+  /// In en, this message translates to:
+  /// **'Paid so far'**
+  String get progressPaidSoFar;
+
+  /// Label
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining {amount}'**
+  String progressRemainingAmount(String amount);
+
+  /// Label
+  ///
+  /// In en, this message translates to:
+  /// **'Overall progress'**
+  String get progressOverall;
+
+  /// Helper text
+  ///
+  /// In en, this message translates to:
+  /// **'Progress here combines actual balance and recast plan summary. The previous overview from Home has been moved to this tab.'**
+  String get progressTabHelper;
+
+  /// Helper text
+  ///
+  /// In en, this message translates to:
+  /// **'Based on current balance versus original principal for each debt.'**
+  String get progressByDebtHelper;
+
+  /// Status text
+  ///
+  /// In en, this message translates to:
+  /// **'This debt is marked as paid off.'**
+  String get progressDebtPaidOffStatus;
+
+  /// Status text
+  ///
+  /// In en, this message translates to:
+  /// **'This debt is paused.'**
+  String get progressDebtPausedStatus;
+
+  /// Status text
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining {current} out of {original} principal'**
+  String progressDebtRemainingVsOriginal(String current, String original);
+
+  /// Subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'{count} payments logged · Current balance {balance}'**
+  String paymentHistorySubtitle(int count, String balance);
+
+  /// Label
+  ///
+  /// In en, this message translates to:
+  /// **'By month'**
+  String get paymentHistoryByMonth;
+
+  /// Subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Log payments from debt details or Monthly Action View to see actual history.'**
+  String get paymentHistoryNoPaymentsSubtitle;
+
+  /// Payment type
+  ///
+  /// In en, this message translates to:
+  /// **'Fee adjustment'**
+  String get paymentTypeFeeLabel;
+
+  /// Payment type
+  ///
+  /// In en, this message translates to:
+  /// **'Refund'**
+  String get paymentTypeRefundLabel;
+
+  /// Payment type
+  ///
+  /// In en, this message translates to:
+  /// **'Charge'**
+  String get paymentTypeChargeLabel;
+
+  /// Option
+  ///
+  /// In en, this message translates to:
+  /// **'Unarchive'**
+  String get debtOptionsUnarchive;
+
+  /// Option
+  ///
+  /// In en, this message translates to:
+  /// **'Archive debt'**
+  String get debtOptionsArchive;
+
+  /// Title
+  ///
+  /// In en, this message translates to:
+  /// **'Add Debt'**
+  String get addDebtTitle;
+
+  /// Action label
+  ///
+  /// In en, this message translates to:
+  /// **'Save debt'**
+  String get addDebtSave;
+
+  /// Action label
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get addDebtSaveChanges;
+
+  /// Common word for month
+  ///
+  /// In en, this message translates to:
+  /// **'month'**
+  String get commonMonth;
 }
 
 class _AppLocalizationsDelegate

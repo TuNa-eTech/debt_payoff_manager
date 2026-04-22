@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
+import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -38,10 +39,10 @@ class AddDebtPage extends StatelessWidget {
             ),
       child: DebtFormScaffold(
         mode: _mode,
-        title: _initialDebt == null ? 'Thêm khoản nợ' : 'Chỉnh sửa khoản nợ',
+        title: _initialDebt == null ? context.l10n.addDebtTitle : context.l10n.editDebtTitle,
         primaryActionLabel: _initialDebt == null
-            ? 'Lưu khoản nợ'
-            : 'Lưu thay đổi',
+            ? context.l10n.addDebtSave
+            : context.l10n.addDebtSaveChanges,
         onSaved: (context, debt) {
           if (_mode == DebtFormMode.edit) {
             context.go(AppRoutes.debtDetailPath(debt.id));
@@ -298,7 +299,7 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
                 child: OutlinedButton(
                   key: AppTestKeys.debtFormCancel,
                   onPressed: widget.onCancel,
-                  child: const Text('Hủy'),
+                  child: Text(context.l10n.commonCancel),
                 ),
               ),
               const SizedBox(width: 12),

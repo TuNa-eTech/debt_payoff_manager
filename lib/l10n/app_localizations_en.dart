@@ -336,7 +336,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logPaymentNoteLabel => 'Note';
 
   @override
-  String get logPaymentNoteHint => 'Example: autopay, bonus, paycheck sweep';
+  String get logPaymentNoteHint => 'E.g. autopay, bonus, extra payment';
 
   @override
   String get logPaymentInfo =>
@@ -1019,4 +1019,284 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingAhaSavedVsMinimum => 'Saved vs minimum';
+
+  @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String get commonTotalDebt => 'Total Debt';
+
+  @override
+  String get commonNotes => 'Notes';
+
+  @override
+  String get debtDetailTitle => 'Debt Details';
+
+  @override
+  String get debtDetailInitialPrincipal => 'Initial Principal';
+
+  @override
+  String get debtDetailApr => 'APR';
+
+  @override
+  String get debtDetailDueDate => 'Due Date';
+
+  @override
+  String get debtDetailMinimumPayment => 'Minimum payment';
+
+  @override
+  String get debtDetailInterestCalc => 'Interest Calculation';
+
+  @override
+  String get debtDetailLogPayment => 'Log payment';
+
+  @override
+  String get debtDetailViewHistory => 'View history';
+
+  @override
+  String get debtDetailArchiveTitle => 'Archive Debt?';
+
+  @override
+  String get debtDetailArchivedMsg => 'Debt archived.';
+
+  @override
+  String get debtDetailUnarchivedMsg => 'Debt restored to paid list.';
+
+  @override
+  String get debtDetailDeleteTitle => 'Delete Debt?';
+
+  @override
+  String get debtDetailDeletedMsg => 'Debt deleted.';
+
+  @override
+  String get debtsListTitle => 'Debts';
+
+  @override
+  String get debtsListFilterAll => 'All';
+
+  @override
+  String get debtsListFilterActive => 'Active';
+
+  @override
+  String get debtsListFilterPaid => 'Paid';
+
+  @override
+  String get debtsListFilterArchived => 'Archived';
+
+  @override
+  String get logPaymentNotFound =>
+      'This debt no longer exists or has been deleted.';
+
+  @override
+  String get paymentHistoryTitle => 'Payment History';
+
+  @override
+  String get paymentHistoryNoPayments => 'No payments for this filter';
+
+  @override
+  String get debtOptionsEdit => 'Edit debt';
+
+  @override
+  String get debtOptionsDelete => 'Delete debt';
+
+  @override
+  String get debtOptionsDeleteSubtitle =>
+      'You can restore it right after deleting.';
+
+  @override
+  String get editDebtTitle => 'Edit Debt';
+
+  @override
+  String get monthlyActionThisMonth => 'This month';
+
+  @override
+  String get monthlyActionNoChecklist => 'No checklist for this month';
+
+  @override
+  String get monthlyActionNeedToPay => 'What you need to pay this month';
+
+  @override
+  String get monthlyActionTotalThisMonth => 'Total this month';
+
+  @override
+  String get monthlyActionCompleted => 'Completed';
+
+  @override
+  String get progressTitle => 'Progress';
+
+  @override
+  String get progressNoProgress => 'No progress to show yet';
+
+  @override
+  String get progressByDebt => 'Progress by debt';
+
+  @override
+  String get progressPlanSummary => 'Plan summary';
+
+  @override
+  String get progressDebtFreeDate => 'Debt-free date';
+
+  @override
+  String get progressProjectedInterest => 'Projected interest';
+
+  @override
+  String get progressSavedVsMinimum => 'Saved vs minimum';
+
+  @override
+  String get debtDetailInfo => 'Debt Info';
+
+  @override
+  String get debtDetailWarnings => 'Data Warnings';
+
+  @override
+  String get debtDetailTracking => 'Payment Tracking';
+
+  @override
+  String get debtDetailTrackingHelper =>
+      'Log real payments to reduce current balance, create an audit trail, and instantly recast your timeline.';
+
+  @override
+  String get debtDetailArchiveMessage =>
+      'This paid-off debt will be moved to the archive.';
+
+  @override
+  String get debtDetailArchiveConfirm => 'Archive';
+
+  @override
+  String get debtDetailDeleteMessage =>
+      'This debt will be hidden, but you can recover it right after deleting.';
+
+  @override
+  String get debtDetailDeleteConfirm => 'Delete';
+
+  @override
+  String get debtsListSectionAll => 'All debts';
+
+  @override
+  String get debtsListSectionActive => 'Active debts';
+
+  @override
+  String get debtsListSectionPaidOff => 'Paid-off debts';
+
+  @override
+  String get debtsListSectionArchived => 'Archived debts';
+
+  @override
+  String get debtsListEmptyAll => 'You have no debts. Add your first one.';
+
+  @override
+  String get debtsListEmptyActive => 'You have no active debts being tracked.';
+
+  @override
+  String get debtsListEmptyPaidOff => 'You have no paid-off debts.';
+
+  @override
+  String get debtsListEmptyArchived => 'You have no archived debts.';
+
+  @override
+  String get logPaymentHelperAmount =>
+      'Amount reduces current balance directly (balance-first model).';
+
+  @override
+  String get logPaymentAuditHelper =>
+      'This payment will create an audit trail with balance before/after and recast timeline immediately after saving.';
+
+  @override
+  String get logPaymentErrorInvalidAmount =>
+      'Please enter a valid amount greater than 0.';
+
+  @override
+  String get monthlyActionNoChecklistSubtitle =>
+      'All your tracked debts are paid off or paused. Timeline is still recast from latest data.';
+
+  @override
+  String get monthlyActionChecklistHelper =>
+      'This checklist is computed directly from your strategy, timeline cache, and payment history.';
+
+  @override
+  String get monthlyActionRecasting => 'Recasting...';
+
+  @override
+  String monthlyActionInMonth(String monthYear) {
+    return 'In $monthYear';
+  }
+
+  @override
+  String get monthlyActionLogged => 'Logged';
+
+  @override
+  String get monthlyActionCheckOff => 'Check off';
+
+  @override
+  String get progressEmptySubtitle =>
+      'Add your first debt so the app can start tracking your completion.';
+
+  @override
+  String get progressPaidSoFar => 'Paid so far';
+
+  @override
+  String progressRemainingAmount(String amount) {
+    return 'Remaining $amount';
+  }
+
+  @override
+  String get progressOverall => 'Overall progress';
+
+  @override
+  String get progressTabHelper =>
+      'Progress here combines actual balance and recast plan summary. The previous overview from Home has been moved to this tab.';
+
+  @override
+  String get progressByDebtHelper =>
+      'Based on current balance versus original principal for each debt.';
+
+  @override
+  String get progressDebtPaidOffStatus => 'This debt is marked as paid off.';
+
+  @override
+  String get progressDebtPausedStatus => 'This debt is paused.';
+
+  @override
+  String progressDebtRemainingVsOriginal(String current, String original) {
+    return 'Remaining $current out of $original principal';
+  }
+
+  @override
+  String paymentHistorySubtitle(int count, String balance) {
+    return '$count payments logged · Current balance $balance';
+  }
+
+  @override
+  String get paymentHistoryByMonth => 'By month';
+
+  @override
+  String get paymentHistoryNoPaymentsSubtitle =>
+      'Log payments from debt details or Monthly Action View to see actual history.';
+
+  @override
+  String get paymentTypeFeeLabel => 'Fee adjustment';
+
+  @override
+  String get paymentTypeRefundLabel => 'Refund';
+
+  @override
+  String get paymentTypeChargeLabel => 'Charge';
+
+  @override
+  String get debtOptionsUnarchive => 'Unarchive';
+
+  @override
+  String get debtOptionsArchive => 'Archive debt';
+
+  @override
+  String get addDebtTitle => 'Add Debt';
+
+  @override
+  String get addDebtSave => 'Save debt';
+
+  @override
+  String get addDebtSaveChanges => 'Save changes';
+
+  @override
+  String get commonMonth => 'month';
 }

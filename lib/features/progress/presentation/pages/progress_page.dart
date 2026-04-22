@@ -6,6 +6,7 @@ import '../../../../core/di/injection.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_chip.dart';
@@ -25,7 +26,7 @@ class ProgressPage extends StatelessWidget {
     final planRepository = getIt.get<PlanRepository>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Tiến độ')),
+      appBar: AppBar(title: Text(context.l10n.progressTitle)),
       body: StreamBuilder<Plan?>(
         stream: planRepository.watchCurrentPlan(),
         builder: (context, planSnapshot) {
@@ -40,10 +41,9 @@ class ProgressPage extends StatelessWidget {
                   .toList(growable: false);
 
               if (debts.isEmpty) {
-                return const EmptyState(
-                  title: 'Chưa có tiến độ để hiển thị',
-                  subtitle:
-                      'Thêm khoản nợ đầu tiên để app bắt đầu theo dõi mức độ hoàn thành của bạn.',
+                return EmptyState(
+                  title: context.l10n.progressNoProgress,
+                  subtitle: context.l10n.progressEmptySubtitle,
                   icon: LucideIcons.barChart2,
                 );
               }
@@ -86,7 +86,7 @@ class ProgressPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Đã trả được',
+                            context.l10n.progressPaidSoFar,
                             style: AppTextStyles.labelMedium.copyWith(
                               color: AppColors.mdPrimaryContainer,
                             ),
@@ -100,7 +100,7 @@ class ProgressPage extends StatelessWidget {
                           ),
                           const SizedBox(height: AppDimensions.sm),
                           Text(
-                            'Còn lại ${AppFormatters.formatCents(totalRemaining)}',
+                            context.l10n.progressRemainingAmount(AppFormatters.formatCents(totalRemaining)),
                             style: AppTextStyles.bodyMedium.copyWith(
                               color:
                                   AppColors.mdOnPrimary.withValues(alpha: 0.82),
@@ -111,7 +111,7 @@ class ProgressPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Tiến độ tổng thể',
+                                context.l10n.progressOverall,
                                 style: AppTextStyles.bodySmall.copyWith(
                                   color: AppColors.mdOnPrimary.withValues(
                                     alpha: 0.82,
@@ -150,14 +150,14 @@ class ProgressPage extends StatelessWidget {
                         children: [
                           Expanded(
                             child: _ProgressStat(
-                              label: 'Đang theo dõi',
+                              label: context.l10n.homeTrackedLabel,
                               value: '$activeCount',
                             ),
                           ),
                           const _ProgressDivider(),
                           Expanded(
                             child: _ProgressStat(
-                              label: 'Đã trả xong',
+                              label: context.l10n.homePaidOffLabel,
                               value: '$paidOffCount',
                               valueColor: AppColors.mdPrimary,
                             ),
@@ -165,7 +165,7 @@ class ProgressPage extends StatelessWidget {
                           const _ProgressDivider(),
                           Expanded(
                             child: _ProgressStat(
-                              label: 'Tạm dừng',
+                              label: context.l10n.homePausedLabel,
                               value: '$pausedCount',
                             ),
                           ),
@@ -176,17 +176,16 @@ class ProgressPage extends StatelessWidget {
                     AppCard(
                       color: AppColors.mdSurfaceContainerLow,
                       child: Text(
-                        'Tiến độ ở đây kết hợp cả số dư thực tế và plan summary đã recast. Phần overview trước đây ở Home đã được chuyển về tab này.',
+                        context.l10n.progressTabHelper,
                         style: AppTextStyles.bodyMedium.copyWith(
                           color: AppColors.mdOnSurfaceVariant,
                         ),
                       ),
                     ),
                     const SizedBox(height: AppDimensions.sectionGap),
-                    const SectionHeader(
-                      title: 'Tiến độ theo khoản',
-                      subtitle:
-                          'Dựa trên số dư hiện tại so với gốc ban đầu của từng khoản.',
+                    SectionHeader(
+                      title: context.l10n.progressByDebt,
+                      subtitle: context.l10n.progressByDebtHelper,
                     ),
                     const SizedBox(height: AppDimensions.md),
                     ...debts.map(
@@ -221,7 +220,7 @@ class _PlanSummaryCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text('Plan summary', style: AppTextStyles.titleSmall),
+              Text(context.l10n.progressPlanSummary, style: AppTextStyles.titleSmall),
               const Spacer(),
               AppChip.status(label: plan.strategy.label, icon: LucideIcons.map),
             ],
@@ -231,9 +230,9 @@ class _PlanSummaryCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _ProgressStat(
-                  label: 'Debt-free date',
+                  label: context.l10n.progressDebtFreeDate,
                   value: plan.projectedDebtFreeDate == null
-                      ? 'Đang recast'
+                      ? context.l10n.monthlyActionRecasting
                       : AppFormatters.formatShortMonthYear(
                           plan.projectedDebtFreeDate!,
                         ),
@@ -242,7 +241,7 @@ class _PlanSummaryCard extends StatelessWidget {
               ),
               Expanded(
                 child: _ProgressStat(
-                  label: 'Extra / tháng',
+                  label: context.l10n.homeExtraMonthlyLabel,
                   value: AppFormatters.formatCents(plan.extraMonthlyAmount),
                 ),
               ),
@@ -253,7 +252,7 @@ class _PlanSummaryCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _ProgressStat(
-                  label: 'Projected interest',
+                  label: context.l10n.progressProjectedInterest,
                   value: AppFormatters.formatCents(
                     plan.totalInterestProjected ?? 0,
                   ),
@@ -261,7 +260,7 @@ class _PlanSummaryCard extends StatelessWidget {
               ),
               Expanded(
                 child: _ProgressStat(
-                  label: 'Saved vs minimum',
+                  label: context.l10n.progressSavedVsMinimum,
                   value: AppFormatters.formatCents(plan.totalInterestSaved ?? 0),
                   valueColor: AppColors.mdPrimary,
                 ),
@@ -360,10 +359,10 @@ class _DebtProgressCard extends StatelessWidget {
           const SizedBox(height: AppDimensions.xs),
           Text(
             isPaidOff
-                ? 'Khoản nợ này đã được đánh dấu trả xong.'
+                ? context.l10n.progressDebtPaidOffStatus
                 : isPaused
-                    ? 'Khoản nợ này đang tạm dừng.'
-                    : 'Còn lại ${AppFormatters.formatCents(debt.currentBalance)} trên gốc ${AppFormatters.formatCents(debt.originalPrincipal)}',
+                    ? context.l10n.progressDebtPausedStatus
+                    : context.l10n.progressDebtRemainingVsOriginal(AppFormatters.formatCents(debt.currentBalance), AppFormatters.formatCents(debt.originalPrincipal)),
             style: AppTextStyles.bodySmall.copyWith(
               color: AppColors.mdOnSurfaceVariant,
             ),

@@ -336,7 +336,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get logPaymentNoteLabel => 'Ghi chú';
 
   @override
-  String get logPaymentNoteHint => 'Ví dụ: autopay, bonus, paycheck sweep';
+  String get logPaymentNoteHint => 'Ví dụ: trả tự động, thưởng, trả trước hạn';
 
   @override
   String get logPaymentInfo =>
@@ -1024,4 +1024,288 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get onboardingAhaSavedVsMinimum => 'Saved vs minimum';
+
+  @override
+  String get commonCancel => 'Hủy';
+
+  @override
+  String get commonTotalDebt => 'Tổng dư nợ';
+
+  @override
+  String get commonNotes => 'Ghi chú';
+
+  @override
+  String get debtDetailTitle => 'Chi tiết khoản nợ';
+
+  @override
+  String get debtDetailInitialPrincipal => 'Số gốc ban đầu';
+
+  @override
+  String get debtDetailApr => 'APR';
+
+  @override
+  String get debtDetailDueDate => 'Ngày đến hạn';
+
+  @override
+  String get debtDetailMinimumPayment => 'Minimum payment';
+
+  @override
+  String get debtDetailInterestCalc => 'Cách tính lãi';
+
+  @override
+  String get debtDetailLogPayment => 'Log payment';
+
+  @override
+  String get debtDetailViewHistory => 'Xem history';
+
+  @override
+  String get debtDetailArchiveTitle => 'Lưu trữ khoản nợ?';
+
+  @override
+  String get debtDetailArchivedMsg => 'Đã lưu trữ khoản nợ.';
+
+  @override
+  String get debtDetailUnarchivedMsg =>
+      'Đã đưa khoản nợ trở lại danh sách đã trả.';
+
+  @override
+  String get debtDetailDeleteTitle => 'Xóa khoản nợ?';
+
+  @override
+  String get debtDetailDeletedMsg => 'Đã xóa khoản nợ.';
+
+  @override
+  String get debtsListTitle => 'Các khoản nợ';
+
+  @override
+  String get debtsListFilterAll => 'Tất cả';
+
+  @override
+  String get debtsListFilterActive => 'Đang nợ';
+
+  @override
+  String get debtsListFilterPaid => 'Đã trả';
+
+  @override
+  String get debtsListFilterArchived => 'Đã lưu trữ';
+
+  @override
+  String get logPaymentNotFound =>
+      'Khoản nợ này không còn tồn tại hoặc đã bị xóa.';
+
+  @override
+  String get paymentHistoryTitle => 'Lịch sử thanh toán';
+
+  @override
+  String get paymentHistoryNoPayments => 'Chưa có payment cho bộ lọc này';
+
+  @override
+  String get debtOptionsEdit => 'Chỉnh sửa khoản nợ';
+
+  @override
+  String get debtOptionsDelete => 'Xóa khoản nợ';
+
+  @override
+  String get debtOptionsDeleteSubtitle =>
+      'Bạn vẫn có thể khôi phục ngay sau khi xóa.';
+
+  @override
+  String get editDebtTitle => 'Chỉnh sửa khoản nợ';
+
+  @override
+  String get monthlyActionThisMonth => 'Tháng này';
+
+  @override
+  String get monthlyActionNoChecklist => 'Không có checklist cho tháng này';
+
+  @override
+  String get monthlyActionNeedToPay => 'Tháng này bạn cần trả';
+
+  @override
+  String get monthlyActionTotalThisMonth => 'Tổng tháng này';
+
+  @override
+  String get monthlyActionCompleted => 'Đã hoàn thành';
+
+  @override
+  String get progressTitle => 'Tiến độ';
+
+  @override
+  String get progressNoProgress => 'Chưa có tiến độ để hiển thị';
+
+  @override
+  String get progressByDebt => 'Tiến độ theo khoản';
+
+  @override
+  String get progressPlanSummary => 'Plan summary';
+
+  @override
+  String get progressDebtFreeDate => 'Debt-free date';
+
+  @override
+  String get progressProjectedInterest => 'Projected interest';
+
+  @override
+  String get progressSavedVsMinimum => 'Saved vs minimum';
+
+  @override
+  String get debtDetailInfo => 'Thông tin khoản nợ';
+
+  @override
+  String get debtDetailWarnings => 'Lưu ý dữ liệu';
+
+  @override
+  String get debtDetailTracking => 'Theo dõi thanh toán';
+
+  @override
+  String get debtDetailTrackingHelper =>
+      'Log payment thật để giảm current balance, tạo audit trail trước/sau, và recast timeline ngay lập tức.';
+
+  @override
+  String get debtDetailArchiveMessage =>
+      'Khoản nợ đã trả xong này sẽ được chuyển sang danh sách lưu trữ.';
+
+  @override
+  String get debtDetailArchiveConfirm => 'Lưu trữ';
+
+  @override
+  String get debtDetailDeleteMessage =>
+      'Khoản nợ sẽ bị ẩn khỏi app, nhưng bạn vẫn có thể khôi phục ngay sau khi xóa.';
+
+  @override
+  String get debtDetailDeleteConfirm => 'Xóa';
+
+  @override
+  String get debtsListSectionAll => 'Tất cả khoản nợ';
+
+  @override
+  String get debtsListSectionActive => 'Khoản nợ đang theo dõi';
+
+  @override
+  String get debtsListSectionPaidOff => 'Khoản nợ đã trả xong';
+
+  @override
+  String get debtsListSectionArchived => 'Khoản nợ đã lưu trữ';
+
+  @override
+  String get debtsListEmptyAll =>
+      'Bạn chưa có khoản nợ nào. Hãy thêm khoản đầu tiên.';
+
+  @override
+  String get debtsListEmptyActive =>
+      'Hiện không có khoản nợ nào đang theo dõi.';
+
+  @override
+  String get debtsListEmptyPaidOff =>
+      'Chưa có khoản nợ nào được đánh dấu đã trả xong.';
+
+  @override
+  String get debtsListEmptyArchived => 'Chưa có khoản nợ nào được lưu trữ.';
+
+  @override
+  String get logPaymentHelperAmount =>
+      'Amount giảm trực tiếp current balance (balance-first model).';
+
+  @override
+  String get logPaymentAuditHelper =>
+      'Payment này sẽ tạo audit trail với số dư trước/sau và recast timeline ngay sau khi lưu.';
+
+  @override
+  String get logPaymentErrorInvalidAmount => 'Nhập số tiền hợp lệ lớn hơn 0.';
+
+  @override
+  String get monthlyActionNoChecklistSubtitle =>
+      'Mọi khoản đang theo dõi của bạn đã trả xong hoặc đang tạm dừng. Timeline vẫn được recast từ dữ liệu mới nhất.';
+
+  @override
+  String get monthlyActionChecklistHelper =>
+      'Checklist này được compute trực tiếp từ strategy, timeline cache, và payment history của bạn.';
+
+  @override
+  String get monthlyActionRecasting => 'Đang recast...';
+
+  @override
+  String monthlyActionInMonth(String monthYear) {
+    return 'Trong $monthYear';
+  }
+
+  @override
+  String get monthlyActionLogged => 'Đã log';
+
+  @override
+  String get monthlyActionCheckOff => 'Check off';
+
+  @override
+  String get progressEmptySubtitle =>
+      'Thêm khoản nợ đầu tiên để app bắt đầu theo dõi mức độ hoàn thành của bạn.';
+
+  @override
+  String get progressPaidSoFar => 'Đã trả được';
+
+  @override
+  String progressRemainingAmount(String amount) {
+    return 'Còn lại $amount';
+  }
+
+  @override
+  String get progressOverall => 'Tiến độ tổng thể';
+
+  @override
+  String get progressTabHelper =>
+      'Tiến độ ở đây kết hợp cả số dư thực tế và plan summary đã recast. Phần overview trước đây ở Home đã được chuyển về tab này.';
+
+  @override
+  String get progressByDebtHelper =>
+      'Dựa trên số dư hiện tại so với gốc ban đầu của từng khoản.';
+
+  @override
+  String get progressDebtPaidOffStatus =>
+      'Khoản nợ này đã được đánh dấu trả xong.';
+
+  @override
+  String get progressDebtPausedStatus => 'Khoản nợ này đang tạm dừng.';
+
+  @override
+  String progressDebtRemainingVsOriginal(String current, String original) {
+    return 'Còn lại $current trên gốc $original';
+  }
+
+  @override
+  String paymentHistorySubtitle(int count, String balance) {
+    return '$count payment đã log · Current balance $balance';
+  }
+
+  @override
+  String get paymentHistoryByMonth => 'Theo tháng';
+
+  @override
+  String get paymentHistoryNoPaymentsSubtitle =>
+      'Log payment từ debt detail hoặc Monthly Action View để thấy lịch sử thật.';
+
+  @override
+  String get paymentTypeFeeLabel => 'Fee adjustment';
+
+  @override
+  String get paymentTypeRefundLabel => 'Refund';
+
+  @override
+  String get paymentTypeChargeLabel => 'Charge';
+
+  @override
+  String get debtOptionsUnarchive => 'Bỏ lưu trữ';
+
+  @override
+  String get debtOptionsArchive => 'Lưu trữ khoản nợ';
+
+  @override
+  String get addDebtTitle => 'Thêm khoản nợ';
+
+  @override
+  String get addDebtSave => 'Lưu khoản nợ';
+
+  @override
+  String get addDebtSaveChanges => 'Lưu thay đổi';
+
+  @override
+  String get commonMonth => 'tháng';
 }

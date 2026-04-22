@@ -4,6 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/extensions/date_extensions.dart';
+import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -61,10 +62,10 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                 : payments.where((payment) => payment.date.yearMonth == _selectedMonth).toList();
 
             return Scaffold(
-              appBar: AppBar(title: const Text('Lịch sử thanh toán')),
+              appBar: AppBar(title: Text(context.l10n.paymentHistoryTitle)),
               body: debt == null
-                  ? const Center(
-                      child: Text('Khoản nợ này không còn tồn tại hoặc đã bị xóa.'),
+                  ? Center(
+                      child: Text(context.l10n.logPaymentNotFound),
                     )
                   : SafeArea(
                       child: ListView(
@@ -81,7 +82,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                                 Text(debt.name, style: AppTextStyles.titleMedium),
                                 const SizedBox(height: AppDimensions.xs),
                                 Text(
-                                  '${payments.length} payment đã log · Current balance ${AppFormatters.formatCents(debt.currentBalance)}',
+                                  context.l10n.paymentHistorySubtitle(payments.length, AppFormatters.formatCents(debt.currentBalance)),
                                   style: AppTextStyles.bodySmall.copyWith(
                                     color: AppColors.mdOnSurfaceVariant,
                                   ),
@@ -92,7 +93,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                           const SizedBox(height: AppDimensions.sectionGap),
                           if (months.isNotEmpty) ...[
                             Text(
-                              'Theo tháng',
+                              context.l10n.paymentHistoryByMonth,
                               style: AppTextStyles.labelMedium.copyWith(
                                 color: AppColors.mdOnSurfaceVariant,
                               ),
@@ -114,10 +115,9 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                             const SizedBox(height: AppDimensions.sectionGap),
                           ],
                           if (visiblePayments.isEmpty)
-                            const EmptyState(
-                              title: 'Chưa có payment cho bộ lọc này',
-                              subtitle:
-                                  'Log payment từ debt detail hoặc Monthly Action View để thấy lịch sử thật.',
+                            EmptyState(
+                              title: context.l10n.paymentHistoryNoPayments,
+                              subtitle: context.l10n.paymentHistoryNoPaymentsSubtitle,
                               icon: LucideIcons.history,
                             )
                           else ...visiblePayments.map(
@@ -127,7 +127,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                                 icon: _iconForPaymentType(payment.type),
                                 iconColor: _iconColorForPaymentType(payment.type),
                                 iconBgColor: AppColors.mdPrimaryContainer,
-                                title: _titleForPaymentType(payment.type),
+                                title: _titleForPaymentType(context, payment.type),
                                 date: AppFormatters.formatDate(payment.date),
                                 amount: AppFormatters.formatCents(payment.amount),
                                 amountColor: AppColors.mdOnSurface,
@@ -177,20 +177,20 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
     return AppColors.mdOnPrimaryContainer;
   }
 
-  static String _titleForPaymentType(PaymentType type) {
+  static String _titleForPaymentType(BuildContext context, PaymentType type) {
     switch (type) {
       case PaymentType.minimum:
-        return 'Minimum payment';
+        return context.l10n.paymentTypeMinimumLabel;
       case PaymentType.extra:
-        return 'Extra payment';
+        return context.l10n.paymentTypeExtraLabel;
       case PaymentType.lumpSum:
-        return 'Lump-sum payment';
+        return context.l10n.paymentTypeLumpSumLabel;
       case PaymentType.fee:
-        return 'Fee adjustment';
+        return context.l10n.paymentTypeFeeLabel;
       case PaymentType.refund:
-        return 'Refund';
+        return context.l10n.paymentTypeRefundLabel;
       case PaymentType.charge:
-        return 'Charge';
+        return context.l10n.paymentTypeChargeLabel;
     }
   }
 

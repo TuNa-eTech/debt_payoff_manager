@@ -4,6 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/extensions/context_extensions.dart';
 import '../../../../domain/entities/debt.dart';
 import '../../../../domain/enums/debt_status.dart';
 
@@ -54,7 +55,7 @@ class DebtOptionsSheet extends StatelessWidget {
           const SizedBox(height: 16),
           _SheetAction(
             icon: LucideIcons.pencil,
-            label: 'Chỉnh sửa khoản nợ',
+            label: context.l10n.debtOptionsEdit,
             onTap: onEdit,
           ),
           if (canArchive)
@@ -66,8 +67,8 @@ class DebtOptionsSheet extends StatelessWidget {
                   ? LucideIcons.archiveRestore
                   : LucideIcons.archive,
               label: debt.status == DebtStatus.archived
-                  ? 'Bỏ lưu trữ'
-                  : 'Lưu trữ khoản nợ',
+                  ? context.l10n.debtOptionsUnarchive
+                  : context.l10n.debtOptionsArchive,
               onTap: onArchiveToggle,
             ),
           const SizedBox(height: 8),
@@ -77,9 +78,9 @@ class DebtOptionsSheet extends StatelessWidget {
             key: AppTestKeys.debtOptionDelete,
             icon: LucideIcons.trash2,
             iconColor: AppColors.mdError,
-            label: 'Xóa khoản nợ',
+            label: context.l10n.debtOptionsDelete,
             labelColor: AppColors.mdError,
-            subtitle: 'Bạn vẫn có thể khôi phục ngay sau khi xóa.',
+            subtitle: context.l10n.debtOptionsDeleteSubtitle,
             onTap: onDelete,
           ),
         ],

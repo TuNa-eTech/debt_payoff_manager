@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
+import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -41,12 +42,12 @@ class DebtDetailPage extends StatelessWidget {
         final debt = snapshot.data;
         if (debt == null) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Chi tiết khoản nợ')),
+            appBar: AppBar(title: Text(context.l10n.debtDetailTitle)),
             body: Center(
               child: Padding(
                 padding: const EdgeInsets.all(AppDimensions.lg),
                 child: Text(
-                  'Khoản nợ này không còn tồn tại hoặc đã bị xóa.',
+                  context.l10n.logPaymentNotFound,
                   style: AppTextStyles.bodyLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -58,7 +59,7 @@ class DebtDetailPage extends StatelessWidget {
         return Scaffold(
           key: AppTestKeys.debtDetail(debt.id),
           appBar: AppBar(
-            title: const Text('Chi tiết khoản nợ'),
+            title: Text(context.l10n.debtDetailTitle),
             actions: [
               IconButton(
                 key: AppTestKeys.debtDetailEdit,
@@ -94,7 +95,7 @@ class DebtDetailPage extends StatelessWidget {
                         child: Row(
                           children: [
                             Text(
-                              'Thông tin khoản nợ',
+                              context.l10n.debtDetailInfo,
                               style: AppTextStyles.titleSmall.copyWith(
                                 fontWeight: FontWeight.w600,
                               ),
@@ -105,7 +106,7 @@ class DebtDetailPage extends StatelessWidget {
                       Container(height: 1, color: AppColors.mdOutlineVariant),
                       DebtInfoRow(
                         icon: LucideIcons.badgeDollarSign,
-                        label: 'Số gốc ban đầu',
+                        label: context.l10n.debtDetailInitialPrincipal,
                         value: AppFormatters.formatCents(
                           debt.originalPrincipal,
                         ),
@@ -113,7 +114,7 @@ class DebtDetailPage extends StatelessWidget {
                       Container(height: 1, color: AppColors.mdOutlineVariant),
                       DebtInfoRow(
                         icon: LucideIcons.percent,
-                        label: 'APR',
+                        label: context.l10n.debtDetailApr,
                         value: AppFormatters.formatApr(
                           double.parse(debt.apr.toString()),
                         ),
@@ -121,19 +122,19 @@ class DebtDetailPage extends StatelessWidget {
                       Container(height: 1, color: AppColors.mdOutlineVariant),
                       DebtInfoRow(
                         icon: LucideIcons.calendarDays,
-                        label: 'Ngày đến hạn',
-                        value: 'Ngày ${debt.dueDayOfMonth} mỗi tháng',
+                        label: context.l10n.debtDetailDueDate,
+                        value: context.l10n.homeDueDay(debt.dueDayOfMonth),
                       ),
                       Container(height: 1, color: AppColors.mdOutlineVariant),
                       DebtInfoRow(
                         icon: LucideIcons.wallet,
-                        label: 'Minimum payment',
+                        label: context.l10n.debtDetailMinimumPayment,
                         value: AppFormatters.formatCents(debt.minimumPayment),
                       ),
                       Container(height: 1, color: AppColors.mdOutlineVariant),
                       DebtInfoRow(
                         icon: LucideIcons.activity,
-                        label: 'Cách tính lãi',
+                        label: context.l10n.debtDetailInterestCalc,
                         value: debt.interestMethod.label,
                       ),
                     ],
@@ -153,7 +154,7 @@ class DebtDetailPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Lưu ý dữ liệu',
+                          context.l10n.debtDetailWarnings,
                           style: AppTextStyles.titleSmall.copyWith(
                             color: AppColors.mdOnPrimaryContainer,
                           ),
@@ -186,12 +187,12 @@ class DebtDetailPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Theo dõi thanh toán',
+                        context.l10n.debtDetailTracking,
                         style: AppTextStyles.titleSmall,
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Log payment thật để giảm current balance, tạo audit trail trước/sau, và recast timeline ngay lập tức.',
+                        context.l10n.debtDetailTrackingHelper,
                         style: AppTextStyles.bodySmall,
                       ),
                       const SizedBox(height: AppDimensions.md),
@@ -200,7 +201,7 @@ class DebtDetailPage extends StatelessWidget {
                           Expanded(
                             child: AppButton.filled(
                               key: AppTestKeys.debtDetailLogPayment,
-                              label: 'Log payment',
+                              label: context.l10n.debtDetailLogPayment,
                               icon: LucideIcons.plus,
                               onPressed: () => context.push(
                                 AppRoutes.logPaymentPath(debt.id),
@@ -211,7 +212,7 @@ class DebtDetailPage extends StatelessWidget {
                           Expanded(
                             child: AppButton.outlined(
                               key: AppTestKeys.debtDetailPaymentHistory,
-                              label: 'Xem history',
+                              label: context.l10n.debtDetailViewHistory,
                               icon: LucideIcons.history,
                               onPressed: () => context.push(
                                 AppRoutes.paymentHistoryPath(debt.id),
@@ -265,10 +266,10 @@ class DebtDetailPage extends StatelessWidget {
     final debtsCubit = context.read<DebtsCubit>();
     final confirmed = await _confirmAction(
       context,
-      title: 'Lưu trữ khoản nợ?',
+      title: context.l10n.debtDetailArchiveTitle,
       message:
-          'Khoản nợ đã trả xong này sẽ được chuyển sang danh sách lưu trữ.',
-      confirmLabel: 'Lưu trữ',
+          context.l10n.debtDetailArchiveMessage,
+      confirmLabel: context.l10n.debtDetailArchiveConfirm,
     );
     if (!confirmed || !context.mounted) return;
 
@@ -276,10 +277,10 @@ class DebtDetailPage extends StatelessWidget {
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('Đã lưu trữ khoản nợ.'),
+        content: Text(context.l10n.debtDetailArchivedMsg),
         action: SnackBarAction(
           key: AppTestKeys.snackbarUndo,
-          label: 'Hoàn tác',
+          label: context.l10n.commonUndo,
           onPressed: () {
             debtsCubit.updateDebt(
               debt.copyWith(updatedAt: DateTime.now().toUtc()),
@@ -294,8 +295,8 @@ class DebtDetailPage extends StatelessWidget {
     await context.read<DebtsCubit>().unarchiveDebt(debt);
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Đã đưa khoản nợ trở lại danh sách đã trả.'),
+      SnackBar(
+        content: Text(context.l10n.debtDetailUnarchivedMsg),
       ),
     );
   }
@@ -304,10 +305,10 @@ class DebtDetailPage extends StatelessWidget {
     final debtsCubit = context.read<DebtsCubit>();
     final confirmed = await _confirmAction(
       context,
-      title: 'Xóa khoản nợ?',
+      title: context.l10n.debtDetailDeleteTitle,
       message:
-          'Khoản nợ sẽ bị ẩn khỏi app, nhưng bạn vẫn có thể khôi phục ngay sau khi xóa.',
-      confirmLabel: 'Xóa',
+          context.l10n.debtDetailDeleteMessage,
+      confirmLabel: context.l10n.debtDetailDeleteConfirm,
       isDestructive: true,
     );
     if (!confirmed || !context.mounted) return;
@@ -318,10 +319,10 @@ class DebtDetailPage extends StatelessWidget {
     context.go(AppRoutes.debts);
     messenger.showSnackBar(
       SnackBar(
-        content: const Text('Đã xóa khoản nợ.'),
+        content: Text(context.l10n.debtDetailDeletedMsg),
         action: SnackBarAction(
           key: AppTestKeys.snackbarUndo,
-          label: 'Hoàn tác',
+          label: context.l10n.commonUndo,
           onPressed: () => debtsCubit.restoreDebt(debt),
         ),
       ),
@@ -344,7 +345,7 @@ class DebtDetailPage extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Hủy'),
+              child: Text(context.l10n.commonCancel),
             ),
             FilledButton(
               key: AppTestKeys.dialogConfirmPrimary,

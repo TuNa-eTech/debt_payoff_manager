@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
+import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/services/payment_logging_service.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -60,10 +61,10 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
         }
 
         return Scaffold(
-          appBar: AppBar(title: const Text('Log payment')),
+          appBar: AppBar(title: Text(context.l10n.logPaymentTitle)),
           body: debt == null
-              ? const Center(
-                  child: Text('Khoản nợ này không còn tồn tại hoặc đã bị xóa.'),
+              ? Center(
+                  child: Text(context.l10n.logPaymentNotFound),
                 )
               : SafeArea(
                   bottom: false,
@@ -93,7 +94,7 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
                                     ),
                                     const SizedBox(height: AppDimensions.xs),
                                     Text(
-                                      'Current balance ${AppFormatters.formatCents(debt.currentBalance)}',
+                                      context.l10n.logPaymentCurrentBalance(AppFormatters.formatCents(debt.currentBalance)),
                                       style: AppTextStyles.bodySmall.copyWith(
                                         color: AppColors.mdOnSurfaceVariant,
                                       ),
@@ -104,10 +105,9 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
                               const SizedBox(height: AppDimensions.sectionGap),
                               AppTextField.currency(
                                 key: AppTestKeys.paymentLogAmount,
-                                label: 'Số tiền đã trả',
+                                label: context.l10n.logPaymentAmountLabel,
                                 controller: _amountController,
-                                helperText:
-                                    'Phase 4 dùng model balance-first: amount giảm trực tiếp current balance.',
+                                helperText: context.l10n.logPaymentHelperAmount,
                                 errorText: _inlineError,
                                 onChanged: (_) {
                                   if (_inlineError != null) {
@@ -117,7 +117,7 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
                               ),
                               const SizedBox(height: AppDimensions.lg),
                               Text(
-                                'Loại payment',
+                                context.l10n.logPaymentTypeLabel,
                                 style: AppTextStyles.labelMedium.copyWith(
                                   color: AppColors.mdOnSurfaceVariant,
                                 ),
@@ -129,7 +129,7 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
                                 children: [
                                   AppChip.filter(
                                     key: AppTestKeys.paymentTypeMinimum,
-                                    label: 'Minimum',
+                                    label: context.l10n.paymentTypeMinimumLabel,
                                     selected:
                                         _selectedType == PaymentType.minimum,
                                     onTap: () => setState(
@@ -139,7 +139,7 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
                                   ),
                                   AppChip.filter(
                                     key: AppTestKeys.paymentTypeExtra,
-                                    label: 'Extra',
+                                    label: context.l10n.paymentTypeExtraLabel,
                                     selected:
                                         _selectedType == PaymentType.extra,
                                     onTap: () => setState(
@@ -149,7 +149,7 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
                                   ),
                                   AppChip.filter(
                                     key: AppTestKeys.paymentTypeLumpSum,
-                                    label: 'Lump sum',
+                                    label: context.l10n.paymentTypeLumpSumLabel,
                                     selected:
                                         _selectedType == PaymentType.lumpSum,
                                     onTap: () => setState(
@@ -176,7 +176,7 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Ngày áp dụng',
+                                            context.l10n.logPaymentDateLabel,
                                             style: AppTextStyles.titleSmall,
                                           ),
                                           const SizedBox(
@@ -205,9 +205,9 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
                               ),
                               const SizedBox(height: AppDimensions.lg),
                               AppTextField(
-                                label: 'Ghi chú',
+                                label: context.l10n.logPaymentNoteLabel,
                                 controller: _noteController,
-                                hint: 'Ví dụ: autopay, bonus, paycheck sweep',
+                                hint: context.l10n.logPaymentNoteHint,
                                 maxLines: 3,
                                 textInputAction: TextInputAction.newline,
                               ),
@@ -215,7 +215,7 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
                               AppCard(
                                 color: AppColors.mdSurfaceContainerLow,
                                 child: Text(
-                                  'Payment này sẽ tạo audit trail với số dư trước/sau và recast timeline ngay sau khi lưu.',
+                                  context.l10n.logPaymentAuditHelper,
                                   style: AppTextStyles.bodySmall.copyWith(
                                     color: AppColors.mdOnSurfaceVariant,
                                   ),
@@ -249,7 +249,7 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
                             child: SizedBox(
                               key: AppTestKeys.paymentLogSubmit,
                               child: AppButton.filledLg(
-                                label: 'Lưu payment',
+                                label: context.l10n.commonSavePayment,
                                 trailingIcon: LucideIcons.arrowRight,
                                 fullWidth: true,
                                 loading: _isSubmitting,
@@ -284,7 +284,7 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
     final amountText = _amountController.text.trim();
     final amount = _parseCurrency(amountText);
     if (amount == null || amount <= 0) {
-      setState(() => _inlineError = 'Nhập số tiền hợp lệ lớn hơn 0.');
+      setState(() => _inlineError = context.l10n.logPaymentErrorInvalidAmount);
       return;
     }
 
@@ -304,7 +304,7 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Đã log payment và recast timeline.')),
+        SnackBar(content: Text(context.l10n.logPaymentSavedMessage)),
       );
       context.pop();
     } catch (error) {

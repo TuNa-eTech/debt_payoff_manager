@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
+import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
@@ -35,7 +36,7 @@ class DebtsListPage extends StatelessWidget {
         context.read<DebtsCubit>().clearActionFeedback();
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Các khoản nợ')),
+        appBar: AppBar(title: Text(context.l10n.debtsListTitle)),
         body: BlocBuilder<DebtsCubit, DebtsState>(
           builder: (context, state) {
             if (state.isLoading) {
@@ -57,7 +58,7 @@ class DebtsListPage extends StatelessWidget {
                     runSpacing: AppDimensions.sm,
                     children: [
                       _FilterChip(
-                        label: 'Tất cả',
+                        label: context.l10n.debtsListFilterAll,
                         count: state.debts.length,
                         selected: state.filter == DebtsFilter.all,
                         onTap: () => context.read<DebtsCubit>().setFilter(
@@ -65,7 +66,7 @@ class DebtsListPage extends StatelessWidget {
                         ),
                       ),
                       _FilterChip(
-                        label: 'Đang nợ',
+                        label: context.l10n.debtsListFilterActive,
                         count: state.activeCount,
                         selected: state.filter == DebtsFilter.active,
                         onTap: () => context.read<DebtsCubit>().setFilter(
@@ -74,7 +75,7 @@ class DebtsListPage extends StatelessWidget {
                       ),
                       _FilterChip(
                         chipKey: AppTestKeys.debtsFilterPaidOff,
-                        label: 'Đã trả',
+                        label: context.l10n.debtsListFilterPaid,
                         count: state.paidOffCount,
                         selected: state.filter == DebtsFilter.paidOff,
                         onTap: () => context.read<DebtsCubit>().setFilter(
@@ -83,7 +84,7 @@ class DebtsListPage extends StatelessWidget {
                       ),
                       _FilterChip(
                         chipKey: AppTestKeys.debtsFilterArchived,
-                        label: 'Đã lưu trữ',
+                        label: context.l10n.debtsListFilterArchived,
                         count: state.archivedCount,
                         selected: state.filter == DebtsFilter.archived,
                         onTap: () => context.read<DebtsCubit>().setFilter(
@@ -94,7 +95,7 @@ class DebtsListPage extends StatelessWidget {
                   ),
                   const SizedBox(height: AppDimensions.sectionGap),
                   Text(
-                    _sectionTitleForFilter(state.filter),
+                    _sectionTitleForFilter(context, state.filter),
                     style: AppTextStyles.labelMedium.copyWith(
                       color: AppColors.mdOnSurfaceVariant,
                       letterSpacing: 0.4,
@@ -147,8 +148,8 @@ class DebtsListPage extends StatelessWidget {
           foregroundColor: AppColors.mdOnPrimaryContainer,
           elevation: 2,
           icon: const Icon(LucideIcons.plus),
-          label: const Text(
-            'Thêm nợ',
+          label: Text(
+            context.l10n.commonAddDebt,
             style: TextStyle(fontWeight: FontWeight.w600),
           ),
         ),
@@ -156,16 +157,16 @@ class DebtsListPage extends StatelessWidget {
     );
   }
 
-  String _sectionTitleForFilter(DebtsFilter filter) {
+  String _sectionTitleForFilter(BuildContext context, DebtsFilter filter) {
     switch (filter) {
       case DebtsFilter.all:
-        return 'Tất cả khoản nợ';
+        return context.l10n.debtsListSectionAll;
       case DebtsFilter.active:
-        return 'Khoản nợ đang theo dõi';
+        return context.l10n.debtsListSectionActive;
       case DebtsFilter.paidOff:
-        return 'Khoản nợ đã trả xong';
+        return context.l10n.debtsListSectionPaidOff;
       case DebtsFilter.archived:
-        return 'Khoản nợ đã lưu trữ';
+        return context.l10n.debtsListSectionArchived;
     }
   }
 }
@@ -190,18 +191,18 @@ class _SummaryCard extends StatelessWidget {
         children: [
           Expanded(
             child: _SummaryCol(
-              label: 'Tổng dư nợ',
+              label: context.l10n.commonTotalDebt,
               value: AppFormatters.formatCents(state.totalBalanceCents),
             ),
           ),
           Container(width: 1, height: 40, color: AppColors.mdOutlineVariant),
           Expanded(
-            child: _SummaryCol(label: 'Đang nợ', value: '${state.activeCount}'),
+            child: _SummaryCol(label: context.l10n.debtsListFilterActive, value: '${state.activeCount}'),
           ),
           Container(width: 1, height: 40, color: AppColors.mdOutlineVariant),
           Expanded(
             child: _SummaryCol(
-              label: 'Đã trả',
+              label: context.l10n.debtsListFilterPaid,
               value: '${state.paidOffCount}',
               valueColor: AppColors.mdPrimary,
             ),
@@ -289,11 +290,10 @@ class _EmptyList extends StatelessWidget {
         border: Border.all(color: AppColors.mdOutlineVariant),
       ),
       child: Text(switch (filter) {
-        DebtsFilter.all => 'Bạn chưa có khoản nợ nào. Hãy thêm khoản đầu tiên.',
-        DebtsFilter.active => 'Hiện không có khoản nợ nào đang theo dõi.',
-        DebtsFilter.paidOff =>
-          'Chưa có khoản nợ nào được đánh dấu đã trả xong.',
-        DebtsFilter.archived => 'Chưa có khoản nợ nào được lưu trữ.',
+        DebtsFilter.all => context.l10n.debtsListEmptyAll,
+        DebtsFilter.active => context.l10n.debtsListEmptyActive,
+        DebtsFilter.paidOff => context.l10n.debtsListEmptyPaidOff,
+        DebtsFilter.archived => context.l10n.debtsListEmptyArchived,
       }, style: AppTextStyles.bodyMedium),
     );
   }

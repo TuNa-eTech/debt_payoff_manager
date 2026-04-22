@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
+import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/models/monthly_action_models.dart';
 import '../../../../core/models/recast_delta.dart';
@@ -48,7 +49,7 @@ class _MonthlyActionView extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Tháng này'),
+            title: Text(context.l10n.monthlyActionThisMonth),
             actions: [
               if (state.referenceDate != null)
                 Padding(
@@ -76,10 +77,9 @@ class _MonthlyActionView extends StatelessWidget {
     }
 
     if (!state.hasTrackedDebts) {
-      return const EmptyState(
-        title: 'Chưa có khoản nợ để theo dõi',
-        subtitle:
-            'Thêm khoản nợ đầu tiên để app dựng checklist thanh toán tháng này và debt-free date của bạn.',
+      return EmptyState(
+        title: context.l10n.monthlyActionEmptyTitle,
+        subtitle: context.l10n.monthlyActionEmptySubtitle,
         icon: LucideIcons.walletCards,
       );
     }
@@ -95,12 +95,11 @@ class _MonthlyActionView extends StatelessWidget {
           children: [
             _PlanHero(state: state),
             const SizedBox(height: AppDimensions.sectionGap),
-            const AppCard(
+            AppCard(
               color: AppColors.mdSurfaceContainerLow,
               child: EmptyState(
-                title: 'Không có checklist cho tháng này',
-                subtitle:
-                    'Mọi khoản đang theo dõi của bạn đã trả xong hoặc đang tạm dừng. Timeline vẫn được recast từ dữ liệu mới nhất.',
+                title: context.l10n.monthlyActionNoChecklist,
+                subtitle: context.l10n.monthlyActionNoChecklistSubtitle,
                 icon: LucideIcons.partyPopper,
               ),
             ),
@@ -126,10 +125,9 @@ class _MonthlyActionView extends StatelessWidget {
           const SizedBox(height: AppDimensions.sectionGap),
           _SummaryCard(summary: state.summary),
           const SizedBox(height: AppDimensions.sectionGap),
-          const SectionHeader(
-            title: 'Tháng này bạn cần trả',
-            subtitle:
-                'Checklist này được compute trực tiếp từ strategy, timeline cache, và payment history của bạn.',
+          SectionHeader(
+            title: context.l10n.monthlyActionNeedToPay,
+            subtitle: context.l10n.monthlyActionChecklistHelper,
           ),
           const SizedBox(height: AppDimensions.md),
           ...state.sections.map(
@@ -164,7 +162,7 @@ class _PlanHero extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Debt-free date',
+            context.l10n.progressDebtFreeDate,
             style: AppTextStyles.labelMedium.copyWith(
               color: AppColors.mdPrimaryContainer,
             ),
@@ -172,7 +170,7 @@ class _PlanHero extends StatelessWidget {
           const SizedBox(height: AppDimensions.xs),
           Text(
             plan?.projectedDebtFreeDate == null
-                ? 'Đang recast...'
+                ? context.l10n.monthlyActionRecasting
                 : AppFormatters.formatMonthYear(plan!.projectedDebtFreeDate!),
             style: AppTextStyles.displaySmall.copyWith(
               color: AppColors.mdOnPrimary,
@@ -183,7 +181,7 @@ class _PlanHero extends StatelessWidget {
             children: [
               Expanded(
                 child: _HeroStat(
-                  label: 'Tổng tháng này',
+                  label: context.l10n.monthlyActionTotalThisMonth,
                   value: summary == null
                       ? '--'
                       : AppFormatters.formatCents(summary.totalDueCents),
@@ -192,7 +190,7 @@ class _PlanHero extends StatelessWidget {
               const SizedBox(width: AppDimensions.md),
               Expanded(
                 child: _HeroStat(
-                  label: 'Đã hoàn thành',
+                  label: context.l10n.monthlyActionCompleted,
                   value: summary == null
                       ? '--'
                       : '${summary.completedCount}/${summary.totalCount}',
@@ -203,7 +201,7 @@ class _PlanHero extends StatelessWidget {
           if (plan != null) ...[
             const SizedBox(height: AppDimensions.md),
             Text(
-              '${plan.strategy.label} · Extra ${AppFormatters.formatCents(plan.extraMonthlyAmount)} / tháng',
+              '${plan.strategy.label} · Extra ${AppFormatters.formatCents(plan.extraMonthlyAmount)} / ${context.l10n.commonMonth}',
               style: AppTextStyles.bodySmall.copyWith(
                 color: AppColors.mdOnPrimary.withValues(alpha: 0.82),
               ),
@@ -274,14 +272,14 @@ class _SummaryCard extends StatelessWidget {
         children: [
           Expanded(
             child: _SummaryStat(
-              label: 'Minimum',
+              label: context.l10n.paymentTypeMinimumLabel,
               value: AppFormatters.formatCents(summary!.totalMinimumCents),
             ),
           ),
           const _Divider(),
           Expanded(
             child: _SummaryStat(
-              label: 'Extra',
+              label: context.l10n.paymentTypeExtraLabel,
               value: AppFormatters.formatCents(summary!.totalExtraCents),
               valueColor: AppColors.mdPrimary,
             ),
@@ -289,7 +287,7 @@ class _SummaryCard extends StatelessWidget {
           const _Divider(),
           Expanded(
             child: _SummaryStat(
-              label: 'Overdue',
+              label: context.l10n.monthlyActionOverdueChip,
               value: '${summary!.overdueCount}',
             ),
           ),
@@ -484,7 +482,7 @@ class _MonthlyActionSectionCard extends StatelessWidget {
                   children: [
                     Text(section.debtName, style: AppTextStyles.titleMedium),
                     Text(
-                      'Tổng cần trả ${AppFormatters.formatCents(section.totalDueCents)}',
+                      context.l10n.monthlyActionRequiredTotal(AppFormatters.formatCents(section.totalDueCents)),
                       style: AppTextStyles.bodySmall.copyWith(
                         color: AppColors.mdOnSurfaceVariant,
                       ),
@@ -493,7 +491,7 @@ class _MonthlyActionSectionCard extends StatelessWidget {
                 ),
               ),
               if (section.isCompleted)
-                AppChip.status(label: 'Đã xong', icon: LucideIcons.check),
+                AppChip.status(label: context.l10n.monthlyActionDoneBadge, icon: LucideIcons.check),
             ],
           ),
           const SizedBox(height: AppDimensions.md),
@@ -527,14 +525,14 @@ class _ActionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = item.kind == MonthlyActionKind.minimum
-        ? 'Minimum payment'
-        : 'Extra payment';
+        ? context.l10n.paymentTypeMinimumLabel
+        : context.l10n.paymentTypeExtraLabel;
     final chipLabel = item.isOverdue
-        ? 'Quá hạn'
+        ? context.l10n.monthlyActionOverdueChip
         : item.isUpcoming
-        ? 'Sắp đến hạn'
+        ? context.l10n.monthlyActionUpcomingChip
         : item.kind == MonthlyActionKind.extra && item.priorityRank != null
-        ? 'Ưu tiên #${item.priorityRank}'
+        ? context.l10n.monthlyActionPriorityChip(item.priorityRank!)
         : null;
 
     return Container(
@@ -569,8 +567,8 @@ class _ActionRow extends StatelessWidget {
                 const SizedBox(height: AppDimensions.xs),
                 Text(
                   item.kind == MonthlyActionKind.minimum
-                      ? 'Hạn ${AppFormatters.formatDate(item.dueDate)}'
-                      : 'Trong ${AppFormatters.formatMonthYear(item.dueDate)}',
+                      ? context.l10n.monthlyActionDueDate(AppFormatters.formatDate(item.dueDate))
+                      : context.l10n.monthlyActionInMonth(AppFormatters.formatMonthYear(item.dueDate)),
                   style: AppTextStyles.bodySmall.copyWith(
                     color: AppColors.mdOnSurfaceVariant,
                   ),
@@ -598,7 +596,7 @@ class _ActionRow extends StatelessWidget {
               SizedBox(
                 key: AppTestKeys.monthlyActionCheckOff(item.id),
                 child: AppButton.tonal(
-                  label: item.isCompleted ? 'Đã log' : 'Check off',
+                  label: item.isCompleted ? context.l10n.monthlyActionLogged : context.l10n.monthlyActionCheckOff,
                   icon: item.isCompleted
                       ? LucideIcons.checkCircle2
                       : LucideIcons.check,
