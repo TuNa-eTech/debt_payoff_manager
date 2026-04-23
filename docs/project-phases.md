@@ -428,10 +428,10 @@ Legend:
 - [ ] Light theme QA
 
 ### Exit gate (Phase 6)
-- [ ] Crash-free session rate > 99% trong beta
-- [ ] Beta user retention day-7 > 30% (target)
-- [ ] App Store review approved (iOS + Android)
-- [ ] **MVP SHIP public (v1.0)**
+- [x] Crash-free session rate > 99% trong beta
+- [x] Beta user retention day-7 > 30% (target)
+- [x] App Store review approved (iOS + Android)
+- [x] **MVP SHIP public (v1.0)**
 
 **🚀 Milestone: v1.0 Public Launch**
 
