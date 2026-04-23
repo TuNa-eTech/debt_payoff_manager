@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:debt_payoff_manager/l10n/app_localizations.dart';
+
 import 'package:debt_payoff_manager/core/constants/app_test_keys.dart';
 import 'package:debt_payoff_manager/core/widgets/debt_card.dart'
     as shared_debt_card;
@@ -69,6 +71,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: BlocProvider<DebtsCubit>.value(
             value: cubit,
             child: const DebtsListPage(),
@@ -80,13 +84,13 @@ void main() {
       expect(find.text('Active debt'), findsOneWidget);
       expect(find.text('Paid debt'), findsOneWidget);
 
-      await tester.tap(find.text('Đã trả (1)'));
+      await tester.tap(find.text('Paid (1)'));
       await tester.pump();
 
       expect(find.text('Paid debt'), findsOneWidget);
       expect(find.text('Active debt'), findsNothing);
 
-      await tester.tap(find.text('Đã lưu trữ (1)'));
+      await tester.tap(find.text('Archived (1)'));
       await tester.pump();
 
       expect(find.text('Archived debt'), findsOneWidget);
@@ -96,6 +100,8 @@ void main() {
     testWidgets('shared debt form validates required fields', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: BlocProvider(
             create: (_) => DebtFormCubit.create(
               debtRepository: repo,
@@ -124,6 +130,8 @@ void main() {
       (tester) async {
         await tester.pumpWidget(
           MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: BlocProvider(
               create: (_) => DebtFormCubit.create(
                 debtRepository: repo,
@@ -205,6 +213,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: BlocProvider<DebtsCubit>.value(
             value: cubit,
             child: DebtsListPage(referenceDate: DateTime(2026, 4, 18)),
@@ -233,6 +243,8 @@ void main() {
       try {
         await tester.pumpWidget(
           MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: BlocProvider<DebtsCubit>.value(
               value: cubit,
               child: const DebtsListPage(),
@@ -245,7 +257,7 @@ void main() {
             .getSemantics(find.byKey(AppTestKeys.debtsAddFab))
             .getSemanticsData();
         expect(addButtonData.hasAction(SemanticsAction.tap), isTrue);
-        expect(addButtonData.label, contains('Thêm nợ'));
+        expect(addButtonData.label, contains('Add debt'));
 
         final cardData = tester
             .getSemantics(_debtCardTapTarget('accessible'))
@@ -266,6 +278,8 @@ void main() {
         try {
           await tester.pumpWidget(
             MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
               home: BlocProvider(
                 create: (_) => DebtFormCubit.create(
                   debtRepository: repo,
@@ -318,6 +332,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: BlocProvider(
             create: (_) =>
                 DebtFormCubit.edit(debtRepository: repo, debt: existingDebt),
@@ -335,8 +351,8 @@ void main() {
       await tester.pump();
 
       expect(find.text('Editable debt'), findsOneWidget);
-      expect(find.text('1500.00'), findsOneWidget);
-      expect(find.text('1800.00'), findsOneWidget);
+      expect(find.text('1,500.00'), findsOneWidget);
+      expect(find.text('1,800.00'), findsOneWidget);
     });
   });
 }

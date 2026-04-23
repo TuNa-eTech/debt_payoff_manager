@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:debt_payoff_manager/l10n/app_localizations.dart';
+
 import 'package:debt_payoff_manager/domain/repositories/debt_repository.dart';
 import 'package:debt_payoff_manager/features/debts/cubit/debts_cubit.dart';
 import 'package:debt_payoff_manager/features/debts/cubit/debts_state.dart';
@@ -33,6 +35,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: BlocProvider<DebtsCubit>.value(
           value: cubit,
           child: const AddAnotherDebtPage(),
@@ -42,6 +46,6 @@ void main() {
     await tester.pump();
 
     expect(find.text('Visa'), findsOneWidget);
-    expect(find.text('Sang bước chọn chiến lược'), findsOneWidget);
+    expect(find.text('Choose Strategy'), findsOneWidget);
   });
 }

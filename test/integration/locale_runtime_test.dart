@@ -79,7 +79,7 @@ void main() {
       await _pumpUntilLocation(tester, harness, AppRoutes.home);
 
       expect(_materialApp(tester).locale?.languageCode, 'en');
-      expect(find.text('Overview'), findsWidgets);
+      expect(find.text('This month'), findsWidgets);
 
       harness.router.go(AppRoutes.settings);
       await _pumpUntilLocation(tester, harness, AppRoutes.settings);
@@ -103,7 +103,7 @@ void main() {
 
       expect(_materialApp(tester).locale?.languageCode, 'vi');
       expect(find.text('Ngôn ngữ'), findsOneWidget);
-      expect(find.text('Tổng quan'), findsWidgets);
+      expect(find.text('Tháng này'), findsWidgets);
       expect(find.text('Khoản nợ'), findsOneWidget);
       expect(
         (await harness.settingsRepository.getSettings()).localeCode,

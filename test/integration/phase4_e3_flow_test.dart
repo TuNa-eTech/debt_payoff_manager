@@ -146,15 +146,15 @@ void main() {
         await tester.pumpUntilVisible(
           find.byKey(AppTestKeys.paymentHistoryMonthChip(yearMonth)),
         );
-        expect(find.text('Minimum payment'), findsOneWidget);
-        expect(find.text('Extra payment'), findsOneWidget);
+        expect(find.text('Minimum'), findsOneWidget);
+        expect(find.text('Extra'), findsOneWidget);
         expect(find.text('Check Off'), findsOneWidget);
         expect(find.text('Manual'), findsOneWidget);
 
         harness.router.go(AppRoutes.plan);
         await _pumpUntilLocation(tester, harness, AppRoutes.plan);
         await tester.pumpRouterIdle();
-        expect(find.text('Kế hoạch'), findsWidgets);
+        expect(find.text('Plan'), findsWidgets);
       },
     );
   });
