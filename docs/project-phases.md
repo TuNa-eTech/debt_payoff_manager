@@ -70,7 +70,7 @@ Legend:
 - Foundation + MVP: **~5 tháng** (Phases 0–6)
 - v1.1 Premium: **~2-3 tháng tiếp** (Phases 7–10)
 
-## Current status (April 19, 2026)
+## Current status (April 23, 2026)
 
 - **Phase 0 / E0** ở trạng thái **mostly complete trong repo**:
   - CI/workflows, dependency stack, codegen, và mobile Firebase config files đã hiện diện.
@@ -94,7 +94,10 @@ Legend:
 - **Phase 6 / E5** bắt đầu:
   - App icon đã setup qua `flutter_launcher_icons` — generated full icon set cho iOS (20+ sizes) và Android (mipmap + adaptive icon với Forest Green background).
   - Source icon: `assets/icons/app_icon.png`, config: `flutter_launcher_icons.yaml`.
-- **Phase 6+** chưa bắt đầu như một phase hardening/ship riêng; hiện mới có groundwork dependency và test coverage.
+- **Phase 6+** không còn có thể coi là "chưa bắt đầu" như một khối:
+  - Repo đã có post-MVP implementation trải dài sang các phase hậu MVP.
+  - **Phase 10** hiện được coi là **closed với accepted scope adjustments**.
+  - Các phần được defer sang backlog từ closeout Phase 10: dedicated email-share flow, deeper PDF visual polish, và device-level notification QA evidence.
 
 ---
 
@@ -546,31 +549,38 @@ Legend:
 
 **Duration:** 3 tuần · **Tracks:** E9 + D8
 
+**Status:** Closed with accepted scope adjustments on **2026-04-23**
+
 ### E9 — Engineering
 
 **Feature §2.5 Reminders**
-- [ ] Local notification scheduling (Flutter local_notifications)
-- [ ] Due date reminders (configurable 1/3/7 days)
-- [ ] Missing payment reminder (end of month)
-- [ ] Milestone notifications
-- [ ] Notification permission request UX (timing matters)
+- [x] Local notification scheduling (`flutter_local_notifications`)
+- [x] Due date reminders (configurable 1/3/7 days)
+- [x] Missing payment reminder (end of month)
+- [x] Milestone notifications
+- [x] Notification permission request UX (first-home prompt + settings fallback)
 
 **Feature §2.6 Reports & Export (Enhanced)**
-- [ ] PDF report templates (monthly, yearly, full history)
-- [ ] Amortization table export
-- [ ] CSV with all fields + metadata
-- [ ] Email-share integration
+- [x] PDF report templates (monthly, yearly, full history)
+- [x] Amortization table export
+- [x] CSV with all fields + metadata
+- [ ] Dedicated email-share integration (moved to backlog; generic system share shipped in accepted scope)
 
 ### D8 — Design
 
-- [ ] Notification copy (friendly, not naggy)
-- [ ] PDF report visual design (printable, brand consistent)
-- [ ] Report preview UI before export
+- [x] Notification copy (friendly, not naggy)
+- [x] PDF report visual design (printable, brand consistent for accepted v1.4 scope)
+- [x] Report preview UI before export
 
-### Exit gate (Phase 10)
-- [ ] Reminder delivery accurate trong test (30 scheduled → 30 received)
-- [ ] PDF report looks professional, users want to share with financial coach
-- [ ] **v1.4 Ship: Reports & Reminders**
+### Exit gate (Phase 10 — accepted closeout)
+- [x] Reminder scheduling and prompt flow covered by unit/integration tests; device-level delivery QA moved to backlog
+- [x] PDF report is exportable, shareable, and acceptable for v1.4 scope; deeper visual polish moved to backlog
+- [x] **Phase 10 closed: Reports & Reminders**
+
+### Deferred backlog from Phase 10 closeout
+- [ ] Dedicated email-share integration
+- [ ] Premium PDF visual polish pass
+- [ ] Device-level notification delivery QA / evidence matrix
 
 ---
 
