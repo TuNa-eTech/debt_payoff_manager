@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -181,6 +183,53 @@ void main() {
         );
       },
     );
+
+    testWidgets('report preview opens and exports a PDF artifact', (
+      tester,
+    ) async {
+      final db = DatabaseProvider.openTestDatabase();
+      final fakeService = _FakeDataManagementService(db: db);
+      final fakeLauncher = _RecordingShareLauncher();
+      final harness = await TestAppHarness.create(
+        db: db,
+        dataManagementService: fakeService,
+        shareLauncher: fakeLauncher,
+      );
+      addTearDown(() => harness.disposeWidgetTest(tester));
+
+      await harness.debtRepository.addDebt(
+        makeRepoDebt(id: 'report-debt', name: 'Report debt'),
+      );
+      await harness.planRepository.savePlan(makeRepoPlan(id: 'report-plan'));
+      await harness.onboardingCubit.completeOnboarding();
+
+      await harness.pumpApp(tester);
+      await _pumpUntilLocation(tester, harness, AppRoutes.home);
+      await _openSettings(tester, harness);
+
+      final reportTile = find.byKey(AppTestKeys.settingsReportsPreview);
+      await tester.pumpUntilVisible(reportTile);
+      await tester.ensureVisible(reportTile);
+      await tester.tap(reportTile);
+      await tester.pumpRouterIdle();
+      await _pumpUntilLocation(tester, harness, AppRoutes.reportsPreview);
+
+      final exportButton = find.byKey(AppTestKeys.reportsPreviewExport);
+      await tester.pumpUntilVisible(exportButton);
+      await tester.ensureVisible(exportButton);
+      await tester.tap(exportButton);
+      await tester.pumpRouterIdle();
+
+      expect(
+        fakeService.generatedKinds,
+        contains(DataExportArtifactKind.pdfReport),
+      );
+      expect(fakeLauncher.sharedArtifacts, hasLength(1));
+      expect(
+        fakeLauncher.sharedArtifacts.single.kind,
+        DataExportArtifactKind.pdfReport,
+      );
+    });
   });
 }
 
@@ -211,6 +260,20 @@ class _FakeDataManagementService extends DataManagementService {
       fileName: 'debt_payoff_backup_test.zip',
       mimeType: 'application/zip',
       kind: DataExportArtifactKind.localBackup,
+    );
+  }
+
+  @override
+  Future<DataExportArtifact> generatePdfExportArtifact(
+    Uint8List pdfBytes, {
+    String filePrefix = 'debt_payoff_report',
+  }) async {
+    generatedKinds.add(DataExportArtifactKind.pdfReport);
+    return const DataExportArtifact(
+      path: '/tmp/debt_payoff_report_test.pdf',
+      fileName: 'debt_payoff_report_test.pdf',
+      mimeType: 'application/pdf',
+      kind: DataExportArtifactKind.pdfReport,
     );
   }
 

@@ -950,11 +950,35 @@ abstract class AppLocalizations {
   /// **'Monthly log'**
   String get settingsMonthlyLogTitle;
 
+  /// Title for the end-of-month reminder settings toggle.
+  ///
+  /// In en, this message translates to:
+  /// **'End-of-month reminder'**
+  String get settingsMonthlyReminderTitle;
+
+  /// Subtitle for the end-of-month reminder settings toggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get one reminder near month end if payments still need to be logged.'**
+  String get settingsMonthlyReminderSubtitle;
+
   /// App bar title for the settings page.
   ///
   /// In en, this message translates to:
   /// **'Settings'**
   String get settingsPageTitle;
+
+  /// Label above the due-date reminder lead-time choices.
+  ///
+  /// In en, this message translates to:
+  /// **'Days before due date'**
+  String get settingsReminderDaysTitle;
+
+  /// Helper copy for due-date reminder lead-time choices.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how early the due-date reminder should arrive.'**
+  String get settingsReminderDaysSubtitle;
 
   /// Subtitle for the payment reminders settings toggle.
   ///
@@ -967,6 +991,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Payment reminders'**
   String get settingsPaymentReminderTitle;
+
+  /// Title for payment due notification.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Reminder'**
+  String get notificationPaymentDueTitle;
+
+  /// Body for payment due notification.
+  ///
+  /// In en, this message translates to:
+  /// **'Your loan \"{debtName}\" is due soon.'**
+  String notificationPaymentDueBody(String debtName);
+
+  /// Title for the end-of-month missing payment reminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly check-in'**
+  String get notificationMonthlyLogTitle;
+
+  /// Body for the end-of-month missing payment reminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Open your plan and make sure this month\'s payments are fully logged before the month closes.'**
+  String get notificationMonthlyLogBody;
+
+  /// Title for milestone notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Milestone reached'**
+  String get notificationMilestoneTitle;
+
+  /// Body for milestone notifications.
+  ///
+  /// In en, this message translates to:
+  /// **'You unlocked a new payoff milestone. Open Progress to review your latest win.'**
+  String get notificationMilestoneBody;
+
+  /// Title for milestone notification settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Milestone alerts'**
+  String get settingsMilestoneReminderTitle;
+
+  /// Subtitle for milestone notification settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Celebrate payoff progress when a new milestone is reached.'**
+  String get settingsMilestoneReminderSubtitle;
+
+  /// Error snackbar shown when notification permission is required.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification permission is required to enable this reminder.'**
+  String get settingsNotificationPermissionRequired;
 
   /// Short trailing action label for reset on the clear-all tile.
   ///
@@ -1052,6 +1130,12 @@ abstract class AppLocalizations {
   /// **'OPTIONS'**
   String get settingsSectionOptions;
 
+  /// Section header for reports in settings.
+  ///
+  /// In en, this message translates to:
+  /// **'REPORTS'**
+  String get settingsSectionReports;
+
   /// Section header for plan-related settings.
   ///
   /// In en, this message translates to:
@@ -1081,6 +1165,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Snowball'**
   String get settingsStrategySnowball;
+
+  /// Title for the reports preview settings tile.
+  ///
+  /// In en, this message translates to:
+  /// **'Report preview'**
+  String get settingsReportsPreviewTitle;
+
+  /// Subtitle for the reports preview settings tile.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview monthly, yearly, or full-history PDF exports before sharing.'**
+  String get settingsReportsPreviewSubtitle;
 
   /// Subtitle copy for cloud backup when trust level is local-only.
   ///
@@ -2349,6 +2445,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'month'**
   String get commonMonth;
+
+  /// Title for report summary section
+  ///
+  /// In en, this message translates to:
+  /// **'Report Summary'**
+  String get reportsPreviewReportSummary;
+
+  /// Label for total paid in report
+  ///
+  /// In en, this message translates to:
+  /// **'Total Paid'**
+  String get reportsPreviewTotalPaid;
+
+  /// Label for total interest in report
+  ///
+  /// In en, this message translates to:
+  /// **'Total Interest'**
+  String get reportsPreviewTotalInterest;
+
+  /// Label for debt free date in report
+  ///
+  /// In en, this message translates to:
+  /// **'Debt Free Date'**
+  String get reportsPreviewDebtFreeDate;
+
+  /// Button state while generating report
+  ///
+  /// In en, this message translates to:
+  /// **'Generating...'**
+  String get reportsPreviewGenerating;
+
+  /// Button label to export to PDF
+  ///
+  /// In en, this message translates to:
+  /// **'Export to PDF'**
+  String get reportsPreviewExportToPdf;
+
+  /// Not available placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'N/A'**
+  String get reportsPreviewNotAvailable;
+
+  /// App bar title for the reports preview page
+  ///
+  /// In en, this message translates to:
+  /// **'Reports'**
+  String get reportsPreviewPageTitle;
+
+  /// Title above the report range chips
+  ///
+  /// In en, this message translates to:
+  /// **'Report range'**
+  String get reportsPreviewRangeTitle;
+
+  /// Monthly report range label
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get reportsPreviewRangeMonthly;
+
+  /// Yearly report range label
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get reportsPreviewRangeYearly;
+
+  /// Full history report range label
+  ///
+  /// In en, this message translates to:
+  /// **'Full history'**
+  String get reportsPreviewRangeFullHistory;
+
+  /// Title above the report preview rows
+  ///
+  /// In en, this message translates to:
+  /// **'Preview rows'**
+  String get reportsPreviewTableTitle;
+
+  /// Error snackbar shown when report generation fails
+  ///
+  /// In en, this message translates to:
+  /// **'Could not generate the report: {message}'**
+  String reportsPreviewGenerateFailed(String message);
+
+  /// Title in PDF report
+  ///
+  /// In en, this message translates to:
+  /// **'Debt Payoff Manager'**
+  String get reportsPdfAppTitle;
+
+  /// Secondary title in PDF report
+  ///
+  /// In en, this message translates to:
+  /// **'Amortization report'**
+  String get reportsPdfAmortizationTitle;
+
+  /// Label preceding the generated timestamp in the PDF report
+  ///
+  /// In en, this message translates to:
+  /// **'Generated on'**
+  String get reportsPdfGeneratedOnLabel;
+
+  /// Page number format in PDF
+  ///
+  /// In en, this message translates to:
+  /// **'Page {pageNumber} of {pagesCount}'**
+  String reportsPdfPageXOfY(int pageNumber, int pagesCount);
+
+  /// Column header in PDF
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get reportsPdfColMonth;
+
+  /// Column header in PDF
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get reportsPdfColPayment;
+
+  /// Column header in PDF
+  ///
+  /// In en, this message translates to:
+  /// **'Principal'**
+  String get reportsPdfColPrincipal;
+
+  /// Column header in PDF
+  ///
+  /// In en, this message translates to:
+  /// **'Interest'**
+  String get reportsPdfColInterest;
+
+  /// Column header in PDF
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get reportsPdfColBalance;
 }
 
 class _AppLocalizationsDelegate

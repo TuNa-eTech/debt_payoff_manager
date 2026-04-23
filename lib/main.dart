@@ -6,6 +6,9 @@ import 'app.dart';
 import 'core/di/injection.dart';
 import 'core/i18n/app_locale.dart';
 import 'core/services/app_analytics.dart';
+import 'core/services/milestone_notification_service.dart';
+import 'core/services/notification_service.dart';
+import 'core/services/reminder_scheduler_service.dart';
 import 'core/theme/app_colors.dart';
 
 void main() async {
@@ -33,6 +36,11 @@ void main() async {
       WidgetsBinding.instance.platformDispatcher.locale,
     ),
   );
+
+  // Initialize notifications
+  await getIt<NotificationService>().initialize();
+  getIt<ReminderSchedulerService>().init();
+  getIt<MilestoneNotificationService>().init();
 
   runApp(const DebtPayoffApp());
 }

@@ -520,7 +520,21 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsMonthlyLogTitle => 'Nhật ký hàng tháng';
 
   @override
+  String get settingsMonthlyReminderTitle => 'Nhắc cuối tháng';
+
+  @override
+  String get settingsMonthlyReminderSubtitle =>
+      'Nhận một nhắc nhở gần cuối tháng nếu vẫn còn khoản thanh toán chưa được log.';
+
+  @override
   String get settingsPageTitle => 'Cài đặt';
+
+  @override
+  String get settingsReminderDaysTitle => 'Số ngày nhắc trước hạn';
+
+  @override
+  String get settingsReminderDaysSubtitle =>
+      'Chọn số ngày app sẽ nhắc trước ngày đến hạn.';
 
   @override
   String get settingsPaymentReminderSubtitle =>
@@ -528,6 +542,39 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get settingsPaymentReminderTitle => 'Nhắc nhở thanh toán';
+
+  @override
+  String get notificationPaymentDueTitle => 'Nhắc nhở thanh toán';
+
+  @override
+  String notificationPaymentDueBody(String debtName) {
+    return 'Khoản vay \"$debtName\" sắp đến hạn thanh toán.';
+  }
+
+  @override
+  String get notificationMonthlyLogTitle => 'Nhắc rà soát cuối tháng';
+
+  @override
+  String get notificationMonthlyLogBody =>
+      'Mở kế hoạch và kiểm tra xem toàn bộ thanh toán tháng này đã được log đầy đủ trước khi tháng kết thúc.';
+
+  @override
+  String get notificationMilestoneTitle => 'Bạn vừa đạt thêm một mốc';
+
+  @override
+  String get notificationMilestoneBody =>
+      'Bạn vừa mở khóa thêm một milestone trả nợ. Vào mục Tiến độ để xem thành quả mới nhất.';
+
+  @override
+  String get settingsMilestoneReminderTitle => 'Thông báo milestone';
+
+  @override
+  String get settingsMilestoneReminderSubtitle =>
+      'Ăn mừng tiến độ trả nợ khi bạn chạm một milestone mới.';
+
+  @override
+  String get settingsNotificationPermissionRequired =>
+      'Cần cấp quyền thông báo để bật nhắc nhở này.';
 
   @override
   String get settingsResetAction => 'Reset';
@@ -575,6 +622,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsSectionOptions => 'TUỲ CHỌN';
 
   @override
+  String get settingsSectionReports => 'BÁO CÁO';
+
+  @override
   String get settingsSectionPlan => 'KẾ HOẠCH TRẢ NỢ';
 
   @override
@@ -588,6 +638,13 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get settingsStrategySnowball => 'Snowball';
+
+  @override
+  String get settingsReportsPreviewTitle => 'Xem trước báo cáo';
+
+  @override
+  String get settingsReportsPreviewSubtitle =>
+      'Xem trước PDF theo tháng, năm hoặc toàn bộ lịch sử trước khi chia sẻ.';
 
   @override
   String get settingsTrustLevelLocalOnlyBody =>
@@ -1308,4 +1365,77 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get commonMonth => 'tháng';
+
+  @override
+  String get reportsPreviewReportSummary => 'Tổng quan báo cáo';
+
+  @override
+  String get reportsPreviewTotalPaid => 'Tổng tiền đã trả';
+
+  @override
+  String get reportsPreviewTotalInterest => 'Tổng tiền lãi';
+
+  @override
+  String get reportsPreviewDebtFreeDate => 'Ngày hết nợ';
+
+  @override
+  String get reportsPreviewGenerating => 'Đang tạo...';
+
+  @override
+  String get reportsPreviewExportToPdf => 'Xuất ra PDF';
+
+  @override
+  String get reportsPreviewNotAvailable => 'N/A';
+
+  @override
+  String get reportsPreviewPageTitle => 'Báo cáo';
+
+  @override
+  String get reportsPreviewRangeTitle => 'Phạm vi báo cáo';
+
+  @override
+  String get reportsPreviewRangeMonthly => 'Theo tháng';
+
+  @override
+  String get reportsPreviewRangeYearly => 'Theo năm';
+
+  @override
+  String get reportsPreviewRangeFullHistory => 'Toàn bộ lịch sử';
+
+  @override
+  String get reportsPreviewTableTitle => 'Dòng xem trước';
+
+  @override
+  String reportsPreviewGenerateFailed(String message) {
+    return 'Không thể tạo báo cáo: $message';
+  }
+
+  @override
+  String get reportsPdfAppTitle => 'Quản lý trả nợ';
+
+  @override
+  String get reportsPdfAmortizationTitle => 'Báo cáo khấu hao';
+
+  @override
+  String get reportsPdfGeneratedOnLabel => 'Tạo lúc';
+
+  @override
+  String reportsPdfPageXOfY(int pageNumber, int pagesCount) {
+    return 'Trang $pageNumber / $pagesCount';
+  }
+
+  @override
+  String get reportsPdfColMonth => 'Tháng';
+
+  @override
+  String get reportsPdfColPayment => 'Thanh toán';
+
+  @override
+  String get reportsPdfColPrincipal => 'Gốc';
+
+  @override
+  String get reportsPdfColInterest => 'Lãi';
+
+  @override
+  String get reportsPdfColBalance => 'Dư nợ';
 }

@@ -679,9 +679,25 @@
   "@settingsMonthlyLogTitle": {
     "description": "Title for the monthly log settings toggle."
   },
+  "settingsMonthlyReminderTitle": "Nhắc cuối tháng",
+  "@settingsMonthlyReminderTitle": {
+    "description": "Title for the end-of-month reminder settings toggle."
+  },
+  "settingsMonthlyReminderSubtitle": "Nhận một nhắc nhở gần cuối tháng nếu vẫn còn khoản thanh toán chưa được log.",
+  "@settingsMonthlyReminderSubtitle": {
+    "description": "Subtitle for the end-of-month reminder settings toggle."
+  },
   "settingsPageTitle": "Cài đặt",
   "@settingsPageTitle": {
     "description": "App bar title for the settings page."
+  },
+  "settingsReminderDaysTitle": "Số ngày nhắc trước hạn",
+  "@settingsReminderDaysTitle": {
+    "description": "Label above the due-date reminder lead-time choices."
+  },
+  "settingsReminderDaysSubtitle": "Chọn số ngày app sẽ nhắc trước ngày đến hạn.",
+  "@settingsReminderDaysSubtitle": {
+    "description": "Helper copy for due-date reminder lead-time choices."
   },
   "settingsPaymentReminderSubtitle": "App sẽ dùng cài đặt này khi payment reminders được bật.",
   "@settingsPaymentReminderSubtitle": {
@@ -690,6 +706,47 @@
   "settingsPaymentReminderTitle": "Nhắc nhở thanh toán",
   "@settingsPaymentReminderTitle": {
     "description": "Title for the payment reminders settings toggle."
+  },
+  "notificationPaymentDueTitle": "Nhắc nhở thanh toán",
+  "@notificationPaymentDueTitle": {
+    "description": "Title for payment due notification."
+  },
+  "notificationPaymentDueBody": "Khoản vay \"{debtName}\" sắp đến hạn thanh toán.",
+  "@notificationPaymentDueBody": {
+    "description": "Body for payment due notification.",
+    "placeholders": {
+      "debtName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationMonthlyLogTitle": "Nhắc rà soát cuối tháng",
+  "@notificationMonthlyLogTitle": {
+    "description": "Title for the end-of-month missing payment reminder."
+  },
+  "notificationMonthlyLogBody": "Mở kế hoạch và kiểm tra xem toàn bộ thanh toán tháng này đã được log đầy đủ trước khi tháng kết thúc.",
+  "@notificationMonthlyLogBody": {
+    "description": "Body for the end-of-month missing payment reminder."
+  },
+  "notificationMilestoneTitle": "Bạn vừa đạt thêm một mốc",
+  "@notificationMilestoneTitle": {
+    "description": "Title for milestone notifications."
+  },
+  "notificationMilestoneBody": "Bạn vừa mở khóa thêm một milestone trả nợ. Vào mục Tiến độ để xem thành quả mới nhất.",
+  "@notificationMilestoneBody": {
+    "description": "Body for milestone notifications."
+  },
+  "settingsMilestoneReminderTitle": "Thông báo milestone",
+  "@settingsMilestoneReminderTitle": {
+    "description": "Title for milestone notification settings."
+  },
+  "settingsMilestoneReminderSubtitle": "Ăn mừng tiến độ trả nợ khi bạn chạm một milestone mới.",
+  "@settingsMilestoneReminderSubtitle": {
+    "description": "Subtitle for milestone notification settings."
+  },
+  "settingsNotificationPermissionRequired": "Cần cấp quyền thông báo để bật nhắc nhở này.",
+  "@settingsNotificationPermissionRequired": {
+    "description": "Error snackbar shown when notification permission is required."
   },
   "settingsResetAction": "Reset",
   "@settingsResetAction": {
@@ -747,6 +804,10 @@
   "@settingsSectionOptions": {
     "description": "Section header for general options in settings."
   },
+  "settingsSectionReports": "BÁO CÁO",
+  "@settingsSectionReports": {
+    "description": "Section header for reports in settings."
+  },
   "settingsSectionPlan": "KẾ HOẠCH TRẢ NỢ",
   "@settingsSectionPlan": {
     "description": "Section header for plan-related settings."
@@ -766,6 +827,14 @@
   "settingsStrategySnowball": "Snowball",
   "@settingsStrategySnowball": {
     "description": "Localized label for the snowball payoff strategy."
+  },
+  "settingsReportsPreviewTitle": "Xem trước báo cáo",
+  "@settingsReportsPreviewTitle": {
+    "description": "Title for the reports preview settings tile."
+  },
+  "settingsReportsPreviewSubtitle": "Xem trước PDF theo tháng, năm hoặc toàn bộ lịch sử trước khi chia sẻ.",
+  "@settingsReportsPreviewSubtitle": {
+    "description": "Subtitle for the reports preview settings tile."
   },
   "settingsTrustLevelLocalOnlyBody": "Hiện tại bạn đang ở local-only. Cloud backup là roadmap tiếp theo, không phải yêu cầu để dùng app.",
   "@settingsTrustLevelLocalOnlyBody": {
@@ -1685,5 +1754,110 @@
   "commonMonth": "tháng",
   "@commonMonth": {
     "description": "Common word for month"
+  },
+  "reportsPreviewReportSummary": "Tổng quan báo cáo",
+  "@reportsPreviewReportSummary": {
+    "description": "Title for report summary section"
+  },
+  "reportsPreviewTotalPaid": "Tổng tiền đã trả",
+  "@reportsPreviewTotalPaid": {
+    "description": "Label for total paid in report"
+  },
+  "reportsPreviewTotalInterest": "Tổng tiền lãi",
+  "@reportsPreviewTotalInterest": {
+    "description": "Label for total interest in report"
+  },
+  "reportsPreviewDebtFreeDate": "Ngày hết nợ",
+  "@reportsPreviewDebtFreeDate": {
+    "description": "Label for debt free date in report"
+  },
+  "reportsPreviewGenerating": "Đang tạo...",
+  "@reportsPreviewGenerating": {
+    "description": "Button state while generating report"
+  },
+  "reportsPreviewExportToPdf": "Xuất ra PDF",
+  "@reportsPreviewExportToPdf": {
+    "description": "Button label to export to PDF"
+  },
+  "reportsPreviewNotAvailable": "N/A",
+  "@reportsPreviewNotAvailable": {
+    "description": "Not available placeholder"
+  },
+  "reportsPreviewPageTitle": "Báo cáo",
+  "@reportsPreviewPageTitle": {
+    "description": "App bar title for the reports preview page"
+  },
+  "reportsPreviewRangeTitle": "Phạm vi báo cáo",
+  "@reportsPreviewRangeTitle": {
+    "description": "Title above the report range chips"
+  },
+  "reportsPreviewRangeMonthly": "Theo tháng",
+  "@reportsPreviewRangeMonthly": {
+    "description": "Monthly report range label"
+  },
+  "reportsPreviewRangeYearly": "Theo năm",
+  "@reportsPreviewRangeYearly": {
+    "description": "Yearly report range label"
+  },
+  "reportsPreviewRangeFullHistory": "Toàn bộ lịch sử",
+  "@reportsPreviewRangeFullHistory": {
+    "description": "Full history report range label"
+  },
+  "reportsPreviewTableTitle": "Dòng xem trước",
+  "@reportsPreviewTableTitle": {
+    "description": "Title above the report preview rows"
+  },
+  "reportsPreviewGenerateFailed": "Không thể tạo báo cáo: {message}",
+  "@reportsPreviewGenerateFailed": {
+    "description": "Error snackbar shown when report generation fails",
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsPdfAppTitle": "Quản lý trả nợ",
+  "@reportsPdfAppTitle": {
+    "description": "Title in PDF report"
+  },
+  "reportsPdfAmortizationTitle": "Báo cáo khấu hao",
+  "@reportsPdfAmortizationTitle": {
+    "description": "Secondary title in PDF report"
+  },
+  "reportsPdfGeneratedOnLabel": "Tạo lúc",
+  "@reportsPdfGeneratedOnLabel": {
+    "description": "Label preceding the generated timestamp in the PDF report"
+  },
+  "reportsPdfPageXOfY": "Trang {pageNumber} / {pagesCount}",
+  "@reportsPdfPageXOfY": {
+    "description": "Page number format in PDF",
+    "placeholders": {
+      "pageNumber": {
+        "type": "int"
+      },
+      "pagesCount": {
+        "type": "int"
+      }
+    }
+  },
+  "reportsPdfColMonth": "Tháng",
+  "@reportsPdfColMonth": {
+    "description": "Column header in PDF"
+  },
+  "reportsPdfColPayment": "Thanh toán",
+  "@reportsPdfColPayment": {
+    "description": "Column header in PDF"
+  },
+  "reportsPdfColPrincipal": "Gốc",
+  "@reportsPdfColPrincipal": {
+    "description": "Column header in PDF"
+  },
+  "reportsPdfColInterest": "Lãi",
+  "@reportsPdfColInterest": {
+    "description": "Column header in PDF"
+  },
+  "reportsPdfColBalance": "Dư nợ",
+  "@reportsPdfColBalance": {
+    "description": "Column header in PDF"
   }
 }

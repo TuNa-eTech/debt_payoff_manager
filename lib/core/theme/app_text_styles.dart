@@ -1,18 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 
 /// App typography — MD3 type scale with Notion compression.
 ///
-/// Font: Roboto (native Android/Material, bundled via google_fonts).
+/// Font: Roboto bundled as a local app asset.
 /// Philosophy: As headings scale up, letter-spacing compresses (Notion-style).
 /// Line height tightens at large sizes, loosens at body sizes.
 class AppTextStyles {
   AppTextStyles._();
 
+  static const String _fontFamily = 'Roboto';
+
+  static TextStyle _roboto({
+    required double fontSize,
+    required FontWeight fontWeight,
+    Color? color,
+    double? letterSpacing,
+    double? height,
+    List<FontFeature>? fontFeatures,
+  }) {
+    return TextStyle(
+      fontFamily: _fontFamily,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color ?? AppColors.mdOnSurface,
+      letterSpacing: letterSpacing,
+      height: height,
+      fontFeatures: fontFeatures,
+    );
+  }
+
   // ── Display — max size, billboard density ──
-  static TextStyle get displayLarge => GoogleFonts.roboto(
+  static TextStyle get displayLarge => _roboto(
     fontSize: 64,
     fontWeight: FontWeight.w700,
     color: AppColors.mdOnSurface,
@@ -20,7 +40,7 @@ class AppTextStyles {
     height: 1.0,
   );
 
-  static TextStyle get displayMedium => GoogleFonts.roboto(
+  static TextStyle get displayMedium => _roboto(
     fontSize: 45,
     fontWeight: FontWeight.w700,
     color: AppColors.mdOnSurface,
@@ -28,7 +48,7 @@ class AppTextStyles {
     height: 1.10,
   );
 
-  static TextStyle get displaySmall => GoogleFonts.roboto(
+  static TextStyle get displaySmall => _roboto(
     fontSize: 36,
     fontWeight: FontWeight.w700,
     color: AppColors.mdOnSurface,
@@ -37,7 +57,7 @@ class AppTextStyles {
   );
 
   // ── Headline ──
-  static TextStyle get headlineLarge => GoogleFonts.roboto(
+  static TextStyle get headlineLarge => _roboto(
     fontSize: 40,
     fontWeight: FontWeight.w700,
     color: AppColors.mdOnSurface,
@@ -45,7 +65,7 @@ class AppTextStyles {
     height: 1.20,
   );
 
-  static TextStyle get headlineMedium => GoogleFonts.roboto(
+  static TextStyle get headlineMedium => _roboto(
     fontSize: 28,
     fontWeight: FontWeight.w700,
     color: AppColors.mdOnSurface,
@@ -53,7 +73,7 @@ class AppTextStyles {
     height: 1.25,
   );
 
-  static TextStyle get headlineSmall => GoogleFonts.roboto(
+  static TextStyle get headlineSmall => _roboto(
     fontSize: 24,
     fontWeight: FontWeight.w600,
     color: AppColors.mdOnSurface,
@@ -62,7 +82,7 @@ class AppTextStyles {
   );
 
   // ── Title (screen headers, card titles) ──
-  static TextStyle get titleLarge => GoogleFonts.roboto(
+  static TextStyle get titleLarge => _roboto(
     fontSize: 22,
     fontWeight: FontWeight.w700,
     color: AppColors.mdOnSurface,
@@ -70,7 +90,7 @@ class AppTextStyles {
     height: 1.27,
   );
 
-  static TextStyle get titleMedium => GoogleFonts.roboto(
+  static TextStyle get titleMedium => _roboto(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     color: AppColors.mdOnSurface,
@@ -78,7 +98,7 @@ class AppTextStyles {
     height: 1.50,
   );
 
-  static TextStyle get titleSmall => GoogleFonts.roboto(
+  static TextStyle get titleSmall => _roboto(
     fontSize: 14,
     fontWeight: FontWeight.w600,
     color: AppColors.mdOnSurface,
@@ -87,7 +107,7 @@ class AppTextStyles {
   );
 
   // ── Body ──
-  static TextStyle get bodyLarge => GoogleFonts.roboto(
+  static TextStyle get bodyLarge => _roboto(
     fontSize: 16,
     fontWeight: FontWeight.w400,
     color: AppColors.mdOnSurface,
@@ -95,7 +115,7 @@ class AppTextStyles {
     height: 1.50,
   );
 
-  static TextStyle get bodyMedium => GoogleFonts.roboto(
+  static TextStyle get bodyMedium => _roboto(
     fontSize: 14,
     fontWeight: FontWeight.w500,
     color: AppColors.mdOnSurfaceVariant,
@@ -103,7 +123,7 @@ class AppTextStyles {
     height: 1.43,
   );
 
-  static TextStyle get bodySmall => GoogleFonts.roboto(
+  static TextStyle get bodySmall => _roboto(
     fontSize: 12,
     fontWeight: FontWeight.w400,
     color: AppColors.mdOnSurfaceVariant,
@@ -112,7 +132,7 @@ class AppTextStyles {
   );
 
   // ── Label ──
-  static TextStyle get labelLarge => GoogleFonts.roboto(
+  static TextStyle get labelLarge => _roboto(
     fontSize: 14,
     fontWeight: FontWeight.w500,
     color: AppColors.mdOnSurface,
@@ -120,7 +140,7 @@ class AppTextStyles {
     height: 1.43,
   );
 
-  static TextStyle get labelMedium => GoogleFonts.roboto(
+  static TextStyle get labelMedium => _roboto(
     fontSize: 12,
     fontWeight: FontWeight.w500,
     color: AppColors.mdOnSurfaceVariant,
@@ -128,7 +148,7 @@ class AppTextStyles {
     height: 1.33,
   );
 
-  static TextStyle get labelSmall => GoogleFonts.roboto(
+  static TextStyle get labelSmall => _roboto(
     fontSize: 11,
     fontWeight: FontWeight.w600,
     color: AppColors.mdOnSurfaceVariant,
@@ -137,7 +157,7 @@ class AppTextStyles {
   );
 
   // ── Badge / Status pill ──
-  static TextStyle get badge => GoogleFonts.roboto(
+  static TextStyle get badge => _roboto(
     fontSize: 11,
     fontWeight: FontWeight.w600,
     letterSpacing: 0.5,
@@ -145,7 +165,7 @@ class AppTextStyles {
   );
 
   // ── Money display (tabular, compressed) ──
-  static TextStyle get moneyLarge => GoogleFonts.roboto(
+  static TextStyle get moneyLarge => _roboto(
     fontSize: 40,
     fontWeight: FontWeight.w700,
     color: AppColors.mdOnSurface,
@@ -154,7 +174,7 @@ class AppTextStyles {
     fontFeatures: const [FontFeature.tabularFigures()],
   );
 
-  static TextStyle get moneyMedium => GoogleFonts.roboto(
+  static TextStyle get moneyMedium => _roboto(
     fontSize: 28,
     fontWeight: FontWeight.w700,
     color: AppColors.mdOnSurface,
@@ -163,7 +183,7 @@ class AppTextStyles {
     fontFeatures: const [FontFeature.tabularFigures()],
   );
 
-  static TextStyle get moneySmall => GoogleFonts.roboto(
+  static TextStyle get moneySmall => _roboto(
     fontSize: 20,
     fontWeight: FontWeight.w600,
     color: AppColors.mdOnSurface,
@@ -172,7 +192,7 @@ class AppTextStyles {
     fontFeatures: const [FontFeature.tabularFigures()],
   );
 
-  static TextStyle get moneyXSmall => GoogleFonts.roboto(
+  static TextStyle get moneyXSmall => _roboto(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     color: AppColors.mdOnSurface,
@@ -181,7 +201,7 @@ class AppTextStyles {
   );
 
   // ── Navigation label ──
-  static TextStyle get navLabel => GoogleFonts.roboto(
+  static TextStyle get navLabel => _roboto(
     fontSize: 11,
     fontWeight: FontWeight.w500,
     letterSpacing: 0,

@@ -1,5 +1,13 @@
 ios/
 android/
+*.g.dart
+*.png
+*.jpg
+*.pen
 assets/
 .agents/
-*.g.dart
+.agent/
+.claude/
+.codex/
+.kiro/
+.windsurf/

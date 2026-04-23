@@ -11,11 +11,14 @@ import '../../../../core/models/backup_bundle_preview.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/services/backup_file_picker.dart';
 import '../../../../core/services/data_management_service.dart';
+import '../../../../core/services/notification_service.dart';
+import '../../../../core/services/reminder_scheduler_service.dart';
 import '../../../../core/services/share_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/formatters.dart';
+import '../../../../core/widgets/app_chip.dart';
 import '../../../../domain/entities/user_settings.dart';
 import '../../../../domain/enums/strategy.dart';
 import '../../../../domain/repositories/plan_repository.dart';
@@ -63,6 +66,7 @@ class _SettingsPageState extends State<SettingsPage> {
             final plan = planSnapshot.data;
 
             return Scaffold(
+              backgroundColor: AppColors.mdSurfaceContainerLow,
               appBar: AppBar(title: Text(l10n.settingsPageTitle)),
               body: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(vertical: AppDimensions.md),
@@ -101,19 +105,61 @@ class _SettingsPageState extends State<SettingsPage> {
                           key: AppTestKeys.settingsPaymentReminders,
                           title: l10n.settingsPaymentReminderTitle,
                           subtitle: l10n.settingsPaymentReminderSubtitle,
-                          trailingText: l10n.commonComingSoon,
-                          onTap: () => _showComingSoon(
-                            l10n.settingsPaymentReminderTitle,
+                          trailingWidget: Switch(
+                            value: settings.notifPaymentReminder,
+                            onChanged: (value) =>
+                                _togglePaymentReminder(settings, value),
+                          ),
+                          onTap: () => _togglePaymentReminder(
+                            settings,
+                            !settings.notifPaymentReminder,
+                          ),
+                        ),
+                        _buildDivider(),
+                        if (settings.notifPaymentReminder) ...[
+                          _buildReminderDayPicker(settings),
+                          _buildDivider(),
+                        ],
+                        _buildListTile(
+                          key: AppTestKeys.settingsMonthlyReminder,
+                          title: l10n.settingsMonthlyReminderTitle,
+                          subtitle: l10n.settingsMonthlyReminderSubtitle,
+                          trailingWidget: Switch(
+                            value: settings.notifMonthlyLog,
+                            onChanged: (value) =>
+                                _toggleMonthlyReminder(settings, value),
+                          ),
+                          onTap: () => _toggleMonthlyReminder(
+                            settings,
+                            !settings.notifMonthlyLog,
                           ),
                         ),
                         _buildDivider(),
                         _buildListTile(
-                          key: AppTestKeys.settingsMonthlyLog,
-                          title: l10n.settingsMonthlyLogTitle,
-                          subtitle: l10n.settingsMonthlyLogSubtitle,
-                          trailingText: l10n.commonComingSoon,
-                          onTap: () =>
-                              _showComingSoon(l10n.settingsMonthlyLogTitle),
+                          key: AppTestKeys.settingsMilestoneReminder,
+                          title: l10n.settingsMilestoneReminderTitle,
+                          subtitle: l10n.settingsMilestoneReminderSubtitle,
+                          trailingWidget: Switch(
+                            value: settings.notifMilestone,
+                            onChanged: (value) =>
+                                _toggleMilestoneReminder(settings, value),
+                          ),
+                          onTap: () => _toggleMilestoneReminder(
+                            settings,
+                            !settings.notifMilestone,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: AppDimensions.md),
+                    _buildSection(
+                      title: l10n.settingsSectionReports,
+                      children: [
+                        _buildListTile(
+                          key: AppTestKeys.settingsReportsPreview,
+                          title: l10n.settingsReportsPreviewTitle,
+                          subtitle: l10n.settingsReportsPreviewSubtitle,
+                          onTap: () => context.push(AppRoutes.reportsPreview),
                         ),
                       ],
                     ),
@@ -440,6 +486,61 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  Future<void> _togglePaymentReminder(UserSettings settings, bool value) async {
+    if (value && !await _ensureNotificationPermission()) {
+      return;
+    }
+
+    await _updateSettings(settings.copyWith(notifPaymentReminder: value));
+    await getIt<ReminderSchedulerService>().rescheduleAllReminders();
+  }
+
+  Future<void> _toggleMonthlyReminder(UserSettings settings, bool value) async {
+    if (value && !await _ensureNotificationPermission()) {
+      return;
+    }
+
+    await _updateSettings(settings.copyWith(notifMonthlyLog: value));
+    await getIt<ReminderSchedulerService>().rescheduleAllReminders();
+  }
+
+  Future<void> _toggleMilestoneReminder(
+    UserSettings settings,
+    bool value,
+  ) async {
+    if (value && !await _ensureNotificationPermission()) {
+      return;
+    }
+
+    await _updateSettings(settings.copyWith(notifMilestone: value));
+  }
+
+  Future<void> _updateReminderDays(
+    UserSettings settings,
+    int daysBefore,
+  ) async {
+    if (settings.notifPaymentReminderDaysBefore == daysBefore) {
+      return;
+    }
+
+    await _updateSettings(
+      settings.copyWith(notifPaymentReminderDaysBefore: daysBefore),
+    );
+    await getIt<ReminderSchedulerService>().rescheduleAllReminders();
+  }
+
+  Future<bool> _ensureNotificationPermission() async {
+    final notificationService = getIt<NotificationService>();
+    final granted = await notificationService.requestPermissions();
+    if (!granted && mounted) {
+      context.showSnackBar(
+        context.l10n.settingsNotificationPermissionRequired,
+        isError: true,
+      );
+    }
+    return granted;
+  }
+
   void _showComingSoon(String featureName) {
     context.showSnackBar(context.l10n.commonComingSoonFeature(featureName));
   }
@@ -498,7 +599,10 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         Container(
           color: AppColors.mdSurface,
-          child: Column(children: children),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: children,
+          ),
         ),
       ],
     );
@@ -551,11 +655,52 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  Widget _buildReminderDayPicker(UserSettings settings) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.pagePaddingH,
+        vertical: AppDimensions.md,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            context.l10n.settingsReminderDaysTitle,
+            style: AppTextStyles.labelMedium.copyWith(
+              color: AppColors.mdOnSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: AppDimensions.xs),
+          Text(
+            context.l10n.settingsReminderDaysSubtitle,
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.mdOnSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: AppDimensions.sm),
+          Wrap(
+            spacing: AppDimensions.sm,
+            runSpacing: AppDimensions.sm,
+            children: [1, 3, 7].map((days) {
+              return AppChip.filter(
+                key: AppTestKeys.settingsReminderDayOption(days),
+                label: '$days',
+                selected: settings.notifPaymentReminderDaysBefore == days,
+                onTap: () => _updateReminderDays(settings, days),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildListTile({
     Key? key,
     required String title,
     String? subtitle,
     String? trailingText,
+    Widget? trailingWidget,
     Color? titleColor,
     Color? trailingColor,
     bool enabled = true,
@@ -576,7 +721,7 @@ class _SettingsPageState extends State<SettingsPage> {
         vertical: AppDimensions.md,
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             child: Column(
@@ -613,7 +758,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 : Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (trailingText != null)
+                      if (trailingWidget != null)
+                        trailingWidget
+                      else if (trailingText != null)
                         Text(
                           trailingText,
                           style: AppTextStyles.bodyMedium.copyWith(
@@ -621,7 +768,9 @@ class _SettingsPageState extends State<SettingsPage> {
                             fontFamily: 'Roboto Mono',
                           ),
                         ),
-                      if (canTap) ...[
+                      if (canTap &&
+                          trailingWidget == null &&
+                          trailingText == null) ...[
                         const SizedBox(width: AppDimensions.sm),
                         const Icon(
                           LucideIcons.chevronRight,

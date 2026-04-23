@@ -28,6 +28,8 @@ class SharePlusLauncher implements ShareLauncher {
         return 'Debt Payoff Manager CSV Export';
       case DataExportArtifactKind.localBackup:
         return 'Debt Payoff Manager Local Backup';
+      case DataExportArtifactKind.pdfReport:
+        return 'Debt Payoff Manager Amortization Report';
     }
   }
 
@@ -37,6 +39,8 @@ class SharePlusLauncher implements ShareLauncher {
         return 'Full CSV export generated from Debt Payoff Manager.';
       case DataExportArtifactKind.localBackup:
         return 'Local backup bundle generated from Debt Payoff Manager.';
+      case DataExportArtifactKind.pdfReport:
+        return 'Monthly Amortization Schedule and Report from Debt Payoff Manager.';
     }
   }
 }

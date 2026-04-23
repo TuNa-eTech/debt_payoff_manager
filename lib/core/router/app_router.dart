@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
+import '../di/injection.dart';
 import '../../domain/repositories/debt_repository.dart';
 import '../../domain/repositories/settings_repository.dart';
 import '../../features/debts/presentation/pages/add_debt_page.dart';
@@ -20,8 +22,10 @@ import '../../features/debts/presentation/pages/log_payment_page.dart';
 import '../../features/debts/presentation/pages/payment_history_page.dart';
 import '../../features/progress/presentation/pages/progress_page.dart';
 import '../../features/pricing/presentation/pages/pricing_page.dart';
+import '../../features/reports/presentation/pages/reports_preview_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/sync_backup_page.dart';
+import '../../features/plan/cubit/plan_timeline_cubit.dart';
 import '../../features/plan/presentation/pages/timeline_page.dart';
 import '../widgets/scaffold_with_nav.dart';
 
@@ -51,6 +55,7 @@ class AppRoutes {
   static const String logPayment = '/debts/:id/log_payment';
   static const String paymentHistory = '/debts/:id/history';
   static const String syncBackup = '/settings/sync';
+  static const String reportsPreview = '/settings/reports';
   static const String pricing = '/settings/pricing';
 
   static String debtDetailPath(String id) => '/debts/$id';
@@ -192,6 +197,15 @@ GoRouter createRouter({
               GoRoute(
                 path: AppRoutes.settings,
                 builder: (context, state) => const SettingsPage(),
+                routes: [
+                  GoRoute(
+                    path: 'reports',
+                    builder: (context, state) => BlocProvider(
+                      create: (_) => getIt<PlanTimelineCubit>()..start(),
+                      child: const ReportsPreviewPage(),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

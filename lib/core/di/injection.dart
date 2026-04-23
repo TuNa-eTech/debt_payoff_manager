@@ -24,9 +24,15 @@ import '../../features/plan/cubit/plan_timeline_cubit.dart';
 import '../services/app_analytics.dart';
 import '../services/backup_file_picker.dart';
 import '../services/data_management_service.dart';
+import '../services/milestone_notification_service.dart';
+import '../services/milestone_service.dart';
 import '../services/monthly_action_service.dart';
+import '../services/notification_permission_prompt_tracker.dart';
+import '../services/notification_service.dart';
 import '../services/payment_logging_service.dart';
 import '../services/plan_recast_service.dart';
+import '../services/reminder_scheduler_service.dart';
+import '../services/report_generator_service.dart';
 import '../services/share_launcher.dart';
 
 /// Global service locator instance.
@@ -40,6 +46,8 @@ void configureDependencies({
   AppAnalytics? appAnalytics,
   BackupFilePicker? backupFilePicker,
   DataManagementService? dataManagementService,
+  NotificationPermissionPromptTracker? notificationPermissionPromptTracker,
+  NotificationService? notificationService,
   ShareLauncher? shareLauncher,
   String? seedLocaleCode,
 }) {
@@ -89,6 +97,7 @@ void configureDependencies({
       paymentRepository: getIt<PaymentRepositoryImpl>(),
       syncStateStore: getIt<SyncStateStore>(),
       planRecastService: getIt<PlanRecastService>(),
+      milestoneService: getIt<MilestoneService>(),
     ),
   );
   getIt.registerLazySingleton<MonthlyActionService>(
@@ -144,6 +153,42 @@ void configureDependencies({
   );
   getIt.registerLazySingleton<MilestoneRepository>(
     () => getIt<MilestoneRepositoryImpl>(),
+  );
+  getIt.registerLazySingleton<MilestoneService>(
+    () => MilestoneService(
+      milestoneRepository: getIt<MilestoneRepository>(),
+      debtRepository: getIt<DebtRepository>(),
+    ),
+  );
+
+  // Notifications & Reminders
+  getIt.registerLazySingleton<NotificationService>(
+    () => notificationService ?? NotificationService(),
+  );
+  getIt.registerLazySingleton<NotificationPermissionPromptTracker>(
+    () =>
+        notificationPermissionPromptTracker ??
+        SharedPrefsNotificationPermissionPromptTracker(),
+  );
+  getIt.registerLazySingleton<ReminderSchedulerService>(
+    () => ReminderSchedulerService(
+      notificationService: getIt<NotificationService>(),
+      debtRepository: getIt<DebtRepository>(),
+      paymentRepository: getIt<PaymentRepository>(),
+      settingsRepository: getIt<SettingsRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<MilestoneNotificationService>(
+    () => MilestoneNotificationService(
+      notificationService: getIt<NotificationService>(),
+      milestoneRepository: getIt<MilestoneRepository>(),
+      settingsRepository: getIt<SettingsRepository>(),
+    ),
+  );
+
+  // Reports
+  getIt.registerLazySingleton<ReportGeneratorService>(
+    () => ReportGeneratorService(),
   );
 
   // Feature state

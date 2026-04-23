@@ -214,6 +214,26 @@ class DataManagementService {
     );
   }
 
+  Future<DataExportArtifact> generatePdfExportArtifact(
+    Uint8List pdfBytes, {
+    String filePrefix = 'debt_payoff_report',
+  }) async {
+    final tempDir = await _temporaryDirectoryProvider();
+    final timestamp = _nowProvider().toIso8601String().replaceAll(':', '-').split('.').first;
+    final fileName = '${filePrefix}_$timestamp.pdf';
+    final filePath = path.join(tempDir.path, fileName);
+    
+    final file = File(filePath);
+    await file.writeAsBytes(pdfBytes);
+
+    return DataExportArtifact(
+      path: filePath,
+      fileName: fileName,
+      mimeType: 'application/pdf',
+      kind: DataExportArtifactKind.pdfReport,
+    );
+  }
+
   Future<BackupBundlePreview> inspectLocalBackupBundle({
     required String filePath,
     String? fileName,

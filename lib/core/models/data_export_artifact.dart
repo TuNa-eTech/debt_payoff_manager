@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum DataExportArtifactKind { csvBundle, localBackup }
+enum DataExportArtifactKind { csvBundle, localBackup, pdfReport }
 
 class DataExportArtifact extends Equatable {
   const DataExportArtifact({

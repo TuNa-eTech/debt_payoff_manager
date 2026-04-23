@@ -8,6 +8,7 @@ import '../../domain/entities/payment.dart';
 import '../../domain/enums/debt_status.dart';
 import '../../domain/enums/payment_type.dart';
 import '../../engine/validators.dart';
+import 'milestone_service.dart';
 import 'plan_recast_service.dart';
 
 /// Logs actual payments against debt balances and triggers a fresh recast.
@@ -18,17 +19,20 @@ class PaymentLoggingService {
     required PaymentRepositoryImpl paymentRepository,
     required SyncStateStore syncStateStore,
     required PlanRecastService planRecastService,
+    MilestoneService? milestoneService,
   }) : _db = db,
        _debtRepository = debtRepository,
        _paymentRepository = paymentRepository,
        _syncStateStore = syncStateStore,
-       _planRecastService = planRecastService;
+       _planRecastService = planRecastService,
+       _milestoneService = milestoneService;
 
   final AppDatabase _db;
   final DebtRepositoryImpl _debtRepository;
   final PaymentRepositoryImpl _paymentRepository;
   final SyncStateStore _syncStateStore;
   final PlanRecastService _planRecastService;
+  final MilestoneService? _milestoneService;
   final Uuid _uuid = const Uuid();
 
   Future<Payment> logPayment({
@@ -105,6 +109,11 @@ class PaymentLoggingService {
       await _syncStateStore.markDirtyMany(const ['debts', 'payments']);
     });
 
+    await _milestoneService?.evaluatePaymentMilestones(
+      originalDebt: debt,
+      updatedDebt: updatedDebt,
+      paymentDate: paymentDate,
+    );
     await _planRecastService.recast(scenarioId: debt.scenarioId);
     return payment;
   }

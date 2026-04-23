@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:flutter/services.dart';
+
 import 'package:debt_payoff_manager/core/constants/app_test_keys.dart';
 import 'package:debt_payoff_manager/core/router/app_router.dart';
+import 'package:debt_payoff_manager/core/services/notification_service.dart';
 import 'package:debt_payoff_manager/domain/enums/debt_status.dart';
 import 'package:debt_payoff_manager/domain/enums/strategy.dart';
 
@@ -11,6 +14,13 @@ import '../helpers/test_app_harness.dart';
 import '../helpers/widget_test_helpers.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+      .setMockMethodCallHandler(
+        const MethodChannel('dexterous.com/flutter/local_notifications'),
+        (call) async => null,
+      );
+
   group('App smoke suite', () {
     testWidgets(
       'fresh launch completes onboarding through the real app shell',
@@ -77,6 +87,34 @@ void main() {
 
         harness.router.go(AppRoutes.welcome);
         await _pumpUntilLocation(tester, harness, AppRoutes.home);
+      },
+    );
+
+    testWidgets(
+      'requests notification permission only on the first home entry',
+      (tester) async {
+        final notificationService = _TrackingNotificationService();
+        final harness = await TestAppHarness.create(
+          notificationService: notificationService,
+        );
+        addTearDown(() => harness.disposeWidgetTest(tester));
+
+        await harness.debtRepository.addDebt(
+          makeRepoDebt(id: 'seed-home-prompt', name: 'Seed debt'),
+        );
+        await harness.onboardingCubit.completeOnboarding();
+
+        await harness.pumpApp(tester);
+        await _pumpUntilLocation(tester, harness, AppRoutes.home);
+        await tester.pumpRouterIdle();
+
+        expect(notificationService.requestPermissionsCalls, 1);
+
+        await harness.relaunch(tester);
+        await _pumpUntilLocation(tester, harness, AppRoutes.home);
+        await tester.pumpRouterIdle();
+
+        expect(notificationService.requestPermissionsCalls, 1);
       },
     );
 
@@ -408,6 +446,22 @@ void main() {
       expect(find.byKey(AppTestKeys.debtCard(paidOffDebt.id)), findsOneWidget);
     });
   });
+}
+
+class _TrackingNotificationService extends NotificationService {
+  int requestPermissionsCalls = 0;
+
+  @override
+  Future<void> initialize() async {}
+
+  @override
+  Future<bool> hasPermissions() async => false;
+
+  @override
+  Future<bool> requestPermissions() async {
+    requestPermissionsCalls += 1;
+    return false;
+  }
 }
 
 Future<void> _enterText(WidgetTester tester, Key key, String value) async {

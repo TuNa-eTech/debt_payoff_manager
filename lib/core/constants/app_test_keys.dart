@@ -78,7 +78,16 @@ class AppTestKeys {
   static const settingsPaymentReminders = ValueKey<String>(
     'settings:payment-reminders',
   );
+  static const settingsMonthlyReminder = ValueKey<String>(
+    'settings:monthly-reminder',
+  );
+  static const settingsMilestoneReminder = ValueKey<String>(
+    'settings:milestone-reminder',
+  );
   static const settingsMonthlyLog = ValueKey<String>('settings:monthly-log');
+  static const settingsReportsPreview = ValueKey<String>(
+    'settings:reports-preview',
+  );
   static const settingsLocale = ValueKey<String>('settings:locale');
   static const settingsLocaleOptionEnglish = ValueKey<String>(
     'settings:locale-option-english',
@@ -161,4 +170,14 @@ class AppTestKeys {
 
   static ValueKey<String> debtDetail(String id) =>
       ValueKey<String>('debt-detail:$id');
+
+  static ValueKey<String> settingsReminderDayOption(int days) =>
+      ValueKey<String>('settings:reminder-days:$days');
+
+  static ValueKey<String> reportsPreviewRange(String range) =>
+      ValueKey<String>('reports-preview:range:$range');
+
+  static const reportsPreviewExport = ValueKey<String>(
+    'reports-preview:export',
+  );
 }

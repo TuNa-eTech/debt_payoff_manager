@@ -10,6 +10,8 @@ import 'package:debt_payoff_manager/core/services/app_analytics.dart';
 import 'package:debt_payoff_manager/core/services/backup_file_picker.dart';
 import 'package:debt_payoff_manager/core/services/data_management_service.dart';
 import 'package:debt_payoff_manager/core/services/monthly_action_service.dart';
+import 'package:debt_payoff_manager/core/services/notification_permission_prompt_tracker.dart';
+import 'package:debt_payoff_manager/core/services/notification_service.dart';
 import 'package:debt_payoff_manager/core/services/payment_logging_service.dart';
 import 'package:debt_payoff_manager/core/services/plan_recast_service.dart';
 import 'package:debt_payoff_manager/core/services/share_launcher.dart';
@@ -74,7 +76,7 @@ class TestAppHarness {
   GoRouter get router => _appScope.router;
 
   String get currentLocation {
-    final location = router.routeInformationProvider.value.uri.toString();
+    final location = router.state.uri.toString();
     return location.isEmpty ? AppRoutes.welcome : location;
   }
 
@@ -83,6 +85,8 @@ class TestAppHarness {
     AppAnalytics? appAnalytics,
     BackupFilePicker? backupFilePicker,
     DataManagementService? dataManagementService,
+    NotificationPermissionPromptTracker? notificationPermissionPromptTracker,
+    NotificationService? notificationService,
     ShareLauncher? shareLauncher,
     String seedLocaleCode = AppLocale.fallbackLocaleCode,
     bool closeDbOnDispose = true,
@@ -97,6 +101,10 @@ class TestAppHarness {
       appAnalytics: appAnalytics,
       backupFilePicker: backupFilePicker,
       dataManagementService: dataManagementService,
+      notificationPermissionPromptTracker:
+          notificationPermissionPromptTracker ??
+          _InMemoryNotificationPermissionPromptTracker(),
+      notificationService: notificationService,
       shareLauncher: shareLauncher,
       seedLocaleCode: seedLocaleCode,
     );
@@ -222,4 +230,17 @@ class _TestAppScope {
   final DebtsCubit debtsCubit;
   final OnboardingCubit onboardingCubit;
   final GoRouter router;
+}
+
+class _InMemoryNotificationPermissionPromptTracker
+    implements NotificationPermissionPromptTracker {
+  bool _hasPrompted = false;
+
+  @override
+  Future<bool> hasPrompted() async => _hasPrompted;
+
+  @override
+  Future<void> markPrompted() async {
+    _hasPrompted = true;
+  }
 }

@@ -517,7 +517,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsMonthlyLogTitle => 'Monthly log';
 
   @override
+  String get settingsMonthlyReminderTitle => 'End-of-month reminder';
+
+  @override
+  String get settingsMonthlyReminderSubtitle =>
+      'Get one reminder near month end if payments still need to be logged.';
+
+  @override
   String get settingsPageTitle => 'Settings';
+
+  @override
+  String get settingsReminderDaysTitle => 'Days before due date';
+
+  @override
+  String get settingsReminderDaysSubtitle =>
+      'Choose how early the due-date reminder should arrive.';
 
   @override
   String get settingsPaymentReminderSubtitle =>
@@ -525,6 +539,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsPaymentReminderTitle => 'Payment reminders';
+
+  @override
+  String get notificationPaymentDueTitle => 'Payment Reminder';
+
+  @override
+  String notificationPaymentDueBody(String debtName) {
+    return 'Your loan \"$debtName\" is due soon.';
+  }
+
+  @override
+  String get notificationMonthlyLogTitle => 'Monthly check-in';
+
+  @override
+  String get notificationMonthlyLogBody =>
+      'Open your plan and make sure this month\'s payments are fully logged before the month closes.';
+
+  @override
+  String get notificationMilestoneTitle => 'Milestone reached';
+
+  @override
+  String get notificationMilestoneBody =>
+      'You unlocked a new payoff milestone. Open Progress to review your latest win.';
+
+  @override
+  String get settingsMilestoneReminderTitle => 'Milestone alerts';
+
+  @override
+  String get settingsMilestoneReminderSubtitle =>
+      'Celebrate payoff progress when a new milestone is reached.';
+
+  @override
+  String get settingsNotificationPermissionRequired =>
+      'Notification permission is required to enable this reminder.';
 
   @override
   String get settingsResetAction => 'Reset';
@@ -572,6 +619,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSectionOptions => 'OPTIONS';
 
   @override
+  String get settingsSectionReports => 'REPORTS';
+
+  @override
   String get settingsSectionPlan => 'PAYOFF PLAN';
 
   @override
@@ -585,6 +635,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsStrategySnowball => 'Snowball';
+
+  @override
+  String get settingsReportsPreviewTitle => 'Report preview';
+
+  @override
+  String get settingsReportsPreviewSubtitle =>
+      'Preview monthly, yearly, or full-history PDF exports before sharing.';
 
   @override
   String get settingsTrustLevelLocalOnlyBody =>
@@ -1299,4 +1356,77 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonMonth => 'month';
+
+  @override
+  String get reportsPreviewReportSummary => 'Report Summary';
+
+  @override
+  String get reportsPreviewTotalPaid => 'Total Paid';
+
+  @override
+  String get reportsPreviewTotalInterest => 'Total Interest';
+
+  @override
+  String get reportsPreviewDebtFreeDate => 'Debt Free Date';
+
+  @override
+  String get reportsPreviewGenerating => 'Generating...';
+
+  @override
+  String get reportsPreviewExportToPdf => 'Export to PDF';
+
+  @override
+  String get reportsPreviewNotAvailable => 'N/A';
+
+  @override
+  String get reportsPreviewPageTitle => 'Reports';
+
+  @override
+  String get reportsPreviewRangeTitle => 'Report range';
+
+  @override
+  String get reportsPreviewRangeMonthly => 'Monthly';
+
+  @override
+  String get reportsPreviewRangeYearly => 'Yearly';
+
+  @override
+  String get reportsPreviewRangeFullHistory => 'Full history';
+
+  @override
+  String get reportsPreviewTableTitle => 'Preview rows';
+
+  @override
+  String reportsPreviewGenerateFailed(String message) {
+    return 'Could not generate the report: $message';
+  }
+
+  @override
+  String get reportsPdfAppTitle => 'Debt Payoff Manager';
+
+  @override
+  String get reportsPdfAmortizationTitle => 'Amortization report';
+
+  @override
+  String get reportsPdfGeneratedOnLabel => 'Generated on';
+
+  @override
+  String reportsPdfPageXOfY(int pageNumber, int pagesCount) {
+    return 'Page $pageNumber of $pagesCount';
+  }
+
+  @override
+  String get reportsPdfColMonth => 'Month';
+
+  @override
+  String get reportsPdfColPayment => 'Payment';
+
+  @override
+  String get reportsPdfColPrincipal => 'Principal';
+
+  @override
+  String get reportsPdfColInterest => 'Interest';
+
+  @override
+  String get reportsPdfColBalance => 'Balance';
 }
