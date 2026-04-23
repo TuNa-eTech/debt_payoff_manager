@@ -187,7 +187,10 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                                   ),
                                   const SizedBox(height: AppDimensions.sm),
                                   Text(
-                                    context.l10n.onboardingExtraTrackedCount(strategyLabel, trackedCount),
+                                    context.l10n.onboardingExtraTrackedCount(
+                                      strategyLabel,
+                                      trackedCount,
+                                    ),
                                     style: AppTextStyles.bodySmall.copyWith(
                                       color: AppColors.mdOnPrimaryContainer
                                           .withValues(alpha: 0.82),
@@ -300,14 +303,18 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                                       ),
                                       const SizedBox(width: AppDimensions.sm),
                                       Text(
-                                        context.l10n.onboardingExtraWhatsNextTitle,
+                                        context
+                                            .l10n
+                                            .onboardingExtraWhatsNextTitle,
                                         style: AppTextStyles.titleSmall,
                                       ),
                                     ],
                                   ),
                                   const SizedBox(height: AppDimensions.sm),
                                   Text(
-                                    context.l10n.onboardingExtraWhatsNextDescription,
+                                    context
+                                        .l10n
+                                        .onboardingExtraWhatsNextDescription,
                                     style: AppTextStyles.bodyMedium.copyWith(
                                       color: AppColors.mdOnSurfaceVariant,
                                     ),
@@ -455,9 +462,7 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.onboardingExtraError),
-        ),
+        SnackBar(content: Text(context.l10n.onboardingExtraError)),
       );
     } finally {
       if (mounted) {
@@ -533,7 +538,10 @@ class _ExtraPreviewCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(context.l10n.onboardingExtraPreviewTitle, style: AppTextStyles.titleSmall),
+              Text(
+                context.l10n.onboardingExtraPreviewTitle,
+                style: AppTextStyles.titleSmall,
+              ),
               const SizedBox(width: AppDimensions.sm),
               AppChip.status(label: strategyLabel, icon: LucideIcons.zap),
             ],
@@ -551,7 +559,9 @@ class _ExtraPreviewCard extends StatelessWidget {
           ),
           const SizedBox(height: AppDimensions.xs),
           Text(
-            context.l10n.onboardingExtraPreviewDebtFree(AppFormatters.formatCents(extraMonthlyAmount)),
+            context.l10n.onboardingExtraPreviewDebtFree(
+              AppFormatters.formatCents(extraMonthlyAmount),
+            ),
             style: AppTextStyles.bodySmall.copyWith(
               color: AppColors.mdOnSurfaceVariant,
             ),

@@ -6,10 +6,7 @@ import '../../../../domain/enums/debt_status.dart';
 enum DebtsFilter { all, active, paidOff, archived }
 
 class DebtActionFeedback extends Equatable {
-  const DebtActionFeedback({
-    required this.message,
-    required this.sequence,
-  });
+  const DebtActionFeedback({required this.message, required this.sequence});
 
   final String message;
   final int sequence;
@@ -56,10 +53,8 @@ class DebtsState extends Equatable {
     }
   }
 
-  int get totalBalanceCents => debts.fold(
-        0,
-        (sum, debt) => sum + debt.currentBalance,
-      );
+  int get totalBalanceCents =>
+      debts.fold(0, (sum, debt) => sum + debt.currentBalance);
 
   int get activeCount => debts
       .where(
@@ -97,10 +92,10 @@ class DebtsState extends Equatable {
 
   @override
   List<Object?> get props => [
-        isLoading,
-        debts,
-        filter,
-        inlineError,
-        lastActionFeedback,
-      ];
+    isLoading,
+    debts,
+    filter,
+    inlineError,
+    lastActionFeedback,
+  ];
 }

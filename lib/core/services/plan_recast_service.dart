@@ -111,7 +111,8 @@ class PlanRecastService {
         .where(
           (debt) =>
               debt.currentBalance > 0 &&
-              (debt.status == DebtStatus.active || debt.status == DebtStatus.paused),
+              (debt.status == DebtStatus.active ||
+                  debt.status == DebtStatus.paused),
         )
         .toList(growable: false);
     final totalBalance = trackedDebts.fold<int>(
@@ -173,10 +174,7 @@ class PlanRecastService {
     }
 
     final lastMonth = projection.months.last.yearMonth.split('-');
-    return DateTime(
-      int.parse(lastMonth[0]),
-      int.parse(lastMonth[1]),
-    );
+    return DateTime(int.parse(lastMonth[0]), int.parse(lastMonth[1]));
   }
 }
 

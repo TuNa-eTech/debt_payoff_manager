@@ -87,8 +87,7 @@ class UserSettings extends Equatable {
       dayCountConvention: dayCountConvention ?? this.dayCountConvention,
       notifPaymentReminder: notifPaymentReminder ?? this.notifPaymentReminder,
       notifPaymentReminderDaysBefore:
-          notifPaymentReminderDaysBefore ??
-              this.notifPaymentReminderDaysBefore,
+          notifPaymentReminderDaysBefore ?? this.notifPaymentReminderDaysBefore,
       notifMilestone: notifMilestone ?? this.notifMilestone,
       notifMonthlyLog: notifMonthlyLog ?? this.notifMonthlyLog,
       onboardingStep: onboardingStep ?? this.onboardingStep,
@@ -104,10 +103,22 @@ class UserSettings extends Equatable {
 
   @override
   List<Object?> get props => [
-        id, trustLevel, firebaseUid, currencyCode, localeCode,
-        dayCountConvention, notifPaymentReminder,
-        notifPaymentReminderDaysBefore, notifMilestone, notifMonthlyLog,
-        onboardingStep, onboardingCompleted, onboardingCompletedAt,
-        isPremium, premiumExpiresAt, createdAt, updatedAt,
-      ];
+    id,
+    trustLevel,
+    firebaseUid,
+    currencyCode,
+    localeCode,
+    dayCountConvention,
+    notifPaymentReminder,
+    notifPaymentReminderDaysBefore,
+    notifMilestone,
+    notifMonthlyLog,
+    onboardingStep,
+    onboardingCompleted,
+    onboardingCompletedAt,
+    isPremium,
+    premiumExpiresAt,
+    createdAt,
+    updatedAt,
+  ];
 }

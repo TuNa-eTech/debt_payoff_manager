@@ -197,7 +197,10 @@ class _SummaryCard extends StatelessWidget {
           ),
           Container(width: 1, height: 40, color: AppColors.mdOutlineVariant),
           Expanded(
-            child: _SummaryCol(label: context.l10n.debtsListFilterActive, value: '${state.activeCount}'),
+            child: _SummaryCol(
+              label: context.l10n.debtsListFilterActive,
+              value: '${state.activeCount}',
+            ),
           ),
           Container(width: 1, height: 40, color: AppColors.mdOutlineVariant),
           Expanded(

@@ -81,10 +81,7 @@ class AppChip extends StatelessWidget {
                   color: fg,
                 ),
               ),
-            Text(
-              label,
-              style: AppTextStyles.labelMedium.copyWith(color: fg),
-            ),
+            Text(label, style: AppTextStyles.labelMedium.copyWith(color: fg)),
           ],
         ),
       ),
@@ -92,7 +89,8 @@ class AppChip extends StatelessWidget {
   }
 
   bool get _showIcon {
-    if (chipVariant == _ChipVariant.filter && selected && selectedIcon != null) return true;
+    if (chipVariant == _ChipVariant.filter && selected && selectedIcon != null)
+      return true;
     return icon != null;
   }
 
@@ -106,11 +104,7 @@ class AppChip extends StatelessWidget {
             AppColors.mdPrimary,
           );
         }
-        return (
-          Colors.transparent,
-          AppColors.mdOnSurface,
-          AppColors.mdOutline,
-        );
+        return (Colors.transparent, AppColors.mdOnSurface, AppColors.mdOutline);
       case _ChipVariant.assist:
         return (
           AppColors.mdSurfaceContainerLow,
@@ -136,10 +130,7 @@ class _FilterChip extends AppChip {
     required super.selected,
     required super.onTap,
     super.icon,
-  }) : super._internal(
-          chipVariant: _ChipVariant.filter,
-          selectedIcon: null,
-        );
+  }) : super._internal(chipVariant: _ChipVariant.filter, selectedIcon: null);
 }
 
 class _AssistChip extends AppChip {
@@ -149,10 +140,10 @@ class _AssistChip extends AppChip {
     required super.onTap,
     super.icon,
   }) : super._internal(
-          chipVariant: _ChipVariant.assist,
-          selected: false,
-          selectedIcon: null,
-        );
+         chipVariant: _ChipVariant.assist,
+         selected: false,
+         selectedIcon: null,
+       );
 }
 
 class _StatusChip extends AppChip {
@@ -163,9 +154,9 @@ class _StatusChip extends AppChip {
     Color? foregroundColor,
     super.icon,
   }) : super._internal(
-          chipVariant: _ChipVariant.status,
-          selected: false,
-          onTap: null,
-          selectedIcon: null,
-        );
+         chipVariant: _ChipVariant.status,
+         selected: false,
+         onTap: null,
+         selectedIcon: null,
+       );
 }

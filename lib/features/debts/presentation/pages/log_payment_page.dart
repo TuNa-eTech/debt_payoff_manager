@@ -63,9 +63,7 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
         return Scaffold(
           appBar: AppBar(title: Text(context.l10n.logPaymentTitle)),
           body: debt == null
-              ? Center(
-                  child: Text(context.l10n.logPaymentNotFound),
-                )
+              ? Center(child: Text(context.l10n.logPaymentNotFound))
               : SafeArea(
                   bottom: false,
                   child: Column(
@@ -94,7 +92,11 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
                                     ),
                                     const SizedBox(height: AppDimensions.xs),
                                     Text(
-                                      context.l10n.logPaymentCurrentBalance(AppFormatters.formatCents(debt.currentBalance)),
+                                      context.l10n.logPaymentCurrentBalance(
+                                        AppFormatters.formatCents(
+                                          debt.currentBalance,
+                                        ),
+                                      ),
                                       style: AppTextStyles.bodySmall.copyWith(
                                         color: AppColors.mdOnSurfaceVariant,
                                       ),

@@ -40,8 +40,7 @@ class InterestMethodConverter extends TypeConverter<InterestMethod, String> {
   const InterestMethodConverter();
 
   @override
-  InterestMethod fromSql(String fromDb) =>
-      InterestMethod.values.byName(fromDb);
+  InterestMethod fromSql(String fromDb) => InterestMethod.values.byName(fromDb);
 
   @override
   String toSql(InterestMethod value) => value.name;
@@ -51,8 +50,7 @@ class MinPaymentTypeConverter extends TypeConverter<MinPaymentType, String> {
   const MinPaymentTypeConverter();
 
   @override
-  MinPaymentType fromSql(String fromDb) =>
-      MinPaymentType.values.byName(fromDb);
+  MinPaymentType fromSql(String fromDb) => MinPaymentType.values.byName(fromDb);
 
   @override
   String toSql(MinPaymentType value) => value.name;
@@ -62,8 +60,7 @@ class CadenceConverter extends TypeConverter<PaymentCadence, String> {
   const CadenceConverter();
 
   @override
-  PaymentCadence fromSql(String fromDb) =>
-      PaymentCadence.values.byName(fromDb);
+  PaymentCadence fromSql(String fromDb) => PaymentCadence.values.byName(fromDb);
 
   @override
   String toSql(PaymentCadence value) => value.name;

@@ -162,12 +162,16 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                                     ),
                                     const SizedBox(height: AppDimensions.sm),
                                     Text(
-                                      context.l10n.onboardingStrategyEmptySubtitle,
+                                      context
+                                          .l10n
+                                          .onboardingStrategyEmptySubtitle,
                                       style: AppTextStyles.bodyMedium,
                                     ),
                                     const SizedBox(height: AppDimensions.md),
                                     AppButton.outlined(
-                                      label: context.l10n.onboardingStrategyBackToAdd,
+                                      label: context
+                                          .l10n
+                                          .onboardingStrategyBackToAdd,
                                       icon: LucideIcons.plus,
                                       onPressed: () => navigateToOnboardingStep(
                                         context,
@@ -194,7 +198,9 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                                 badgeText: _previewBadgeText(
                                   context,
                                   _previews[Strategy.snowball],
-                                  fallback: context.l10n.onboardingStrategySnowballFallback,
+                                  fallback: context
+                                      .l10n
+                                      .onboardingStrategySnowballFallback,
                                 ),
                                 badgeColor: AppColors.mdPrimaryContainer,
                                 badgeTextColor: AppColors.mdOnPrimaryContainer,
@@ -223,7 +229,9 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                                 badgeText: _previewBadgeText(
                                   context,
                                   _previews[Strategy.avalanche],
-                                  fallback: context.l10n.onboardingStrategyAvalancheFallback,
+                                  fallback: context
+                                      .l10n
+                                      .onboardingStrategyAvalancheFallback,
                                 ),
                                 badgeColor: AppColors.mdSecondaryContainer,
                                 badgeTextColor:
@@ -260,7 +268,9 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                                     const SizedBox(width: AppDimensions.sm),
                                     Expanded(
                                       child: Text(
-                                        context.l10n.onboardingStrategyChangeNote,
+                                        context
+                                            .l10n
+                                            .onboardingStrategyChangeNote,
                                         style: AppTextStyles.bodySmall.copyWith(
                                           color: AppColors.mdOnSurfaceVariant,
                                         ),
@@ -434,9 +444,7 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.onboardingStrategyError),
-        ),
+        SnackBar(content: Text(context.l10n.onboardingStrategyError)),
       );
     } finally {
       if (mounted) {
@@ -488,7 +496,10 @@ class _SelectedStrategyPreviewCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(context.l10n.onboardingStrategyPreviewTitle, style: AppTextStyles.titleSmall),
+              Text(
+                context.l10n.onboardingStrategyPreviewTitle,
+                style: AppTextStyles.titleSmall,
+              ),
               const Spacer(),
               AppChip.status(label: strategy.label, icon: LucideIcons.sparkles),
             ],

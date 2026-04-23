@@ -40,7 +40,9 @@ class PaymentLoggingService {
     String? note,
   }) async {
     if (!_isSupportedType(type)) {
-      throw ArgumentError('Only minimum, extra, and lump sum payments are supported in phase 4.');
+      throw ArgumentError(
+        'Only minimum, extra, and lump sum payments are supported in phase 4.',
+      );
     }
     if (amountCents <= 0) {
       throw ArgumentError('Payment amount must be greater than 0.');
@@ -50,7 +52,8 @@ class PaymentLoggingService {
     if (debt == null) {
       throw ArgumentError('Debt not found.');
     }
-    if (debt.status == DebtStatus.archived || debt.status == DebtStatus.paidOff) {
+    if (debt.status == DebtStatus.archived ||
+        debt.status == DebtStatus.paidOff) {
       throw ArgumentError('This debt can no longer accept payments.');
     }
     if (amountCents > debt.currentBalance) {

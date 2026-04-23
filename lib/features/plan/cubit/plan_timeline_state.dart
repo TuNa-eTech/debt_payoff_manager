@@ -41,17 +41,19 @@ class PlanTimelineState extends Equatable {
       plan: plan ?? this.plan,
       projection: projection ?? this.projection,
       delta: delta ?? this.delta,
-      errorMessage: clearErrorMessage ? null : (errorMessage ?? this.errorMessage),
+      errorMessage: clearErrorMessage
+          ? null
+          : (errorMessage ?? this.errorMessage),
     );
   }
 
   @override
   List<Object?> get props => [
-        isLoading,
-        debts,
-        plan,
-        projection,
-        delta,
-        errorMessage,
-      ];
+    isLoading,
+    debts,
+    plan,
+    projection,
+    delta,
+    errorMessage,
+  ];
 }

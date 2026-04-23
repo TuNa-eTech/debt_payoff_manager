@@ -2,8 +2,10 @@ import 'package:debt_payoff_manager/core/utils/currency_input_formatter.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-TextEditingValue _val(String text) =>
-    TextEditingValue(text: text, selection: TextSelection.collapsed(offset: text.length));
+TextEditingValue _val(String text) => TextEditingValue(
+  text: text,
+  selection: TextSelection.collapsed(offset: text.length),
+);
 
 String _format(String oldText, String newText) {
   final formatter = CurrencyInputFormatter();

@@ -85,7 +85,9 @@ class AddAnotherDebtPage extends StatelessWidget {
                             Text(
                               debts.isEmpty
                                   ? context.l10n.onboardingAddAnotherEmpty
-                                  : context.l10n.onboardingAddAnotherCount(debts.length),
+                                  : context.l10n.onboardingAddAnotherCount(
+                                      debts.length,
+                                    ),
                               style: AppTextStyles.bodyMedium.copyWith(
                                 color: AppColors.mdOnSurfaceVariant,
                               ),

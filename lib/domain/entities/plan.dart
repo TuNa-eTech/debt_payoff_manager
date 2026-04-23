@@ -88,9 +88,18 @@ class Plan extends Equatable {
 
   @override
   List<Object?> get props => [
-        id, scenarioId, strategy, extraMonthlyAmount, extraPaymentCadence,
-        customOrder, lastRecastAt, projectedDebtFreeDate,
-        totalInterestProjected, totalInterestSaved,
-        createdAt, updatedAt, deletedAt,
-      ];
+    id,
+    scenarioId,
+    strategy,
+    extraMonthlyAmount,
+    extraPaymentCadence,
+    customOrder,
+    lastRecastAt,
+    projectedDebtFreeDate,
+    totalInterestProjected,
+    totalInterestSaved,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  ];
 }

@@ -51,16 +51,35 @@ class DebtPaymentItem extends StatelessWidget {
               children: [
                 Text(title, style: AppTextStyles.titleSmall),
                 const SizedBox(height: 2),
-                Text(date, style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdOnSurfaceVariant, fontSize: 11)),
+                Text(
+                  date,
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.mdOnSurfaceVariant,
+                    fontSize: 11,
+                  ),
+                ),
               ],
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(amount, style: AppTextStyles.titleMedium.copyWith(color: amountColor, fontWeight: FontWeight.w600, fontFamily: 'Roboto Mono')),
+              Text(
+                amount,
+                style: AppTextStyles.titleMedium.copyWith(
+                  color: amountColor,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Roboto Mono',
+                ),
+              ),
               const SizedBox(height: 2),
-              Text(type, style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdOnSurfaceVariant, fontSize: 10)),
+              Text(
+                type,
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.mdOnSurfaceVariant,
+                  fontSize: 10,
+                ),
+              ),
             ],
           ),
         ],

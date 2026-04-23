@@ -22,45 +22,44 @@ class StatusBadge extends StatelessWidget {
   });
 
   factory StatusBadge.overdue({Key? key}) => StatusBadge._(
-        key: key,
-        label: 'QUÁ HẠN',
-        backgroundColor: AppColors.mdErrorContainer,
-        foregroundColor: AppColors.debtRed,
-      );
+    key: key,
+    label: 'QUÁ HẠN',
+    backgroundColor: AppColors.mdErrorContainer,
+    foregroundColor: AppColors.debtRed,
+  );
 
   factory StatusBadge.paid({Key? key}) => StatusBadge._(
-        key: key,
-        label: 'ĐÃ TRẢ',
-        backgroundColor: AppColors.mdPrimaryContainer,
-        foregroundColor: AppColors.mdPrimary,
-      );
+    key: key,
+    label: 'ĐÃ TRẢ',
+    backgroundColor: AppColors.mdPrimaryContainer,
+    foregroundColor: AppColors.mdPrimary,
+  );
 
   factory StatusBadge.active({Key? key, String? label}) => StatusBadge._(
-        key: key,
-        label: label ?? 'ĐANG TRẢ',
-        backgroundColor: AppColors.mdSurfaceContainerHigh,
-        foregroundColor: AppColors.mdOnSurfaceVariant,
-      );
+    key: key,
+    label: label ?? 'ĐANG TRẢ',
+    backgroundColor: AppColors.mdSurfaceContainerHigh,
+    foregroundColor: AppColors.mdOnSurfaceVariant,
+  );
 
   factory StatusBadge.upcoming({Key? key}) => StatusBadge._(
-        key: key,
-        label: 'SẮP ĐẾN HẠN',
-        backgroundColor: AppColors.warningContainer,
-        foregroundColor: AppColors.warning,
-      );
+    key: key,
+    label: 'SẮP ĐẾN HẠN',
+    backgroundColor: AppColors.warningContainer,
+    foregroundColor: AppColors.warning,
+  );
 
   factory StatusBadge.custom({
     Key? key,
     required String label,
     required Color backgroundColor,
     required Color foregroundColor,
-  }) =>
-      StatusBadge._(
-        key: key,
-        label: label,
-        backgroundColor: backgroundColor,
-        foregroundColor: foregroundColor,
-      );
+  }) => StatusBadge._(
+    key: key,
+    label: label,
+    backgroundColor: backgroundColor,
+    foregroundColor: foregroundColor,
+  );
 
   final String label;
   final Color backgroundColor;

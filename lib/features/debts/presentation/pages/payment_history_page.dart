@@ -20,10 +20,7 @@ import '../../../../domain/repositories/payment_repository.dart';
 import '../widgets/debt_payment_item.dart';
 
 class PaymentHistoryPage extends StatefulWidget {
-  const PaymentHistoryPage({
-    super.key,
-    required this.id,
-  });
+  const PaymentHistoryPage({super.key, required this.id});
 
   final String id;
 
@@ -42,7 +39,8 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
       stream: _debtRepository.watchDebtById(widget.id),
       builder: (context, debtSnapshot) {
         final debt = debtSnapshot.data;
-        if (debtSnapshot.connectionState == ConnectionState.waiting && debt == null) {
+        if (debtSnapshot.connectionState == ConnectionState.waiting &&
+            debt == null) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
@@ -59,14 +57,16 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
 
             final visiblePayments = _selectedMonth == null
                 ? payments
-                : payments.where((payment) => payment.date.yearMonth == _selectedMonth).toList();
+                : payments
+                      .where(
+                        (payment) => payment.date.yearMonth == _selectedMonth,
+                      )
+                      .toList();
 
             return Scaffold(
               appBar: AppBar(title: Text(context.l10n.paymentHistoryTitle)),
               body: debt == null
-                  ? Center(
-                      child: Text(context.l10n.logPaymentNotFound),
-                    )
+                  ? Center(child: Text(context.l10n.logPaymentNotFound))
                   : SafeArea(
                       child: ListView(
                         padding: const EdgeInsets.symmetric(
@@ -79,10 +79,18 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(debt.name, style: AppTextStyles.titleMedium),
+                                Text(
+                                  debt.name,
+                                  style: AppTextStyles.titleMedium,
+                                ),
                                 const SizedBox(height: AppDimensions.xs),
                                 Text(
-                                  context.l10n.paymentHistorySubtitle(payments.length, AppFormatters.formatCents(debt.currentBalance)),
+                                  context.l10n.paymentHistorySubtitle(
+                                    payments.length,
+                                    AppFormatters.formatCents(
+                                      debt.currentBalance,
+                                    ),
+                                  ),
                                   style: AppTextStyles.bodySmall.copyWith(
                                     color: AppColors.mdOnSurfaceVariant,
                                   ),
@@ -102,39 +110,56 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                             Wrap(
                               spacing: AppDimensions.sm,
                               runSpacing: AppDimensions.sm,
-                              children: months.map(
-                                (month) => AppChip.filter(
-                                  key: AppTestKeys.paymentHistoryMonthChip(month),
-                                  label: _formatYearMonth(month),
-                                  selected: _selectedMonth == month,
-                                  onTap: () => setState(() => _selectedMonth = month),
-                                  icon: LucideIcons.calendarDays,
-                                ),
-                              ).toList(growable: false),
+                              children: months
+                                  .map(
+                                    (month) => AppChip.filter(
+                                      key: AppTestKeys.paymentHistoryMonthChip(
+                                        month,
+                                      ),
+                                      label: _formatYearMonth(month),
+                                      selected: _selectedMonth == month,
+                                      onTap: () => setState(
+                                        () => _selectedMonth = month,
+                                      ),
+                                      icon: LucideIcons.calendarDays,
+                                    ),
+                                  )
+                                  .toList(growable: false),
                             ),
                             const SizedBox(height: AppDimensions.sectionGap),
                           ],
                           if (visiblePayments.isEmpty)
                             EmptyState(
                               title: context.l10n.paymentHistoryNoPayments,
-                              subtitle: context.l10n.paymentHistoryNoPaymentsSubtitle,
+                              subtitle:
+                                  context.l10n.paymentHistoryNoPaymentsSubtitle,
                               icon: LucideIcons.history,
                             )
-                          else ...visiblePayments.map(
-                            (payment) => Padding(
-                              padding: const EdgeInsets.only(bottom: AppDimensions.sm),
-                              child: DebtPaymentItem(
-                                icon: _iconForPaymentType(payment.type),
-                                iconColor: _iconColorForPaymentType(payment.type),
-                                iconBgColor: AppColors.mdPrimaryContainer,
-                                title: _titleForPaymentType(context, payment.type),
-                                date: AppFormatters.formatDate(payment.date),
-                                amount: AppFormatters.formatCents(payment.amount),
-                                amountColor: AppColors.mdOnSurface,
-                                type: payment.source.label,
+                          else
+                            ...visiblePayments.map(
+                              (payment) => Padding(
+                                padding: const EdgeInsets.only(
+                                  bottom: AppDimensions.sm,
+                                ),
+                                child: DebtPaymentItem(
+                                  icon: _iconForPaymentType(payment.type),
+                                  iconColor: _iconColorForPaymentType(
+                                    payment.type,
+                                  ),
+                                  iconBgColor: AppColors.mdPrimaryContainer,
+                                  title: _titleForPaymentType(
+                                    context,
+                                    payment.type,
+                                  ),
+                                  date: AppFormatters.formatDate(payment.date),
+                                  amount: AppFormatters.formatCents(
+                                    payment.amount,
+                                  ),
+                                  amountColor: AppColors.mdOnSurface,
+                                  type: payment.source.label,
+                                ),
                               ),
                             ),
-                          ),
                         ],
                       ),
                     ),
@@ -148,8 +173,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
   List<String> _availableMonths(List<Payment> payments) {
     final months = {
       for (final payment in payments) payment.date.yearMonth,
-    }.toList()
-      ..sort((a, b) => b.compareTo(a));
+    }.toList()..sort((a, b) => b.compareTo(a));
     return months;
   }
 

@@ -4,9 +4,7 @@ import '../enums/milestone_type.dart';
 /// Abstract interface for milestone data access.
 abstract class MilestoneRepository {
   /// Get all milestones that haven't been seen yet.
-  Future<List<Milestone>> getUnseenMilestones({
-    String scenarioId = 'main',
-  });
+  Future<List<Milestone>> getUnseenMilestones({String scenarioId = 'main'});
 
   /// Get all milestones for a specific debt.
   Future<List<Milestone>> getMilestonesForDebt(String debtId);
@@ -21,7 +19,5 @@ abstract class MilestoneRepository {
   Future<bool> milestoneExists(MilestoneType type, {String? debtId});
 
   /// Watch unseen milestones as a stream.
-  Stream<List<Milestone>> watchUnseenMilestones({
-    String scenarioId = 'main',
-  });
+  Stream<List<Milestone>> watchUnseenMilestones({String scenarioId = 'main'});
 }

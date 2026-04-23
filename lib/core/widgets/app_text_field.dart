@@ -72,16 +72,16 @@ class AppTextField extends StatelessWidget {
     this.enabled = true,
     this.autofocus = false,
     bool isCurrency = false,
-  })  : _isCurrency = isCurrency,
-        _isPercentage = !isCurrency,
-        hint = null,
-        textInputAction = TextInputAction.done,
-        maxLines = 1,
-        textAlign = TextAlign.end,
-        onSuffixTap = null,
-        keyboardType = null,
-        inputFormatters = null,
-        obscureText = false;
+  }) : _isCurrency = isCurrency,
+       _isPercentage = !isCurrency,
+       hint = null,
+       textInputAction = TextInputAction.done,
+       maxLines = 1,
+       textAlign = TextAlign.end,
+       onSuffixTap = null,
+       keyboardType = null,
+       inputFormatters = null,
+       obscureText = false;
 
   /// Currency variant — right-aligned, numeric keyboard, dollar prefix.
   factory AppTextField.currency({
@@ -97,24 +97,23 @@ class AppTextField extends StatelessWidget {
     bool readOnly = false,
     bool enabled = true,
     bool autofocus = false,
-  }) =>
-      AppTextField._numeric(
-        key: key,
-        label: label,
-        controller: controller,
-        focusNode: focusNode,
-        helperText: helperText,
-        errorText: errorText,
-        prefixIcon: null,
-        suffixIcon: null,
-        onChanged: onChanged,
-        onSubmitted: onSubmitted,
-        required: required,
-        readOnly: readOnly,
-        enabled: enabled,
-        autofocus: autofocus,
-        isCurrency: true,
-      );
+  }) => AppTextField._numeric(
+    key: key,
+    label: label,
+    controller: controller,
+    focusNode: focusNode,
+    helperText: helperText,
+    errorText: errorText,
+    prefixIcon: null,
+    suffixIcon: null,
+    onChanged: onChanged,
+    onSubmitted: onSubmitted,
+    required: required,
+    readOnly: readOnly,
+    enabled: enabled,
+    autofocus: autofocus,
+    isCurrency: true,
+  );
 
   /// Percentage variant — right-aligned, numeric keyboard, percent suffix.
   factory AppTextField.percentage({
@@ -130,24 +129,23 @@ class AppTextField extends StatelessWidget {
     bool readOnly = false,
     bool enabled = true,
     bool autofocus = false,
-  }) =>
-      AppTextField._numeric(
-        key: key,
-        label: label,
-        controller: controller,
-        focusNode: focusNode,
-        helperText: helperText,
-        errorText: errorText,
-        prefixIcon: null,
-        suffixIcon: null,
-        onChanged: onChanged,
-        onSubmitted: onSubmitted,
-        required: required,
-        readOnly: readOnly,
-        enabled: enabled,
-        autofocus: autofocus,
-        isCurrency: false,
-      );
+  }) => AppTextField._numeric(
+    key: key,
+    label: label,
+    controller: controller,
+    focusNode: focusNode,
+    helperText: helperText,
+    errorText: errorText,
+    prefixIcon: null,
+    suffixIcon: null,
+    onChanged: onChanged,
+    onSubmitted: onSubmitted,
+    required: required,
+    readOnly: readOnly,
+    enabled: enabled,
+    autofocus: autofocus,
+    isCurrency: false,
+  );
 
   final String label;
   final TextEditingController? controller;
@@ -240,7 +238,11 @@ class AppTextField extends StatelessWidget {
 
   Widget? _buildPrefixIcon() {
     if (prefixIcon == null) return null;
-    return Icon(prefixIcon, size: AppDimensions.iconMd, color: AppColors.mdOnSurfaceVariant);
+    return Icon(
+      prefixIcon,
+      size: AppDimensions.iconMd,
+      color: AppColors.mdOnSurfaceVariant,
+    );
   }
 
   Widget? _buildSuffixIcon() {
@@ -248,9 +250,17 @@ class AppTextField extends StatelessWidget {
     if (onSuffixTap != null) {
       return GestureDetector(
         onTap: onSuffixTap,
-        child: Icon(suffixIcon, size: AppDimensions.iconMd, color: AppColors.mdOnSurfaceVariant),
+        child: Icon(
+          suffixIcon,
+          size: AppDimensions.iconMd,
+          color: AppColors.mdOnSurfaceVariant,
+        ),
       );
     }
-    return Icon(suffixIcon, size: AppDimensions.iconMd, color: AppColors.mdOnSurfaceVariant);
+    return Icon(
+      suffixIcon,
+      size: AppDimensions.iconMd,
+      color: AppColors.mdOnSurfaceVariant,
+    );
   }
 }

@@ -28,7 +28,12 @@ class DebtInfoRow extends StatelessWidget {
             children: [
               Icon(icon, size: 20, color: AppColors.mdOnSurfaceVariant),
               const SizedBox(width: 12),
-              Text(label, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.mdOnSurfaceVariant)),
+              Text(
+                label,
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.mdOnSurfaceVariant,
+                ),
+              ),
             ],
           ),
           Text(

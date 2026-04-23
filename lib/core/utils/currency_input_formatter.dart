@@ -19,7 +19,6 @@ import 'package:intl/intl.dart';
 /// )
 /// ```
 class CurrencyInputFormatter extends TextInputFormatter {
-
   @override
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue,
@@ -48,7 +47,10 @@ class CurrencyInputFormatter extends TextInputFormatter {
 
     // Parse the integer portion and format with commas.
     final integerValue = int.tryParse(integerPart) ?? 0;
-    final formattedInteger = NumberFormat('#,##0', 'en_US').format(integerValue);
+    final formattedInteger = NumberFormat(
+      '#,##0',
+      'en_US',
+    ).format(integerValue);
 
     // Rebuild the formatted string.
     String formatted;
@@ -73,6 +75,5 @@ class CurrencyInputFormatter extends TextInputFormatter {
   /// Strips formatting characters from a user-entered value before parsing.
   ///
   /// e.g. `"1,500.00"` → `"1500.00"`
-  static String strip(String formatted) =>
-      formatted.replaceAll(',', '').trim();
+  static String strip(String formatted) => formatted.replaceAll(',', '').trim();
 }

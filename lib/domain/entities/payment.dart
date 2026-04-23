@@ -26,8 +26,10 @@ class Payment extends Equatable {
     required this.createdAt,
     required this.updatedAt,
     this.deletedAt,
-  }) : assert(amount == principalPortion + interestPortion + feePortion,
-            'Payment split must equal total amount');
+  }) : assert(
+         amount == principalPortion + interestPortion + feePortion,
+         'Payment split must equal total amount',
+       );
 
   final String id;
   final String scenarioId;
@@ -108,9 +110,22 @@ class Payment extends Equatable {
 
   @override
   List<Object?> get props => [
-        id, scenarioId, debtId, amount, principalPortion, interestPortion,
-        feePortion, date, type, source, note, status,
-        appliedBalanceBefore, appliedBalanceAfter, createdAt, updatedAt,
-        deletedAt,
-      ];
+    id,
+    scenarioId,
+    debtId,
+    amount,
+    principalPortion,
+    interestPortion,
+    feePortion,
+    date,
+    type,
+    source,
+    note,
+    status,
+    appliedBalanceBefore,
+    appliedBalanceAfter,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  ];
 }

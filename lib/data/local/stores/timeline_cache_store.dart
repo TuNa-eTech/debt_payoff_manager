@@ -15,7 +15,9 @@ class TimelineCacheStore {
     await _db.transaction(() async {
       await clearPlan(projection.planId);
       for (final month in projection.months) {
-        await _db.into(_db.timelineCacheTable).insert(
+        await _db
+            .into(_db.timelineCacheTable)
+            .insert(
               TimelineCacheTableCompanion.insert(
                 planId: projection.planId,
                 monthIndex: month.monthIndex,
@@ -34,16 +36,17 @@ class TimelineCacheStore {
   }
 
   Future<void> clearPlan(String planId) async {
-    await (_db.delete(_db.timelineCacheTable)
-          ..where((row) => row.planId.equals(planId)))
-        .go();
+    await (_db.delete(
+      _db.timelineCacheTable,
+    )..where((row) => row.planId.equals(planId))).go();
   }
 
   Future<TimelineProjection?> getProjection(String planId) async {
-    final rows = await (_db.select(_db.timelineCacheTable)
-          ..where((row) => row.planId.equals(planId))
-          ..orderBy([(row) => OrderingTerm.asc(row.monthIndex)]))
-        .get();
+    final rows =
+        await (_db.select(_db.timelineCacheTable)
+              ..where((row) => row.planId.equals(planId))
+              ..orderBy([(row) => OrderingTerm.asc(row.monthIndex)]))
+            .get();
 
     return _rowsToProjection(planId, rows);
   }
@@ -84,15 +87,15 @@ class TimelineCacheStore {
   }
 
   static Map<String, dynamic> _entryToJson(DebtMonthEntry entry) => {
-        'debtId': entry.debtId,
-        'startingBalance': entry.startingBalance,
-        'interestAccrued': entry.interestAccrued,
-        'paymentApplied': entry.paymentApplied,
-        'principalPortion': entry.principalPortion,
-        'interestPortion': entry.interestPortion,
-        'endingBalance': entry.endingBalance,
-        'isPaidOffThisMonth': entry.isPaidOffThisMonth,
-      };
+    'debtId': entry.debtId,
+    'startingBalance': entry.startingBalance,
+    'interestAccrued': entry.interestAccrued,
+    'paymentApplied': entry.paymentApplied,
+    'principalPortion': entry.principalPortion,
+    'interestPortion': entry.interestPortion,
+    'endingBalance': entry.endingBalance,
+    'isPaidOffThisMonth': entry.isPaidOffThisMonth,
+  };
 
   static DebtMonthEntry _entryFromJson(Map<String, dynamic> json) {
     return DebtMonthEntry(

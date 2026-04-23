@@ -267,8 +267,7 @@ class DebtDetailPage extends StatelessWidget {
     final confirmed = await _confirmAction(
       context,
       title: context.l10n.debtDetailArchiveTitle,
-      message:
-          context.l10n.debtDetailArchiveMessage,
+      message: context.l10n.debtDetailArchiveMessage,
       confirmLabel: context.l10n.debtDetailArchiveConfirm,
     );
     if (!confirmed || !context.mounted) return;
@@ -295,9 +294,7 @@ class DebtDetailPage extends StatelessWidget {
     await context.read<DebtsCubit>().unarchiveDebt(debt);
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(context.l10n.debtDetailUnarchivedMsg),
-      ),
+      SnackBar(content: Text(context.l10n.debtDetailUnarchivedMsg)),
     );
   }
 
@@ -306,8 +303,7 @@ class DebtDetailPage extends StatelessWidget {
     final confirmed = await _confirmAction(
       context,
       title: context.l10n.debtDetailDeleteTitle,
-      message:
-          context.l10n.debtDetailDeleteMessage,
+      message: context.l10n.debtDetailDeleteMessage,
       confirmLabel: context.l10n.debtDetailDeleteConfirm,
       isDestructive: true,
     );

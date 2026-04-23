@@ -70,10 +70,13 @@ class DebtCard extends StatelessWidget {
               // ── Header row ──
               Row(
                 children: [
-                  Icon(debtTypeIcon, size: AppDimensions.iconMd, color: textColor),
+                  Icon(
+                    debtTypeIcon,
+                    size: AppDimensions.iconMd,
+                    color: textColor,
+                  ),
                   const Spacer(),
-                  if (apr != null)
-                    _AprBadge(label: apr!, state: state),
+                  if (apr != null) _AprBadge(label: apr!, state: state),
                   if (onMoreTap != null) ...[
                     const SizedBox(width: 4),
                     _MoreButton(onTap: onMoreTap!),
@@ -98,7 +101,9 @@ class DebtCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       balance,
-                      style: AppTextStyles.moneyXSmall.copyWith(color: textColor),
+                      style: AppTextStyles.moneyXSmall.copyWith(
+                        color: textColor,
+                      ),
                     ),
                   ),
                   _StateBadge(state: state),
@@ -182,10 +187,7 @@ class _AprBadge extends StatelessWidget {
         color: bg,
         borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
       ),
-      child: Text(
-        label,
-        style: AppTextStyles.badge.copyWith(color: fg),
-      ),
+      child: Text(label, style: AppTextStyles.badge.copyWith(color: fg)),
     );
   }
 }
@@ -251,8 +253,10 @@ class _DetailItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(label, style: AppTextStyles.labelSmall),
-            Text(value,
-                style: AppTextStyles.labelMedium.copyWith(color: color)),
+            Text(
+              value,
+              style: AppTextStyles.labelMedium.copyWith(color: color),
+            ),
           ],
         ),
       ],

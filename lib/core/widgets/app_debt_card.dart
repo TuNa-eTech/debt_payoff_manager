@@ -85,23 +85,33 @@ class AppDebtCard extends StatelessWidget {
               child: Icon(icon, color: leadIconColor, size: 20),
             ),
             const SizedBox(width: 16),
-            
+
             // Body
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(name, style: AppTextStyles.titleSmall.copyWith(color: textColor)),
+                  Text(
+                    name,
+                    style: AppTextStyles.titleSmall.copyWith(color: textColor),
+                  ),
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: AppTextStyles.bodySmall.copyWith(color: subTextColor, fontSize: 12),
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: subTextColor,
+                      fontSize: 12,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   LinearProgressIndicator(
                     value: progress,
                     backgroundColor: trackColor,
-                    color: status == DebtStatus.paid ? leadIconColor : (status == DebtStatus.overdue ? AppColors.mdOnErrorContainer : AppColors.mdPrimary),
+                    color: status == DebtStatus.paid
+                        ? leadIconColor
+                        : (status == DebtStatus.overdue
+                              ? AppColors.mdOnErrorContainer
+                              : AppColors.mdPrimary),
                     minHeight: 5,
                     borderRadius: BorderRadius.circular(4),
                   ),
@@ -109,7 +119,7 @@ class AppDebtCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 16),
-            
+
             // Trail
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -117,7 +127,9 @@ class AppDebtCard extends StatelessWidget {
                 Text(
                   amount,
                   style: AppTextStyles.titleMedium.copyWith(
-                    color: status == DebtStatus.overdue ? textColor : AppColors.mdOnSurface,
+                    color: status == DebtStatus.overdue
+                        ? textColor
+                        : AppColors.mdOnSurface,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Roboto Mono',
                   ),
@@ -131,9 +143,15 @@ class AppDebtCard extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    status == DebtStatus.paid ? LucideIcons.check : (status == DebtStatus.normal ? LucideIcons.plus : LucideIcons.alertCircle),
+                    status == DebtStatus.paid
+                        ? LucideIcons.check
+                        : (status == DebtStatus.normal
+                              ? LucideIcons.plus
+                              : LucideIcons.alertCircle),
                     size: 16,
-                    color: status == DebtStatus.normal ? AppColors.mdOnSurface : Colors.white,
+                    color: status == DebtStatus.normal
+                        ? AppColors.mdOnSurface
+                        : Colors.white,
                   ),
                 ),
               ],

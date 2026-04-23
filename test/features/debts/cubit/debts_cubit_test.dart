@@ -37,12 +37,8 @@ void main() {
     });
 
     test('filters debts by lifecycle bucket', () async {
-      await repo.addDebt(
-        makeRepoDebt(id: 'active', status: DebtStatus.active),
-      );
-      await repo.addDebt(
-        makeRepoDebt(id: 'paid', status: DebtStatus.paidOff),
-      );
+      await repo.addDebt(makeRepoDebt(id: 'active', status: DebtStatus.active));
+      await repo.addDebt(makeRepoDebt(id: 'paid', status: DebtStatus.paidOff));
       await repo.addDebt(
         makeRepoDebt(id: 'archived', status: DebtStatus.archived),
       );
@@ -56,7 +52,10 @@ void main() {
       await Future<void>.delayed(Duration.zero);
 
       cubit.setFilter(DebtsFilter.active);
-      expect(cubit.state.visibleDebts.map((debt) => debt.id), ['active', 'paused']);
+      expect(cubit.state.visibleDebts.map((debt) => debt.id), [
+        'active',
+        'paused',
+      ]);
 
       cubit.setFilter(DebtsFilter.paidOff);
       expect(cubit.state.visibleDebts.map((debt) => debt.id), ['paid']);

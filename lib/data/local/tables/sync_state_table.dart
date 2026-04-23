@@ -18,8 +18,7 @@ class SyncStateTable extends Table {
       text().nullable().map(const UtcDateTimeConverter())();
   TextColumn get lastPushedAt =>
       text().nullable().map(const UtcDateTimeConverter())();
-  IntColumn get pendingWrites =>
-      integer().withDefault(const Constant(0))();
+  IntColumn get pendingWrites => integer().withDefault(const Constant(0))();
   TextColumn get lastSyncError => text().nullable()();
   TextColumn get updatedAt => text().map(const UtcDateTimeConverter())();
 

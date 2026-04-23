@@ -147,10 +147,7 @@ class AppButton extends StatelessWidget {
       return SizedBox(
         width: 20,
         height: 20,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          color: contentColor,
-        ),
+        child: CircularProgressIndicator(strokeWidth: 2, color: contentColor),
       );
     }
     final children = <Widget>[
@@ -158,7 +155,10 @@ class AppButton extends StatelessWidget {
         Icon(icon, size: AppDimensions.iconMd, color: contentColor),
         const SizedBox(width: 8),
       ],
-      Text(label, style: AppTextStyles.labelLarge.copyWith(color: contentColor)),
+      Text(
+        label,
+        style: AppTextStyles.labelLarge.copyWith(color: contentColor),
+      ),
       if (trailingIcon != null) ...[
         const SizedBox(width: 8),
         Icon(trailingIcon, size: AppDimensions.iconMd, color: contentColor),
@@ -168,28 +168,28 @@ class AppButton extends StatelessWidget {
   }
 
   ButtonStyle _filledStyle() => FilledButton.styleFrom(
-        backgroundColor: AppColors.mdPrimary,
-        foregroundColor: AppColors.mdOnPrimary,
-        elevation: 0,
-        shape: const StadiumBorder(),
-        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.lg),
-      );
+    backgroundColor: AppColors.mdPrimary,
+    foregroundColor: AppColors.mdOnPrimary,
+    elevation: 0,
+    shape: const StadiumBorder(),
+    padding: const EdgeInsets.symmetric(horizontal: AppDimensions.lg),
+  );
 
   ButtonStyle _tonalStyle() => FilledButton.styleFrom(
-        backgroundColor: AppColors.mdPrimaryContainer,
-        foregroundColor: AppColors.mdOnPrimaryContainer,
-        elevation: 0,
-        shape: const StadiumBorder(),
-        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.lg),
-      );
+    backgroundColor: AppColors.mdPrimaryContainer,
+    foregroundColor: AppColors.mdOnPrimaryContainer,
+    elevation: 0,
+    shape: const StadiumBorder(),
+    padding: const EdgeInsets.symmetric(horizontal: AppDimensions.lg),
+  );
 
   ButtonStyle _errorStyle() => FilledButton.styleFrom(
-        backgroundColor: AppColors.mdErrorContainer,
-        foregroundColor: AppColors.debtRed,
-        elevation: 0,
-        shape: const StadiumBorder(),
-        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.lg),
-      );
+    backgroundColor: AppColors.mdErrorContainer,
+    foregroundColor: AppColors.debtRed,
+    elevation: 0,
+    shape: const StadiumBorder(),
+    padding: const EdgeInsets.symmetric(horizontal: AppDimensions.lg),
+  );
 }
 
 enum _ButtonVariant { filled, tonal, outlined, text, error }
@@ -205,9 +205,9 @@ class _FilledButton extends AppButton {
     super.loading = false,
     super.fullWidth = false,
   }) : super._internal(
-          variant: _ButtonVariant.filled,
-          height: AppDimensions.buttonHeight,
-        );
+         variant: _ButtonVariant.filled,
+         height: AppDimensions.buttonHeight,
+       );
 }
 
 class _FilledLgButton extends AppButton {
@@ -220,9 +220,9 @@ class _FilledLgButton extends AppButton {
     super.loading = false,
     super.fullWidth = false,
   }) : super._internal(
-          variant: _ButtonVariant.filled,
-          height: AppDimensions.buttonHeightLg,
-        );
+         variant: _ButtonVariant.filled,
+         height: AppDimensions.buttonHeightLg,
+       );
 }
 
 class _TonalButton extends AppButton {
@@ -234,9 +234,9 @@ class _TonalButton extends AppButton {
     super.loading = false,
     super.fullWidth = false,
   }) : super._internal(
-          variant: _ButtonVariant.tonal,
-          height: AppDimensions.buttonHeight,
-        );
+         variant: _ButtonVariant.tonal,
+         height: AppDimensions.buttonHeight,
+       );
 }
 
 class _OutlinedButton extends AppButton {
@@ -248,9 +248,9 @@ class _OutlinedButton extends AppButton {
     super.loading = false,
     super.fullWidth = false,
   }) : super._internal(
-          variant: _ButtonVariant.outlined,
-          height: AppDimensions.buttonHeight,
-        );
+         variant: _ButtonVariant.outlined,
+         height: AppDimensions.buttonHeight,
+       );
 }
 
 class _TextButton extends AppButton {
@@ -259,10 +259,7 @@ class _TextButton extends AppButton {
     required super.label,
     required super.onPressed,
     super.icon,
-  }) : super._internal(
-          variant: _ButtonVariant.text,
-          height: 36,
-        );
+  }) : super._internal(variant: _ButtonVariant.text, height: 36);
 }
 
 class _ErrorButton extends AppButton {
@@ -274,7 +271,7 @@ class _ErrorButton extends AppButton {
     super.loading = false,
     super.fullWidth = false,
   }) : super._internal(
-          variant: _ButtonVariant.error,
-          height: AppDimensions.buttonHeight,
-        );
+         variant: _ButtonVariant.error,
+         height: AppDimensions.buttonHeight,
+       );
 }

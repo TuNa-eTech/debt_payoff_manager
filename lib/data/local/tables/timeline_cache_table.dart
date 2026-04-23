@@ -20,8 +20,7 @@ class TimelineCacheTable extends Table {
   IntColumn get totalPaymentCents => integer()();
   IntColumn get totalInterestCents => integer()();
   IntColumn get totalBalanceEndCents => integer()();
-  TextColumn get generatedAt =>
-      text().map(const UtcDateTimeConverter())();
+  TextColumn get generatedAt => text().map(const UtcDateTimeConverter())();
 
   @override
   Set<Column> get primaryKey => {planId, monthIndex};

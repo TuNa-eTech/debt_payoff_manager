@@ -9,15 +9,15 @@ class SyncStateStore {
   final AppDatabase _db;
 
   Future<SyncStateRow?> getState(String tableName) {
-    return (_db.select(_db.syncStateTable)
-          ..where((row) => row.tableSyncName.equals(tableName)))
-        .getSingleOrNull();
+    return (_db.select(
+      _db.syncStateTable,
+    )..where((row) => row.tableSyncName.equals(tableName))).getSingleOrNull();
   }
 
   Stream<List<SyncStateRow>> watchAllStates() {
-    return (_db.select(_db.syncStateTable)
-          ..orderBy([(row) => OrderingTerm.asc(row.tableSyncName)]))
-        .watch();
+    return (_db.select(
+      _db.syncStateTable,
+    )..orderBy([(row) => OrderingTerm.asc(row.tableSyncName)])).watch();
   }
 
   Future<void> markDirty(String tableName) async {
@@ -25,7 +25,9 @@ class SyncStateStore {
     final current = await getState(tableName);
 
     if (current == null) {
-      await _db.into(_db.syncStateTable).insert(
+      await _db
+          .into(_db.syncStateTable)
+          .insert(
             SyncStateTableCompanion.insert(
               tableSyncName: tableName,
               pendingWrites: const Value(1),
@@ -35,9 +37,9 @@ class SyncStateStore {
       return;
     }
 
-    await (_db.update(_db.syncStateTable)
-          ..where((row) => row.tableSyncName.equals(tableName)))
-        .write(
+    await (_db.update(
+      _db.syncStateTable,
+    )..where((row) => row.tableSyncName.equals(tableName))).write(
       SyncStateTableCompanion(
         pendingWrites: Value(current.pendingWrites + 1),
         updatedAt: Value(now),

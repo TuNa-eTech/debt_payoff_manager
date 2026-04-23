@@ -32,22 +32,20 @@ class PlanTimelineCubit extends Cubit<PlanTimelineState> {
   Future<void> start() async {
     await _subscription?.cancel();
     emit(state.copyWith(isLoading: true, clearErrorMessage: true));
-    _subscription = CombineLatestStream.list<Object?>([
-      _debtRepository.watchAllDebts(),
-      _planRepository.watchCurrentPlan(),
-    ]).listen(
-      (_) {
-        unawaited(load());
-      },
-      onError: (Object error, StackTrace stackTrace) {
-        emit(
-          state.copyWith(
-            isLoading: false,
-            errorMessage: error.toString(),
-          ),
+    _subscription =
+        CombineLatestStream.list<Object?>([
+          _debtRepository.watchAllDebts(),
+          _planRepository.watchCurrentPlan(),
+        ]).listen(
+          (_) {
+            unawaited(load());
+          },
+          onError: (Object error, StackTrace stackTrace) {
+            emit(
+              state.copyWith(isLoading: false, errorMessage: error.toString()),
+            );
+          },
         );
-      },
-    );
     await load();
   }
 
@@ -81,7 +79,8 @@ class PlanTimelineCubit extends Cubit<PlanTimelineState> {
           (projection == null || plan.projectedDebtFreeDate == null)) {
         final recast = await _planRecastService.recast();
         plan = recast?.plan ?? plan;
-        projection = recast?.projection ??
+        projection =
+            recast?.projection ??
             await _timelineCacheStore.getProjection(plan.id);
       }
 
@@ -96,12 +95,7 @@ class PlanTimelineCubit extends Cubit<PlanTimelineState> {
         ),
       );
     } catch (error) {
-      emit(
-        state.copyWith(
-          isLoading: false,
-          errorMessage: error.toString(),
-        ),
-      );
+      emit(state.copyWith(isLoading: false, errorMessage: error.toString()));
     }
   }
 

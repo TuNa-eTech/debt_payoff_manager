@@ -12,8 +12,8 @@ import 'debts_state.dart';
 /// Feature 1.1: Nhập & quản lý khoản nợ
 class DebtsCubit extends Cubit<DebtsState> {
   DebtsCubit({required DebtRepository debtRepository})
-      : _debtRepository = debtRepository,
-        super(const DebtsState());
+    : _debtRepository = debtRepository,
+      super(const DebtsState());
 
   final DebtRepository _debtRepository;
   StreamSubscription<List<Debt>>? _debtsSubscription;
@@ -22,12 +22,7 @@ class DebtsCubit extends Cubit<DebtsState> {
   /// Start listening to live debt updates.
   Future<void> start() async {
     await _debtsSubscription?.cancel();
-    emit(
-      state.copyWith(
-        isLoading: true,
-        clearInlineError: true,
-      ),
-    );
+    emit(state.copyWith(isLoading: true, clearInlineError: true));
     _debtsSubscription = _debtRepository.watchAllDebts().listen(
       (debts) {
         emit(
@@ -40,10 +35,7 @@ class DebtsCubit extends Cubit<DebtsState> {
       },
       onError: (Object error, StackTrace stackTrace) {
         emit(
-          state.copyWith(
-            isLoading: false,
-            inlineError: _humanizeError(error),
-          ),
+          state.copyWith(isLoading: false, inlineError: _humanizeError(error)),
         );
       },
     );
@@ -120,12 +112,7 @@ class DebtsCubit extends Cubit<DebtsState> {
 
   void setFilter(DebtsFilter filter) {
     if (filter == state.filter) return;
-    emit(
-      state.copyWith(
-        filter: filter,
-        clearInlineError: true,
-      ),
-    );
+    emit(state.copyWith(filter: filter, clearInlineError: true));
   }
 
   void clearActionFeedback() {
@@ -150,11 +137,7 @@ class DebtsCubit extends Cubit<DebtsState> {
   }
 
   void _emitInlineError(Object error) {
-    emit(
-      state.copyWith(
-        inlineError: _humanizeError(error),
-      ),
-    );
+    emit(state.copyWith(inlineError: _humanizeError(error)));
   }
 
   String _humanizeError(Object error) {

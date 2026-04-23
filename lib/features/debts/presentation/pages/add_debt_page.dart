@@ -39,7 +39,9 @@ class AddDebtPage extends StatelessWidget {
             ),
       child: DebtFormScaffold(
         mode: _mode,
-        title: _initialDebt == null ? context.l10n.addDebtTitle : context.l10n.editDebtTitle,
+        title: _initialDebt == null
+            ? context.l10n.addDebtTitle
+            : context.l10n.editDebtTitle,
         primaryActionLabel: _initialDebt == null
             ? context.l10n.addDebtSave
             : context.l10n.addDebtSaveChanges,

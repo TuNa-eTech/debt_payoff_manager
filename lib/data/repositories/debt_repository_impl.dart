@@ -72,30 +72,26 @@ class DebtRepositoryImpl implements DebtRepository {
   Future<void> updateDebt(Debt debt) async {
     _validateInvariants(debt);
     final updated = debt.copyWith(updatedAt: DateTime.now().toUtc());
-    await (_db.update(_db.debtsTable)
-          ..where((d) => d.id.equals(debt.id)))
-        .write(updated.toCompanion());
+    await (_db.update(
+      _db.debtsTable,
+    )..where((d) => d.id.equals(debt.id))).write(updated.toCompanion());
   }
 
   @override
   Future<void> deleteDebt(String id) async {
     // Soft delete: set deletedAt, per ADR-006
     final now = DateTime.now().toUtc();
-    await (_db.update(_db.debtsTable)..where((d) => d.id.equals(id)))
-        .write(DebtsTableCompanion(
-      deletedAt: Value(now),
-      updatedAt: Value(now),
-    ));
+    await (_db.update(_db.debtsTable)..where((d) => d.id.equals(id))).write(
+      DebtsTableCompanion(deletedAt: Value(now), updatedAt: Value(now)),
+    );
   }
 
   @override
   Future<void> restoreDebt(String id) async {
     final now = DateTime.now().toUtc();
-    await (_db.update(_db.debtsTable)..where((d) => d.id.equals(id)))
-        .write(DebtsTableCompanion(
-      deletedAt: const Value(null),
-      updatedAt: Value(now),
-    ));
+    await (_db.update(_db.debtsTable)..where((d) => d.id.equals(id))).write(
+      DebtsTableCompanion(deletedAt: const Value(null), updatedAt: Value(now)),
+    );
   }
 
   @override
@@ -104,9 +100,7 @@ class DebtRepositoryImpl implements DebtRepository {
       ..where((d) => d.scenarioId.equals(scenarioId))
       ..where((d) => d.deletedAt.isNull());
 
-    return query.watch().map(
-          (rows) => rows.map((r) => r.toDomain()).toList(),
-        );
+    return query.watch().map((rows) => rows.map((r) => r.toDomain()).toList());
   }
 
   @override
@@ -116,9 +110,7 @@ class DebtRepositoryImpl implements DebtRepository {
       ..where((d) => d.status.equals(DebtStatus.active.name))
       ..where((d) => d.deletedAt.isNull());
 
-    return query.watch().map(
-          (rows) => rows.map((r) => r.toDomain()).toList(),
-        );
+    return query.watch().map((rows) => rows.map((r) => r.toDomain()).toList());
   }
 
   /// Validate repository-level invariants before write.

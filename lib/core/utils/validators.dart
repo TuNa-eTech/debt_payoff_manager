@@ -45,7 +45,9 @@ class Validators {
     if (apr < Decimal.zero) return 'APR cannot be negative';
 
     // Convert from user input (percent) to decimal
-    final aprDecimal = (apr / Decimal.fromInt(100)).toDecimal(scaleOnInfinitePrecision: 10);
+    final aprDecimal = (apr / Decimal.fromInt(100)).toDecimal(
+      scaleOnInfinitePrecision: 10,
+    );
     if (aprDecimal > FinancialConstants.maxApr) {
       return 'APR cannot exceed 100%';
     }

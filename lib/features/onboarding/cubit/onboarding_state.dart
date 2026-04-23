@@ -55,9 +55,5 @@ class OnboardingState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        isLoading,
-        currentStep,
-        hasCompletedOnboarding,
-      ];
+  List<Object?> get props => [isLoading, currentStep, hasCompletedOnboarding];
 }

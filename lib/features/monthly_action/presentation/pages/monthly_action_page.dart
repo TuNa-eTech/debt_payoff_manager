@@ -482,7 +482,9 @@ class _MonthlyActionSectionCard extends StatelessWidget {
                   children: [
                     Text(section.debtName, style: AppTextStyles.titleMedium),
                     Text(
-                      context.l10n.monthlyActionRequiredTotal(AppFormatters.formatCents(section.totalDueCents)),
+                      context.l10n.monthlyActionRequiredTotal(
+                        AppFormatters.formatCents(section.totalDueCents),
+                      ),
                       style: AppTextStyles.bodySmall.copyWith(
                         color: AppColors.mdOnSurfaceVariant,
                       ),
@@ -491,7 +493,10 @@ class _MonthlyActionSectionCard extends StatelessWidget {
                 ),
               ),
               if (section.isCompleted)
-                AppChip.status(label: context.l10n.monthlyActionDoneBadge, icon: LucideIcons.check),
+                AppChip.status(
+                  label: context.l10n.monthlyActionDoneBadge,
+                  icon: LucideIcons.check,
+                ),
             ],
           ),
           const SizedBox(height: AppDimensions.md),
@@ -567,8 +572,12 @@ class _ActionRow extends StatelessWidget {
                 const SizedBox(height: AppDimensions.xs),
                 Text(
                   item.kind == MonthlyActionKind.minimum
-                      ? context.l10n.monthlyActionDueDate(AppFormatters.formatDate(item.dueDate))
-                      : context.l10n.monthlyActionInMonth(AppFormatters.formatMonthYear(item.dueDate)),
+                      ? context.l10n.monthlyActionDueDate(
+                          AppFormatters.formatDate(item.dueDate),
+                        )
+                      : context.l10n.monthlyActionInMonth(
+                          AppFormatters.formatMonthYear(item.dueDate),
+                        ),
                   style: AppTextStyles.bodySmall.copyWith(
                     color: AppColors.mdOnSurfaceVariant,
                   ),
@@ -596,7 +605,9 @@ class _ActionRow extends StatelessWidget {
               SizedBox(
                 key: AppTestKeys.monthlyActionCheckOff(item.id),
                 child: AppButton.tonal(
-                  label: item.isCompleted ? context.l10n.monthlyActionLogged : context.l10n.monthlyActionCheckOff,
+                  label: item.isCompleted
+                      ? context.l10n.monthlyActionLogged
+                      : context.l10n.monthlyActionCheckOff,
                   icon: item.isCompleted
                       ? LucideIcons.checkCircle2
                       : LucideIcons.check,

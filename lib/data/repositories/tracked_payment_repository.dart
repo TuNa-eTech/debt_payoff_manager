@@ -31,9 +31,7 @@ class TrackedPaymentRepository implements PaymentRepository {
     final current = await _base.getPaymentById(id);
     await _base.deletePayment(id);
     await _syncStateStore.markDirty('payments');
-    await _planRecastService.recast(
-      scenarioId: current?.scenarioId ?? 'main',
-    );
+    await _planRecastService.recast(scenarioId: current?.scenarioId ?? 'main');
   }
 
   @override

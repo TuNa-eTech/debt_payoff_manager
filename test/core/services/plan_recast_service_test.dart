@@ -105,10 +105,7 @@ void main() {
       );
       expect(second.plan.totalInterestSaved, greaterThanOrEqualTo(0));
       expect(cachedAfterSecond, isNotNull);
-      expect(
-        cachedAfterSecond!.months.length,
-        second.projection.months.length,
-      );
+      expect(cachedAfterSecond!.months.length, second.projection.months.length);
       expect(plansSyncAfterSecond?.pendingWrites, 2);
     },
   );

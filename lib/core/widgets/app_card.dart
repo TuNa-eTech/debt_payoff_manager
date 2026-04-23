@@ -69,7 +69,8 @@ class AppCard extends StatelessWidget {
             splashColor: AppColors.mdPrimary.withValues(alpha: 0.05),
             highlightColor: AppColors.mdPrimary.withValues(alpha: 0.03),
             child: Padding(
-              padding: padding ?? const EdgeInsets.all(AppDimensions.cardPadding),
+              padding:
+                  padding ?? const EdgeInsets.all(AppDimensions.cardPadding),
               child: child,
             ),
           ),
@@ -132,10 +133,7 @@ class SectionHeader extends StatelessWidget {
             children: [
               Text(title, style: AppTextStyles.titleSmall),
               if (subtitle != null)
-                Text(
-                  subtitle!,
-                  style: AppTextStyles.bodySmall,
-                ),
+                Text(subtitle!, style: AppTextStyles.bodySmall),
             ],
           ),
         ),

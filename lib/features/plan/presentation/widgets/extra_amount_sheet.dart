@@ -37,15 +37,20 @@ class ExtraAmountSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-          
-          Text(context.l10n.planExtraAmountSheetTitle, style: AppTextStyles.titleLarge),
+
+          Text(
+            context.l10n.planExtraAmountSheetTitle,
+            style: AppTextStyles.titleLarge,
+          ),
           const SizedBox(height: 8),
           Text(
             context.l10n.planExtraAmountSheetSubtitle,
-            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.mdOnSurfaceVariant),
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.mdOnSurfaceVariant,
+            ),
           ),
           const SizedBox(height: 24),
-          
+
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
             decoration: BoxDecoration(
@@ -55,18 +60,34 @@ class ExtraAmountSheet extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('\$', style: TextStyle(color: AppColors.mdOnPrimaryContainer, fontSize: 32, fontWeight: FontWeight.w700, fontFamily: 'Roboto Mono')),
+                Text(
+                  '\$',
+                  style: TextStyle(
+                    color: AppColors.mdOnPrimaryContainer,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Roboto Mono',
+                  ),
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: TextField(
                     controller: TextEditingController(text: '250'),
-                    style: const TextStyle(color: AppColors.mdOnPrimaryContainer, fontSize: 48, fontWeight: FontWeight.w700, fontFamily: 'Roboto Mono', letterSpacing: -1),
+                    style: const TextStyle(
+                      color: AppColors.mdOnPrimaryContainer,
+                      fontSize: 48,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Roboto Mono',
+                      letterSpacing: -1,
+                    ),
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                       isDense: true,
                       contentPadding: EdgeInsets.zero,
                     ),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'[\d.,]')),
                       CurrencyInputFormatter(),
@@ -77,9 +98,9 @@ class ExtraAmountSheet extends StatelessWidget {
               ],
             ),
           ),
-          
+
           const SizedBox(height: 32),
-          
+
           AppButton.filled(
             onPressed: () => Navigator.pop(context),
             label: context.l10n.planExtraAmountSheetSave,

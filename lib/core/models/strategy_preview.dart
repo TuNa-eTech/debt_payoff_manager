@@ -22,11 +22,11 @@ class StrategyPreview extends Equatable {
 
   @override
   List<Object?> get props => [
-        strategy,
-        projectedDebtFreeDate,
-        projectedMonths,
-        totalInterestProjected,
-        totalInterestSaved,
-        totalBalance,
-      ];
+    strategy,
+    projectedDebtFreeDate,
+    projectedMonths,
+    totalInterestProjected,
+    totalInterestSaved,
+    totalBalance,
+  ];
 }

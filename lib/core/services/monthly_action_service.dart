@@ -134,15 +134,18 @@ class MonthlyActionService {
   }) {
     final currentMonthStart = referenceDate.startOfMonth;
     final currentMonthEnd = referenceDate.endOfMonth;
-    final eligibleDebts = debts.where((debt) {
-      if (debt.currentBalance <= 0) return false;
-      if (debt.status != DebtStatus.active && debt.status != DebtStatus.paused) {
-        return false;
-      }
-      if (debt.firstDueDate.isAfter(currentMonthEnd)) return false;
-      if (debt.isPaused(currentMonthStart)) return false;
-      return true;
-    }).toList(growable: false);
+    final eligibleDebts = debts
+        .where((debt) {
+          if (debt.currentBalance <= 0) return false;
+          if (debt.status != DebtStatus.active &&
+              debt.status != DebtStatus.paused) {
+            return false;
+          }
+          if (debt.firstDueDate.isAfter(currentMonthEnd)) return false;
+          if (debt.isPaused(currentMonthStart)) return false;
+          return true;
+        })
+        .toList(growable: false);
 
     final scheduledMinimums = <String, int>{};
     final balanceAfterMinimum = <String, int>{};
@@ -241,7 +244,9 @@ class MonthlyActionService {
       }
 
       if (extraAmount > 0) {
-        final priorityRank = ordered.indexWhere((candidate) => candidate.id == debt.id);
+        final priorityRank = ordered.indexWhere(
+          (candidate) => candidate.id == debt.id,
+        );
         items.add(
           MonthlyActionItem(
             id: '${debt.id}:${currentMonthStart.yearMonth}:extra',
@@ -289,8 +294,16 @@ class MonthlyActionService {
   }
 
   static DateTime _resolveDueDate(DateTime referenceDate, int desiredDay) {
-    final lastDay = DateTime(referenceDate.year, referenceDate.month + 1, 0).day;
-    return DateTime(referenceDate.year, referenceDate.month, min(desiredDay, lastDay));
+    final lastDay = DateTime(
+      referenceDate.year,
+      referenceDate.month + 1,
+      0,
+    ).day;
+    return DateTime(
+      referenceDate.year,
+      referenceDate.month,
+      min(desiredDay, lastDay),
+    );
   }
 
   static DateTime _localDay(DateTime value) {
@@ -315,15 +328,16 @@ class MonthlyActionSnapshot extends Equatable {
   final MonthlyActionSummary summary;
   final bool hasTrackedDebts;
 
-  bool get hasActionItems => sections.any((section) => section.items.isNotEmpty);
+  bool get hasActionItems =>
+      sections.any((section) => section.items.isNotEmpty);
 
   @override
   List<Object?> get props => [
-        referenceDate,
-        plan,
-        delta,
-        sections,
-        summary,
-        hasTrackedDebts,
-      ];
+    referenceDate,
+    plan,
+    delta,
+    sections,
+    summary,
+    hasTrackedDebts,
+  ];
 }

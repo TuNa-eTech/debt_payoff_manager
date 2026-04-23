@@ -52,7 +52,9 @@ class _TimelineViewState extends State<_TimelineView> {
     return BlocBuilder<PlanTimelineCubit, PlanTimelineState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(title: Text(AppLocalizations.of(context)!.planTimelineTitle)),
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context)!.planTimelineTitle),
+          ),
           body: _buildBody(state),
         );
       },
@@ -87,7 +89,9 @@ class _TimelineViewState extends State<_TimelineView> {
               color: AppColors.mdSurfaceContainerLow,
               child: EmptyState(
                 title: AppLocalizations.of(context)!.planTimelineAllPaidTitle,
-                subtitle: AppLocalizations.of(context)!.planTimelineAllPaidSubtitle,
+                subtitle: AppLocalizations.of(
+                  context,
+                )!.planTimelineAllPaidSubtitle,
                 icon: LucideIcons.partyPopper,
               ),
             ),
@@ -179,14 +183,18 @@ class _PlanHero extends StatelessWidget {
             children: [
               Expanded(
                 child: _HeroStat(
-                  label: AppLocalizations.of(context)!.planTimelineHeroProjectedInterest,
+                  label: AppLocalizations.of(
+                    context,
+                  )!.planTimelineHeroProjectedInterest,
                   value: AppFormatters.formatCents(projectedInterest),
                 ),
               ),
               const SizedBox(width: AppDimensions.md),
               Expanded(
                 child: _HeroStat(
-                  label: AppLocalizations.of(context)!.planTimelineHeroSavedVsMinimum,
+                  label: AppLocalizations.of(
+                    context,
+                  )!.planTimelineHeroSavedVsMinimum,
                   value: AppFormatters.formatCents(savedInterest),
                 ),
               ),
@@ -195,7 +203,11 @@ class _PlanHero extends StatelessWidget {
           if (plan != null) ...[
             const SizedBox(height: AppDimensions.md),
             Text(
-              AppLocalizations.of(context)!.planTimelineStrategySummary(plan.strategy.label, AppFormatters.formatCents(plan.extraMonthlyAmount), projection?.months.length ?? 0),
+              AppLocalizations.of(context)!.planTimelineStrategySummary(
+                plan.strategy.label,
+                AppFormatters.formatCents(plan.extraMonthlyAmount),
+                projection?.months.length ?? 0,
+              ),
               style: AppTextStyles.bodySmall.copyWith(
                 color: AppColors.mdOnPrimary.withValues(alpha: 0.82),
               ),
@@ -314,11 +326,15 @@ class _DeltaBanner extends StatelessWidget {
         delta.newDebtFreeDate != null) {
       final monthDelta = delta.debtFreeMonthDelta;
       final deltaStr = monthDelta == 0
-              ? ''
-              : monthDelta < 0
-              ? l10n.monthlyActionDeltaSooner(monthDelta.abs())
-              : l10n.monthlyActionDeltaLater(monthDelta);
-      return l10n.monthlyActionRecastDebtFree(AppFormatters.formatMonthYear(delta.previousDebtFreeDate!), AppFormatters.formatMonthYear(delta.newDebtFreeDate!), deltaStr);
+          ? ''
+          : monthDelta < 0
+          ? l10n.monthlyActionDeltaSooner(monthDelta.abs())
+          : l10n.monthlyActionDeltaLater(monthDelta);
+      return l10n.monthlyActionRecastDebtFree(
+        AppFormatters.formatMonthYear(delta.previousDebtFreeDate!),
+        AppFormatters.formatMonthYear(delta.newDebtFreeDate!),
+        deltaStr,
+      );
     }
 
     if (delta.hasProjectedInterestChange &&
@@ -326,11 +342,19 @@ class _DeltaBanner extends StatelessWidget {
         delta.newTotalInterestProjected != null) {
       final projectedDelta = delta.projectedInterestDelta!;
       final deltaStr = projectedDelta == 0
-              ? ''
-              : projectedDelta < 0
-              ? l10n.monthlyActionDeltaReduced(AppFormatters.formatCents(projectedDelta.abs()))
-              : l10n.monthlyActionDeltaIncreased(AppFormatters.formatCents(projectedDelta));
-      return l10n.monthlyActionRecastProjectedInterest(AppFormatters.formatCents(delta.previousTotalInterestProjected!), AppFormatters.formatCents(delta.newTotalInterestProjected!), deltaStr);
+          ? ''
+          : projectedDelta < 0
+          ? l10n.monthlyActionDeltaReduced(
+              AppFormatters.formatCents(projectedDelta.abs()),
+            )
+          : l10n.monthlyActionDeltaIncreased(
+              AppFormatters.formatCents(projectedDelta),
+            );
+      return l10n.monthlyActionRecastProjectedInterest(
+        AppFormatters.formatCents(delta.previousTotalInterestProjected!),
+        AppFormatters.formatCents(delta.newTotalInterestProjected!),
+        deltaStr,
+      );
     }
 
     if (delta.hasSavedInterestChange &&
@@ -338,11 +362,19 @@ class _DeltaBanner extends StatelessWidget {
         delta.newTotalInterestSaved != null) {
       final savedDelta = delta.savedInterestDelta!;
       final deltaStr = savedDelta == 0
-              ? ''
-              : savedDelta > 0
-              ? l10n.monthlyActionDeltaIncreased(AppFormatters.formatCents(savedDelta))
-              : l10n.monthlyActionDeltaReduced(AppFormatters.formatCents(savedDelta.abs()));
-      return l10n.monthlyActionRecastSavedInterest(AppFormatters.formatCents(delta.previousTotalInterestSaved!), AppFormatters.formatCents(delta.newTotalInterestSaved!), deltaStr);
+          ? ''
+          : savedDelta > 0
+          ? l10n.monthlyActionDeltaIncreased(
+              AppFormatters.formatCents(savedDelta),
+            )
+          : l10n.monthlyActionDeltaReduced(
+              AppFormatters.formatCents(savedDelta.abs()),
+            );
+      return l10n.monthlyActionRecastSavedInterest(
+        AppFormatters.formatCents(delta.previousTotalInterestSaved!),
+        AppFormatters.formatCents(delta.newTotalInterestSaved!),
+        deltaStr,
+      );
     }
 
     return l10n.planTimelineRecastNeutral;
@@ -365,7 +397,10 @@ class _InterestComparisonCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(AppLocalizations.of(context)!.planTimelineComparisonTitle, style: AppTextStyles.titleSmall),
+          Text(
+            AppLocalizations.of(context)!.planTimelineComparisonTitle,
+            style: AppTextStyles.titleSmall,
+          ),
           const SizedBox(height: AppDimensions.md),
           _ComparisonRow(
             label: AppLocalizations.of(context)!.planTimelineComparisonCurrent,
@@ -476,7 +511,9 @@ class _MonthCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _MiniStat(
-                  label: AppLocalizations.of(context)!.planTimelineMonthEndingBalance,
+                  label: AppLocalizations.of(
+                    context,
+                  )!.planTimelineMonthEndingBalance,
                   value: AppFormatters.formatCents(
                     month.totalBalanceEndOfMonth,
                   ),
@@ -485,7 +522,9 @@ class _MonthCard extends StatelessWidget {
               const SizedBox(width: AppDimensions.md),
               Expanded(
                 child: _MiniStat(
-                  label: AppLocalizations.of(context)!.planTimelineMonthDebtsPaidOff,
+                  label: AppLocalizations.of(
+                    context,
+                  )!.planTimelineMonthDebtsPaidOff,
                   value:
                       '${month.entries.where((entry) => entry.isPaidOffThisMonth).length}',
                 ),
@@ -516,26 +555,36 @@ class _MonthCard extends StatelessWidget {
                           ),
                           if (entry.isPaidOffThisMonth)
                             AppChip.status(
-                              label: AppLocalizations.of(context)!.planTimelinePaidOffBadge,
+                              label: AppLocalizations.of(
+                                context,
+                              )!.planTimelinePaidOffBadge,
                               icon: LucideIcons.partyPopper,
                             ),
                         ],
                       ),
                       const SizedBox(height: AppDimensions.sm),
                       _ComparisonRow(
-                        label: AppLocalizations.of(context)!.planTimelineMonthStartingBalance,
+                        label: AppLocalizations.of(
+                          context,
+                        )!.planTimelineMonthStartingBalance,
                         value: AppFormatters.formatCents(entry.startingBalance),
                       ),
                       _ComparisonRow(
-                        label: AppLocalizations.of(context)!.planTimelineMonthInterestAccrued,
+                        label: AppLocalizations.of(
+                          context,
+                        )!.planTimelineMonthInterestAccrued,
                         value: AppFormatters.formatCents(entry.interestAccrued),
                       ),
                       _ComparisonRow(
-                        label: AppLocalizations.of(context)!.planTimelineMonthPaymentApplied,
+                        label: AppLocalizations.of(
+                          context,
+                        )!.planTimelineMonthPaymentApplied,
                         value: AppFormatters.formatCents(entry.paymentApplied),
                       ),
                       _ComparisonRow(
-                        label: AppLocalizations.of(context)!.planTimelineMonthEndingBalance,
+                        label: AppLocalizations.of(
+                          context,
+                        )!.planTimelineMonthEndingBalance,
                         value: AppFormatters.formatCents(entry.endingBalance),
                         valueColor: entry.endingBalance == 0
                             ? AppColors.mdPrimary

@@ -34,7 +34,9 @@ class TrackedPlanRepository implements PlanRepository {
   Future<Plan> savePlan(Plan plan) async {
     final saved = await _base.savePlan(plan);
     await _syncStateStore.markDirty('plans');
-    final recast = await _planRecastService.recast(scenarioId: saved.scenarioId);
+    final recast = await _planRecastService.recast(
+      scenarioId: saved.scenarioId,
+    );
     return recast?.plan ?? saved;
   }
 

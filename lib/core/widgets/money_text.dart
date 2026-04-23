@@ -35,9 +35,9 @@ class MoneyText extends StatelessWidget {
     this.isPositive,
     this.compact = false,
     required _MoneySize size,
-  })  : _size = size,
-        locale = 'en_US',
-        style = null;
+  }) : _size = size,
+       locale = 'en_US',
+       style = null;
 
   factory MoneyText.large({
     Key? key,
@@ -47,17 +47,16 @@ class MoneyText extends StatelessWidget {
     bool showSign = false,
     bool? isPositive,
     bool compact = false,
-  }) =>
-      MoneyText._sized(
-        key: key,
-        amount: amount,
-        currency: currency,
-        color: color,
-        showSign: showSign,
-        isPositive: isPositive,
-        compact: compact,
-        size: _MoneySize.large,
-      );
+  }) => MoneyText._sized(
+    key: key,
+    amount: amount,
+    currency: currency,
+    color: color,
+    showSign: showSign,
+    isPositive: isPositive,
+    compact: compact,
+    size: _MoneySize.large,
+  );
 
   factory MoneyText.small({
     Key? key,
@@ -67,17 +66,16 @@ class MoneyText extends StatelessWidget {
     bool showSign = false,
     bool? isPositive,
     bool compact = false,
-  }) =>
-      MoneyText._sized(
-        key: key,
-        amount: amount,
-        currency: currency,
-        color: color,
-        showSign: showSign,
-        isPositive: isPositive,
-        compact: compact,
-        size: _MoneySize.small,
-      );
+  }) => MoneyText._sized(
+    key: key,
+    amount: amount,
+    currency: currency,
+    color: color,
+    showSign: showSign,
+    isPositive: isPositive,
+    compact: compact,
+    size: _MoneySize.small,
+  );
 
   final double amount;
   final String currency;

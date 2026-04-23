@@ -100,10 +100,13 @@ class ProgressPage extends StatelessWidget {
                           ),
                           const SizedBox(height: AppDimensions.sm),
                           Text(
-                            context.l10n.progressRemainingAmount(AppFormatters.formatCents(totalRemaining)),
+                            context.l10n.progressRemainingAmount(
+                              AppFormatters.formatCents(totalRemaining),
+                            ),
                             style: AppTextStyles.bodyMedium.copyWith(
-                              color:
-                                  AppColors.mdOnPrimary.withValues(alpha: 0.82),
+                              color: AppColors.mdOnPrimary.withValues(
+                                alpha: 0.82,
+                              ),
                             ),
                           ),
                           const SizedBox(height: AppDimensions.md),
@@ -129,7 +132,9 @@ class ProgressPage extends StatelessWidget {
                           const SizedBox(height: AppDimensions.sm),
                           LinearProgressIndicator(
                             value: overallProgress.clamp(0.0, 1.0),
-                            backgroundColor: Colors.white.withValues(alpha: 0.18),
+                            backgroundColor: Colors.white.withValues(
+                              alpha: 0.18,
+                            ),
                             color: AppColors.mdPrimaryContainer,
                             minHeight: 6,
                             borderRadius: BorderRadius.circular(
@@ -190,7 +195,9 @@ class ProgressPage extends StatelessWidget {
                     const SizedBox(height: AppDimensions.md),
                     ...debts.map(
                       (debt) => Padding(
-                        padding: const EdgeInsets.only(bottom: AppDimensions.md),
+                        padding: const EdgeInsets.only(
+                          bottom: AppDimensions.md,
+                        ),
                         child: _DebtProgressCard(debt: debt),
                       ),
                     ),
@@ -220,7 +227,10 @@ class _PlanSummaryCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(context.l10n.progressPlanSummary, style: AppTextStyles.titleSmall),
+              Text(
+                context.l10n.progressPlanSummary,
+                style: AppTextStyles.titleSmall,
+              ),
               const Spacer(),
               AppChip.status(label: plan.strategy.label, icon: LucideIcons.map),
             ],
@@ -261,7 +271,9 @@ class _PlanSummaryCard extends StatelessWidget {
               Expanded(
                 child: _ProgressStat(
                   label: context.l10n.progressSavedVsMinimum,
-                  value: AppFormatters.formatCents(plan.totalInterestSaved ?? 0),
+                  value: AppFormatters.formatCents(
+                    plan.totalInterestSaved ?? 0,
+                  ),
                   valueColor: AppColors.mdPrimary,
                 ),
               ),
@@ -328,8 +340,10 @@ class _DebtProgressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final paidAmount =
-        (debt.originalPrincipal - debt.currentBalance).clamp(0, debt.originalPrincipal);
+    final paidAmount = (debt.originalPrincipal - debt.currentBalance).clamp(
+      0,
+      debt.originalPrincipal,
+    );
     final progress = debt.originalPrincipal == 0
         ? 0.0
         : paidAmount / debt.originalPrincipal;
@@ -340,14 +354,16 @@ class _DebtProgressCard extends StatelessWidget {
       color: isPaidOff
           ? AppColors.successContainer
           : isPaused
-              ? AppColors.mdSurfaceContainerLow
-              : AppColors.mdSurface,
+          ? AppColors.mdSurfaceContainerLow
+          : AppColors.mdSurface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Expanded(child: Text(debt.name, style: AppTextStyles.titleMedium)),
+              Expanded(
+                child: Text(debt.name, style: AppTextStyles.titleMedium),
+              ),
               Text(
                 '${(progress * 100).round()}%',
                 style: AppTextStyles.labelMedium.copyWith(
@@ -361,8 +377,11 @@ class _DebtProgressCard extends StatelessWidget {
             isPaidOff
                 ? context.l10n.progressDebtPaidOffStatus
                 : isPaused
-                    ? context.l10n.progressDebtPausedStatus
-                    : context.l10n.progressDebtRemainingVsOriginal(AppFormatters.formatCents(debt.currentBalance), AppFormatters.formatCents(debt.originalPrincipal)),
+                ? context.l10n.progressDebtPausedStatus
+                : context.l10n.progressDebtRemainingVsOriginal(
+                    AppFormatters.formatCents(debt.currentBalance),
+                    AppFormatters.formatCents(debt.originalPrincipal),
+                  ),
             style: AppTextStyles.bodySmall.copyWith(
               color: AppColors.mdOnSurfaceVariant,
             ),

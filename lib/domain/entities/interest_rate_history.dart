@@ -40,6 +40,12 @@ class InterestRateHistory extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [id, debtId, apr, effectiveFrom, effectiveTo, reason];
+  List<Object?> get props => [
+    id,
+    debtId,
+    apr,
+    effectiveFrom,
+    effectiveTo,
+    reason,
+  ];
 }

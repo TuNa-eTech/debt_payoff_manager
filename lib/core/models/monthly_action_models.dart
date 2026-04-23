@@ -60,20 +60,20 @@ class MonthlyActionItem extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        debtId,
-        debtName,
-        debtType,
-        kind,
-        paymentType,
-        amountCents,
-        dueDate,
-        subtitle,
-        priorityRank,
-        isCompleted,
-        isOverdue,
-        isUpcoming,
-      ];
+    id,
+    debtId,
+    debtName,
+    debtType,
+    kind,
+    paymentType,
+    amountCents,
+    dueDate,
+    subtitle,
+    priorityRank,
+    isCompleted,
+    isOverdue,
+    isUpcoming,
+  ];
 }
 
 class MonthlyActionSection extends Equatable {
@@ -91,7 +91,8 @@ class MonthlyActionSection extends Equatable {
   final int totalDueCents;
   final List<MonthlyActionItem> items;
 
-  bool get isCompleted => items.isNotEmpty && items.every((item) => item.isCompleted);
+  bool get isCompleted =>
+      items.isNotEmpty && items.every((item) => item.isCompleted);
 
   @override
   List<Object?> get props => [debtId, debtName, debtType, totalDueCents, items];
@@ -118,11 +119,11 @@ class MonthlyActionSummary extends Equatable {
 
   @override
   List<Object?> get props => [
-        totalMinimumCents,
-        totalExtraCents,
-        totalDueCents,
-        completedCount,
-        totalCount,
-        overdueCount,
-      ];
+    totalMinimumCents,
+    totalExtraCents,
+    totalDueCents,
+    completedCount,
+    totalCount,
+    overdueCount,
+  ];
 }

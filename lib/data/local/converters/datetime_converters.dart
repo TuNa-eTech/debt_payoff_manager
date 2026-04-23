@@ -29,6 +29,5 @@ class LocalDateConverter extends TypeConverter<DateTime, String> {
   DateTime fromSql(String fromDb) => DateTime.parse(fromDb); // keep local
 
   @override
-  String toSql(DateTime value) =>
-      value.toIso8601String().substring(0, 10); // YYYY-MM-DD
+  String toSql(DateTime value) => value.toIso8601String().substring(0, 10); // YYYY-MM-DD
 }

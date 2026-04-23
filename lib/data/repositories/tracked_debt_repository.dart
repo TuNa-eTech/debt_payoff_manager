@@ -43,7 +43,10 @@ class TrackedDebtRepository implements DebtRepository {
     String scenarioId = 'main',
     List<String>? statusFilter,
   }) {
-    return _base.getAllDebts(scenarioId: scenarioId, statusFilter: statusFilter);
+    return _base.getAllDebts(
+      scenarioId: scenarioId,
+      statusFilter: statusFilter,
+    );
   }
 
   @override

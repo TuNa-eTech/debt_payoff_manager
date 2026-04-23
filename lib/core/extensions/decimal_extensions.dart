@@ -15,7 +15,8 @@ extension DecimalFinancialExtensions on Decimal {
   Decimal roundRate() => round(scale: FinancialConstants.rateScaleInternal);
 
   /// Round for display rate (4 decimal places).
-  Decimal roundRateDisplay() => round(scale: FinancialConstants.rateScaleDisplay);
+  Decimal roundRateDisplay() =>
+      round(scale: FinancialConstants.rateScaleDisplay);
 
   /// Round percentage for display (1 decimal place).
   Decimal roundPercentDisplay() =>

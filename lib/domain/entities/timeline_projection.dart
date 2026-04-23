@@ -50,9 +50,13 @@ class MonthProjection extends Equatable {
 
   @override
   List<Object?> get props => [
-        monthIndex, yearMonth, entries,
-        totalPaymentThisMonth, totalInterestThisMonth, totalBalanceEndOfMonth,
-      ];
+    monthIndex,
+    yearMonth,
+    entries,
+    totalPaymentThisMonth,
+    totalInterestThisMonth,
+    totalBalanceEndOfMonth,
+  ];
 }
 
 /// Per-debt data within a month projection.
@@ -81,7 +85,13 @@ class DebtMonthEntry extends Equatable {
 
   @override
   List<Object?> get props => [
-        debtId, startingBalance, interestAccrued, paymentApplied,
-        principalPortion, interestPortion, endingBalance, isPaidOffThisMonth,
-      ];
+    debtId,
+    startingBalance,
+    interestAccrued,
+    paymentApplied,
+    principalPortion,
+    interestPortion,
+    endingBalance,
+    isPaidOffThisMonth,
+  ];
 }

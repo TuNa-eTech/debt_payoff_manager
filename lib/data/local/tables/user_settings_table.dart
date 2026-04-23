@@ -13,19 +13,15 @@ class UserSettingsTable extends Table {
   @override
   String get tableName => 'user_settings';
 
-  TextColumn get id =>
-      text().withDefault(const Constant('singleton'))();
+  TextColumn get id => text().withDefault(const Constant('singleton'))();
 
   // Trust level (ADR-003)
-  IntColumn get trustLevel =>
-      integer().withDefault(const Constant(0))();
+  IntColumn get trustLevel => integer().withDefault(const Constant(0))();
   TextColumn get firebaseUid => text().nullable()();
 
   // Display
-  TextColumn get currencyCode =>
-      text().withDefault(const Constant('USD'))();
-  TextColumn get localeCode =>
-      text().withDefault(const Constant('en-US'))();
+  TextColumn get currencyCode => text().withDefault(const Constant('USD'))();
+  TextColumn get localeCode => text().withDefault(const Constant('en-US'))();
   TextColumn get dayCountConvention =>
       text().withDefault(const Constant('actual365'))();
 
@@ -42,16 +38,14 @@ class UserSettingsTable extends Table {
   // Onboarding
   // 0=not started, 1=welcome, 2=first debt, 3=strategy,
   // 4=extra amount, 5=completed
-  IntColumn get onboardingStep =>
-      integer().withDefault(const Constant(0))();
+  IntColumn get onboardingStep => integer().withDefault(const Constant(0))();
   BoolColumn get onboardingCompleted =>
       boolean().withDefault(const Constant(false))();
   TextColumn get onboardingCompletedAt =>
       text().nullable().map(const UtcDateTimeConverter())();
 
   // Premium
-  BoolColumn get isPremium =>
-      boolean().withDefault(const Constant(false))();
+  BoolColumn get isPremium => boolean().withDefault(const Constant(false))();
   TextColumn get premiumExpiresAt =>
       text().nullable().map(const UtcDateTimeConverter())();
 

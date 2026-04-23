@@ -7,10 +7,7 @@ import '../../../../core/extensions/context_extensions.dart';
 import 'add_debt_page.dart';
 
 class EditDebtPage extends StatelessWidget {
-  const EditDebtPage({
-    super.key,
-    required this.id,
-  });
+  const EditDebtPage({super.key, required this.id});
 
   final String id;
 
@@ -30,9 +27,7 @@ class EditDebtPage extends StatelessWidget {
         if (debt == null) {
           return Scaffold(
             appBar: AppBar(title: Text(context.l10n.editDebtTitle)),
-            body: Center(
-              child: Text(context.l10n.logPaymentNotFound),
-            ),
+            body: Center(child: Text(context.l10n.logPaymentNotFound)),
           );
         }
 

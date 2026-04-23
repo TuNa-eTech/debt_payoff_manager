@@ -57,16 +57,12 @@ class MilestoneRepositoryImpl implements MilestoneRepository {
 
   @override
   Future<void> markSeen(String id) async {
-    await (_db.update(_db.milestonesTable)
-          ..where((m) => m.id.equals(id)))
+    await (_db.update(_db.milestonesTable)..where((m) => m.id.equals(id)))
         .write(const MilestonesTableCompanion(seen: Value(true)));
   }
 
   @override
-  Future<bool> milestoneExists(
-    MilestoneType type, {
-    String? debtId,
-  }) async {
+  Future<bool> milestoneExists(MilestoneType type, {String? debtId}) async {
     final query = _db.select(_db.milestonesTable)
       ..where((m) => m.type.equals(type.name))
       ..where((m) => m.deletedAt.isNull());
@@ -82,17 +78,13 @@ class MilestoneRepositoryImpl implements MilestoneRepository {
   }
 
   @override
-  Stream<List<Milestone>> watchUnseenMilestones({
-    String scenarioId = 'main',
-  }) {
+  Stream<List<Milestone>> watchUnseenMilestones({String scenarioId = 'main'}) {
     final query = _db.select(_db.milestonesTable)
       ..where((m) => m.scenarioId.equals(scenarioId))
       ..where((m) => m.seen.equals(false))
       ..where((m) => m.deletedAt.isNull())
       ..orderBy([(m) => OrderingTerm.desc(m.achievedAt)]);
 
-    return query.watch().map(
-          (rows) => rows.map((r) => r.toDomain()).toList(),
-        );
+    return query.watch().map((rows) => rows.map((r) => r.toDomain()).toList());
   }
 }

@@ -104,7 +104,9 @@ class AhaMomentPage extends StatelessWidget {
                           child: SingleChildScrollView(
                             padding: EdgeInsets.symmetric(
                               horizontal: AppDimensions.lg,
-                              vertical: isCompact ? AppDimensions.xs : AppDimensions.sm,
+                              vertical: isCompact
+                                  ? AppDimensions.xs
+                                  : AppDimensions.sm,
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,27 +147,40 @@ class AhaMomentPage extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                SizedBox(height: isCompact ? AppDimensions.sm : AppDimensions.md),
+                                SizedBox(
+                                  height: isCompact
+                                      ? AppDimensions.sm
+                                      : AppDimensions.md,
+                                ),
                                 Text(
                                   trackedDebts.isEmpty
                                       ? context.l10n.onboardingAhaEmpty
                                       : payoffDate == null
                                       ? context.l10n.onboardingAhaRecasting
-                                      : context.l10n.onboardingAhaDebtFree(AppFormatters.formatMonthYear(payoffDate)),
-                                  style: (isCompact
-                                          ? AppTextStyles.headlineSmall
-                                          : AppTextStyles.headlineMedium)
-                                      .copyWith(
-                                    color: AppColors.mdOnPrimary,
-                                  ),
+                                      : context.l10n.onboardingAhaDebtFree(
+                                          AppFormatters.formatMonthYear(
+                                            payoffDate,
+                                          ),
+                                        ),
+                                  style:
+                                      (isCompact
+                                              ? AppTextStyles.headlineSmall
+                                              : AppTextStyles.headlineMedium)
+                                          .copyWith(
+                                            color: AppColors.mdOnPrimary,
+                                          ),
                                   textAlign: TextAlign.center,
                                 ),
                                 if (!isCompact) ...[
                                   const SizedBox(height: AppDimensions.sm),
                                   Text(
                                     trackedDebts.isEmpty
-                                        ? context.l10n.onboardingAhaEmptySubtitle
-                                        : context.l10n.onboardingAhaReadySubtitle,
+                                        ? context
+                                              .l10n
+                                              .onboardingAhaEmptySubtitle
+                                        : context
+                                              .l10n
+                                              .onboardingAhaReadySubtitle,
                                     style: AppTextStyles.bodyLarge.copyWith(
                                       color: AppColors.mdOnPrimary.withValues(
                                         alpha: 0.84,
@@ -174,7 +189,11 @@ class AhaMomentPage extends StatelessWidget {
                                     textAlign: TextAlign.center,
                                   ),
                                 ],
-                                SizedBox(height: isCompact ? AppDimensions.sm : AppDimensions.lg),
+                                SizedBox(
+                                  height: isCompact
+                                      ? AppDimensions.sm
+                                      : AppDimensions.lg,
+                                ),
                                 AppCard(
                                   color: AppColors.mdOnPrimary,
                                   borderRadius: AppDimensions.radius2xl,
@@ -188,7 +207,9 @@ class AhaMomentPage extends StatelessWidget {
                                       Row(
                                         children: [
                                           Text(
-                                            context.l10n.onboardingAhaSummaryTitle,
+                                            context
+                                                .l10n
+                                                .onboardingAhaSummaryTitle,
                                             style: AppTextStyles.titleMedium,
                                           ),
                                           const Spacer(),
@@ -199,12 +220,18 @@ class AhaMomentPage extends StatelessWidget {
                                             ),
                                         ],
                                       ),
-                                      SizedBox(height: isCompact ? AppDimensions.sm : AppDimensions.md),
+                                      SizedBox(
+                                        height: isCompact
+                                            ? AppDimensions.sm
+                                            : AppDimensions.md,
+                                      ),
                                       Row(
                                         children: [
                                           Expanded(
                                             child: _SummaryStat(
-                                              label: context.l10n.onboardingAhaTotalBalance,
+                                              label: context
+                                                  .l10n
+                                                  .onboardingAhaTotalBalance,
                                               value: AppFormatters.formatCents(
                                                 totalBalance,
                                               ),
@@ -213,9 +240,13 @@ class AhaMomentPage extends StatelessWidget {
                                           ),
                                           Expanded(
                                             child: _SummaryStat(
-                                              label: context.l10n.onboardingAhaDebtFreeDate,
+                                              label: context
+                                                  .l10n
+                                                  .onboardingAhaDebtFreeDate,
                                               value: payoffDate == null
-                                                  ? context.l10n.onboardingAhaRecasting
+                                                  ? context
+                                                        .l10n
+                                                        .onboardingAhaRecasting
                                                   : AppFormatters.formatShortMonthYear(
                                                       payoffDate,
                                                     ),
@@ -224,19 +255,27 @@ class AhaMomentPage extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: isCompact ? AppDimensions.xs : AppDimensions.md),
+                                      SizedBox(
+                                        height: isCompact
+                                            ? AppDimensions.xs
+                                            : AppDimensions.md,
+                                      ),
                                       Row(
                                         children: [
                                           Expanded(
                                             child: _SummaryStat(
-                                              label: context.l10n.onboardingAhaTrackedCount,
+                                              label: context
+                                                  .l10n
+                                                  .onboardingAhaTrackedCount,
                                               value: '${trackedDebts.length}',
                                               isCompact: isCompact,
                                             ),
                                           ),
                                           Expanded(
                                             child: _SummaryStat(
-                                              label: context.l10n.onboardingAhaExtraMonthly,
+                                              label: context
+                                                  .l10n
+                                                  .onboardingAhaExtraMonthly,
                                               value: AppFormatters.formatCents(
                                                 plan?.extraMonthlyAmount ?? 0,
                                               ),
@@ -245,12 +284,18 @@ class AhaMomentPage extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: isCompact ? AppDimensions.xs : AppDimensions.md),
+                                      SizedBox(
+                                        height: isCompact
+                                            ? AppDimensions.xs
+                                            : AppDimensions.md,
+                                      ),
                                       Row(
                                         children: [
                                           Expanded(
                                             child: _SummaryStat(
-                                              label: context.l10n.onboardingAhaProjectedInterest,
+                                              label: context
+                                                  .l10n
+                                                  .onboardingAhaProjectedInterest,
                                               value: AppFormatters.formatCents(
                                                 projectedInterest,
                                               ),
@@ -259,7 +304,9 @@ class AhaMomentPage extends StatelessWidget {
                                           ),
                                           Expanded(
                                             child: _SummaryStat(
-                                              label: context.l10n.onboardingAhaSavedVsMinimum,
+                                              label: context
+                                                  .l10n
+                                                  .onboardingAhaSavedVsMinimum,
                                               value: AppFormatters.formatCents(
                                                 interestSaved,
                                               ),
@@ -269,11 +316,17 @@ class AhaMomentPage extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: isCompact ? AppDimensions.xs : AppDimensions.md),
+                                      SizedBox(
+                                        height: isCompact
+                                            ? AppDimensions.xs
+                                            : AppDimensions.md,
+                                      ),
                                       Container(
                                         width: double.infinity,
                                         padding: EdgeInsets.all(
-                                          isCompact ? AppDimensions.sm : AppDimensions.md,
+                                          isCompact
+                                              ? AppDimensions.sm
+                                              : AppDimensions.md,
                                         ),
                                         decoration: BoxDecoration(
                                           color: AppColors.mdPrimaryContainer,
@@ -296,8 +349,12 @@ class AhaMomentPage extends StatelessWidget {
                                             Expanded(
                                               child: Text(
                                                 isCompact
-                                                    ? context.l10n.onboardingAhaDataCompact
-                                                    : context.l10n.onboardingAhaDataFull,
+                                                    ? context
+                                                          .l10n
+                                                          .onboardingAhaDataCompact
+                                                    : context
+                                                          .l10n
+                                                          .onboardingAhaDataFull,
                                                 style: AppTextStyles.bodySmall
                                                     .copyWith(
                                                       color: AppColors
@@ -390,12 +447,13 @@ class _SummaryStat extends StatelessWidget {
         const SizedBox(height: AppDimensions.xs),
         Text(
           value,
-          style: (isCompact
-                  ? AppTextStyles.titleMedium
-                  : AppTextStyles.titleLarge)
-              .copyWith(
-            color: emphasize ? AppColors.mdPrimary : AppColors.mdOnSurface,
-          ),
+          style:
+              (isCompact ? AppTextStyles.titleMedium : AppTextStyles.titleLarge)
+                  .copyWith(
+                    color: emphasize
+                        ? AppColors.mdPrimary
+                        : AppColors.mdOnSurface,
+                  ),
         ),
       ],
     );

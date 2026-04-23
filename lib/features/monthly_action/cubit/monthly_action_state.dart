@@ -27,7 +27,8 @@ class MonthlyActionState extends Equatable {
   final String? errorMessage;
   final bool hasTrackedDebts;
 
-  bool get hasActionItems => sections.any((section) => section.items.isNotEmpty);
+  bool get hasActionItems =>
+      sections.any((section) => section.items.isNotEmpty);
 
   MonthlyActionState copyWith({
     bool? isLoading,
@@ -49,21 +50,23 @@ class MonthlyActionState extends Equatable {
       sections: sections ?? this.sections,
       summary: summary ?? this.summary,
       submittingIds: submittingIds ?? this.submittingIds,
-      errorMessage: clearErrorMessage ? null : (errorMessage ?? this.errorMessage),
+      errorMessage: clearErrorMessage
+          ? null
+          : (errorMessage ?? this.errorMessage),
       hasTrackedDebts: hasTrackedDebts ?? this.hasTrackedDebts,
     );
   }
 
   @override
   List<Object?> get props => [
-        isLoading,
-        referenceDate,
-        plan,
-        delta,
-        sections,
-        summary,
-        submittingIds,
-        errorMessage,
-        hasTrackedDebts,
-      ];
+    isLoading,
+    referenceDate,
+    plan,
+    delta,
+    sections,
+    summary,
+    submittingIds,
+    errorMessage,
+    hasTrackedDebts,
+  ];
 }
