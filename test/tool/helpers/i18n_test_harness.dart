@@ -212,11 +212,29 @@ exit 0
   }
 
   String get _dartExecutable {
+    // Prefer the FVM-managed dart when available (local dev with .fvm/).
     final repoDart = File(_repoDartPath);
     if (repoDart.existsSync()) {
       return repoDart.path;
     }
-    return Platform.resolvedExecutable;
+
+    // Platform.resolvedExecutable under `flutter test` is `flutter_tester`,
+    // not the dart CLI. Its path is:
+    //   <flutter_sdk>/bin/cache/artifacts/engine/<platform>/flutter_tester
+    // The dart binary lives at:
+    //   <flutter_sdk>/bin/cache/dart-sdk/bin/dart
+    // So we walk up 3 levels from flutter_tester's parent to reach cache/,
+    // then descend into dart-sdk/bin/dart.
+    final testerPath = Platform.resolvedExecutable;
+    final dartName = Platform.isWindows ? 'dart.exe' : 'dart';
+    final cacheDir = File(testerPath).parent.parent.parent.parent;
+    final sdkDart = File(p.join(cacheDir.path, 'dart-sdk', 'bin', dartName));
+    if (sdkDart.existsSync()) {
+      return sdkDart.path;
+    }
+
+    // Last resort: rely on `dart` being on PATH (e.g. CI without .fvm/).
+    return dartName;
   }
 }
 
