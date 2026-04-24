@@ -2,6 +2,8 @@
 
 > **A living plan for debt freedom.** Track, strategize, and conquer your debt with mathematically precise payoff plans that adapt to your real life.
 
+> **Current repo status (April 24, 2026):** MVP core is complete in the repository, `v1.4` reports and reminders are implemented, while cloud sync, partner sharing, and monetization are still planned.
+
 [![Flutter](https://img.shields.io/badge/Flutter-3.38-02569B?logo=flutter)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.9-0175C2?logo=dart)](https://dart.dev)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -36,14 +38,14 @@ We analyzed 6 top debt payoff apps on the US App Store. Every single one fails u
 - **Monthly Action View** — "This month you need to pay: ..." with one-tap check-off
 - **Progressive Trust Model** — Start with zero account. Back up when ready. Share when you choose.
 
-### ⚡ Tier 2 — Power Features (Post-MVP)
+### ⚡ Post-MVP / v1.x Status
 
-- What-If Scenario Comparison
-- Forbearance, Rate Changes, New Charges
-- Progress Milestones & Streak Tracking
-- Partner / Household Sharing
-- Payment Reminders & Notifications
-- PDF Reports & CSV Export
+- **Reports & PDF Export** — Implemented in the accepted `v1.4` scope with preview, PDF generation, and system share flow
+- **Reminders & Notifications** — Implemented in the accepted `v1.4` scope for due dates, monthly logging, and milestones
+- **Progress Milestones** — Detection and notification foundations are implemented; broader celebration/streak UX is still partial
+- **What-If Scenarios** — Planned
+- **Cloud Sync & Partner Sharing** — Planned
+- **Premium / IAP** — Pricing narrative exists, but monetization flow is still a placeholder
 
 See the full [Feature Spec →](docs/feature-spec.md)
 
@@ -72,12 +74,14 @@ lib/
 │   └── validators.dart
 └── features/           # Feature-first UI modules
     ├── debts/          # Debt CRUD
+    ├── home/           # Home shell entry point
     ├── monthly_action/ # Monthly Action View (home)
     ├── onboarding/     # Guided first-time setup
-    ├── payments/       # Payment logging & history
-    ├── settings/       # User preferences
-    ├── strategy/       # Strategy selection & comparison
-    └── timeline/       # Living payoff timeline
+    ├── plan/           # Strategy + living payoff timeline
+    ├── pricing/        # Premium/pricing placeholder
+    ├── progress/       # Progress dashboard
+    ├── reports/        # Report preview + export
+    └── settings/       # User preferences
 ```
 
 ### Key Technical Decisions
@@ -196,17 +200,18 @@ Phase 1 acceptance uses golden test vectors TV-1 through TV-4: standard amortiza
 ```
 Phase 0     ✅  Architecture + Spec Baseline
 Phase 1     ✅  Foundation + Core Data & Engine
-Phase 2-3  🔄  Core UX Design + Debt Management MVP
-Phase 4       Living Plan (strategy, timeline, payments)
-Phase 5       Onboarding & Trust Layer
-Phase 6       MVP Polish & Ship (v1.0)
-Phase 7       Cloud Sync — Trust Level 1 (v1.1)
-Phase 8       Power Features — Scenarios, Milestones (v1.2)
-Phase 9       Partner Sharing (v1.3)
-Phase 10      Reports & Reminders (v1.4)
+Phase 2     ✅  Core UX Design
+Phase 3     ✅  Debt Management MVP
+Phase 4     ✅  Living Plan (strategy, timeline, payments)
+Phase 5     ✅  Onboarding & Trust Layer
+Phase 6     ✅  MVP Polish & Ship (v1.0)
+Phase 7     ⏳  Cloud Sync — Trust Level 1 (not started in app layer)
+Phase 8     🟡  Power Features — partial foundations only
+Phase 9     ⏳  Partner Sharing (planned)
+Phase 10    ✅  Reports & Reminders (v1.4 accepted scope)
 ```
 
-See the full [Project Phases →](docs/project-phases.md) for entry/exit criteria, deliverables, and dependencies.
+See the full [Project Phases →](docs/project-phases.md) for entry/exit criteria, accepted scope adjustments, and remaining backlog.
 
 ---
 
@@ -275,16 +280,19 @@ Contributions are welcome! Here's how you can help:
 
 ## Project Status
 
-> 🚧 **Active Development** — The financial engine and data layer are implemented. UI features are being built.
+> Active development continues beyond MVP. Core payoff flows are implemented in the repo; the main gaps are cloud sync, partner sharing, IAP, and remaining premium/polish backlog.
 
 | Component | Status |
 |---|---|
 | Financial Engine | ✅ Implemented + Tested |
-| Data Schema (Drift) | ✅ Designed |
-| Core Architecture | ✅ Scaffolded |
-| Feature UI | 🔄 In Progress |
-| Cloud Sync | 📋 Planned |
-| Premium / IAP | 📋 Planned |
+| Data Schema (Drift) | ✅ Implemented + Tested |
+| Core Architecture | ✅ Live in app |
+| Core MVP Flows | ✅ Implemented end-to-end |
+| Reports & Reminders (`v1.4`) | ✅ Implemented in accepted scope |
+| Progress / Milestone Foundation | 🟡 Partial |
+| Cloud Sync | 📋 Not started in app layer |
+| Partner Sharing | 📋 Planned |
+| Premium / IAP | 📋 Placeholder UI only |
 
 ---
 

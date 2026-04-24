@@ -70,7 +70,7 @@ Legend:
 - Foundation + MVP: **~5 tháng** (Phases 0–6)
 - v1.1 Premium: **~2-3 tháng tiếp** (Phases 7–10)
 
-## Current status (April 23, 2026)
+## Current status (April 24, 2026)
 
 - **Phase 0 / E0** ở trạng thái **mostly complete trong repo**:
   - CI/workflows, dependency stack, codegen, và mobile Firebase config files đã hiện diện.
@@ -91,13 +91,19 @@ Legend:
   - Guided onboarding đã live end-to-end, có resume flow, và đã được instrument bằng onboarding analytics để đo step views, resume, và completion funnel trong beta.
   - Trust Layer Level 0 đã có `CSV export`, `local backup ZIP`, `local restore ZIP`, `clear all / factory reset`, cùng trust UX copy rõ ràng về local-only và roadmap cloud.
   - `Pricing screen stub` Free vs Premium đã live từ flow `Sao lưu đám mây`; `PDF export` được dời có chủ ý sang scope reports/premium hậu MVP thay vì tiếp tục block Phase 5.
-- **Phase 6 / E5** bắt đầu:
-  - App icon đã setup qua `flutter_launcher_icons` — generated full icon set cho iOS (20+ sizes) và Android (mipmap + adaptive icon với Forest Green background).
-  - Source icon: `assets/icons/app_icon.png`, config: `flutter_launcher_icons.yaml`.
-- **Phase 6+** không còn có thể coi là "chưa bắt đầu" như một khối:
-  - Repo đã có post-MVP implementation trải dài sang các phase hậu MVP.
-  - **Phase 10** hiện được coi là **closed với accepted scope adjustments**.
-  - Các phần được defer sang backlog từ closeout Phase 10: dedicated email-share flow, deeper PDF visual polish, và device-level notification QA evidence.
+- **Phase 6 / E5** nên được coi là **complete cho shipped v1.0 scope**:
+  - Repo có i18n runtime, analytics bootstrap, app icon assets/config, smoke coverage, và ship-hardening đủ mạnh để không còn phù hợp với nhãn "đang bắt đầu".
+  - Các gate như App Store approval, beta retention, và device QA matrix là repo-external evidence; không dùng làm blocker để mô tả codebase hiện tại là chưa hoàn tất.
+- **Phase 7** hiện **chưa bắt đầu ở app layer**:
+  - Package Firebase có mặt để bootstrap app/analytics, nhưng chưa có Firebase Auth flow, Firestore sync service, security rules, conflict handling, hay upgrade/downgrade trust flow chạy thật trong app.
+- **Phase 8** ở trạng thái **partial foundations only**:
+  - Repo đã có `milestone` entities/repository/service, milestone notifications, và progress dashboard cơ bản.
+  - Chưa có scenario management/comparison UI, chưa có IAP gating, chưa có rate-history runtime end-to-end, và chưa có partner-facing premium flow.
+- **Phase 9** hiện **chưa bắt đầu**:
+  - Chưa có owner/partner invite flow, shared Firestore collection, revoke UX, hay collaborative access rules ở app layer.
+- **Phase 10** hiện **closed với accepted scope adjustments**:
+  - Reminder scheduling, permission UX, report preview, PDF export, và generic system share flow đã nằm trong repo và test suite.
+  - Các phần defer sang backlog từ closeout Phase 10: dedicated email-share flow, deeper PDF visual polish, và device-level notification QA evidence.
 
 ---
 
