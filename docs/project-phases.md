@@ -70,15 +70,15 @@ Legend:
 - Foundation + MVP: **~5 tháng** (Phases 0–6)
 - v1.1 Premium: **~2-3 tháng tiếp** (Phases 7–10)
 
-## Current status (April 24, 2026)
+## Current status (April 25, 2026)
 
 - **Phase 0 / E0** ở trạng thái **mostly complete trong repo**:
-  - CI/workflows, dependency stack, codegen, và mobile Firebase config files đã hiện diện.
+  - CI/workflows, dependency stack, codegen, và mobile Firebase config files đã hiện diện. Thêm vào đó, CI đã được migrate sang MacOS.
   - Các mục process/team-only như clone time, commit convention thực tế, Dev/Prod env split, và Crashlytics/Analytics runtime wiring chưa thể audit đầy đủ chỉ từ repo.
 - **Phase 0 / D0** update:
-  - Logo concept finalized: **"Debt Payoff X"** — V3 Minimalist Peak + X Summit (Mountain peak with X at summit + horizon line, Forest Green gradient background).
+  - Logo concept finalized: **"Debt Payoff X"** — V3 Minimalist Peak + X Summit.
   - Tagline: **"Clear debt. Live free."**
-  - Brand lockup (icon + wordmark + tagline) đã có.
+  - Brand lockup (icon + wordmark + tagline) đã hoàn thiện và tích hợp.
   - Dark mode variant đã có.
 - **Phase 1 / E1** complete trong codebase và test suite hiện tại.
 - **Phase 2 / D1** không thể audit trọn vẹn chỉ từ repo:
@@ -431,8 +431,9 @@ Legend:
 
 ### D5 — Design
 
-- [ ] App Store screenshots (both platforms, showing aha moment)
-- [ ] Marketing page / landing page design (nếu có website)
+- [x] App Store screenshots (iPhone & iPad, fully localized with Apple HIG standard)
+- [x] Marketing page / landing page design (Web version completed in `landing-page/`)
+- [x] Marketing asset frames for promotional use
 - [ ] Onboarding tutorial video (30s) nếu quyết định cần
 - [ ] Error state final polish
 - [ ] Light theme QA

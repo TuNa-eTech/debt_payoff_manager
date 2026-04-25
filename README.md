@@ -2,7 +2,7 @@
 
 > **A living plan for debt freedom.** Track, strategize, and conquer your debt with mathematically precise payoff plans that adapt to your real life.
 
-> **Current repo status (April 24, 2026):** MVP core is complete in the repository, `v1.4` reports and reminders are implemented, while cloud sync, partner sharing, and monetization are still planned.
+> **Current repo status (April 25, 2026):** MVP core is complete in the repository, `v1.4` reports and reminders are implemented, landing page & marketing assets are finalized, while cloud sync, partner sharing, and monetization are still planned.
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.38-02569B?logo=flutter)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.9-0175C2?logo=dart)](https://dart.dev)
