@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>931230818628-lg9qnes9jt3nt8785f18m48drplrgn7q.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.931230818628-lg9qnes9jt3nt8785f18m48drplrgn7q</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCAnTbCPKN5IbBQZ5AxN906RYlDHbYr5vU</string>
 	<key>GCM_SENDER_ID</key>
@@ -9,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.anhtu.debtpayoffmanager</string>
+	<string>com.anhtu.debtPayoffManager</string>
 	<key>PROJECT_ID</key>
 	<string>debt-payoff-manager-e6283</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:931230818628:ios:c7d5329653bb04ca31b711</string>
+	<string>1:931230818628:ios:d8ec5674f691937331b711</string>
 </dict>
 </plist>

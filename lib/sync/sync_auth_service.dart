@@ -96,10 +96,14 @@ class FirebaseSyncAuthService implements SyncAuthService {
         user,
         fallbackProviderId: GoogleAuthProvider.PROVIDER_ID,
       );
-    } on GoogleSignInException catch (error) {
+    } on GoogleSignInException catch (error, stackTrace) {
       if (error.code == GoogleSignInExceptionCode.canceled) {
         throw const SyncAuthCancelledException();
       }
+      debugPrint('Google Sign-In Exception [${error.code}]: ${error.description}\n$stackTrace');
+      rethrow;
+    } catch (error, stackTrace) {
+      debugPrint('Google Sign-In Error: $error\n$stackTrace');
       rethrow;
     }
   }
@@ -140,10 +144,14 @@ class FirebaseSyncAuthService implements SyncAuthService {
         user,
         fallbackProviderId: AppleAuthProvider.PROVIDER_ID,
       );
-    } on SignInWithAppleAuthorizationException catch (error) {
+    } on SignInWithAppleAuthorizationException catch (error, stackTrace) {
       if (error.code == AuthorizationErrorCode.canceled) {
         throw const SyncAuthCancelledException();
       }
+      debugPrint('Apple Sign-In Exception [${error.code}]: ${error.message}\n$stackTrace');
+      rethrow;
+    } catch (error, stackTrace) {
+      debugPrint('Apple Sign-In Error: $error\n$stackTrace');
       rethrow;
     }
   }
