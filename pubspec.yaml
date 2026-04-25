@@ -46,6 +46,8 @@ dependencies:
   google_fonts: ^6.2.1
   flutter_animate: ^4.5.2
   lucide_icons: ^0.257.0
+  auth_buttons: ^3.0.3
+  flutter_svg: ^2.0.10
 
   # Notifications (Feature §2.5)
   flutter_local_notifications: ^17.2.3
@@ -111,6 +113,8 @@ dev_dependencies:
 flutter:
   generate: true
   uses-material-design: true
+  assets:
+    - assets/icons/
   fonts:
     - family: Roboto
       fonts:

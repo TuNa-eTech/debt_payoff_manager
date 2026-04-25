@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
@@ -181,7 +182,18 @@ class _SyncBackupPageState extends State<SyncBackupPage> {
         AppButton.filledLg(
           key: AppTestKeys.syncBackupGoogle,
           label: l10n.syncBackupSignInGoogle,
-          icon: LucideIcons.cloud,
+          customIcon: Container(
+            padding: const EdgeInsets.all(4),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+            child: SvgPicture.asset(
+              'assets/icons/google_g_logo.svg',
+              width: AppDimensions.iconMd - 8,
+              height: AppDimensions.iconMd - 8,
+            ),
+          ),
           fullWidth: true,
           loading: _pendingAction == _CloudBackupAction.google,
           onPressed: _isBusy
@@ -197,7 +209,15 @@ class _SyncBackupPageState extends State<SyncBackupPage> {
           AppButton.outlined(
             key: AppTestKeys.syncBackupApple,
             label: l10n.syncBackupSignInApple,
-            icon: LucideIcons.apple,
+            customIcon: SvgPicture.asset(
+              'assets/icons/apple_logo.svg',
+              width: AppDimensions.iconMd,
+              height: AppDimensions.iconMd,
+              colorFilter: const ColorFilter.mode(
+                AppColors.mdOnSurface,
+                BlendMode.srcIn,
+              ),
+            ),
             fullWidth: true,
             loading: _pendingAction == _CloudBackupAction.apple,
             onPressed: _isBusy

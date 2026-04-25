@@ -21,6 +21,7 @@ class AppButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.icon,
+    this.customIcon,
     this.trailingIcon,
     this.loading = false,
     this.fullWidth = false,
@@ -34,6 +35,7 @@ class AppButton extends StatelessWidget {
     required String label,
     required VoidCallback? onPressed,
     IconData? icon,
+    Widget? customIcon,
     IconData? trailingIcon,
     bool loading,
     bool fullWidth,
@@ -45,6 +47,7 @@ class AppButton extends StatelessWidget {
     required String label,
     required VoidCallback? onPressed,
     IconData? icon,
+    Widget? customIcon,
     IconData? trailingIcon,
     bool loading,
     bool fullWidth,
@@ -56,6 +59,7 @@ class AppButton extends StatelessWidget {
     required String label,
     required VoidCallback? onPressed,
     IconData? icon,
+    Widget? customIcon,
     bool loading,
     bool fullWidth,
   }) = _TonalButton;
@@ -66,6 +70,7 @@ class AppButton extends StatelessWidget {
     required String label,
     required VoidCallback? onPressed,
     IconData? icon,
+    Widget? customIcon,
     bool loading,
     bool fullWidth,
   }) = _OutlinedButton;
@@ -76,6 +81,7 @@ class AppButton extends StatelessWidget {
     required String label,
     required VoidCallback? onPressed,
     IconData? icon,
+    Widget? customIcon,
   }) = _TextButton;
 
   /// Error/destructive button — errorContainer fill.
@@ -84,6 +90,7 @@ class AppButton extends StatelessWidget {
     required String label,
     required VoidCallback? onPressed,
     IconData? icon,
+    Widget? customIcon,
     bool loading,
     bool fullWidth,
   }) = _ErrorButton;
@@ -91,6 +98,7 @@ class AppButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
   final IconData? icon;
+  final Widget? customIcon;
   final IconData? trailingIcon;
   final bool loading;
   final bool fullWidth;
@@ -151,7 +159,10 @@ class AppButton extends StatelessWidget {
       );
     }
     final children = <Widget>[
-      if (icon != null) ...[
+      if (customIcon != null) ...[
+        customIcon!,
+        const SizedBox(width: 8),
+      ] else if (icon != null) ...[
         Icon(icon, size: AppDimensions.iconMd, color: contentColor),
         const SizedBox(width: 8),
       ],
@@ -201,6 +212,7 @@ class _FilledButton extends AppButton {
     required super.label,
     required super.onPressed,
     super.icon,
+    super.customIcon,
     super.trailingIcon,
     super.loading = false,
     super.fullWidth = false,
@@ -216,6 +228,7 @@ class _FilledLgButton extends AppButton {
     required super.label,
     required super.onPressed,
     super.icon,
+    super.customIcon,
     super.trailingIcon,
     super.loading = false,
     super.fullWidth = false,
@@ -231,6 +244,7 @@ class _TonalButton extends AppButton {
     required super.label,
     required super.onPressed,
     super.icon,
+    super.customIcon,
     super.loading = false,
     super.fullWidth = false,
   }) : super._internal(
@@ -245,6 +259,7 @@ class _OutlinedButton extends AppButton {
     required super.label,
     required super.onPressed,
     super.icon,
+    super.customIcon,
     super.loading = false,
     super.fullWidth = false,
   }) : super._internal(
@@ -259,6 +274,7 @@ class _TextButton extends AppButton {
     required super.label,
     required super.onPressed,
     super.icon,
+    super.customIcon,
   }) : super._internal(variant: _ButtonVariant.text, height: 36);
 }
 
@@ -268,6 +284,7 @@ class _ErrorButton extends AppButton {
     required super.label,
     required super.onPressed,
     super.icon,
+    super.customIcon,
     super.loading = false,
     super.fullWidth = false,
   }) : super._internal(
