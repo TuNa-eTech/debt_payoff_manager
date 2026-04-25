@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -34,11 +36,26 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
       .get<PaymentLoggingService>();
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
+  late Stream<Debt?> _debtStream;
 
   PaymentType _selectedType = PaymentType.minimum;
   DateTime _selectedDate = DateTime.now();
   bool _isSubmitting = false;
   String? _inlineError;
+
+  @override
+  void initState() {
+    super.initState();
+    _debtStream = _debtRepository.watchDebtById(widget.id);
+  }
+
+  @override
+  void didUpdateWidget(covariant LogPaymentPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.id != widget.id) {
+      _debtStream = _debtRepository.watchDebtById(widget.id);
+    }
+  }
 
   @override
   void dispose() {
@@ -50,9 +67,10 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Debt?>(
-      stream: _debtRepository.watchDebtById(widget.id),
+      stream: _debtStream,
       builder: (context, snapshot) {
         final debt = snapshot.data;
+        final isKeyboardVisible = MediaQuery.viewInsetsOf(context).bottom > 0;
         if (snapshot.connectionState == ConnectionState.waiting &&
             debt == null) {
           return const Scaffold(
@@ -227,39 +245,38 @@ class _LogPaymentPageState extends State<LogPaymentPage> {
                           ),
                         ),
                       ),
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: AppColors.mdSurface,
-                          border: Border(
-                            top: BorderSide(color: AppColors.mdOutlineVariant),
-                          ),
+                      AnimatedSwitcher(
+                        duration: const Duration(
+                          milliseconds: AppDimensions.animFast,
                         ),
-                        child: SafeArea(
-                          top: false,
-                          child: AnimatedPadding(
-                            duration: const Duration(
-                              milliseconds: AppDimensions.animFast,
-                            ),
-                            curve: Curves.easeOut,
-                            padding: EdgeInsets.fromLTRB(
-                              AppDimensions.pagePaddingH,
-                              AppDimensions.md,
-                              AppDimensions.pagePaddingH,
-                              AppDimensions.md +
-                                  MediaQuery.viewInsetsOf(context).bottom,
-                            ),
-                            child: SizedBox(
-                              key: AppTestKeys.paymentLogSubmit,
-                              child: AppButton.filledLg(
-                                label: context.l10n.commonSavePayment,
-                                trailingIcon: LucideIcons.arrowRight,
-                                fullWidth: true,
-                                loading: _isSubmitting,
-                                onPressed: () => _submit(debt),
+                        switchInCurve: Curves.easeOut,
+                        switchOutCurve: Curves.easeOut,
+                        child: isKeyboardVisible
+                            ? const SizedBox.shrink()
+                            : Container(
+                                decoration: const BoxDecoration(
+                                  color: AppColors.mdSurface,
+                                  border: Border(
+                                    top: BorderSide(
+                                      color: AppColors.mdOutlineVariant,
+                                    ),
+                                  ),
+                                ),
+                                padding: const EdgeInsets.all(AppDimensions.md),
+                                child: SafeArea(
+                                  top: false,
+                                  child: SizedBox(
+                                    key: AppTestKeys.paymentLogSubmit,
+                                    child: AppButton.filledLg(
+                                      label: context.l10n.commonSavePayment,
+                                      trailingIcon: LucideIcons.arrowRight,
+                                      fullWidth: true,
+                                      loading: _isSubmitting,
+                                      onPressed: () => _submit(debt),
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
                       ),
                     ],
                   ),

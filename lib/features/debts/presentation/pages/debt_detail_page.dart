@@ -22,16 +22,38 @@ import '../widgets/debt_detail_hero_card.dart';
 import '../widgets/debt_info_row.dart';
 import '../widgets/debt_options_sheet.dart';
 
-class DebtDetailPage extends StatelessWidget {
+class DebtDetailPage extends StatefulWidget {
   const DebtDetailPage({super.key, required this.id});
 
   final String id;
 
   @override
+  State<DebtDetailPage> createState() => _DebtDetailPageState();
+}
+
+class _DebtDetailPageState extends State<DebtDetailPage> {
+  late final DebtRepository _debtRepository;
+  late Stream<Debt?> _debtStream;
+
+  @override
+  void initState() {
+    super.initState();
+    _debtRepository = getIt.get<DebtRepository>();
+    _debtStream = _debtRepository.watchDebtById(widget.id);
+  }
+
+  @override
+  void didUpdateWidget(covariant DebtDetailPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.id != widget.id) {
+      _debtStream = _debtRepository.watchDebtById(widget.id);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final debtRepository = getIt.get<DebtRepository>();
     return StreamBuilder<Debt?>(
-      stream: debtRepository.watchDebtById(id),
+      stream: _debtStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
@@ -274,19 +296,13 @@ class DebtDetailPage extends StatelessWidget {
 
     await debtsCubit.archiveDebt(debt);
     if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(context.l10n.debtDetailArchivedMsg),
-        action: SnackBarAction(
-          key: AppTestKeys.snackbarUndo,
-          label: context.l10n.commonUndo,
-          onPressed: () {
-            debtsCubit.updateDebt(
-              debt.copyWith(updatedAt: DateTime.now().toUtc()),
-            );
-          },
-        ),
-      ),
+    _showUndoSnackBar(
+      messenger: ScaffoldMessenger.of(context),
+      message: context.l10n.debtDetailArchivedMsg,
+      undoLabel: context.l10n.commonUndo,
+      onUndo: () {
+        debtsCubit.updateDebt(debt.copyWith(updatedAt: DateTime.now().toUtc()));
+      },
     );
   }
 
@@ -310,16 +326,44 @@ class DebtDetailPage extends StatelessWidget {
     if (!confirmed || !context.mounted) return;
 
     final messenger = ScaffoldMessenger.of(context);
+    final message = context.l10n.debtDetailDeletedMsg;
+    final undoLabel = context.l10n.commonUndo;
     await debtsCubit.deleteDebt(debt);
     if (!context.mounted) return;
     context.go(AppRoutes.debts);
+    _showUndoSnackBar(
+      messenger: messenger,
+      message: message,
+      undoLabel: undoLabel,
+      onUndo: () => debtsCubit.restoreDebt(debt),
+    );
+  }
+
+  void _showUndoSnackBar({
+    required String message,
+    required String undoLabel,
+    required VoidCallback onUndo,
+    required ScaffoldMessengerState messenger,
+  }) {
+    messenger.hideCurrentSnackBar();
     messenger.showSnackBar(
       SnackBar(
-        content: Text(context.l10n.debtDetailDeletedMsg),
-        action: SnackBarAction(
-          key: AppTestKeys.snackbarUndo,
-          label: context.l10n.commonUndo,
-          onPressed: () => debtsCubit.restoreDebt(debt),
+        duration: const Duration(seconds: 6),
+        content: Row(
+          children: [
+            Expanded(child: Text(message)),
+            TextButton(
+              key: AppTestKeys.snackbarUndo,
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.mdInversePrimary,
+              ),
+              onPressed: () {
+                messenger.hideCurrentSnackBar();
+                onUndo();
+              },
+              child: Text(undoLabel),
+            ),
+          ],
         ),
       ),
     );

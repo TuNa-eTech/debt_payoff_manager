@@ -384,7 +384,7 @@ class UserSettings extends Table {
 
 - Chỉ 1 row duy nhất với `id = 'singleton'`
 - `trustLevel >= 1` → `firebaseUid` phải NOT NULL
-- `trustLevel == 2` → `firebaseUid` NOT NULL AND từ email provider (không anonymous)
+- `trustLevel == 2` → `firebaseUid` NOT NULL AND from authenticated provider (Google/Apple)
 
 ---
 

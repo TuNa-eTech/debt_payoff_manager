@@ -69,6 +69,22 @@
   "@paymentTypeLumpSumLabel": {
     "description": "Label for a lump-sum payment type."
   },
+  "debtStatusActive": "Đang trả",
+  "@debtStatusActive": {
+    "description": "Localized debt status label."
+  },
+  "debtStatusPaidOff": "Đã trả xong",
+  "@debtStatusPaidOff": {
+    "description": "Localized debt status label."
+  },
+  "debtStatusArchived": "Đã lưu trữ",
+  "@debtStatusArchived": {
+    "description": "Localized debt status label."
+  },
+  "debtStatusPaused": "Tạm dừng",
+  "@debtStatusPaused": {
+    "description": "Localized debt status label."
+  },
   "homeCurrentBalanceTitle": "Tổng dư nợ hiện tại",
   "@homeCurrentBalanceTitle": {
     "description": "Title on the home hero card for the current outstanding balance."
@@ -248,6 +264,120 @@
   "@monthlyActionNextActionPrimary": {
     "description": "Primary CTA on the next-best-action card."
   },
+  "monthlyActionDoneProofTitle": "Tháng này đã xong",
+  "@monthlyActionDoneProofTitle": {
+    "description": "Title for the all-done proof dashboard."
+  },
+  "monthlyActionDoneProofSubtitle": "Đã log {amount} trong tháng này.",
+  "@monthlyActionDoneProofSubtitle": {
+    "description": "Subtitle for the all-done proof dashboard.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionDoneProofSingleRemaining": "{debtName} còn lại {balance}.",
+  "@monthlyActionDoneProofSingleRemaining": {
+    "description": "All-done subtitle when only one debt is tracked and still has balance.",
+    "placeholders": {
+      "debtName": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionDoneProofSinglePaidOff": "{debtName} đã trả xong.",
+  "@monthlyActionDoneProofSinglePaidOff": {
+    "description": "All-done subtitle when the only tracked debt is paid off.",
+    "placeholders": {
+      "debtName": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionStatLogged": "Đã log",
+  "@monthlyActionStatLogged": {
+    "description": "Label for total logged payments this month."
+  },
+  "monthlyActionStatRemaining": "Còn lại",
+  "@monthlyActionStatRemaining": {
+    "description": "Label for remaining debt balance."
+  },
+  "monthlyActionStatLatestLogged": "Gần nhất",
+  "@monthlyActionStatLatestLogged": {
+    "description": "Label for latest logged payment date."
+  },
+  "monthlyActionNoLoggedDate": "Chưa có",
+  "@monthlyActionNoLoggedDate": {
+    "description": "Fallback when there is no logged payment date."
+  },
+  "monthlyActionViewHistory": "Xem lịch sử",
+  "@monthlyActionViewHistory": {
+    "description": "CTA to view payment history."
+  },
+  "monthlyActionLogAnother": "Log thêm",
+  "@monthlyActionLogAnother": {
+    "description": "CTA to log another payment."
+  },
+  "monthlyActionViewProgress": "Xem tiến độ",
+  "@monthlyActionViewProgress": {
+    "description": "CTA to view payoff progress."
+  },
+  "monthlyActionAddAnotherDebt": "Thêm khoản nợ khác",
+  "@monthlyActionAddAnotherDebt": {
+    "description": "CTA to add another debt after payoff."
+  },
+  "monthlyActionSingleDebtTitle": "Khoản nợ này",
+  "@monthlyActionSingleDebtTitle": {
+    "description": "Title for a compact single-debt status card."
+  },
+  "monthlyActionSingleDebtPaidOffTitle": "Khoản nợ này đã trả xong",
+  "@monthlyActionSingleDebtPaidOffTitle": {
+    "description": "Title for a compact single-debt payoff card."
+  },
+  "monthlyActionSingleDebtRemainingLabel": "Số dư còn lại",
+  "@monthlyActionSingleDebtRemainingLabel": {
+    "description": "Label for remaining balance on the single-debt card."
+  },
+  "monthlyActionSingleDebtDueDateLabel": "Ngày due",
+  "@monthlyActionSingleDebtDueDateLabel": {
+    "description": "Label for due date on the single-debt card."
+  },
+  "monthlyActionSingleDebtStatusLabel": "Trạng thái",
+  "@monthlyActionSingleDebtStatusLabel": {
+    "description": "Label for status on the single-debt card."
+  },
+  "monthlyActionCompletedChecklistTitle": "Đã hoàn thành {completed}/{total}",
+  "@monthlyActionCompletedChecklistTitle": {
+    "description": "Collapsed checklist header after all monthly actions are complete.",
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "monthlyActionLoggedProof": "Đã log {amount} ngày {date}",
+  "@monthlyActionLoggedProof": {
+    "description": "Proof line for a completed monthly action item.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionNextPay": "Cần xử lý tiếp",
+  "@monthlyActionNextPay": {
+    "description": "Small label on the first monthly action card."
+  },
   "monthlyActionRequiredTotal": "Cần trả {amount}",
   "@monthlyActionRequiredTotal": {
     "description": "Subtitle on a required monthly-action debt card.",
@@ -286,6 +416,23 @@
   "monthlyActionOptionalHelper": "Khoản này giúp bạn rút ngắn thời gian hết nợ.",
   "@monthlyActionOptionalHelper": {
     "description": "Helper text for an optional extra payment item."
+  },
+  "monthlyActionMinimumSubtitle": "Khoản bắt buộc của debt này.",
+  "@monthlyActionMinimumSubtitle": {
+    "description": "Short helper text for a minimum-payment monthly action."
+  },
+  "monthlyActionExtraSubtitle": "Khoản trả thêm được gợi ý để hết nợ sớm hơn.",
+  "@monthlyActionExtraSubtitle": {
+    "description": "Short helper text for an extra-payment monthly action."
+  },
+  "monthlyActionExtraPrioritySubtitle": "Ưu tiên #{rank} để rút ngắn thời gian hết nợ.",
+  "@monthlyActionExtraPrioritySubtitle": {
+    "description": "Short helper text for a prioritized extra-payment monthly action.",
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
   },
   "monthlyActionOverdueChip": "Quá hạn",
   "@monthlyActionOverdueChip": {
@@ -328,6 +475,14 @@
   "monthlyActionConfirmSubtitle": "Khoản này sẽ được lưu vào lịch sử và cập nhật lại kế hoạch trả nợ của bạn.",
   "@monthlyActionConfirmSubtitle": {
     "description": "Subtitle of the monthly action confirmation bottom sheet."
+  },
+  "monthlyActionConfirmPrimary": "Xác nhận đã thanh toán",
+  "@monthlyActionConfirmPrimary": {
+    "description": "Primary CTA in the monthly action confirmation sheet."
+  },
+  "monthlyActionLogDifferent": "Log payment khác",
+  "@monthlyActionLogDifferent": {
+    "description": "Secondary CTA in the monthly action confirmation sheet for custom payment details."
   },
   "monthlyActionInfoDebt": "Khoản nợ",
   "@monthlyActionInfoDebt": {
@@ -868,7 +1023,7 @@
   "@settingsZipLabel": {
     "description": "Short trailing label for ZIP-based data actions."
   },
-  "syncBackupBody": "Hiện tại app của bạn đang ở chế độ local-only. Bạn vẫn có đầy đủ export, local backup và restore mà không cần tài khoản.",
+  "syncBackupBody": "Đăng nhập để sao lưu thiết bị này vào cloud mirror riêng của bạn. Local export, local backup và restore vẫn luôn khả dụng.",
   "@syncBackupBody": {
     "description": "Body copy on the sync backup page."
   },
@@ -896,7 +1051,7 @@
   "@syncBackupFreeTitle": {
     "description": "Title for the free capability card on the sync backup page."
   },
-  "syncBackupHeadline": "Sao lưu đám mây là bước tiếp theo, không phải điều kiện để dùng app.",
+  "syncBackupHeadline": "Bật sao lưu đám mây",
   "@syncBackupHeadline": {
     "description": "Headline on the sync backup page."
   },
@@ -923,6 +1078,70 @@
   "syncBackupTrustMessage": "Cam kết trust không đổi: dữ liệu khởi đầu nằm trên thiết bị, không bank linking, và export local vẫn luôn mở ngay cả khi Premium xuất hiện.",
   "@syncBackupTrustMessage": {
     "description": "Trust reassurance card copy on the sync backup page."
+  },
+  "syncBackupDisable": "Tắt sao lưu đám mây",
+  "@syncBackupDisable": {
+    "description": "Button label for disabling cloud backup."
+  },
+  "syncBackupDisableConfirm": "Xóa bản sao cloud",
+  "@syncBackupDisableConfirm": {
+    "description": "Confirmation button for disabling cloud backup and deleting cloud data."
+  },
+  "syncBackupDisableDialogBody": "Thao tác này dừng sync, xóa cloud mirror và giữ nguyên toàn bộ dữ liệu trên thiết bị này.",
+  "@syncBackupDisableDialogBody": {
+    "description": "Body copy for the disable cloud backup confirmation dialog."
+  },
+  "syncBackupDisableDialogTitle": "Tắt sao lưu đám mây?",
+  "@syncBackupDisableDialogTitle": {
+    "description": "Title for the disable cloud backup confirmation dialog."
+  },
+  "syncBackupDisableSuccess": "Đã tắt sao lưu đám mây. Dữ liệu local không thay đổi.",
+  "@syncBackupDisableSuccess": {
+    "description": "Snackbar shown after cloud backup is disabled."
+  },
+  "syncBackupEnableSuccess": "Đã bật sao lưu đám mây.",
+  "@syncBackupEnableSuccess": {
+    "description": "Snackbar shown after cloud backup is enabled."
+  },
+  "syncBackupEnabledBody": "Thiết bị này đang kết nối với bản sao lưu riêng của bạn. Các thay đổi tiếp tục sync khi app online.",
+  "@syncBackupEnabledBody": {
+    "description": "Body copy on the sync backup page when cloud backup is enabled."
+  },
+  "syncBackupEnabledHeadline": "Sao lưu đám mây đang bật",
+  "@syncBackupEnabledHeadline": {
+    "description": "Headline on the sync backup page when cloud backup is enabled."
+  },
+  "syncBackupLastSynced": "Sync gần nhất",
+  "@syncBackupLastSynced": {
+    "description": "Label for the last synced timestamp."
+  },
+  "syncBackupLastSyncedPending": "Đang chờ lần sync đầu tiên",
+  "@syncBackupLastSyncedPending": {
+    "description": "Status when no sync timestamp is available yet."
+  },
+  "syncBackupSignedInAs": "Đăng nhập bằng",
+  "@syncBackupSignedInAs": {
+    "description": "Label for the signed-in cloud backup account."
+  },
+  "syncBackupSignInApple": "Tiếp tục với Apple",
+  "@syncBackupSignInApple": {
+    "description": "Button label for Apple sign-in."
+  },
+  "syncBackupSignInGoogle": "Tiếp tục với Google",
+  "@syncBackupSignInGoogle": {
+    "description": "Button label for Google sign-in."
+  },
+  "syncBackupStatus": "Trạng thái",
+  "@syncBackupStatus": {
+    "description": "Label for cloud backup status."
+  },
+  "syncBackupStatusEnabled": "Đã bật",
+  "@syncBackupStatusEnabled": {
+    "description": "Enabled cloud backup status value."
+  },
+  "syncBackupSyncing": "Đang sync",
+  "@syncBackupSyncing": {
+    "description": "Syncing status value."
   },
   "syncBackupViewPricing": "Xem Free vs Premium",
   "@syncBackupViewPricing": {

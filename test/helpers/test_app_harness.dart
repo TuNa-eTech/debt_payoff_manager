@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -30,6 +32,7 @@ import 'package:debt_payoff_manager/features/debts/cubit/debts_cubit.dart';
 import 'package:debt_payoff_manager/features/onboarding/cubit/onboarding_cubit.dart';
 import 'package:debt_payoff_manager/features/onboarding/services/onboarding_analytics.dart';
 import 'package:debt_payoff_manager/l10n/app_localizations.dart';
+import 'package:debt_payoff_manager/sync/cloud_backup_service.dart';
 
 class TestAppHarness {
   TestAppHarness._({
@@ -88,6 +91,7 @@ class TestAppHarness {
     NotificationPermissionPromptTracker? notificationPermissionPromptTracker,
     NotificationService? notificationService,
     ShareLauncher? shareLauncher,
+    CloudBackupService? cloudBackupService,
     String seedLocaleCode = AppLocale.fallbackLocaleCode,
     bool closeDbOnDispose = true,
   }) async {
@@ -106,6 +110,7 @@ class TestAppHarness {
           _InMemoryNotificationPermissionPromptTracker(),
       notificationService: notificationService,
       shareLauncher: shareLauncher,
+      cloudBackupService: cloudBackupService ?? _NoopCloudBackupService(),
       seedLocaleCode: seedLocaleCode,
     );
 
@@ -218,6 +223,28 @@ class TestAppHarness {
       },
     );
   }
+}
+
+class _NoopCloudBackupService implements CloudBackupService {
+  final _controller = StreamController<CloudBackupRuntimeState>.broadcast();
+
+  @override
+  CloudBackupRuntimeState get currentState => const CloudBackupRuntimeState();
+
+  @override
+  Future<void> disableAndDeleteCloudBackup() async {}
+
+  @override
+  Future<void> enableWithApple() async {}
+
+  @override
+  Future<void> enableWithGoogle() async {}
+
+  @override
+  Future<void> refresh() async {}
+
+  @override
+  Stream<CloudBackupRuntimeState> watchRuntimeState() => _controller.stream;
 }
 
 class _TestAppScope {

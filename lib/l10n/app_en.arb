@@ -69,6 +69,22 @@
   "@paymentTypeLumpSumLabel": {
     "description": "Label for a lump-sum payment type."
   },
+  "debtStatusActive": "Active",
+  "@debtStatusActive": {
+    "description": "Localized debt status label."
+  },
+  "debtStatusPaidOff": "Paid off",
+  "@debtStatusPaidOff": {
+    "description": "Localized debt status label."
+  },
+  "debtStatusArchived": "Archived",
+  "@debtStatusArchived": {
+    "description": "Localized debt status label."
+  },
+  "debtStatusPaused": "Paused",
+  "@debtStatusPaused": {
+    "description": "Localized debt status label."
+  },
   "homeCurrentBalanceTitle": "Current total balance",
   "@homeCurrentBalanceTitle": {
     "description": "Title on the home hero card for the current outstanding balance."
@@ -248,6 +264,120 @@
   "@monthlyActionNextActionPrimary": {
     "description": "Primary CTA on the next-best-action card."
   },
+  "monthlyActionDoneProofTitle": "This month is done",
+  "@monthlyActionDoneProofTitle": {
+    "description": "Title for the all-done proof dashboard."
+  },
+  "monthlyActionDoneProofSubtitle": "Logged {amount} this month.",
+  "@monthlyActionDoneProofSubtitle": {
+    "description": "Subtitle for the all-done proof dashboard.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionDoneProofSingleRemaining": "{debtName} has {balance} remaining.",
+  "@monthlyActionDoneProofSingleRemaining": {
+    "description": "All-done subtitle when only one debt is tracked and still has balance.",
+    "placeholders": {
+      "debtName": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionDoneProofSinglePaidOff": "{debtName} is paid off.",
+  "@monthlyActionDoneProofSinglePaidOff": {
+    "description": "All-done subtitle when the only tracked debt is paid off.",
+    "placeholders": {
+      "debtName": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionStatLogged": "Logged",
+  "@monthlyActionStatLogged": {
+    "description": "Label for total logged payments this month."
+  },
+  "monthlyActionStatRemaining": "Remaining",
+  "@monthlyActionStatRemaining": {
+    "description": "Label for remaining debt balance."
+  },
+  "monthlyActionStatLatestLogged": "Latest",
+  "@monthlyActionStatLatestLogged": {
+    "description": "Label for latest logged payment date."
+  },
+  "monthlyActionNoLoggedDate": "None",
+  "@monthlyActionNoLoggedDate": {
+    "description": "Fallback when there is no logged payment date."
+  },
+  "monthlyActionViewHistory": "View history",
+  "@monthlyActionViewHistory": {
+    "description": "CTA to view payment history."
+  },
+  "monthlyActionLogAnother": "Log another",
+  "@monthlyActionLogAnother": {
+    "description": "CTA to log another payment."
+  },
+  "monthlyActionViewProgress": "View progress",
+  "@monthlyActionViewProgress": {
+    "description": "CTA to view payoff progress."
+  },
+  "monthlyActionAddAnotherDebt": "Add another debt",
+  "@monthlyActionAddAnotherDebt": {
+    "description": "CTA to add another debt after payoff."
+  },
+  "monthlyActionSingleDebtTitle": "This debt",
+  "@monthlyActionSingleDebtTitle": {
+    "description": "Title for a compact single-debt status card."
+  },
+  "monthlyActionSingleDebtPaidOffTitle": "This debt is paid off",
+  "@monthlyActionSingleDebtPaidOffTitle": {
+    "description": "Title for a compact single-debt payoff card."
+  },
+  "monthlyActionSingleDebtRemainingLabel": "Remaining balance",
+  "@monthlyActionSingleDebtRemainingLabel": {
+    "description": "Label for remaining balance on the single-debt card."
+  },
+  "monthlyActionSingleDebtDueDateLabel": "Due date",
+  "@monthlyActionSingleDebtDueDateLabel": {
+    "description": "Label for due date on the single-debt card."
+  },
+  "monthlyActionSingleDebtStatusLabel": "Status",
+  "@monthlyActionSingleDebtStatusLabel": {
+    "description": "Label for status on the single-debt card."
+  },
+  "monthlyActionCompletedChecklistTitle": "Completed {completed}/{total}",
+  "@monthlyActionCompletedChecklistTitle": {
+    "description": "Collapsed checklist header after all monthly actions are complete.",
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "monthlyActionLoggedProof": "Logged {amount} on {date}",
+  "@monthlyActionLoggedProof": {
+    "description": "Proof line for a completed monthly action item.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "monthlyActionNextPay": "Next to pay",
+  "@monthlyActionNextPay": {
+    "description": "Small label on the first monthly action card."
+  },
   "monthlyActionRequiredTotal": "Need to pay {amount}",
   "@monthlyActionRequiredTotal": {
     "description": "Subtitle on a required monthly-action debt card.",
@@ -286,6 +416,23 @@
   "monthlyActionOptionalHelper": "This payment helps shorten your payoff timeline.",
   "@monthlyActionOptionalHelper": {
     "description": "Helper text for an optional extra payment item."
+  },
+  "monthlyActionMinimumSubtitle": "Required payment for this debt.",
+  "@monthlyActionMinimumSubtitle": {
+    "description": "Short helper text for a minimum-payment monthly action."
+  },
+  "monthlyActionExtraSubtitle": "Suggested extra payment to finish sooner.",
+  "@monthlyActionExtraSubtitle": {
+    "description": "Short helper text for an extra-payment monthly action."
+  },
+  "monthlyActionExtraPrioritySubtitle": "Priority #{rank} extra payment to finish sooner.",
+  "@monthlyActionExtraPrioritySubtitle": {
+    "description": "Short helper text for a prioritized extra-payment monthly action.",
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
   },
   "monthlyActionOverdueChip": "Overdue",
   "@monthlyActionOverdueChip": {
@@ -328,6 +475,14 @@
   "monthlyActionConfirmSubtitle": "This will be added to your history and will update your payoff plan.",
   "@monthlyActionConfirmSubtitle": {
     "description": "Subtitle of the monthly action confirmation bottom sheet."
+  },
+  "monthlyActionConfirmPrimary": "Confirm paid",
+  "@monthlyActionConfirmPrimary": {
+    "description": "Primary CTA in the monthly action confirmation sheet."
+  },
+  "monthlyActionLogDifferent": "Log a different payment",
+  "@monthlyActionLogDifferent": {
+    "description": "Secondary CTA in the monthly action confirmation sheet for custom payment details."
   },
   "monthlyActionInfoDebt": "Debt",
   "@monthlyActionInfoDebt": {
@@ -868,7 +1023,7 @@
   "@settingsZipLabel": {
     "description": "Short trailing label for ZIP-based data actions."
   },
-  "syncBackupBody": "Your app is currently running in local-only mode. You still have full export, local backup, and restore without an account.",
+  "syncBackupBody": "Sign in to back up this device to your private cloud mirror. Local export, local backup, and restore stay available.",
   "@syncBackupBody": {
     "description": "Body copy on the sync backup page."
   },
@@ -896,7 +1051,7 @@
   "@syncBackupFreeTitle": {
     "description": "Title for the free capability card on the sync backup page."
   },
-  "syncBackupHeadline": "Cloud backup is the next step, not a requirement to use the app.",
+  "syncBackupHeadline": "Turn on cloud backup",
   "@syncBackupHeadline": {
     "description": "Headline on the sync backup page."
   },
@@ -923,6 +1078,70 @@
   "syncBackupTrustMessage": "Our trust commitment does not change: data starts on-device, no bank linking, and local export stays open even when Premium arrives.",
   "@syncBackupTrustMessage": {
     "description": "Trust reassurance card copy on the sync backup page."
+  },
+  "syncBackupDisable": "Disable cloud backup",
+  "@syncBackupDisable": {
+    "description": "Button label for disabling cloud backup."
+  },
+  "syncBackupDisableConfirm": "Delete cloud backup",
+  "@syncBackupDisableConfirm": {
+    "description": "Confirmation button for disabling cloud backup and deleting cloud data."
+  },
+  "syncBackupDisableDialogBody": "This stops sync, deletes your cloud mirror, and keeps all data on this device.",
+  "@syncBackupDisableDialogBody": {
+    "description": "Body copy for the disable cloud backup confirmation dialog."
+  },
+  "syncBackupDisableDialogTitle": "Disable cloud backup?",
+  "@syncBackupDisableDialogTitle": {
+    "description": "Title for the disable cloud backup confirmation dialog."
+  },
+  "syncBackupDisableSuccess": "Cloud backup is disabled. Your local data is unchanged.",
+  "@syncBackupDisableSuccess": {
+    "description": "Snackbar shown after cloud backup is disabled."
+  },
+  "syncBackupEnableSuccess": "Cloud backup is enabled.",
+  "@syncBackupEnableSuccess": {
+    "description": "Snackbar shown after cloud backup is enabled."
+  },
+  "syncBackupEnabledBody": "This device is connected to your private backup. Changes continue to sync when the app is online.",
+  "@syncBackupEnabledBody": {
+    "description": "Body copy on the sync backup page when cloud backup is enabled."
+  },
+  "syncBackupEnabledHeadline": "Cloud backup is on",
+  "@syncBackupEnabledHeadline": {
+    "description": "Headline on the sync backup page when cloud backup is enabled."
+  },
+  "syncBackupLastSynced": "Last synced",
+  "@syncBackupLastSynced": {
+    "description": "Label for the last synced timestamp."
+  },
+  "syncBackupLastSyncedPending": "Waiting for first sync",
+  "@syncBackupLastSyncedPending": {
+    "description": "Status when no sync timestamp is available yet."
+  },
+  "syncBackupSignedInAs": "Signed in as",
+  "@syncBackupSignedInAs": {
+    "description": "Label for the signed-in cloud backup account."
+  },
+  "syncBackupSignInApple": "Continue with Apple",
+  "@syncBackupSignInApple": {
+    "description": "Button label for Apple sign-in."
+  },
+  "syncBackupSignInGoogle": "Continue with Google",
+  "@syncBackupSignInGoogle": {
+    "description": "Button label for Google sign-in."
+  },
+  "syncBackupStatus": "Status",
+  "@syncBackupStatus": {
+    "description": "Label for cloud backup status."
+  },
+  "syncBackupStatusEnabled": "Enabled",
+  "@syncBackupStatusEnabled": {
+    "description": "Enabled cloud backup status value."
+  },
+  "syncBackupSyncing": "Syncing",
+  "@syncBackupSyncing": {
+    "description": "Syncing status value."
   },
   "syncBackupViewPricing": "View Free vs Premium",
   "@syncBackupViewPricing": {

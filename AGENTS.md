@@ -1,13 +1,13 @@
 <claude-mem-context>
 # Memory Context
 
-# [Debt-Payoff-Manager] recent context, 2026-04-23 5:59pm GMT+7
+# [Debt-Payoff-Manager] recent context, 2026-04-25 10:13am GMT+7
 
 Legend: 🎯session 🔴bugfix 🟣feature 🔄refactor ✅change 🔵discovery ⚖️decision 🚨security_alert 🔐security_note
 Format: ID TIME TYPE TITLE
 Fetch details: get_observations([IDs]) | Search: mem-search skill
 
-Stats: 22 obs (8,641t read) | 1,118,057t work | 99% savings
+Stats: 36 obs (14,904t read) | 1,283,693t work | 99% savings
 
 ### Apr 18, 2026
 1 10:33a 🔵 Debt-Payoff-Manager Project Documentation Structure
@@ -32,8 +32,23 @@ Stats: 22 obs (8,641t read) | 1,118,057t work | 99% savings
 42 " 🔵 Flutter Analyzer: 51 Issues — 4 Recursive Getters (Errors), 46 Deprecation Warnings, 1 Unused Import
 43 " 🔵 Phase 3 Wiring Gap: All UI Forms Save Without Persisting, All Feature Fields Ignored
 44 " 🔵 DebtRepositoryImpl Full CRUD + Streams Confirmed Working with 9 Tests
+### Apr 25, 2026
+70 8:48a 🔵 LogPaymentPage Keyboard UX Bug: Double-Shift on Save Button
+71 8:49a ⚖️ Log Payment Screen: CTA "Save payment" to Hide Under Keyboard
+72 8:51a 🔵 GitNexus Cannot Parse Dart Files in Debt-Payoff-Manager
+73 " 🔴 Log Payment Page: Save Button Hidden When Keyboard Is Visible
+74 8:52a 🟣 Integration Test: Log Payment Keyboard Visibility Hides Submit Button
+75 " 🔵 Dart MCP Addition Request: Existing Config State Audited
+76 " ✅ CLAUDE.md Expanded with GitNexus Workflow Sections
+77 8:53a 🔵 Dart MCP Config Addition: Pre-flight State Confirmed
+78 " 🟣 Dart MCP Server Added to Global Codex Config
+79 8:55a 🔵 Debt-Payoff-Manager Phase Progress Audit — April 25, 2026
+80 8:56a 🔵 Debt-Payoff-Manager Test Suite: 215+ Tests Passing Across All Layers
+81 " 🔵 Full Test Suite Exits Clean: 225 Tests All Passed
+82 " 🔵 Active Uncommitted Changes: log_payment_page and Phase 4 E3 Integration Test
+83 " 🔵 Debt-Payoff-Manager Project Phase Status: Phases 0–6 Complete, Phase 7–9 Not Started/Partial
 
-Access 1118k tokens of past work via get_observations([IDs]) or mem-search skill.
+Access 1284k tokens of past work via get_observations([IDs]) or mem-search skill.
 </claude-mem-context>
 
 <!-- gitnexus:start -->

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../data/local/database.dart';
@@ -21,6 +23,14 @@ import '../../features/debts/cubit/debts_cubit.dart';
 import '../../features/monthly_action/cubit/monthly_action_cubit.dart';
 import '../../features/onboarding/services/onboarding_analytics.dart';
 import '../../features/plan/cubit/plan_timeline_cubit.dart';
+import '../../sync/cloud_backup_remote_store.dart';
+import '../../sync/cloud_backup_service.dart';
+import '../../sync/firebase_sync_config.dart';
+import '../../sync/firebase_sync_runtime.dart';
+import '../../sync/pull_listener.dart';
+import '../../sync/push_queue.dart';
+import '../../sync/sync_auth_service.dart';
+import '../../sync/sync_engine.dart';
 import '../services/app_analytics.dart';
 import '../services/backup_file_picker.dart';
 import '../services/data_management_service.dart';
@@ -49,6 +59,7 @@ void configureDependencies({
   NotificationPermissionPromptTracker? notificationPermissionPromptTracker,
   NotificationService? notificationService,
   ShareLauncher? shareLauncher,
+  CloudBackupService? cloudBackupService,
   String? seedLocaleCode,
 }) {
   // Database — singleton, opened once
@@ -124,6 +135,74 @@ void configureDependencies({
   );
   getIt.registerLazySingleton<ShareLauncher>(
     () => shareLauncher ?? SharePlusLauncher(),
+  );
+
+  // Cloud sync runtime is registered lazily and only used after user opt-in.
+  getIt.registerLazySingleton<FirebaseSyncConfig>(
+    FirebaseSyncConfig.fromEnvironment,
+  );
+  getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
+  getIt.registerLazySingleton<FirebaseFirestore>(
+    () => FirebaseFirestore.instance,
+  );
+  getIt.registerLazySingleton<FirebaseSyncInitializer>(
+    () => DefaultFirebaseSyncInitializer(
+      config: getIt<FirebaseSyncConfig>(),
+      auth: getIt<FirebaseAuth>(),
+      firestore: getIt<FirebaseFirestore>(),
+    ),
+  );
+  getIt.registerLazySingleton<SyncAuthService>(
+    () => FirebaseSyncAuthService(
+      auth: getIt<FirebaseAuth>(),
+      initializer: getIt<FirebaseSyncInitializer>(),
+    ),
+  );
+  getIt.registerLazySingleton<SyncRemoteWriter>(
+    () => CloudFirestoreSyncRemoteWriter(firestore: getIt<FirebaseFirestore>()),
+  );
+  getIt.registerLazySingleton<SyncPushQueue>(
+    () => DriftSyncPushQueue(
+      db: getIt<AppDatabase>(),
+      syncStateStore: getIt<SyncStateStore>(),
+      deviceId: const String.fromEnvironment(
+        'SYNC_DEVICE_ID',
+        defaultValue: 'local-device',
+      ),
+    ),
+  );
+  getIt.registerLazySingleton<SyncPullListener>(
+    () => CloudFirestoreSyncPullListener(firestore: getIt<FirebaseFirestore>()),
+  );
+  getIt.registerLazySingleton<SyncPullApplier>(
+    () => DriftSyncPullApplier(
+      db: getIt<AppDatabase>(),
+      syncStateStore: getIt<SyncStateStore>(),
+    ),
+  );
+  getIt.registerLazySingleton<SyncEngine>(
+    () => SyncEngine(
+      pushQueue: getIt<SyncPushQueue>(),
+      pullListener: getIt<SyncPullListener>(),
+      remoteWriter: getIt<SyncRemoteWriter>(),
+      pullApplier: getIt<SyncPullApplier>(),
+    ),
+  );
+  getIt.registerLazySingleton<CloudBackupRemoteStore>(
+    () => FirestoreCloudBackupRemoteStore(
+      firestore: getIt<FirebaseFirestore>(),
+      initializer: getIt<FirebaseSyncInitializer>(),
+    ),
+  );
+  getIt.registerLazySingleton<CloudBackupService>(
+    () =>
+        cloudBackupService ??
+        CloudBackupCoordinator(
+          settingsRepository: getIt<SettingsRepository>(),
+          authService: getIt<SyncAuthService>(),
+          syncEngine: getIt<SyncEngine>(),
+          remoteStore: getIt<CloudBackupRemoteStore>(),
+        ),
   );
 
   // Public repository contracts

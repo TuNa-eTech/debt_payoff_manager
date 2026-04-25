@@ -94,8 +94,9 @@ Legend:
 - **Phase 6 / E5** nên được coi là **complete cho shipped v1.0 scope**:
   - Repo có i18n runtime, analytics bootstrap, app icon assets/config, smoke coverage, và ship-hardening đủ mạnh để không còn phù hợp với nhãn "đang bắt đầu".
   - Các gate như App Store approval, beta retention, và device QA matrix là repo-external evidence; không dùng làm blocker để mô tả codebase hiện tại là chưa hoàn tất.
-- **Phase 7** hiện **chưa bắt đầu ở app layer**:
-  - Package Firebase có mặt để bootstrap app/analytics, nhưng chưa có Firebase Auth flow, Firestore sync service, security rules, conflict handling, hay upgrade/downgrade trust flow chạy thật trong app.
+- **Phase 7** hiện **đã bắt đầu ở foundation layer, chưa nối app layer**:
+  - Đã có `firebase.json`, `firestore.rules`, Firestore rules emulator tests, và `lib/sync/` architecture skeleton cho paths, mirror document metadata, push/pull contracts, sync engine lifecycle, và LWW conflict resolver.
+  - Package Firebase có mặt để bootstrap app/analytics, nhưng chưa có Firebase Auth flow, Firestore runtime adapter, Drift → Firestore push/pull implementation, hay upgrade/downgrade trust flow chạy thật trong app.
 - **Phase 8** ở trạng thái **partial foundations only**:
   - Repo đã có `milestone` entities/repository/service, milestone notifications, và progress dashboard cơ bản.
   - Chưa có scenario management/comparison UI, chưa có IAP gating, chưa có rate-history runtime end-to-end, và chưa có partner-facing premium flow.
@@ -456,7 +457,7 @@ Legend:
 
 ### E6 — Engineering
 
-- [ ] Firebase Auth integration (anonymous + email)
+- [x] Firebase Auth integration (Google + Apple Sign-In)
 - [ ] Firestore schema matching Drift 1-1 (ADR-012)
 - [ ] Firestore security rules (per-user subcollection)
 - [ ] Sync service: push/pull với debounce + batch (ADR-010, 019)
@@ -464,9 +465,22 @@ Legend:
 - [ ] Sync state UI: "Last synced X seconds ago", "Syncing...", offline indicator
 - [ ] Level 0 → Level 1 upgrade flow (non-destructive)
 - [ ] Level 1 → Level 0 downgrade (delete cloud data với confirmation)
-- [ ] Anonymous → Email linking (ADR-013)
+
 - [ ] Firebase emulator integration test suite
 - [ ] Multi-device test matrix: 2 iOS, 2 Android, cross-platform
+
+### Foundation progress (April 25, 2026)
+
+- [x] `firebase.json` configured for Firestore emulator and rules file.
+- [x] `firestore.rules` Level 1 baseline: signed-in owner-only access for user-owned mirror data, payload validation for debts/payments/plans/settings/sync metadata, and Phase 9 `sharedPlans` access disabled until partner sharing starts.
+- [x] Firestore rules tests under `test/firestore-rules/` covering owner access, unauthenticated rejection, cross-user denial, invalid debt rejection, payment split validation, private settings/sync metadata, shared-plan denial, and downgrade delete.
+- [x] `lib/sync/` architecture skeleton: Firebase emulator config, Firestore paths/mirror metadata, push queue contract, pull listener contract, sync engine lifecycle, and LWW conflict resolver.
+- [x] Dart unit tests for sync path/model helpers and LWW conflict decisions.
+- [ ] Runtime Firebase Auth adapter end-to-end verification.
+- [ ] Drift row → Firestore mirror serializers for all synced tables.
+- [ ] Push queue implementation using `SyncStateStore`.
+- [ ] Pull listener implementation applying Firestore changes back into Drift.
+- [ ] Settings upgrade/downgrade UI flow.
 
 ### Exit gate (Phase 7)
 - [ ] User có thể backup cross-device successful

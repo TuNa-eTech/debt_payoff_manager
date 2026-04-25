@@ -59,6 +59,10 @@ class MonthlyActionService {
           completedCount: 0,
           totalCount: 0,
           overdueCount: 0,
+          loggedTotalCents: 0,
+          remainingBalanceCents: 0,
+          trackedDebtCount: 0,
+          paidOffDebtCount: 0,
         ),
         hasTrackedDebts: trackedDebts.isNotEmpty,
       );
@@ -76,10 +80,13 @@ class MonthlyActionService {
       effectiveDate.yearMonth,
       scenarioId: scenarioId,
     );
+    final completedMonthPayments = payments
+        .where((payment) => payment.status == PaymentStatus.completed)
+        .toList(growable: false);
     final items = _computeItems(
       debts: trackedDebts,
       plan: plan,
-      completedPayments: payments,
+      completedPayments: completedMonthPayments,
       referenceDate: effectiveDate,
     );
 
@@ -103,6 +110,7 @@ class MonthlyActionService {
         )
         .toList(growable: false);
 
+    final singleDebt = trackedDebts.length == 1 ? trackedDebts.single : null;
     final summary = MonthlyActionSummary(
       totalMinimumCents: items
           .where((item) => item.kind == MonthlyActionKind.minimum)
@@ -114,6 +122,28 @@ class MonthlyActionService {
       completedCount: items.where((item) => item.isCompleted).length,
       totalCount: items.length,
       overdueCount: items.where((item) => item.isOverdue).length,
+      loggedTotalCents: completedMonthPayments.fold<int>(
+        0,
+        (sum, payment) => sum + payment.amount,
+      ),
+      latestLoggedAt: _latestPayment(completedMonthPayments)?.date,
+      remainingBalanceCents: trackedDebts.fold<int>(
+        0,
+        (sum, debt) => sum + max(0, debt.currentBalance),
+      ),
+      trackedDebtCount: trackedDebts.length,
+      paidOffDebtCount: trackedDebts
+          .where(
+            (debt) =>
+                debt.status == DebtStatus.paidOff || debt.currentBalance <= 0,
+          )
+          .length,
+      singleDebtId: singleDebt?.id,
+      singleDebtName: singleDebt?.name,
+      singleDebtDueDate: singleDebt == null
+          ? null
+          : _resolveDueDate(effectiveDate, singleDebt.dueDayOfMonth),
+      singleDebtStatus: singleDebt?.status,
     );
 
     return MonthlyActionSnapshot(
@@ -197,16 +227,14 @@ class MonthlyActionService {
       extraPool -= applied;
     }
 
-    final minimumCompleted = <String>{};
-    final extraCompleted = <String>{};
-    for (final payment in completedPayments.where(
-      (payment) => payment.status == PaymentStatus.completed,
-    )) {
+    final minimumCompleted = <String, Payment>{};
+    final extraCompleted = <String, Payment>{};
+    for (final payment in completedPayments) {
       if (payment.type == PaymentType.minimum) {
-        minimumCompleted.add(payment.debtId);
+        _storeLatestPayment(minimumCompleted, payment);
       } else if (payment.type == PaymentType.extra ||
           payment.type == PaymentType.lumpSum) {
-        extraCompleted.add(payment.debtId);
+        _storeLatestPayment(extraCompleted, payment);
       }
     }
 
@@ -215,6 +243,8 @@ class MonthlyActionService {
       final dueDate = dueDates[debt.id]!;
       final minimumAmount = scheduledMinimums[debt.id] ?? 0;
       final extraAmount = extraAllocations[debt.id] ?? 0;
+      final minimumProofPayment = minimumCompleted[debt.id];
+      final extraProofPayment = extraCompleted[debt.id];
 
       if (minimumAmount > 0) {
         items.add(
@@ -227,18 +257,21 @@ class MonthlyActionService {
             paymentType: PaymentType.minimum,
             amountCents: minimumAmount,
             dueDate: dueDate,
-            subtitle: 'Minimum payment',
-            isCompleted: minimumCompleted.contains(debt.id),
+            subtitle: '',
+            isCompleted: minimumProofPayment != null,
             isOverdue: _isOverdue(
               dueDate: dueDate,
               referenceDate: referenceDate,
-              isCompleted: minimumCompleted.contains(debt.id),
+              isCompleted: minimumProofPayment != null,
             ),
             isUpcoming: _isUpcoming(
               dueDate: dueDate,
               referenceDate: referenceDate,
-              isCompleted: minimumCompleted.contains(debt.id),
+              isCompleted: minimumProofPayment != null,
             ),
+            completionProof: minimumProofPayment == null
+                ? null
+                : _toCompletionProof(minimumProofPayment),
           ),
         );
       }
@@ -257,9 +290,12 @@ class MonthlyActionService {
             paymentType: PaymentType.extra,
             amountCents: extraAmount,
             dueDate: dueDate,
-            subtitle: '${plan.strategy.label} extra allocation',
+            subtitle: '',
             priorityRank: priorityRank == -1 ? null : priorityRank + 1,
-            isCompleted: extraCompleted.contains(debt.id),
+            isCompleted: extraProofPayment != null,
+            completionProof: extraProofPayment == null
+                ? null
+                : _toCompletionProof(extraProofPayment),
           ),
         );
       }
@@ -308,6 +344,45 @@ class MonthlyActionService {
 
   static DateTime _localDay(DateTime value) {
     return DateTime(value.year, value.month, value.day);
+  }
+
+  static void _storeLatestPayment(
+    Map<String, Payment> latestByDebt,
+    Payment payment,
+  ) {
+    final current = latestByDebt[payment.debtId];
+    if (current == null || _isNewerPayment(payment, current)) {
+      latestByDebt[payment.debtId] = payment;
+    }
+  }
+
+  static Payment? _latestPayment(List<Payment> payments) {
+    Payment? latest;
+    for (final payment in payments) {
+      if (latest == null || _isNewerPayment(payment, latest)) {
+        latest = payment;
+      }
+    }
+    return latest;
+  }
+
+  static bool _isNewerPayment(Payment candidate, Payment current) {
+    final dateCompare = candidate.date.compareTo(current.date);
+    if (dateCompare != 0) return dateCompare > 0;
+    final createdCompare = candidate.createdAt.compareTo(current.createdAt);
+    if (createdCompare != 0) return createdCompare > 0;
+    return candidate.id.compareTo(current.id) > 0;
+  }
+
+  static MonthlyActionCompletionProof _toCompletionProof(Payment payment) {
+    return MonthlyActionCompletionProof(
+      paymentId: payment.id,
+      amountCents: payment.amount,
+      date: payment.date,
+      appliedBalanceAfter: payment.appliedBalanceAfter,
+      source: payment.source,
+      type: payment.type,
+    );
   }
 }
 

@@ -41,6 +41,8 @@ class _SettingsPageState extends State<SettingsPage> {
   late final DataManagementService _dataManagementService =
       getIt<DataManagementService>();
   late final ShareLauncher _shareLauncher = getIt<ShareLauncher>();
+  late final _settingsStream = _settingsRepository.watchSettings();
+  late final _planStream = _planRepository.watchCurrentPlan();
 
   _SettingsDataAction? _pendingAction;
 
@@ -51,7 +53,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final l10n = context.l10n;
 
     return StreamBuilder<UserSettings>(
-      stream: _settingsRepository.watchSettings(),
+      stream: _settingsStream,
       builder: (context, settingsSnapshot) {
         final settings = settingsSnapshot.data;
         if (settings == null) {
@@ -61,7 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
         }
 
         return StreamBuilder(
-          stream: _planRepository.watchCurrentPlan(),
+          stream: _planStream,
           builder: (context, planSnapshot) {
             final plan = planSnapshot.data;
 
@@ -194,13 +196,11 @@ class _SettingsPageState extends State<SettingsPage> {
                           key: AppTestKeys.settingsCloudBackup,
                           title: l10n.settingsCloudBackupTitle,
                           subtitle: _trustLevelCopy(settings.trustLevel),
-                          trailingText: l10n.commonComingSoon,
+                          trailingText: _trustLevelLabel(settings.trustLevel),
                           enabled: !_isDataActionPending,
                           onTap: _isDataActionPending
                               ? null
-                              : () => _showComingSoon(
-                                  l10n.settingsCloudBackupTitle,
-                                ),
+                              : () => context.push(AppRoutes.syncBackup),
                         ),
                         _buildDivider(),
                         _buildListTile(
@@ -567,6 +567,19 @@ class _SettingsPageState extends State<SettingsPage> {
       case 0:
       default:
         return l10n.settingsTrustLevelLocalOnlyBody;
+    }
+  }
+
+  String _trustLevelLabel(int trustLevel) {
+    final l10n = context.l10n;
+    switch (trustLevel) {
+      case 1:
+        return l10n.settingsTrustLevelOneLabel;
+      case 2:
+        return l10n.settingsTrustLevelTwoLabel;
+      case 0:
+      default:
+        return l10n.settingsTrustLevelLocalOnlyLabel;
     }
   }
 

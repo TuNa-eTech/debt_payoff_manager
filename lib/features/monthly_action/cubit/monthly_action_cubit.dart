@@ -84,7 +84,7 @@ class MonthlyActionCubit extends Cubit<MonthlyActionState> {
     }
   }
 
-  Future<void> checkOffPayment(MonthlyActionItem item) async {
+  Future<bool> checkOffPayment(MonthlyActionItem item) async {
     final nextSubmitting = {...state.submittingIds, item.id};
     emit(
       state.copyWith(submittingIds: nextSubmitting, clearErrorMessage: true),
@@ -107,12 +107,13 @@ class MonthlyActionCubit extends Cubit<MonthlyActionState> {
           errorMessage: error.toString(),
         ),
       );
-      return;
+      return false;
     }
 
     emit(
       state.copyWith(submittingIds: {...state.submittingIds}..remove(item.id)),
     );
+    return true;
   }
 
   @override

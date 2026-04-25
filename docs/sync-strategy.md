@@ -2,7 +2,7 @@
 
 > Chi tiết kiến trúc đồng bộ giữa local Drift DB và Firestore cloud.
 > **Nguyên tắc nền tảng:** Drift là source of truth, Firestore là sync channel (ADR-003). App offline 100% vẫn full functional.
-> **Reference:** architecture-decisions.md (ADR-003, 006, 009, 010, 011, 012, 013, 019), data-schema.md, feature-spec.md §1.6, §2.4.
+> **Reference:** architecture-decisions.md (ADR-003, 006, 009, 010, 011, 012, 019), data-schema.md, feature-spec.md §1.6, §2.4.
 
 ---
 
@@ -14,7 +14,7 @@
 4. [Security rules](#4-security-rules)
 5. [Sync engine](#5-sync-engine)
 6. [Conflict resolution](#6-conflict-resolution)
-7. [Anonymous → Email upgrade](#7-anonymous--email-upgrade)
+7. [~~Anonymous → Email upgrade~~ (Removed)](#7-anonymous--email-upgrade-removed)
 8. [Partner Sharing mechanism](#8-partner-sharing-mechanism)
 9. [Offline & queue management](#9-offline--queue-management)
 10. [Cost estimation & optimization](#10-cost-estimation--optimization)
@@ -94,12 +94,12 @@
 
 ### Level 1 — Backed up
 
-**Trigger:** User vào Settings → "Backup data" → chọn anonymous hoặc email sign-in.
+**Trigger:** User vào Settings → "Backup data" → chọn Google Sign-In hoặc Apple Sign-In.
 
 **State transition:**
 ```
 1. Firebase.initializeApp() (lazy, lần đầu)
-2. FirebaseAuth.signInAnonymously() HOẶC signInWithEmailLink()
+2. FirebaseAuth.signInWithGoogle() HOẶC signInWithApple()
 3. UserSettings.firebaseUid = auth.currentUser.uid
 4. UserSettings.trustLevel = 1
 5. SyncEngine.start()
@@ -120,8 +120,7 @@
 
 **State transition:**
 ```
-1. Require email-authenticated account (không anonymous)
-   → Nếu đang anonymous, prompt upgrade (xem §7)
+1. Require authenticated account (Google or Apple provider)
 2. Create sharedPlans/{planId} document với ownerUid + partnerUids[]
 3. Partner receives invite (email link + deep link vào app)
 4. Partner authenticates → added to partnerUids[]
@@ -552,35 +551,13 @@ Scenario: Payment references a debt. Debt deleted remotely, payment still pendin
 
 ---
 
-## 7. Anonymous → Email upgrade
+## 7. ~~Anonymous → Email upgrade~~ (Removed)
 
-### Flow
-
-```
-State: trustLevel=1, anonymous auth, uid=ANON_UID
-
-User triggers: "Sign in with email" in Settings
-
-1. Get current user: auth.currentUser (anonymous)
-2. Create EmailLink credential
-3. auth.currentUser.linkWithCredential(cred)
-   → Firebase keeps same UID, adds email provider
-4. On success:
-   - UserSettings.firebaseUid unchanged (still ANON_UID)
-   - UserSettings.authProvider = "email"
-   - All /users/ANON_UID/... data preserved
-5. On conflict (email already has an account):
-   - Prompt: "Email này đã có account. Chọn:"
-     a. "Sign in to existing" → lose current anonymous data (warn + confirm)
-     b. "Use different email"
-   - If (a): signOut anonymous → signIn email → re-upload local Drift (local is source of truth)
-```
-
-### Key guarantees
-
-- Non-destructive by default
-- User always sees warning before any data loss
-- Local Drift is fallback: even if cloud data lost, local can re-upload
+> **Status:** Removed (2026-04-25). See ADR-013 (Deprecated).
+>
+> App uses direct Google Sign-In / Apple Sign-In for Level 1 upgrade.
+> There is no anonymous auth step, so this section is no longer applicable.
+> Users authenticate with a real provider from the start.
 
 ---
 
@@ -873,9 +850,9 @@ Pre-conditions:
 
 Steps:
   1. Show onboarding screen: "What backup means, data shape, cost"
-  2. User chooses: Anonymous or Email
+  2. User chooses: Google or Apple Sign-In
   3. Firebase.initializeApp() (first time)
-  4. Auth (anonymous or email link)
+  4. Auth (Google or Apple provider)
   5. Write UserSettings.firebaseUid, trustLevel = 1
   6. Initial full push (all Drift data → Firestore)
      - Show progress UI: "Backing up 124 debts and 3,421 payments..."
@@ -902,7 +879,7 @@ Steps:
   5. Call Cloud Function deleteUserData(uid)
      - CF iterates users/{uid}/** and batch deletes
      - CF deletes any sharedPlans where ownerUid = uid
-  6. FirebaseAuth.signOut() (or delete anonymous user)
+  6. FirebaseAuth.signOut()
   7. UserSettings.firebaseUid = null, trustLevel = 0
   8. Local Drift unchanged (!)
   9. Confirmation: "Backup disabled. Your local data is safe."
@@ -913,10 +890,10 @@ Steps:
 ```
 Pre-conditions:
   - User at L1
-  - Must be email-authenticated (not anonymous)
+  - Must be authenticated with Google or Apple provider
 
 Steps:
-  1. If anonymous: prompt upgrade to email auth (§7)
+  1. Verify user has authenticated provider account
   2. Open "Share Plan" screen
   3. Enter partner email + choose mode (readonly / collaborative)
   4. Select scope (all debts or specific)

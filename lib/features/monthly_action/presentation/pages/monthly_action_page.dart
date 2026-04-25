@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
-import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/di/injection.dart';
+import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/models/monthly_action_models.dart';
 import '../../../../core/models/recast_delta.dart';
+import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -15,6 +17,7 @@ import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_chip.dart';
 import '../../../../core/widgets/empty_state.dart';
+import '../../../../domain/enums/debt_status.dart';
 import '../../../debts/presentation/debt_ui_utils.dart';
 import '../../cubit/monthly_action_cubit.dart';
 import '../../cubit/monthly_action_state.dart';
@@ -48,6 +51,7 @@ class _MonthlyActionView extends StatelessWidget {
       },
       builder: (context, state) {
         return Scaffold(
+          backgroundColor: AppColors.mdSurfaceContainerLow,
           appBar: AppBar(
             title: Text(context.l10n.monthlyActionThisMonth),
             actions: [
@@ -77,32 +81,104 @@ class _MonthlyActionView extends StatelessWidget {
     }
 
     if (!state.hasTrackedDebts) {
-      return EmptyState(
-        title: context.l10n.monthlyActionEmptyTitle,
-        subtitle: context.l10n.monthlyActionEmptySubtitle,
-        icon: LucideIcons.walletCards,
+      return KeyedSubtree(
+        key: AppTestKeys.monthlyActionEmptyAddDebt,
+        child: EmptyState(
+          title: context.l10n.monthlyActionEmptyTitle,
+          subtitle: context.l10n.monthlyActionEmptySubtitle,
+          icon: LucideIcons.walletCards,
+          actionLabel: context.l10n.commonAddDebt,
+          onAction: () => context.push(AppRoutes.addDebt),
+        ),
       );
     }
 
+    final nextAction = _selectNextAction(state);
+    final allDone =
+        state.summary != null &&
+        state.summary!.allCompleted &&
+        state.hasActionItems;
+
     if (!state.hasActionItems) {
-      return SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.pagePaddingH,
-          vertical: AppDimensions.pagePaddingV,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+      return RefreshIndicator(
+        onRefresh: () =>
+            context.read<MonthlyActionCubit>().loadMonthlyActions(),
+        child: ListView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.pagePaddingH,
+            vertical: AppDimensions.pagePaddingV,
+          ),
           children: [
-            _PlanHero(state: state),
-            const SizedBox(height: AppDimensions.sectionGap),
-            AppCard(
-              color: AppColors.mdSurfaceContainerLow,
-              child: EmptyState(
-                title: context.l10n.monthlyActionNoChecklist,
-                subtitle: context.l10n.monthlyActionNoChecklistSubtitle,
-                icon: LucideIcons.partyPopper,
-              ),
+            _CompletionCard(
+              state: state,
+              onViewPlan: () => context.go(AppRoutes.plan),
             ),
+            if (state.summary?.hasSingleTrackedDebt ?? false) ...[
+              const SizedBox(height: AppDimensions.md),
+              _SingleDebtSnapshotCard(
+                summary: state.summary!,
+                onViewProgress: () => context.go(AppRoutes.progress),
+                onAddDebt: () => context.push(AppRoutes.addDebt),
+              ),
+            ],
+            const SizedBox(height: AppDimensions.md),
+            if (state.delta?.hasMeaningfulChange ?? false)
+              _RecastBanner(delta: state.delta!),
+            const SizedBox(height: 80),
+          ],
+        ),
+      );
+    }
+
+    if (allDone) {
+      return RefreshIndicator(
+        onRefresh: () =>
+            context.read<MonthlyActionCubit>().loadMonthlyActions(),
+        child: ListView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.pagePaddingH,
+            vertical: AppDimensions.pagePaddingV,
+          ),
+          children: [
+            _DoneProofDashboard(
+              state: state,
+              onViewPlan: () => context.go(AppRoutes.plan),
+              onViewHistory: () {
+                final debtId = _historyDebtId(state);
+                if (debtId == null) return;
+                final route = state.summary!.trackedDebtCount == 1
+                    ? AppRoutes.paymentHistoryPath(debtId)
+                    : AppRoutes.debtDetailPath(debtId);
+                context.push(route);
+              },
+              onLogAnother: () {
+                final debtId = _logDebtId(state);
+                if (debtId != null) {
+                  context.push(AppRoutes.logPaymentPath(debtId));
+                }
+              },
+            ),
+            if (state.delta?.hasMeaningfulChange ?? false) ...[
+              const SizedBox(height: AppDimensions.sm),
+              _RecastBanner(delta: state.delta!),
+            ],
+            const SizedBox(height: AppDimensions.md),
+            _SummaryStrip(summary: state.summary),
+            if (state.summary?.hasSingleTrackedDebt ?? false) ...[
+              const SizedBox(height: AppDimensions.md),
+              _SingleDebtSnapshotCard(
+                summary: state.summary!,
+                onViewProgress: () => context.go(AppRoutes.progress),
+                onAddDebt: () => context.push(AppRoutes.addDebt),
+              ),
+            ],
+            const SizedBox(height: AppDimensions.md),
+            _CompletedChecklistSection(
+              sections: state.sections,
+              submittingIds: state.submittingIds,
+              onCheckOff: (item) => _showCheckOffSheet(context, item),
+            ),
+            const SizedBox(height: 80),
           ],
         ),
       );
@@ -116,28 +192,33 @@ class _MonthlyActionView extends StatelessWidget {
           vertical: AppDimensions.pagePaddingV,
         ),
         children: [
-          _PlanHero(state: state),
-          if (state.delta?.hasMeaningfulChange ?? false)
-            Padding(
-              padding: const EdgeInsets.only(top: AppDimensions.md),
-              child: _RecastBanner(delta: state.delta!),
-            ),
-          const SizedBox(height: AppDimensions.sectionGap),
-          _SummaryCard(summary: state.summary),
-          const SizedBox(height: AppDimensions.sectionGap),
+          _NextActionCard(
+            item: nextAction,
+            summary: state.summary,
+            onCheckOff: nextAction == null
+                ? null
+                : () => _showCheckOffSheet(context, nextAction),
+            onViewPlan: () => context.go(AppRoutes.plan),
+          ),
+          if (state.delta?.hasMeaningfulChange ?? false) ...[
+            const SizedBox(height: AppDimensions.sm),
+            _RecastBanner(delta: state.delta!),
+          ],
+          const SizedBox(height: AppDimensions.md),
+          _SummaryStrip(summary: state.summary),
+          const SizedBox(height: AppDimensions.md),
           SectionHeader(
             title: context.l10n.monthlyActionNeedToPay,
             subtitle: context.l10n.monthlyActionChecklistHelper,
           ),
-          const SizedBox(height: AppDimensions.md),
+          const SizedBox(height: AppDimensions.sm),
           ...state.sections.map(
             (section) => Padding(
-              padding: const EdgeInsets.only(bottom: AppDimensions.md),
+              padding: const EdgeInsets.only(bottom: AppDimensions.sm),
               child: _MonthlyActionSectionCard(
                 section: section,
                 submittingIds: state.submittingIds,
-                onCheckOff: (item) =>
-                    context.read<MonthlyActionCubit>().checkOffPayment(item),
+                onCheckOff: (item) => _showCheckOffSheet(context, item),
               ),
             ),
           ),
@@ -146,65 +227,489 @@ class _MonthlyActionView extends StatelessWidget {
       ),
     );
   }
+
+  MonthlyActionItem? _selectNextAction(MonthlyActionState state) {
+    final items = state.sections
+        .expand((section) => section.items)
+        .where((item) => !item.isCompleted)
+        .toList(growable: false);
+    if (items.isEmpty) return null;
+
+    MonthlyActionItem? firstWhere(bool Function(MonthlyActionItem) test) {
+      for (final item in items) {
+        if (test(item)) return item;
+      }
+      return null;
+    }
+
+    return firstWhere(
+          (item) => item.kind == MonthlyActionKind.minimum && item.isOverdue,
+        ) ??
+        firstWhere(
+          (item) => item.kind == MonthlyActionKind.minimum && item.isUpcoming,
+        ) ??
+        firstWhere((item) => item.kind == MonthlyActionKind.minimum) ??
+        firstWhere((item) => item.kind == MonthlyActionKind.extra) ??
+        items.first;
+  }
+
+  String? _historyDebtId(MonthlyActionState state) {
+    if (state.summary?.trackedDebtCount == 1) {
+      return state.summary?.singleDebtId;
+    }
+    return _latestProofItem(state.sections)?.debtId;
+  }
+
+  String? _logDebtId(MonthlyActionState state) {
+    return _latestProofItem(state.sections)?.debtId ??
+        state.summary?.singleDebtId;
+  }
+
+  Future<void> _showCheckOffSheet(
+    BuildContext context,
+    MonthlyActionItem item,
+  ) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (sheetContext) {
+        var isSubmitting = false;
+
+        return StatefulBuilder(
+          builder: (sheetContext, setSheetState) {
+            Future<void> confirm() async {
+              setSheetState(() => isSubmitting = true);
+              final success = await context
+                  .read<MonthlyActionCubit>()
+                  .checkOffPayment(item);
+              if (!sheetContext.mounted) return;
+              Navigator.of(sheetContext).pop();
+
+              if (success && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      context.l10n.monthlyActionSnackbarSaved(item.debtName),
+                    ),
+                  ),
+                );
+              }
+            }
+
+            void logCustomPayment() {
+              Navigator.of(sheetContext).pop();
+              context.push(AppRoutes.logPaymentPath(item.debtId));
+            }
+
+            return SafeArea(
+              top: false,
+              child: Padding(
+                key: AppTestKeys.monthlyActionConfirmSheet,
+                padding: const EdgeInsets.fromLTRB(
+                  AppDimensions.pagePaddingH,
+                  0,
+                  AppDimensions.pagePaddingH,
+                  AppDimensions.md,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      context.l10n.monthlyActionConfirmTitle,
+                      style: AppTextStyles.titleLarge,
+                    ),
+                    const SizedBox(height: AppDimensions.xs),
+                    Text(
+                      context.l10n.monthlyActionConfirmSubtitle,
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.mdOnSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.md),
+                    _ConfirmInfoRow(
+                      label: context.l10n.monthlyActionInfoDebt,
+                      value: item.debtName,
+                    ),
+                    _ConfirmInfoRow(
+                      label: context.l10n.monthlyActionInfoType,
+                      value: _actionTitle(context, item),
+                    ),
+                    _ConfirmInfoRow(
+                      label: context.l10n.monthlyActionInfoAmount,
+                      value: AppFormatters.formatCents(item.amountCents),
+                    ),
+                    _ConfirmInfoRow(
+                      label: context.l10n.monthlyActionInfoDate,
+                      value: AppFormatters.formatDate(
+                        context
+                                .read<MonthlyActionCubit>()
+                                .state
+                                .referenceDate ??
+                            item.dueDate,
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.md),
+                    SizedBox(
+                      key: AppTestKeys.monthlyActionConfirmPrimary,
+                      child: AppButton.filled(
+                        label: context.l10n.monthlyActionConfirmPrimary,
+                        icon: LucideIcons.check,
+                        loading: isSubmitting,
+                        fullWidth: true,
+                        onPressed: isSubmitting ? null : confirm,
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.sm),
+                    SizedBox(
+                      key: AppTestKeys.monthlyActionConfirmCustom,
+                      child: AppButton.outlined(
+                        label: context.l10n.monthlyActionLogDifferent,
+                        icon: LucideIcons.pencil,
+                        fullWidth: true,
+                        onPressed: isSubmitting ? null : logCustomPayment,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 }
 
-class _PlanHero extends StatelessWidget {
-  const _PlanHero({required this.state});
+class _NextActionCard extends StatelessWidget {
+  const _NextActionCard({
+    required this.item,
+    required this.summary,
+    required this.onCheckOff,
+    required this.onViewPlan,
+  });
 
-  final MonthlyActionState state;
+  final MonthlyActionItem? item;
+  final MonthlyActionSummary? summary;
+  final VoidCallback? onCheckOff;
+  final VoidCallback onViewPlan;
 
   @override
   Widget build(BuildContext context) {
-    final summary = state.summary;
-    final plan = state.plan;
-    return AppHeroCard(
+    final nextItem = item;
+    if (nextItem == null) {
+      return _CompletionCard(summary: summary, onViewPlan: onViewPlan);
+    }
+
+    final chipLabel = _statusChipLabel(context, nextItem);
+    final isUrgent = nextItem.isOverdue;
+
+    return AppCard(
+      key: AppTestKeys.monthlyActionNextAction,
+      color: AppColors.mdSurface,
+      borderColor: isUrgent
+          ? AppColors.debtRed.withValues(alpha: 0.28)
+          : AppColors.whisperBorder,
+      padding: const EdgeInsets.all(AppDimensions.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            context.l10n.progressDebtFreeDate,
-            style: AppTextStyles.labelMedium.copyWith(
-              color: AppColors.mdPrimaryContainer,
-            ),
-          ),
-          const SizedBox(height: AppDimensions.xs),
-          Text(
-            plan?.projectedDebtFreeDate == null
-                ? context.l10n.monthlyActionRecasting
-                : AppFormatters.formatMonthYear(plan!.projectedDebtFreeDate!),
-            style: AppTextStyles.displaySmall.copyWith(
-              color: AppColors.mdOnPrimary,
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: isUrgent
+                      ? AppColors.mdErrorContainer
+                      : AppColors.mdPrimaryContainer,
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+                ),
+                child: Icon(
+                  isUrgent
+                      ? LucideIcons.alertCircle
+                      : LucideIcons.calendarCheck,
+                  size: AppDimensions.iconMd,
+                  color: isUrgent ? AppColors.debtRed : AppColors.mdPrimary,
+                ),
+              ),
+              const SizedBox(width: AppDimensions.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.l10n.monthlyActionNextPay,
+                      style: AppTextStyles.labelMedium.copyWith(
+                        color: AppColors.mdOnSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.xs),
+                    Text(nextItem.debtName, style: AppTextStyles.titleMedium),
+                    const SizedBox(height: AppDimensions.xs),
+                    Text(
+                      _actionSubtitle(context, nextItem),
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.mdOnSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: AppDimensions.sm),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    AppFormatters.formatCents(nextItem.amountCents),
+                    style: AppTextStyles.moneyXSmall.copyWith(
+                      color: isUrgent
+                          ? AppColors.debtRed
+                          : AppColors.mdOnSurface,
+                    ),
+                  ),
+                  if (chipLabel != null) ...[
+                    const SizedBox(height: AppDimensions.xs),
+                    AppChip.status(label: chipLabel),
+                  ],
+                ],
+              ),
+            ],
           ),
           const SizedBox(height: AppDimensions.md),
           Row(
             children: [
               Expanded(
-                child: _HeroStat(
-                  label: context.l10n.monthlyActionTotalThisMonth,
-                  value: summary == null
-                      ? '--'
-                      : AppFormatters.formatCents(summary.totalDueCents),
+                child: Text(
+                  _dueText(context, nextItem),
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.mdOnSurfaceVariant,
+                  ),
                 ),
               ),
-              const SizedBox(width: AppDimensions.md),
-              Expanded(
-                child: _HeroStat(
-                  label: context.l10n.monthlyActionCompleted,
-                  value: summary == null
-                      ? '--'
-                      : '${summary.completedCount}/${summary.totalCount}',
+              SizedBox(
+                key: AppTestKeys.monthlyActionNextCheckOff(nextItem.id),
+                child: AppButton.filled(
+                  label: context.l10n.monthlyActionCheckOff,
+                  icon: LucideIcons.check,
+                  onPressed: onCheckOff,
                 ),
               ),
             ],
           ),
-          if (plan != null) ...[
-            const SizedBox(height: AppDimensions.md),
-            Text(
-              '${plan.strategy.label} · Extra ${AppFormatters.formatCents(plan.extraMonthlyAmount)} / ${context.l10n.commonMonth}',
-              style: AppTextStyles.bodySmall.copyWith(
-                color: AppColors.mdOnPrimary.withValues(alpha: 0.82),
+        ],
+      ),
+    );
+  }
+}
+
+class _DoneProofDashboard extends StatelessWidget {
+  const _DoneProofDashboard({
+    required this.state,
+    required this.onViewPlan,
+    required this.onViewHistory,
+    required this.onLogAnother,
+  });
+
+  final MonthlyActionState state;
+  final VoidCallback onViewPlan;
+  final VoidCallback onViewHistory;
+  final VoidCallback onLogAnother;
+
+  @override
+  Widget build(BuildContext context) {
+    final summary = state.summary!;
+    final latestProof = _latestProofItem(state.sections)?.completionProof;
+    final latestLabel = latestProof == null
+        ? context.l10n.monthlyActionNoLoggedDate
+        : AppFormatters.formatDate(latestProof.date);
+    final canLogAnother =
+        _latestProofItem(state.sections) != null ||
+        summary.singleDebtId != null;
+
+    return AppCard(
+      key: AppTestKeys.monthlyActionDoneDashboard,
+      color: AppColors.mdSurface,
+      padding: const EdgeInsets.all(AppDimensions.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppColors.mdPrimaryContainer,
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+                ),
+                child: const Icon(
+                  LucideIcons.checkCircle2,
+                  size: AppDimensions.iconMd,
+                  color: AppColors.mdPrimary,
+                ),
               ),
+              const SizedBox(width: AppDimensions.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.l10n.monthlyActionDoneProofTitle,
+                      style: AppTextStyles.titleMedium,
+                    ),
+                    const SizedBox(height: AppDimensions.xs),
+                    Text(
+                      _doneProofSubtitle(context, summary),
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: AppColors.mdOnSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppDimensions.md),
+          Row(
+            children: [
+              Expanded(
+                child: _SummaryStat(
+                  label: context.l10n.monthlyActionStatLogged,
+                  value: AppFormatters.formatCents(summary.loggedTotalCents),
+                  valueColor: AppColors.mdPrimary,
+                ),
+              ),
+              const _Divider(),
+              Expanded(
+                child: _SummaryStat(
+                  label: context.l10n.monthlyActionStatRemaining,
+                  value: AppFormatters.formatCents(
+                    summary.remainingBalanceCents,
+                  ),
+                ),
+              ),
+              const _Divider(),
+              Expanded(
+                child: _SummaryStat(
+                  label: context.l10n.monthlyActionStatLatestLogged,
+                  value: latestLabel,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppDimensions.md),
+          Wrap(
+            spacing: AppDimensions.sm,
+            runSpacing: AppDimensions.sm,
+            children: [
+              AppButton.tonal(
+                label: context.l10n.monthlyActionViewHistory,
+                icon: LucideIcons.history,
+                onPressed: onViewHistory,
+              ),
+              if (canLogAnother)
+                AppButton.outlined(
+                  label: context.l10n.monthlyActionLogAnother,
+                  icon: LucideIcons.plus,
+                  onPressed: onLogAnother,
+                ),
+              AppButton.text(
+                label: context.l10n.monthlyActionNextActionPrimary,
+                icon: LucideIcons.map,
+                onPressed: onViewPlan,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _doneProofSubtitle(
+    BuildContext context,
+    MonthlyActionSummary summary,
+  ) {
+    final debtName = summary.singleDebtName;
+    if (summary.hasSingleTrackedDebt && debtName != null) {
+      if (summary.singleTrackedDebtPaidOff) {
+        return context.l10n.monthlyActionDoneProofSinglePaidOff(debtName);
+      }
+      return context.l10n.monthlyActionDoneProofSingleRemaining(
+        debtName,
+        AppFormatters.formatCents(summary.remainingBalanceCents),
+      );
+    }
+
+    return context.l10n.monthlyActionDoneProofSubtitle(
+      AppFormatters.formatCents(summary.loggedTotalCents),
+    );
+  }
+}
+
+class _SingleDebtSnapshotCard extends StatelessWidget {
+  const _SingleDebtSnapshotCard({
+    required this.summary,
+    required this.onViewProgress,
+    required this.onAddDebt,
+  });
+
+  final MonthlyActionSummary summary;
+  final VoidCallback onViewProgress;
+  final VoidCallback onAddDebt;
+
+  @override
+  Widget build(BuildContext context) {
+    final isPaidOff = summary.singleTrackedDebtPaidOff;
+
+    return AppCard(
+      key: AppTestKeys.monthlyActionSingleDebtCard,
+      color: AppColors.mdSurface,
+      padding: const EdgeInsets.all(AppDimensions.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            isPaidOff
+                ? context.l10n.monthlyActionSingleDebtPaidOffTitle
+                : context.l10n.monthlyActionSingleDebtTitle,
+            style: AppTextStyles.titleSmall,
+          ),
+          const SizedBox(height: AppDimensions.sm),
+          _SingleDebtInfoRow(
+            label: context.l10n.monthlyActionSingleDebtRemainingLabel,
+            value: AppFormatters.formatCents(summary.remainingBalanceCents),
+          ),
+          if (summary.singleDebtDueDate != null)
+            _SingleDebtInfoRow(
+              label: context.l10n.monthlyActionSingleDebtDueDateLabel,
+              value: AppFormatters.formatDate(summary.singleDebtDueDate!),
+            ),
+          if (summary.singleDebtStatus != null)
+            _SingleDebtInfoRow(
+              label: context.l10n.monthlyActionSingleDebtStatusLabel,
+              value: _debtStatusLabel(context, summary.singleDebtStatus!),
+            ),
+          if (isPaidOff) ...[
+            const SizedBox(height: AppDimensions.sm),
+            Wrap(
+              spacing: AppDimensions.sm,
+              runSpacing: AppDimensions.sm,
+              children: [
+                AppButton.tonal(
+                  label: context.l10n.monthlyActionViewProgress,
+                  icon: LucideIcons.trendingDown,
+                  onPressed: onViewProgress,
+                ),
+                AppButton.outlined(
+                  label: context.l10n.monthlyActionAddAnotherDebt,
+                  icon: LucideIcons.plus,
+                  onPressed: onAddDebt,
+                ),
+              ],
             ),
           ],
         ],
@@ -213,34 +718,32 @@ class _PlanHero extends StatelessWidget {
   }
 }
 
-class _HeroStat extends StatelessWidget {
-  const _HeroStat({required this.label, required this.value});
+class _SingleDebtInfoRow extends StatelessWidget {
+  const _SingleDebtInfoRow({required this.label, required this.value});
 
   final String label;
   final String value;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppDimensions.md),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppDimensions.xs),
+      child: Row(
         children: [
-          Text(
-            label,
-            style: AppTextStyles.labelSmall.copyWith(
-              color: AppColors.mdPrimaryContainer,
+          Expanded(
+            child: Text(
+              label,
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.mdOnSurfaceVariant,
+              ),
             ),
           ),
-          const SizedBox(height: AppDimensions.xs),
-          Text(
-            value,
-            style: AppTextStyles.titleMedium.copyWith(
-              color: AppColors.mdOnPrimary,
+          const SizedBox(width: AppDimensions.md),
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: AppTextStyles.bodyMedium,
             ),
           ),
         ],
@@ -249,8 +752,81 @@ class _HeroStat extends StatelessWidget {
   }
 }
 
-class _SummaryCard extends StatelessWidget {
-  const _SummaryCard({required this.summary});
+class _CompletionCard extends StatelessWidget {
+  const _CompletionCard({this.state, this.summary, this.onViewPlan});
+
+  final MonthlyActionState? state;
+  final MonthlyActionSummary? summary;
+  final VoidCallback? onViewPlan;
+
+  @override
+  Widget build(BuildContext context) {
+    final effectiveSummary = summary ?? state?.summary;
+
+    return AppCard(
+      color: AppColors.mdSurface,
+      padding: const EdgeInsets.all(AppDimensions.md),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppColors.mdPrimaryContainer,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+            ),
+            child: const Icon(
+              LucideIcons.checkCircle2,
+              size: AppDimensions.iconMd,
+              color: AppColors.mdPrimary,
+            ),
+          ),
+          const SizedBox(width: AppDimensions.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.l10n.monthlyActionNextActionTitle,
+                  style: AppTextStyles.titleMedium,
+                ),
+                const SizedBox(height: AppDimensions.xs),
+                Text(
+                  context.l10n.monthlyActionNextActionSubtitle,
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.mdOnSurfaceVariant,
+                  ),
+                ),
+                if (effectiveSummary != null) ...[
+                  const SizedBox(height: AppDimensions.sm),
+                  AppChip.status(
+                    label: context.l10n.monthlyActionCompletionChip(
+                      effectiveSummary.completedCount,
+                      effectiveSummary.totalCount,
+                    ),
+                    icon: LucideIcons.check,
+                  ),
+                ],
+                if (onViewPlan != null) ...[
+                  const SizedBox(height: AppDimensions.md),
+                  AppButton.tonal(
+                    label: context.l10n.monthlyActionNextActionPrimary,
+                    icon: LucideIcons.map,
+                    onPressed: onViewPlan,
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SummaryStrip extends StatelessWidget {
+  const _SummaryStrip({required this.summary});
 
   final MonthlyActionSummary? summary;
 
@@ -258,29 +834,65 @@ class _SummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     if (summary == null) {
       return const AppCard(
-        color: AppColors.mdSurfaceContainerLow,
+        color: AppColors.mdSurface,
+        padding: EdgeInsets.all(AppDimensions.md),
         child: SizedBox(
-          height: 96,
+          height: 56,
           child: Center(child: CircularProgressIndicator()),
         ),
       );
     }
 
+    if (summary!.allCompleted) {
+      return AppCard(
+        color: AppColors.mdSurface,
+        padding: const EdgeInsets.all(AppDimensions.md),
+        child: Row(
+          children: [
+            Expanded(
+              child: _SummaryStat(
+                label: context.l10n.monthlyActionStatLogged,
+                value: AppFormatters.formatCents(summary!.loggedTotalCents),
+                valueColor: AppColors.mdPrimary,
+              ),
+            ),
+            const _Divider(),
+            Expanded(
+              child: _SummaryStat(
+                label: context.l10n.monthlyActionCompleted,
+                value: '${summary!.completedCount}/${summary!.totalCount}',
+              ),
+            ),
+            const _Divider(),
+            Expanded(
+              child: _SummaryStat(
+                label: context.l10n.monthlyActionStatRemaining,
+                value: AppFormatters.formatCents(
+                  summary!.remainingBalanceCents,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return AppCard(
-      color: AppColors.mdSurfaceContainerLow,
+      color: AppColors.mdSurface,
+      padding: const EdgeInsets.all(AppDimensions.md),
       child: Row(
         children: [
           Expanded(
             child: _SummaryStat(
-              label: context.l10n.paymentTypeMinimumLabel,
-              value: AppFormatters.formatCents(summary!.totalMinimumCents),
+              label: context.l10n.monthlyActionTotalThisMonth,
+              value: AppFormatters.formatCents(summary!.totalDueCents),
             ),
           ),
           const _Divider(),
           Expanded(
             child: _SummaryStat(
-              label: context.l10n.paymentTypeExtraLabel,
-              value: AppFormatters.formatCents(summary!.totalExtraCents),
+              label: context.l10n.monthlyActionCompleted,
+              value: '${summary!.completedCount}/${summary!.totalCount}',
               valueColor: AppColors.mdPrimary,
             ),
           ),
@@ -289,6 +901,7 @@ class _SummaryCard extends StatelessWidget {
             child: _SummaryStat(
               label: context.l10n.monthlyActionOverdueChip,
               value: '${summary!.overdueCount}',
+              valueColor: summary!.overdueCount > 0 ? AppColors.debtRed : null,
             ),
           ),
         ],
@@ -315,6 +928,8 @@ class _SummaryStat extends StatelessWidget {
       children: [
         Text(
           label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: AppTextStyles.labelSmall.copyWith(
             color: AppColors.mdOnSurfaceVariant,
           ),
@@ -322,6 +937,8 @@ class _SummaryStat extends StatelessWidget {
         const SizedBox(height: AppDimensions.xs),
         Text(
           value,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: AppTextStyles.titleMedium.copyWith(
             color: valueColor ?? AppColors.mdOnSurface,
           ),
@@ -338,8 +955,8 @@ class _Divider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 1,
-      height: 42,
-      margin: const EdgeInsets.symmetric(horizontal: AppDimensions.md),
+      height: 38,
+      margin: const EdgeInsets.symmetric(horizontal: AppDimensions.sm),
       color: AppColors.mdOutlineVariant,
     );
   }
@@ -373,8 +990,9 @@ class _RecastBanner extends StatelessWidget {
           ? AppColors.mdPrimaryContainer
           : isNegative
           ? AppColors.mdErrorContainer
-          : AppColors.mdSurfaceContainerLow,
+          : AppColors.mdSurface,
       borderColor: Colors.transparent,
+      padding: const EdgeInsets.all(AppDimensions.md),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -393,7 +1011,7 @@ class _RecastBanner extends StatelessWidget {
           const SizedBox(width: AppDimensions.sm),
           Expanded(
             child: Text(
-              _message(),
+              _message(context),
               style: AppTextStyles.bodySmall.copyWith(
                 color: isPositive
                     ? AppColors.mdOnPrimaryContainer
@@ -408,44 +1026,145 @@ class _RecastBanner extends StatelessWidget {
     );
   }
 
-  String _message() {
+  String _message(BuildContext context) {
+    final l10n = context.l10n;
     if (delta.hasDebtFreeDateChange &&
         delta.previousDebtFreeDate != null &&
         delta.newDebtFreeDate != null) {
       final monthDelta = delta.debtFreeMonthDelta;
-      return 'Debt-free date: ${AppFormatters.formatMonthYear(delta.previousDebtFreeDate!)} → ${AppFormatters.formatMonthYear(delta.newDebtFreeDate!)}'
-          '${monthDelta == 0
-              ? ''
-              : monthDelta < 0
-              ? ' (sớm hơn ${monthDelta.abs()} tháng)'
-              : ' (trễ hơn $monthDelta tháng)'}';
+      return l10n.monthlyActionRecastDebtFree(
+        AppFormatters.formatMonthYear(delta.previousDebtFreeDate!),
+        AppFormatters.formatMonthYear(delta.newDebtFreeDate!),
+        monthDelta == 0
+            ? ''
+            : monthDelta < 0
+            ? l10n.monthlyActionDeltaSooner(monthDelta.abs())
+            : l10n.monthlyActionDeltaLater(monthDelta),
+      );
     }
 
     if (delta.hasProjectedInterestChange &&
         delta.previousTotalInterestProjected != null &&
         delta.newTotalInterestProjected != null) {
       final projectedDelta = delta.projectedInterestDelta!;
-      return 'Projected interest: ${AppFormatters.formatCents(delta.previousTotalInterestProjected!)} → ${AppFormatters.formatCents(delta.newTotalInterestProjected!)}'
-          '${projectedDelta == 0
-              ? ''
-              : projectedDelta < 0
-              ? ' (giảm ${AppFormatters.formatCents(projectedDelta.abs())})'
-              : ' (tăng ${AppFormatters.formatCents(projectedDelta)})'}';
+      return l10n.monthlyActionRecastProjectedInterest(
+        AppFormatters.formatCents(delta.previousTotalInterestProjected!),
+        AppFormatters.formatCents(delta.newTotalInterestProjected!),
+        projectedDelta == 0
+            ? ''
+            : projectedDelta < 0
+            ? l10n.monthlyActionDeltaReduced(
+                AppFormatters.formatCents(projectedDelta.abs()),
+              )
+            : l10n.monthlyActionDeltaIncreased(
+                AppFormatters.formatCents(projectedDelta),
+              ),
+      );
     }
 
     if (delta.hasSavedInterestChange &&
         delta.previousTotalInterestSaved != null &&
         delta.newTotalInterestSaved != null) {
       final savedDelta = delta.savedInterestDelta!;
-      return 'Saved vs minimum: ${AppFormatters.formatCents(delta.previousTotalInterestSaved!)} → ${AppFormatters.formatCents(delta.newTotalInterestSaved!)}'
-          '${savedDelta == 0
-              ? ''
-              : savedDelta > 0
-              ? ' (tăng ${AppFormatters.formatCents(savedDelta)})'
-              : ' (giảm ${AppFormatters.formatCents(savedDelta.abs())})'}';
+      return l10n.monthlyActionRecastSavedInterest(
+        AppFormatters.formatCents(delta.previousTotalInterestSaved!),
+        AppFormatters.formatCents(delta.newTotalInterestSaved!),
+        savedDelta == 0
+            ? ''
+            : savedDelta > 0
+            ? l10n.monthlyActionDeltaIncreased(
+                AppFormatters.formatCents(savedDelta),
+              )
+            : l10n.monthlyActionDeltaReduced(
+                AppFormatters.formatCents(savedDelta.abs()),
+              ),
+      );
     }
 
-    return 'Timeline vừa được recast từ dữ liệu mới nhất của bạn.';
+    return l10n.monthlyActionRecastNeutral;
+  }
+}
+
+class _CompletedChecklistSection extends StatefulWidget {
+  const _CompletedChecklistSection({
+    required this.sections,
+    required this.submittingIds,
+    required this.onCheckOff,
+  });
+
+  final List<MonthlyActionSection> sections;
+  final Set<String> submittingIds;
+  final ValueChanged<MonthlyActionItem> onCheckOff;
+
+  @override
+  State<_CompletedChecklistSection> createState() =>
+      _CompletedChecklistSectionState();
+}
+
+class _CompletedChecklistSectionState
+    extends State<_CompletedChecklistSection> {
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final totalCount = widget.sections.fold<int>(
+      0,
+      (sum, section) => sum + section.items.length,
+    );
+    final completedCount = widget.sections.fold<int>(
+      0,
+      (sum, section) =>
+          sum + section.items.where((item) => item.isCompleted).length,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        AppCard(
+          key: AppTestKeys.monthlyActionCompletedChecklistToggle,
+          color: AppColors.mdSurface,
+          padding: const EdgeInsets.all(AppDimensions.md),
+          onTap: () => setState(() => _expanded = !_expanded),
+          child: Row(
+            children: [
+              Icon(
+                LucideIcons.listChecks,
+                size: AppDimensions.iconMd,
+                color: AppColors.mdPrimary,
+              ),
+              const SizedBox(width: AppDimensions.sm),
+              Expanded(
+                child: Text(
+                  context.l10n.monthlyActionCompletedChecklistTitle(
+                    completedCount,
+                    totalCount,
+                  ),
+                  style: AppTextStyles.titleSmall,
+                ),
+              ),
+              Icon(
+                _expanded ? LucideIcons.chevronUp : LucideIcons.chevronDown,
+                size: AppDimensions.iconMd,
+                color: AppColors.mdOnSurfaceVariant,
+              ),
+            ],
+          ),
+        ),
+        if (_expanded) ...[
+          const SizedBox(height: AppDimensions.sm),
+          ...widget.sections.map(
+            (section) => Padding(
+              padding: const EdgeInsets.only(bottom: AppDimensions.sm),
+              child: _MonthlyActionSectionCard(
+                section: section,
+                submittingIds: widget.submittingIds,
+                onCheckOff: widget.onCheckOff,
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
   }
 }
 
@@ -465,6 +1184,7 @@ class _MonthlyActionSectionCard extends StatelessWidget {
     return AppCard(
       key: AppTestKeys.monthlyActionSection(section.debtId),
       color: AppColors.mdSurface,
+      padding: const EdgeInsets.all(AppDimensions.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -499,7 +1219,7 @@ class _MonthlyActionSectionCard extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: AppDimensions.md),
+          const SizedBox(height: AppDimensions.sm),
           ...section.items.map(
             (item) => Padding(
               padding: const EdgeInsets.only(bottom: AppDimensions.sm),
@@ -529,16 +1249,8 @@ class _ActionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = item.kind == MonthlyActionKind.minimum
-        ? context.l10n.paymentTypeMinimumLabel
-        : context.l10n.paymentTypeExtraLabel;
-    final chipLabel = item.isOverdue
-        ? context.l10n.monthlyActionOverdueChip
-        : item.isUpcoming
-        ? context.l10n.monthlyActionUpcomingChip
-        : item.kind == MonthlyActionKind.extra && item.priorityRank != null
-        ? context.l10n.monthlyActionPriorityChip(item.priorityRank!)
-        : null;
+    final chipLabel = _statusChipLabel(context, item);
+    final proof = item.completionProof;
 
     return Container(
       key: AppTestKeys.monthlyActionItem(item.id),
@@ -561,22 +1273,24 @@ class _ActionRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: AppTextStyles.titleSmall),
+                Text(
+                  _actionTitle(context, item),
+                  style: AppTextStyles.titleSmall,
+                ),
                 const SizedBox(height: AppDimensions.xs),
                 Text(
-                  item.subtitle,
+                  _actionSubtitle(context, item),
                   style: AppTextStyles.bodySmall.copyWith(
                     color: AppColors.mdOnSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: AppDimensions.xs),
                 Text(
-                  item.kind == MonthlyActionKind.minimum
-                      ? context.l10n.monthlyActionDueDate(
-                          AppFormatters.formatDate(item.dueDate),
-                        )
-                      : context.l10n.monthlyActionInMonth(
-                          AppFormatters.formatMonthYear(item.dueDate),
+                  proof == null
+                      ? _dueText(context, item)
+                      : context.l10n.monthlyActionLoggedProof(
+                          AppFormatters.formatCents(proof.amountCents),
+                          AppFormatters.formatDate(proof.date),
                         ),
                   style: AppTextStyles.bodySmall.copyWith(
                     color: AppColors.mdOnSurfaceVariant,
@@ -623,4 +1337,97 @@ class _ActionRow extends StatelessWidget {
       ),
     );
   }
+}
+
+class _ConfirmInfoRow extends StatelessWidget {
+  const _ConfirmInfoRow({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppDimensions.sm),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.mdOnSurfaceVariant,
+              ),
+            ),
+          ),
+          const SizedBox(width: AppDimensions.md),
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.mdOnSurface,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+MonthlyActionItem? _latestProofItem(List<MonthlyActionSection> sections) {
+  MonthlyActionItem? latest;
+  for (final item in sections.expand((section) => section.items)) {
+    if (item.completionProof == null) continue;
+    final currentProof = latest?.completionProof;
+    if (currentProof == null ||
+        item.completionProof!.date.isAfter(currentProof.date)) {
+      latest = item;
+    }
+  }
+  return latest;
+}
+
+String _debtStatusLabel(BuildContext context, DebtStatus status) {
+  return switch (status) {
+    DebtStatus.active => context.l10n.debtStatusActive,
+    DebtStatus.paidOff => context.l10n.debtStatusPaidOff,
+    DebtStatus.archived => context.l10n.debtStatusArchived,
+    DebtStatus.paused => context.l10n.debtStatusPaused,
+  };
+}
+
+String _actionTitle(BuildContext context, MonthlyActionItem item) {
+  return item.kind == MonthlyActionKind.minimum
+      ? context.l10n.paymentTypeMinimumLabel
+      : context.l10n.paymentTypeExtraLabel;
+}
+
+String _actionSubtitle(BuildContext context, MonthlyActionItem item) {
+  if (item.kind == MonthlyActionKind.minimum) {
+    return context.l10n.monthlyActionMinimumSubtitle;
+  }
+  if (item.priorityRank != null) {
+    return context.l10n.monthlyActionExtraPrioritySubtitle(item.priorityRank!);
+  }
+  return context.l10n.monthlyActionExtraSubtitle;
+}
+
+String _dueText(BuildContext context, MonthlyActionItem item) {
+  return item.kind == MonthlyActionKind.minimum
+      ? context.l10n.monthlyActionDueDate(
+          AppFormatters.formatDate(item.dueDate),
+        )
+      : context.l10n.monthlyActionInMonth(
+          AppFormatters.formatMonthYear(item.dueDate),
+        );
+}
+
+String? _statusChipLabel(BuildContext context, MonthlyActionItem item) {
+  if (item.isOverdue) return context.l10n.monthlyActionOverdueChip;
+  if (item.isUpcoming) return context.l10n.monthlyActionUpcomingChip;
+  if (item.kind == MonthlyActionKind.extra && item.priorityRank != null) {
+    return context.l10n.monthlyActionPriorityChip(item.priorityRank!);
+  }
+  return null;
 }

@@ -312,42 +312,42 @@ void main() {
       },
     );
 
-    testWidgets(
-      'settings blocks outside-MVP features with coming soon feedback',
-      (tester) async {
-        final harness = await TestAppHarness.create();
-        addTearDown(() => harness.disposeWidgetTest(tester));
+    testWidgets('settings opens cloud backup opt-in flow', (tester) async {
+      final harness = await TestAppHarness.create();
+      addTearDown(() => harness.disposeWidgetTest(tester));
 
-        await harness.onboardingCubit.completeOnboarding();
-        await harness.pumpApp(tester);
-        await _pumpUntilLocation(tester, harness, AppRoutes.home);
+      await harness.onboardingCubit.completeOnboarding();
+      await harness.pumpApp(tester);
+      await _pumpUntilLocation(tester, harness, AppRoutes.home);
 
-        harness.router.go(AppRoutes.settings);
-        await _pumpUntilLocation(tester, harness, AppRoutes.settings);
+      harness.router.go(AppRoutes.settings);
+      await _pumpUntilLocation(tester, harness, AppRoutes.settings);
 
-        final syncTile = find.byKey(AppTestKeys.settingsCloudBackup);
-        await tester.pumpUntilVisible(syncTile);
-        await tester.ensureVisible(syncTile);
-        await tester.tap(syncTile);
-        await tester.pump();
-        await tester.pumpRouterIdle();
+      final syncTile = find.byKey(AppTestKeys.settingsCloudBackup);
+      await tester.pumpUntilVisible(syncTile);
+      await tester.ensureVisible(syncTile);
+      await tester.tap(syncTile);
+      await tester.pump();
+      await tester.pumpRouterIdle();
 
-        expect(harness.router.state.matchedLocation, AppRoutes.settings);
-        expect(find.byType(SnackBar), findsOneWidget);
+      expect(harness.router.state.matchedLocation, AppRoutes.syncBackup);
+      expect(find.byKey(AppTestKeys.syncBackupGoogle), findsOneWidget);
 
-        final reminderTile = find.byKey(AppTestKeys.settingsPaymentReminders);
-        await tester.pumpUntilVisible(reminderTile);
-        await tester.ensureVisible(reminderTile);
-        await tester.tap(reminderTile);
-        await tester.pump();
-        await tester.pumpRouterIdle();
+      harness.router.go(AppRoutes.settings);
+      await _pumpUntilLocation(tester, harness, AppRoutes.settings);
 
-        expect(harness.router.state.matchedLocation, AppRoutes.settings);
-        expect(find.byType(SnackBar), findsOneWidget);
+      final reminderTile = find.byKey(AppTestKeys.settingsPaymentReminders);
+      await tester.pumpUntilVisible(reminderTile);
+      await tester.ensureVisible(reminderTile);
+      await tester.tap(reminderTile);
+      await tester.pump();
+      await tester.pumpRouterIdle();
 
-        await _pumpUntilLocation(tester, harness, AppRoutes.settings);
-      },
-    );
+      expect(harness.router.state.matchedLocation, AppRoutes.settings);
+      expect(find.byType(SnackBar), findsOneWidget);
+
+      await _pumpUntilLocation(tester, harness, AppRoutes.settings);
+    });
 
     testWidgets('archive and unarchive respect paid-off only semantics', (
       tester,
@@ -414,6 +414,11 @@ void main() {
         (await harness.debtRepository.getDebtById(paidOffDebt.id))!.status,
         DebtStatus.archived,
       );
+      await tester.pumpUntilVisible(find.byKey(AppTestKeys.snackbarUndo));
+      expect(find.byType(SnackBar), findsOneWidget);
+      await tester.pump(const Duration(seconds: 7));
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.byType(SnackBar), findsNothing);
 
       harness.router.go(AppRoutes.debts);
       await _pumpUntilLocation(tester, harness, AppRoutes.debts);

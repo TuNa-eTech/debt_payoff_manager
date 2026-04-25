@@ -98,6 +98,16 @@ class AppTestKeys {
   static const syncBackupViewPricing = ValueKey<String>(
     'settings:sync-backup-view-pricing',
   );
+  static const syncBackupGoogle = ValueKey<String>(
+    'settings:sync-backup-google',
+  );
+  static const syncBackupApple = ValueKey<String>('settings:sync-backup-apple');
+  static const syncBackupDisable = ValueKey<String>(
+    'settings:sync-backup-disable',
+  );
+  static const syncBackupDisableConfirm = ValueKey<String>(
+    'settings:sync-backup-disable-confirm',
+  );
   static const pricingContinueFree = ValueKey<String>('pricing:continue-free');
   static const settingsDataExportCsv = ValueKey<String>(
     'settings:data-export-csv',
@@ -158,6 +168,33 @@ class AppTestKeys {
 
   static ValueKey<String> monthlyActionCheckOff(String actionId) =>
       ValueKey<String>('monthly-action:checkoff:$actionId');
+
+  static const monthlyActionEmptyAddDebt = ValueKey<String>(
+    'monthly-action:empty-add-debt',
+  );
+  static const monthlyActionNextAction = ValueKey<String>(
+    'monthly-action:next-action',
+  );
+  static const monthlyActionDoneDashboard = ValueKey<String>(
+    'monthly-action:done-dashboard',
+  );
+  static const monthlyActionSingleDebtCard = ValueKey<String>(
+    'monthly-action:single-debt-card',
+  );
+  static const monthlyActionCompletedChecklistToggle = ValueKey<String>(
+    'monthly-action:completed-checklist-toggle',
+  );
+  static ValueKey<String> monthlyActionNextCheckOff(String actionId) =>
+      ValueKey<String>('monthly-action:next-checkoff:$actionId');
+  static const monthlyActionConfirmSheet = ValueKey<String>(
+    'monthly-action:confirm-sheet',
+  );
+  static const monthlyActionConfirmPrimary = ValueKey<String>(
+    'monthly-action:confirm-primary',
+  );
+  static const monthlyActionConfirmCustom = ValueKey<String>(
+    'monthly-action:confirm-custom',
+  );
 
   static ValueKey<String> paymentHistoryMonthChip(String yearMonth) =>
       ValueKey<String>('payment-history:month:$yearMonth');

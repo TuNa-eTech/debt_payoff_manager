@@ -6,7 +6,7 @@ As of **April 24, 2026**, the repository reflects this project status:
 
 - `Phase 0-6` MVP scope is complete in the codebase.
 - `Phase 10` Reports & Reminders is closed with accepted scope adjustments.
-- `Phase 7` Cloud Sync has not started in the app layer yet.
+- `Phase 7` Cloud Sync has started in the foundation layer: Firestore rules, emulator rules tests, and sync architecture skeleton exist, but Firebase Auth, push/pull runtime, and upgrade UI are not connected yet.
 - `Phase 8` has partial foundations only: milestones, reminder hooks, and basic progress surfaces exist, but scenarios and premium flows are not complete.
 - `Phase 9` Partner Sharing is still planned.
 

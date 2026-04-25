@@ -174,15 +174,45 @@ void main() {
           appliedBalanceAfter: 37000,
         ),
       );
+      await paymentRepository.addPayment(
+        makeRepoPayment(
+          id: 'lump-sum-completed',
+          debtId: 'snowball-target',
+          amount: 2000,
+          principalPortion: 2000,
+          interestPortion: 0,
+          date: DateTime(2026, 1, 8),
+          type: PaymentType.lumpSum,
+          appliedBalanceBefore: 37000,
+          appliedBalanceAfter: 35000,
+        ),
+      );
 
       final snapshot = await service.load(referenceDate: DateTime(2026, 1, 18));
       final targetSection = snapshot.sections.firstWhere(
         (section) => section.debtId == 'snowball-target',
       );
+      final targetMinimum = targetSection.items.firstWhere(
+        (item) => item.kind == MonthlyActionKind.minimum,
+      );
+      final targetExtra = targetSection.items.firstWhere(
+        (item) => item.kind == MonthlyActionKind.extra,
+      );
 
       expect(targetSection.items, hasLength(2));
       expect(targetSection.items.every((item) => item.isCompleted), isTrue);
       expect(targetSection.isCompleted, isTrue);
+      expect(targetMinimum.completionProof?.paymentId, 'minimum-completed');
+      expect(targetMinimum.completionProof?.amountCents, 5000);
+      expect(targetMinimum.completionProof?.appliedBalanceAfter, 40000);
+      expect(targetExtra.completionProof?.paymentId, 'lump-sum-completed');
+      expect(targetExtra.completionProof?.type, PaymentType.lumpSum);
+      expect(targetExtra.completionProof?.amountCents, 2000);
+      expect(snapshot.summary.loggedTotalCents, 10000);
+      expect(snapshot.summary.latestLoggedAt, DateTime(2026, 1, 8));
+      expect(snapshot.summary.remainingBalanceCents, 135000);
+      expect(snapshot.summary.trackedDebtCount, 2);
+      expect(snapshot.summary.paidOffDebtCount, 0);
       expect(snapshot.summary.completedCount, 2);
       expect(snapshot.summary.totalCount, 3);
     },

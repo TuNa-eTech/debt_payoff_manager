@@ -126,7 +126,7 @@ Trước khi đi vào tính năng cụ thể, mọi quyết định feature đ�
 | Level | Trigger | Cần account? | Data ở đâu |
 |---|---|---|---|
 | **Level 0 — Local** | Mở app lần đầu | ❌ Không | Device only (SQLite) |
-| **Level 1 — Backed up** | User chọn "Backup data" | ✅ Firebase Auth (anonymous hoặc email) | Device + Firestore sync |
+| **Level 1 — Backed up** | User chọn "Backup data" | ✅ Firebase Auth (Google or Apple) | Device + Firestore sync |
 | **Level 2 — Shared** | User chọn "Share with partner" | ✅ Firebase Auth (email required) | Device + Firestore + sharing rules |
 
 **Quy tắc chuyển level:**

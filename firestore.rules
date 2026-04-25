@@ -1,0 +1,334 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function hasRequiredFields(data, fields) {
+      return data.keys().hasAll(fields);
+    }
+
+    function isNullableTimestamp(value) {
+      return value == null || value is timestamp;
+    }
+
+    function isNullableString(value) {
+      return value == null || value is string;
+    }
+
+    function isNullableInt(value) {
+      return value == null || value is int;
+    }
+
+    function hasValidSyncFields(data) {
+      return data.id is string
+        && data.scenarioId is string
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp
+        && isNullableTimestamp(data.deletedAt)
+        && data._deviceId is string
+        && data._schemaVersion is int;
+    }
+
+    function isValidDebt(data) {
+      return hasRequiredFields(data, [
+          'id',
+          'scenarioId',
+          'name',
+          'type',
+          'originalPrincipalCents',
+          'currentBalanceCents',
+          'apr',
+          'interestMethod',
+          'minimumPaymentCents',
+          'minimumPaymentType',
+          'minimumPaymentPercent',
+          'minimumPaymentFloorCents',
+          'paymentCadence',
+          'dueDayOfMonth',
+          'firstDueDate',
+          'status',
+          'pausedUntil',
+          'priority',
+          'excludeFromStrategy',
+          'paidOffAt',
+          'createdAt',
+          'updatedAt',
+          'deletedAt',
+          '_deviceId',
+          '_schemaVersion'
+        ])
+        && hasValidSyncFields(data)
+        && data.name is string
+        && data.name.size() > 0
+        && data.name.size() <= 60
+        && data.type is string
+        && data.originalPrincipalCents is int
+        && data.originalPrincipalCents > 0
+        && data.currentBalanceCents is int
+        && data.currentBalanceCents >= 0
+        && data.apr is string
+        && data.interestMethod is string
+        && data.minimumPaymentCents is int
+        && data.minimumPaymentCents >= 0
+        && data.minimumPaymentType is string
+        && isNullableString(data.minimumPaymentPercent)
+        && isNullableInt(data.minimumPaymentFloorCents)
+        && (data.minimumPaymentFloorCents == null || data.minimumPaymentFloorCents >= 0)
+        && data.paymentCadence is string
+        && data.dueDayOfMonth is int
+        && data.dueDayOfMonth >= 1
+        && data.dueDayOfMonth <= 31
+        && data.firstDueDate is string
+        && data.status is string
+        && isNullableString(data.pausedUntil)
+        && isNullableInt(data.priority)
+        && data.excludeFromStrategy is bool
+        && isNullableTimestamp(data.paidOffAt);
+    }
+
+    function isValidPayment(data) {
+      return hasRequiredFields(data, [
+          'id',
+          'scenarioId',
+          'debtId',
+          'amountCents',
+          'principalPortionCents',
+          'interestPortionCents',
+          'feePortionCents',
+          'date',
+          'type',
+          'source',
+          'note',
+          'status',
+          'appliedBalanceBeforeCents',
+          'appliedBalanceAfterCents',
+          'createdAt',
+          'updatedAt',
+          'deletedAt',
+          '_deviceId',
+          '_schemaVersion'
+        ])
+        && hasValidSyncFields(data)
+        && data.debtId is string
+        && data.amountCents is int
+        && data.amountCents > 0
+        && data.principalPortionCents is int
+        && data.principalPortionCents >= 0
+        && data.interestPortionCents is int
+        && data.interestPortionCents >= 0
+        && data.feePortionCents is int
+        && data.feePortionCents >= 0
+        && data.amountCents == data.principalPortionCents + data.interestPortionCents + data.feePortionCents
+        && data.date is string
+        && data.type is string
+        && data.source is string
+        && isNullableString(data.note)
+        && data.status is string
+        && data.appliedBalanceBeforeCents is int
+        && data.appliedBalanceBeforeCents >= 0
+        && data.appliedBalanceAfterCents is int
+        && data.appliedBalanceAfterCents >= 0;
+    }
+
+    function isValidPlan(data) {
+      return hasRequiredFields(data, [
+          'id',
+          'scenarioId',
+          'strategy',
+          'extraMonthlyAmountCents',
+          'extraPaymentCadence',
+          'customOrderJson',
+          'lastRecastAt',
+          'projectedDebtFreeDate',
+          'totalInterestProjectedCents',
+          'totalInterestSavedCents',
+          'createdAt',
+          'updatedAt',
+          'deletedAt',
+          '_deviceId',
+          '_schemaVersion'
+        ])
+        && hasValidSyncFields(data)
+        && data.strategy is string
+        && data.extraMonthlyAmountCents is int
+        && data.extraMonthlyAmountCents >= 0
+        && data.extraPaymentCadence is string
+        && isNullableString(data.customOrderJson)
+        && data.lastRecastAt is timestamp
+        && isNullableString(data.projectedDebtFreeDate)
+        && isNullableInt(data.totalInterestProjectedCents)
+        && (data.totalInterestProjectedCents == null || data.totalInterestProjectedCents >= 0)
+        && isNullableInt(data.totalInterestSavedCents)
+        && (data.totalInterestSavedCents == null || data.totalInterestSavedCents >= 0);
+    }
+
+    function isValidSettings(data) {
+      return hasRequiredFields(data, [
+          'id',
+          'scenarioId',
+          'trustLevel',
+          'firebaseUid',
+          'currencyCode',
+          'localeCode',
+          'dayCountConvention',
+          'notifPaymentReminder',
+          'notifPaymentReminderDaysBefore',
+          'notifMilestone',
+          'notifMonthlyLog',
+          'onboardingStep',
+          'onboardingCompleted',
+          'onboardingCompletedAt',
+          'isPremium',
+          'premiumExpiresAt',
+          'createdAt',
+          'updatedAt',
+          'deletedAt',
+          '_deviceId',
+          '_schemaVersion'
+        ])
+        && hasValidSyncFields(data)
+        && data.id == 'singleton'
+        && data.scenarioId == 'main'
+        && data.trustLevel is int
+        && data.trustLevel >= 0
+        && data.trustLevel <= 1
+        && isNullableString(data.firebaseUid)
+        && data.currencyCode is string
+        && data.localeCode is string
+        && data.dayCountConvention is string
+        && data.notifPaymentReminder is bool
+        && data.notifPaymentReminderDaysBefore is int
+        && data.notifPaymentReminderDaysBefore in [1, 3, 7]
+        && data.notifMilestone is bool
+        && data.notifMonthlyLog is bool
+        && data.onboardingStep is int
+        && data.onboardingStep >= 0
+        && data.onboardingStep <= 5
+        && data.onboardingCompleted is bool
+        && isNullableTimestamp(data.onboardingCompletedAt)
+        && data.isPremium is bool
+        && isNullableTimestamp(data.premiumExpiresAt);
+    }
+
+    function isValidMilestone(data) {
+      return hasRequiredFields(data, [
+          'id',
+          'scenarioId',
+          'type',
+          'debtId',
+          'achievedAt',
+          'seen',
+          'metadata',
+          'createdAt',
+          'updatedAt',
+          'deletedAt',
+          '_deviceId',
+          '_schemaVersion'
+        ])
+        && hasValidSyncFields(data)
+        && data.type is string
+        && isNullableString(data.debtId)
+        && data.achievedAt is timestamp
+        && data.seen is bool
+        && isNullableString(data.metadata);
+    }
+
+    function isValidInterestRateHistory(data) {
+      return hasRequiredFields(data, [
+          'id',
+          'scenarioId',
+          'debtId',
+          'apr',
+          'effectiveFrom',
+          'effectiveTo',
+          'reason',
+          'createdAt',
+          'updatedAt',
+          'deletedAt',
+          '_deviceId',
+          '_schemaVersion'
+        ])
+        && hasValidSyncFields(data)
+        && data.debtId is string
+        && data.apr is string
+        && data.effectiveFrom is string
+        && isNullableString(data.effectiveTo)
+        && isNullableString(data.reason);
+    }
+
+    function isValidSyncMeta(data) {
+      return hasRequiredFields(data, [
+          'deviceId',
+          'schemaVersion',
+          'updatedAt'
+        ])
+        && data.deviceId is string
+        && data.schemaVersion is int
+        && data.updatedAt is timestamp;
+    }
+
+    match /users/{uid}/debts/{docId} {
+      allow read, delete: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+        && request.resource.data.id == docId
+        && isValidDebt(request.resource.data);
+    }
+
+    match /users/{uid}/payments/{docId} {
+      allow read, delete: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+        && request.resource.data.id == docId
+        && isValidPayment(request.resource.data);
+    }
+
+    match /users/{uid}/plans/{docId} {
+      allow read, delete: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+        && request.resource.data.id == docId
+        && isValidPlan(request.resource.data);
+    }
+
+    match /users/{uid}/settings/{docId} {
+      allow read, delete: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+        && docId == 'singleton'
+        && request.resource.data.id == docId
+        && isValidSettings(request.resource.data);
+    }
+
+    match /users/{uid}/milestones/{docId} {
+      allow read, delete: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+        && request.resource.data.id == docId
+        && isValidMilestone(request.resource.data);
+    }
+
+    match /users/{uid}/interestRateHistory/{docId} {
+      allow read, delete: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+        && request.resource.data.id == docId
+        && isValidInterestRateHistory(request.resource.data);
+    }
+
+    match /users/{uid}/syncMeta/{docId} {
+      allow read, delete: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+        && isValidSyncMeta(request.resource.data);
+    }
+
+    match /sharedPlans/{planId} {
+      allow read, write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

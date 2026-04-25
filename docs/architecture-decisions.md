@@ -228,16 +228,17 @@
 
 ## ADR-013: Anonymous → Email upgrade qua Firebase Auth linking
 
-- **Status:** Accepted
+- **Status:** Deprecated
 - **Date:** 2026-04-16
+- **Deprecated:** 2026-04-25
 - **Context:** User ở Level 1 có thể là anonymous (auto-created UID) hoặc email. Khi upgrade anonymous → email, UID có đổi không?
-- **Decision:** Dùng Firebase `linkWithCredential()` — giữ nguyên UID
-- **Rationale:**
-  - Không cần migrate data (`users/{uid}/...` giữ nguyên)
-  - Không mất history khi user "sign up" sau đã dùng anonymous
+- **Decision:** ~~Dùng Firebase `linkWithCredential()` — giữ nguyên UID~~
+- **Deprecation reason:** App uses direct Google Sign-In and Apple Sign-In for Level 1 upgrade. There is no anonymous auth step, so anonymous → email linking is not applicable. Users authenticate with a real provider from the start, eliminating the complexity of UID migration and the edge case of email account conflicts during linking.
 - **Consequences:**
-  - (+) Seamless upgrade path
-  - (−) Edge case: nếu email đã có account khác → conflict, user phải chọn (handle trong UI)
+  - (+) Simpler auth flow — one step instead of two
+  - (+) No UID migration risk
+  - (+) No edge case handling for "email already has an account" conflict
+  - (−) User must have a Google or Apple account (acceptable for iOS/Android market)
 
 ---
 
@@ -440,7 +441,7 @@
 | 010 | Sync on write + foreground + manual | UX responsiveness |
 | 011 | Sync scope excludes TimelineProjection | Cost optimization |
 | 012 | Firestore 1-1 mirror, per-user | Security simplicity |
-| 013 | Firebase Auth linking | Anon → email path |
+| 013 | ~~Firebase Auth linking~~ (Deprecated) | ~~Anon → email path~~ → Direct provider sign-in |
 | 014 | scenarioId từ v1 | Tier 2 readiness |
 | 015 | In-memory + property-based tests | Engine trust |
 | 016 | Drift schema versioning | Migration safety |

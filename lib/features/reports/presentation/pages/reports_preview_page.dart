@@ -35,6 +35,7 @@ class _ReportsPreviewPageState extends State<ReportsPreviewPage> {
   final _dataManagement = getIt<DataManagementService>();
   final _shareLauncher = getIt<ShareLauncher>();
   final _settingsRepository = getIt<SettingsRepository>();
+  late final _settingsStream = _settingsRepository.watchSettings();
 
   bool _isGenerating = false;
   ReportTimeRange _selectedRange = ReportTimeRange.fullHistory;
@@ -62,7 +63,7 @@ class _ReportsPreviewPageState extends State<ReportsPreviewPage> {
                 }
 
                 return StreamBuilder<UserSettings>(
-                  stream: _settingsRepository.watchSettings(),
+                  stream: _settingsStream,
                   builder: (context, settingsSnapshot) {
                     final settings = settingsSnapshot.data;
                     if (settings == null) {

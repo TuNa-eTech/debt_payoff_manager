@@ -59,6 +59,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentTypeLumpSumLabel => 'Lump sum';
 
   @override
+  String get debtStatusActive => 'Active';
+
+  @override
+  String get debtStatusPaidOff => 'Paid off';
+
+  @override
+  String get debtStatusArchived => 'Archived';
+
+  @override
+  String get debtStatusPaused => 'Paused';
+
+  @override
   String get homeCurrentBalanceTitle => 'Current total balance';
 
   @override
@@ -190,6 +202,79 @@ class AppLocalizationsEn extends AppLocalizations {
   String get monthlyActionNextActionPrimary => 'View plan';
 
   @override
+  String get monthlyActionDoneProofTitle => 'This month is done';
+
+  @override
+  String monthlyActionDoneProofSubtitle(String amount) {
+    return 'Logged $amount this month.';
+  }
+
+  @override
+  String monthlyActionDoneProofSingleRemaining(
+    String debtName,
+    String balance,
+  ) {
+    return '$debtName has $balance remaining.';
+  }
+
+  @override
+  String monthlyActionDoneProofSinglePaidOff(String debtName) {
+    return '$debtName is paid off.';
+  }
+
+  @override
+  String get monthlyActionStatLogged => 'Logged';
+
+  @override
+  String get monthlyActionStatRemaining => 'Remaining';
+
+  @override
+  String get monthlyActionStatLatestLogged => 'Latest';
+
+  @override
+  String get monthlyActionNoLoggedDate => 'None';
+
+  @override
+  String get monthlyActionViewHistory => 'View history';
+
+  @override
+  String get monthlyActionLogAnother => 'Log another';
+
+  @override
+  String get monthlyActionViewProgress => 'View progress';
+
+  @override
+  String get monthlyActionAddAnotherDebt => 'Add another debt';
+
+  @override
+  String get monthlyActionSingleDebtTitle => 'This debt';
+
+  @override
+  String get monthlyActionSingleDebtPaidOffTitle => 'This debt is paid off';
+
+  @override
+  String get monthlyActionSingleDebtRemainingLabel => 'Remaining balance';
+
+  @override
+  String get monthlyActionSingleDebtDueDateLabel => 'Due date';
+
+  @override
+  String get monthlyActionSingleDebtStatusLabel => 'Status';
+
+  @override
+  String monthlyActionCompletedChecklistTitle(int completed, int total) {
+    return 'Completed $completed/$total';
+  }
+
+  @override
+  String monthlyActionLoggedProof(String amount, String date) {
+    return 'Logged $amount on $date';
+  }
+
+  @override
+  String get monthlyActionNextPay => 'Next to pay';
+
+  @override
   String monthlyActionRequiredTotal(String amount) {
     return 'Need to pay $amount';
   }
@@ -214,6 +299,18 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get monthlyActionOptionalHelper =>
       'This payment helps shorten your payoff timeline.';
+
+  @override
+  String get monthlyActionMinimumSubtitle => 'Required payment for this debt.';
+
+  @override
+  String get monthlyActionExtraSubtitle =>
+      'Suggested extra payment to finish sooner.';
+
+  @override
+  String monthlyActionExtraPrioritySubtitle(int rank) {
+    return 'Priority #$rank extra payment to finish sooner.';
+  }
 
   @override
   String get monthlyActionOverdueChip => 'Overdue';
@@ -243,6 +340,12 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get monthlyActionConfirmSubtitle =>
       'This will be added to your history and will update your payoff plan.';
+
+  @override
+  String get monthlyActionConfirmPrimary => 'Confirm paid';
+
+  @override
+  String get monthlyActionLogDifferent => 'Log a different payment';
 
   @override
   String get monthlyActionInfoDebt => 'Debt';
@@ -672,7 +775,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get syncBackupBody =>
-      'Your app is currently running in local-only mode. You still have full export, local backup, and restore without an account.';
+      'Sign in to back up this device to your private cloud mirror. Local export, local backup, and restore stay available.';
 
   @override
   String get syncBackupContinueLocal => 'Keep using local-only';
@@ -696,8 +799,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get syncBackupFreeTitle => 'Already included in Free';
 
   @override
-  String get syncBackupHeadline =>
-      'Cloud backup is the next step, not a requirement to use the app.';
+  String get syncBackupHeadline => 'Turn on cloud backup';
 
   @override
   String get syncBackupPremiumBulletCloud => 'Cloud backup across devices';
@@ -720,6 +822,57 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get syncBackupTrustMessage =>
       'Our trust commitment does not change: data starts on-device, no bank linking, and local export stays open even when Premium arrives.';
+
+  @override
+  String get syncBackupDisable => 'Disable cloud backup';
+
+  @override
+  String get syncBackupDisableConfirm => 'Delete cloud backup';
+
+  @override
+  String get syncBackupDisableDialogBody =>
+      'This stops sync, deletes your cloud mirror, and keeps all data on this device.';
+
+  @override
+  String get syncBackupDisableDialogTitle => 'Disable cloud backup?';
+
+  @override
+  String get syncBackupDisableSuccess =>
+      'Cloud backup is disabled. Your local data is unchanged.';
+
+  @override
+  String get syncBackupEnableSuccess => 'Cloud backup is enabled.';
+
+  @override
+  String get syncBackupEnabledBody =>
+      'This device is connected to your private backup. Changes continue to sync when the app is online.';
+
+  @override
+  String get syncBackupEnabledHeadline => 'Cloud backup is on';
+
+  @override
+  String get syncBackupLastSynced => 'Last synced';
+
+  @override
+  String get syncBackupLastSyncedPending => 'Waiting for first sync';
+
+  @override
+  String get syncBackupSignedInAs => 'Signed in as';
+
+  @override
+  String get syncBackupSignInApple => 'Continue with Apple';
+
+  @override
+  String get syncBackupSignInGoogle => 'Continue with Google';
+
+  @override
+  String get syncBackupStatus => 'Status';
+
+  @override
+  String get syncBackupStatusEnabled => 'Enabled';
+
+  @override
+  String get syncBackupSyncing => 'Syncing';
 
   @override
   String get syncBackupViewPricing => 'View Free vs Premium';

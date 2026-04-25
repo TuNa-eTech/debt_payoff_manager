@@ -63,6 +63,7 @@ class UserSettings extends Equatable {
     String? id,
     int? trustLevel,
     String? firebaseUid,
+    bool clearFirebaseUid = false,
     String? currencyCode,
     String? localeCode,
     String? dayCountConvention,
@@ -81,7 +82,7 @@ class UserSettings extends Equatable {
     return UserSettings(
       id: id ?? this.id,
       trustLevel: trustLevel ?? this.trustLevel,
-      firebaseUid: firebaseUid ?? this.firebaseUid,
+      firebaseUid: clearFirebaseUid ? null : firebaseUid ?? this.firebaseUid,
       currencyCode: currencyCode ?? this.currencyCode,
       localeCode: localeCode ?? this.localeCode,
       dayCountConvention: dayCountConvention ?? this.dayCountConvention,

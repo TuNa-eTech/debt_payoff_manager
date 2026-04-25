@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -31,12 +33,31 @@ class PaymentHistoryPage extends StatefulWidget {
 class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
   final DebtRepository _debtRepository = getIt.get<DebtRepository>();
   final PaymentRepository _paymentRepository = getIt.get<PaymentRepository>();
+  late Stream<Debt?> _debtStream;
+  late Stream<List<Payment>> _paymentsStream;
   String? _selectedMonth;
+
+  @override
+  void initState() {
+    super.initState();
+    _debtStream = _debtRepository.watchDebtById(widget.id);
+    _paymentsStream = _paymentRepository.watchPaymentsForDebt(widget.id);
+  }
+
+  @override
+  void didUpdateWidget(covariant PaymentHistoryPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.id != widget.id) {
+      _debtStream = _debtRepository.watchDebtById(widget.id);
+      _paymentsStream = _paymentRepository.watchPaymentsForDebt(widget.id);
+      _selectedMonth = null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Debt?>(
-      stream: _debtRepository.watchDebtById(widget.id),
+      stream: _debtStream,
       builder: (context, debtSnapshot) {
         final debt = debtSnapshot.data;
         if (debtSnapshot.connectionState == ConnectionState.waiting &&
@@ -47,7 +68,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
         }
 
         return StreamBuilder<List<Payment>>(
-          stream: _paymentRepository.watchPaymentsForDebt(widget.id),
+          stream: _paymentsStream,
           builder: (context, paymentsSnapshot) {
             final payments = paymentsSnapshot.data ?? const <Payment>[];
             final months = _availableMonths(payments);

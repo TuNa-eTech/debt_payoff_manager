@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui' show SemanticsAction;
 
 import 'package:drift/native.dart';
@@ -9,21 +10,34 @@ import 'package:mocktail/mocktail.dart';
 import 'package:debt_payoff_manager/l10n/app_localizations.dart';
 
 import 'package:debt_payoff_manager/core/constants/app_test_keys.dart';
+import 'package:debt_payoff_manager/core/di/injection.dart';
+import 'package:debt_payoff_manager/core/services/payment_logging_service.dart';
 import 'package:debt_payoff_manager/core/widgets/debt_card.dart'
     as shared_debt_card;
 import 'package:debt_payoff_manager/data/local/database.dart';
 import 'package:debt_payoff_manager/data/repositories/debt_repository_impl.dart';
+import 'package:debt_payoff_manager/domain/entities/debt.dart';
+import 'package:debt_payoff_manager/domain/entities/payment.dart';
 import 'package:debt_payoff_manager/domain/enums/debt_status.dart';
 import 'package:debt_payoff_manager/domain/repositories/debt_repository.dart';
+import 'package:debt_payoff_manager/domain/repositories/payment_repository.dart';
 import 'package:debt_payoff_manager/features/debts/cubit/debt_form_cubit.dart';
 import 'package:debt_payoff_manager/features/debts/cubit/debts_cubit.dart';
 import 'package:debt_payoff_manager/features/debts/cubit/debts_state.dart';
 import 'package:debt_payoff_manager/features/debts/presentation/pages/add_debt_page.dart';
+import 'package:debt_payoff_manager/features/debts/presentation/pages/debt_detail_page.dart';
 import 'package:debt_payoff_manager/features/debts/presentation/pages/debts_list_page.dart';
+import 'package:debt_payoff_manager/features/debts/presentation/pages/log_payment_page.dart';
+import 'package:debt_payoff_manager/features/debts/presentation/pages/payment_history_page.dart';
 
 import '../../../data/repositories/repository_test_helpers.dart';
 
 class _MockDebtRepository extends Mock implements DebtRepository {}
+
+class _MockPaymentRepository extends Mock implements PaymentRepository {}
+
+class _MockPaymentLoggingService extends Mock
+    implements PaymentLoggingService {}
 
 class _TestDebtsCubit extends DebtsCubit {
   _TestDebtsCubit() : super(debtRepository: _MockDebtRepository());
@@ -34,6 +48,10 @@ class _TestDebtsCubit extends DebtsCubit {
 void main() {
   late AppDatabase db;
   late DebtRepositoryImpl repo;
+
+  setUpAll(() {
+    registerFallbackValue(makeRepoDebt());
+  });
 
   setUp(() {
     db = AppDatabase(NativeDatabase.memory());
@@ -354,6 +372,224 @@ void main() {
       expect(find.text('1,500.00'), findsOneWidget);
       expect(find.text('1,800.00'), findsOneWidget);
     });
+
+    testWidgets(
+      'debt detail keeps the same debt stream across parent rebuilds',
+      (tester) async {
+        final repository = _MockDebtRepository();
+        final debtStream = StreamController<dynamic>.broadcast();
+        var watchCalls = 0;
+
+        addTearDown(() async {
+          await debtStream.close();
+          await getIt.reset();
+        });
+
+        await getIt.reset();
+        getIt.registerSingleton<DebtRepository>(repository);
+        when(() => repository.watchDebtById('stable-detail')).thenAnswer((_) {
+          watchCalls += 1;
+          return debtStream.stream.cast<Debt?>();
+        });
+
+        await tester.pumpWidget(
+          MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const DebtDetailPage(id: 'stable-detail'),
+          ),
+        );
+        debtStream.add(makeRepoDebt(id: 'stable-detail', name: 'Stable debt'));
+        await tester.pump();
+
+        expect(find.text('Stable debt'), findsOneWidget);
+        expect(watchCalls, 1);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const DebtDetailPage(id: 'stable-detail'),
+          ),
+        );
+        await tester.pump();
+
+        expect(find.text('Stable debt'), findsOneWidget);
+        expect(watchCalls, 1);
+      },
+    );
+
+    testWidgets('debt detail undo snackbar auto-dismisses without action', (
+      tester,
+    ) async {
+      final repository = _MockDebtRepository();
+      final cubit = DebtsCubit(debtRepository: repository);
+      final paidOffDebt = makeRepoDebt(
+        id: 'snackbar-timeout',
+        name: 'Snackbar timeout',
+        currentBalance: 0,
+        status: DebtStatus.paidOff,
+      );
+
+      addTearDown(() async {
+        await cubit.close();
+        await getIt.reset();
+      });
+
+      await getIt.reset();
+      getIt.registerSingleton<DebtRepository>(repository);
+      when(
+        () => repository.watchDebtById('snackbar-timeout'),
+      ).thenAnswer((_) => Stream<Debt?>.value(paidOffDebt));
+      when(() => repository.updateDebt(any())).thenAnswer((_) async {});
+
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: BlocProvider<DebtsCubit>.value(
+            value: cubit,
+            child: const DebtDetailPage(id: 'snackbar-timeout'),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+
+      await tester.tap(find.byKey(AppTestKeys.debtDetailMore));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(AppTestKeys.debtOptionArchive));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(AppTestKeys.dialogConfirmPrimary));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(AppTestKeys.snackbarUndo), findsOneWidget);
+      expect(find.byType(SnackBar), findsOneWidget);
+
+      await tester.pump(const Duration(seconds: 7));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.byType(SnackBar), findsNothing);
+    });
+
+    testWidgets(
+      'log payment keeps the same debt stream across local rebuilds',
+      (tester) async {
+        final repository = _MockDebtRepository();
+        final paymentLoggingService = _MockPaymentLoggingService();
+        final debtStream = StreamController<dynamic>.broadcast();
+        var watchCalls = 0;
+
+        addTearDown(() async {
+          await debtStream.close();
+          await getIt.reset();
+        });
+
+        await getIt.reset();
+        getIt
+          ..registerSingleton<DebtRepository>(repository)
+          ..registerSingleton<PaymentLoggingService>(paymentLoggingService);
+        when(() => repository.watchDebtById('log-stable')).thenAnswer((_) {
+          watchCalls += 1;
+          return debtStream.stream.cast<Debt?>();
+        });
+
+        await tester.pumpWidget(
+          MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const LogPaymentPage(id: 'log-stable'),
+          ),
+        );
+        debtStream.add(makeRepoDebt(id: 'log-stable', name: 'Log stable debt'));
+        await tester.pump();
+
+        expect(find.text('Log stable debt'), findsOneWidget);
+        expect(watchCalls, 1);
+
+        await tester.tap(find.byKey(AppTestKeys.paymentTypeExtra));
+        await tester.pump();
+
+        expect(find.text('Log stable debt'), findsOneWidget);
+        expect(watchCalls, 1);
+      },
+    );
+
+    testWidgets(
+      'payment history keeps debt and payment streams across month changes',
+      (tester) async {
+        final debtRepository = _MockDebtRepository();
+        final paymentRepository = _MockPaymentRepository();
+        final debtStream = StreamController<dynamic>.broadcast();
+        final paymentStream = StreamController<dynamic>.broadcast();
+        var debtWatchCalls = 0;
+        var paymentWatchCalls = 0;
+
+        addTearDown(() async {
+          await debtStream.close();
+          await paymentStream.close();
+          await getIt.reset();
+        });
+
+        await getIt.reset();
+        getIt
+          ..registerSingleton<DebtRepository>(debtRepository)
+          ..registerSingleton<PaymentRepository>(paymentRepository);
+        when(() => debtRepository.watchDebtById('history-stable')).thenAnswer((
+          _,
+        ) {
+          debtWatchCalls += 1;
+          return debtStream.stream.cast<Debt?>();
+        });
+        when(
+          () => paymentRepository.watchPaymentsForDebt('history-stable'),
+        ).thenAnswer((_) {
+          paymentWatchCalls += 1;
+          return paymentStream.stream.cast<List<Payment>>();
+        });
+
+        await tester.pumpWidget(
+          MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const PaymentHistoryPage(id: 'history-stable'),
+          ),
+        );
+        debtStream.add(
+          makeRepoDebt(id: 'history-stable', name: 'History stable debt'),
+        );
+        await tester.pump();
+
+        paymentStream.add([
+          makeRepoPayment(
+            id: 'payment-may',
+            debtId: 'history-stable',
+            date: DateTime(2026, 5, 10),
+          ),
+          makeRepoPayment(
+            id: 'payment-apr',
+            debtId: 'history-stable',
+            date: DateTime(2026, 4, 10),
+          ),
+        ]);
+        await tester.pumpAndSettle();
+
+        expect(find.text('History stable debt'), findsOneWidget);
+        expect(debtWatchCalls, 1);
+        expect(paymentWatchCalls, 1);
+
+        final aprilChip = find.byKey(
+          AppTestKeys.paymentHistoryMonthChip('2026-04'),
+        );
+        await tester.ensureVisible(aprilChip);
+        await tester.tap(aprilChip);
+        await tester.pump();
+
+        expect(find.text('History stable debt'), findsOneWidget);
+        expect(debtWatchCalls, 1);
+        expect(paymentWatchCalls, 1);
+      },
+    );
   });
 }
 

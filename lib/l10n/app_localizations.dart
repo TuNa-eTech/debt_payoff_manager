@@ -194,6 +194,30 @@ abstract class AppLocalizations {
   /// **'Lump sum'**
   String get paymentTypeLumpSumLabel;
 
+  /// Localized debt status label.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get debtStatusActive;
+
+  /// Localized debt status label.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid off'**
+  String get debtStatusPaidOff;
+
+  /// Localized debt status label.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get debtStatusArchived;
+
+  /// Localized debt status label.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get debtStatusPaused;
+
   /// Title on the home hero card for the current outstanding balance.
   ///
   /// In en, this message translates to:
@@ -416,6 +440,126 @@ abstract class AppLocalizations {
   /// **'View plan'**
   String get monthlyActionNextActionPrimary;
 
+  /// Title for the all-done proof dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'This month is done'**
+  String get monthlyActionDoneProofTitle;
+
+  /// Subtitle for the all-done proof dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged {amount} this month.'**
+  String monthlyActionDoneProofSubtitle(String amount);
+
+  /// All-done subtitle when only one debt is tracked and still has balance.
+  ///
+  /// In en, this message translates to:
+  /// **'{debtName} has {balance} remaining.'**
+  String monthlyActionDoneProofSingleRemaining(String debtName, String balance);
+
+  /// All-done subtitle when the only tracked debt is paid off.
+  ///
+  /// In en, this message translates to:
+  /// **'{debtName} is paid off.'**
+  String monthlyActionDoneProofSinglePaidOff(String debtName);
+
+  /// Label for total logged payments this month.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged'**
+  String get monthlyActionStatLogged;
+
+  /// Label for remaining debt balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining'**
+  String get monthlyActionStatRemaining;
+
+  /// Label for latest logged payment date.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest'**
+  String get monthlyActionStatLatestLogged;
+
+  /// Fallback when there is no logged payment date.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get monthlyActionNoLoggedDate;
+
+  /// CTA to view payment history.
+  ///
+  /// In en, this message translates to:
+  /// **'View history'**
+  String get monthlyActionViewHistory;
+
+  /// CTA to log another payment.
+  ///
+  /// In en, this message translates to:
+  /// **'Log another'**
+  String get monthlyActionLogAnother;
+
+  /// CTA to view payoff progress.
+  ///
+  /// In en, this message translates to:
+  /// **'View progress'**
+  String get monthlyActionViewProgress;
+
+  /// CTA to add another debt after payoff.
+  ///
+  /// In en, this message translates to:
+  /// **'Add another debt'**
+  String get monthlyActionAddAnotherDebt;
+
+  /// Title for a compact single-debt status card.
+  ///
+  /// In en, this message translates to:
+  /// **'This debt'**
+  String get monthlyActionSingleDebtTitle;
+
+  /// Title for a compact single-debt payoff card.
+  ///
+  /// In en, this message translates to:
+  /// **'This debt is paid off'**
+  String get monthlyActionSingleDebtPaidOffTitle;
+
+  /// Label for remaining balance on the single-debt card.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining balance'**
+  String get monthlyActionSingleDebtRemainingLabel;
+
+  /// Label for due date on the single-debt card.
+  ///
+  /// In en, this message translates to:
+  /// **'Due date'**
+  String get monthlyActionSingleDebtDueDateLabel;
+
+  /// Label for status on the single-debt card.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get monthlyActionSingleDebtStatusLabel;
+
+  /// Collapsed checklist header after all monthly actions are complete.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed {completed}/{total}'**
+  String monthlyActionCompletedChecklistTitle(int completed, int total);
+
+  /// Proof line for a completed monthly action item.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged {amount} on {date}'**
+  String monthlyActionLoggedProof(String amount, String date);
+
+  /// Small label on the first monthly action card.
+  ///
+  /// In en, this message translates to:
+  /// **'Next to pay'**
+  String get monthlyActionNextPay;
+
   /// Subtitle on a required monthly-action debt card.
   ///
   /// In en, this message translates to:
@@ -451,6 +595,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This payment helps shorten your payoff timeline.'**
   String get monthlyActionOptionalHelper;
+
+  /// Short helper text for a minimum-payment monthly action.
+  ///
+  /// In en, this message translates to:
+  /// **'Required payment for this debt.'**
+  String get monthlyActionMinimumSubtitle;
+
+  /// Short helper text for an extra-payment monthly action.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested extra payment to finish sooner.'**
+  String get monthlyActionExtraSubtitle;
+
+  /// Short helper text for a prioritized extra-payment monthly action.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority #{rank} extra payment to finish sooner.'**
+  String monthlyActionExtraPrioritySubtitle(int rank);
 
   /// Chip label
   ///
@@ -499,6 +661,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This will be added to your history and will update your payoff plan.'**
   String get monthlyActionConfirmSubtitle;
+
+  /// Primary CTA in the monthly action confirmation sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm paid'**
+  String get monthlyActionConfirmPrimary;
+
+  /// Secondary CTA in the monthly action confirmation sheet for custom payment details.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a different payment'**
+  String get monthlyActionLogDifferent;
 
   /// Label for the debt name row in the monthly action confirmation sheet.
   ///
@@ -1229,7 +1403,7 @@ abstract class AppLocalizations {
   /// Body copy on the sync backup page.
   ///
   /// In en, this message translates to:
-  /// **'Your app is currently running in local-only mode. You still have full export, local backup, and restore without an account.'**
+  /// **'Sign in to back up this device to your private cloud mirror. Local export, local backup, and restore stay available.'**
   String get syncBackupBody;
 
   /// Secondary CTA on the sync backup page.
@@ -1271,7 +1445,7 @@ abstract class AppLocalizations {
   /// Headline on the sync backup page.
   ///
   /// In en, this message translates to:
-  /// **'Cloud backup is the next step, not a requirement to use the app.'**
+  /// **'Turn on cloud backup'**
   String get syncBackupHeadline;
 
   /// Premium bullet on the sync backup page describing cloud backup.
@@ -1309,6 +1483,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Our trust commitment does not change: data starts on-device, no bank linking, and local export stays open even when Premium arrives.'**
   String get syncBackupTrustMessage;
+
+  /// Button label for disabling cloud backup.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable cloud backup'**
+  String get syncBackupDisable;
+
+  /// Confirmation button for disabling cloud backup and deleting cloud data.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete cloud backup'**
+  String get syncBackupDisableConfirm;
+
+  /// Body copy for the disable cloud backup confirmation dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'This stops sync, deletes your cloud mirror, and keeps all data on this device.'**
+  String get syncBackupDisableDialogBody;
+
+  /// Title for the disable cloud backup confirmation dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable cloud backup?'**
+  String get syncBackupDisableDialogTitle;
+
+  /// Snackbar shown after cloud backup is disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud backup is disabled. Your local data is unchanged.'**
+  String get syncBackupDisableSuccess;
+
+  /// Snackbar shown after cloud backup is enabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud backup is enabled.'**
+  String get syncBackupEnableSuccess;
+
+  /// Body copy on the sync backup page when cloud backup is enabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This device is connected to your private backup. Changes continue to sync when the app is online.'**
+  String get syncBackupEnabledBody;
+
+  /// Headline on the sync backup page when cloud backup is enabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud backup is on'**
+  String get syncBackupEnabledHeadline;
+
+  /// Label for the last synced timestamp.
+  ///
+  /// In en, this message translates to:
+  /// **'Last synced'**
+  String get syncBackupLastSynced;
+
+  /// Status when no sync timestamp is available yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for first sync'**
+  String get syncBackupLastSyncedPending;
+
+  /// Label for the signed-in cloud backup account.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in as'**
+  String get syncBackupSignedInAs;
+
+  /// Button label for Apple sign-in.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Apple'**
+  String get syncBackupSignInApple;
+
+  /// Button label for Google sign-in.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get syncBackupSignInGoogle;
+
+  /// Label for cloud backup status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get syncBackupStatus;
+
+  /// Enabled cloud backup status value.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabled'**
+  String get syncBackupStatusEnabled;
+
+  /// Syncing status value.
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing'**
+  String get syncBackupSyncing;
 
   /// Primary CTA on the sync backup page that opens pricing.
   ///

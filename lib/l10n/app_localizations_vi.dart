@@ -59,6 +59,18 @@ class AppLocalizationsVi extends AppLocalizations {
   String get paymentTypeLumpSumLabel => 'Trả dồn';
 
   @override
+  String get debtStatusActive => 'Đang trả';
+
+  @override
+  String get debtStatusPaidOff => 'Đã trả xong';
+
+  @override
+  String get debtStatusArchived => 'Đã lưu trữ';
+
+  @override
+  String get debtStatusPaused => 'Tạm dừng';
+
+  @override
   String get homeCurrentBalanceTitle => 'Tổng dư nợ hiện tại';
 
   @override
@@ -190,6 +202,79 @@ class AppLocalizationsVi extends AppLocalizations {
   String get monthlyActionNextActionPrimary => 'Xem kế hoạch';
 
   @override
+  String get monthlyActionDoneProofTitle => 'Tháng này đã xong';
+
+  @override
+  String monthlyActionDoneProofSubtitle(String amount) {
+    return 'Đã log $amount trong tháng này.';
+  }
+
+  @override
+  String monthlyActionDoneProofSingleRemaining(
+    String debtName,
+    String balance,
+  ) {
+    return '$debtName còn lại $balance.';
+  }
+
+  @override
+  String monthlyActionDoneProofSinglePaidOff(String debtName) {
+    return '$debtName đã trả xong.';
+  }
+
+  @override
+  String get monthlyActionStatLogged => 'Đã log';
+
+  @override
+  String get monthlyActionStatRemaining => 'Còn lại';
+
+  @override
+  String get monthlyActionStatLatestLogged => 'Gần nhất';
+
+  @override
+  String get monthlyActionNoLoggedDate => 'Chưa có';
+
+  @override
+  String get monthlyActionViewHistory => 'Xem lịch sử';
+
+  @override
+  String get monthlyActionLogAnother => 'Log thêm';
+
+  @override
+  String get monthlyActionViewProgress => 'Xem tiến độ';
+
+  @override
+  String get monthlyActionAddAnotherDebt => 'Thêm khoản nợ khác';
+
+  @override
+  String get monthlyActionSingleDebtTitle => 'Khoản nợ này';
+
+  @override
+  String get monthlyActionSingleDebtPaidOffTitle => 'Khoản nợ này đã trả xong';
+
+  @override
+  String get monthlyActionSingleDebtRemainingLabel => 'Số dư còn lại';
+
+  @override
+  String get monthlyActionSingleDebtDueDateLabel => 'Ngày due';
+
+  @override
+  String get monthlyActionSingleDebtStatusLabel => 'Trạng thái';
+
+  @override
+  String monthlyActionCompletedChecklistTitle(int completed, int total) {
+    return 'Đã hoàn thành $completed/$total';
+  }
+
+  @override
+  String monthlyActionLoggedProof(String amount, String date) {
+    return 'Đã log $amount ngày $date';
+  }
+
+  @override
+  String get monthlyActionNextPay => 'Cần xử lý tiếp';
+
+  @override
   String monthlyActionRequiredTotal(String amount) {
     return 'Cần trả $amount';
   }
@@ -214,6 +299,18 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get monthlyActionOptionalHelper =>
       'Khoản này giúp bạn rút ngắn thời gian hết nợ.';
+
+  @override
+  String get monthlyActionMinimumSubtitle => 'Khoản bắt buộc của debt này.';
+
+  @override
+  String get monthlyActionExtraSubtitle =>
+      'Khoản trả thêm được gợi ý để hết nợ sớm hơn.';
+
+  @override
+  String monthlyActionExtraPrioritySubtitle(int rank) {
+    return 'Ưu tiên #$rank để rút ngắn thời gian hết nợ.';
+  }
 
   @override
   String get monthlyActionOverdueChip => 'Quá hạn';
@@ -243,6 +340,12 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get monthlyActionConfirmSubtitle =>
       'Khoản này sẽ được lưu vào lịch sử và cập nhật lại kế hoạch trả nợ của bạn.';
+
+  @override
+  String get monthlyActionConfirmPrimary => 'Xác nhận đã thanh toán';
+
+  @override
+  String get monthlyActionLogDifferent => 'Log payment khác';
 
   @override
   String get monthlyActionInfoDebt => 'Khoản nợ';
@@ -675,7 +778,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get syncBackupBody =>
-      'Hiện tại app của bạn đang ở chế độ local-only. Bạn vẫn có đầy đủ export, local backup và restore mà không cần tài khoản.';
+      'Đăng nhập để sao lưu thiết bị này vào cloud mirror riêng của bạn. Local export, local backup và restore vẫn luôn khả dụng.';
 
   @override
   String get syncBackupContinueLocal => 'Tiếp tục dùng local-only';
@@ -700,8 +803,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get syncBackupFreeTitle => 'Bạn đã có trong bản miễn phí';
 
   @override
-  String get syncBackupHeadline =>
-      'Sao lưu đám mây là bước tiếp theo, không phải điều kiện để dùng app.';
+  String get syncBackupHeadline => 'Bật sao lưu đám mây';
 
   @override
   String get syncBackupPremiumBulletCloud => 'Cloud backup giữa nhiều thiết bị';
@@ -724,6 +826,57 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get syncBackupTrustMessage =>
       'Cam kết trust không đổi: dữ liệu khởi đầu nằm trên thiết bị, không bank linking, và export local vẫn luôn mở ngay cả khi Premium xuất hiện.';
+
+  @override
+  String get syncBackupDisable => 'Tắt sao lưu đám mây';
+
+  @override
+  String get syncBackupDisableConfirm => 'Xóa bản sao cloud';
+
+  @override
+  String get syncBackupDisableDialogBody =>
+      'Thao tác này dừng sync, xóa cloud mirror và giữ nguyên toàn bộ dữ liệu trên thiết bị này.';
+
+  @override
+  String get syncBackupDisableDialogTitle => 'Tắt sao lưu đám mây?';
+
+  @override
+  String get syncBackupDisableSuccess =>
+      'Đã tắt sao lưu đám mây. Dữ liệu local không thay đổi.';
+
+  @override
+  String get syncBackupEnableSuccess => 'Đã bật sao lưu đám mây.';
+
+  @override
+  String get syncBackupEnabledBody =>
+      'Thiết bị này đang kết nối với bản sao lưu riêng của bạn. Các thay đổi tiếp tục sync khi app online.';
+
+  @override
+  String get syncBackupEnabledHeadline => 'Sao lưu đám mây đang bật';
+
+  @override
+  String get syncBackupLastSynced => 'Sync gần nhất';
+
+  @override
+  String get syncBackupLastSyncedPending => 'Đang chờ lần sync đầu tiên';
+
+  @override
+  String get syncBackupSignedInAs => 'Đăng nhập bằng';
+
+  @override
+  String get syncBackupSignInApple => 'Tiếp tục với Apple';
+
+  @override
+  String get syncBackupSignInGoogle => 'Tiếp tục với Google';
+
+  @override
+  String get syncBackupStatus => 'Trạng thái';
+
+  @override
+  String get syncBackupStatusEnabled => 'Đã bật';
+
+  @override
+  String get syncBackupSyncing => 'Đang sync';
 
   @override
   String get syncBackupViewPricing => 'Xem Free vs Premium';
