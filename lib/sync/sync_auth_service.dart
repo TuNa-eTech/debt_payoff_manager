@@ -100,7 +100,9 @@ class FirebaseSyncAuthService implements SyncAuthService {
       if (error.code == GoogleSignInExceptionCode.canceled) {
         throw const SyncAuthCancelledException();
       }
-      debugPrint('Google Sign-In Exception [${error.code}]: ${error.description}\n$stackTrace');
+      debugPrint(
+        'Google Sign-In Exception [${error.code}]: ${error.description}\n$stackTrace',
+      );
       rethrow;
     } catch (error, stackTrace) {
       debugPrint('Google Sign-In Error: $error\n$stackTrace');
@@ -148,7 +150,9 @@ class FirebaseSyncAuthService implements SyncAuthService {
       if (error.code == AuthorizationErrorCode.canceled) {
         throw const SyncAuthCancelledException();
       }
-      debugPrint('Apple Sign-In Exception [${error.code}]: ${error.message}\n$stackTrace');
+      debugPrint(
+        'Apple Sign-In Exception [${error.code}]: ${error.message}\n$stackTrace',
+      );
       rethrow;
     } catch (error, stackTrace) {
       debugPrint('Apple Sign-In Error: $error\n$stackTrace');

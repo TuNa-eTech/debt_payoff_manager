@@ -35,6 +35,8 @@ class SyncEngine {
   final SyncRemoteWriter _remoteWriter;
   final SyncPullApplier _pullApplier;
   StreamSubscription<PullChangeSet>? _pullSubscription;
+  StreamSubscription<void>? _pushSubscription;
+  Timer? _pushDebounceTimer;
   final _stateController = StreamController<SyncEngineState>.broadcast();
 
   SyncEngineState _state = const SyncEngineState(
@@ -53,12 +55,8 @@ class SyncEngine {
     _setState(SyncEngineState(status: SyncEngineStatus.starting, uid: uid));
 
     try {
-      final batch = await _pushQueue.collectPendingWrites(uid: uid);
-      final syncedAt = DateTime.now().toUtc();
-      if (!batch.isEmpty) {
-        await _remoteWriter.pushBatch(batch);
-        await _pushQueue.markPushed(batch: batch, pushedAt: syncedAt);
-      }
+      // Perform initial push on startup
+      await _performPush(uid);
 
       await _pullSubscription?.cancel();
       _pullSubscription = _pullListener
@@ -76,11 +74,19 @@ class SyncEngine {
               );
             },
           );
+
+      // Start listening to local database changes for auto-push
+      await _pushSubscription?.cancel();
+      _pushSubscription = _pushQueue.watchPendingWrites().listen((_) {
+        _schedulePush();
+      });
+
       _setState(
         SyncEngineState(
           status: SyncEngineStatus.running,
           uid: uid,
-          lastSyncedAt: syncedAt,
+          lastSyncedAt: _state
+              .lastSyncedAt, // _performPush updates lastSyncedAt if successful
         ),
       );
     } catch (error) {
@@ -101,8 +107,16 @@ class SyncEngine {
     final previousSyncedAt = _state.lastSyncedAt;
     final uid = _state.uid;
     _setState(SyncEngineState(status: SyncEngineStatus.stopping, uid: uid));
+
+    _pushDebounceTimer?.cancel();
+    _pushDebounceTimer = null;
+
+    await _pushSubscription?.cancel();
+    _pushSubscription = null;
+
     await _pullSubscription?.cancel();
     _pullSubscription = null;
+
     await _pullListener.stop();
     _setState(
       SyncEngineState(
@@ -111,6 +125,45 @@ class SyncEngine {
         lastSyncedAt: previousSyncedAt,
       ),
     );
+  }
+
+  void _schedulePush() {
+    _pushDebounceTimer?.cancel();
+    _pushDebounceTimer = Timer(const Duration(seconds: 2), () {
+      if (_state.status == SyncEngineStatus.running && _state.uid != null) {
+        unawaited(_performPush(_state.uid!));
+      }
+    });
+  }
+
+  Future<void> _performPush(String uid) async {
+    try {
+      final batch = await _pushQueue.collectPendingWrites(uid: uid);
+      final syncedAt = DateTime.now().toUtc();
+
+      if (!batch.isEmpty) {
+        await _remoteWriter.pushBatch(batch);
+        await _pushQueue.markPushed(batch: batch, pushedAt: syncedAt);
+      } else {
+      }
+
+      _setState(
+        SyncEngineState(
+          status: SyncEngineStatus.running,
+          uid: uid,
+          lastSyncedAt: syncedAt,
+        ),
+      );
+    } catch (error) {
+      _setState(
+        SyncEngineState(
+          status: SyncEngineStatus.failed,
+          uid: uid,
+          lastSyncedAt: _state.lastSyncedAt,
+          lastError: error,
+        ),
+      );
+    }
   }
 
   Future<void> _handlePullChangeSet(PullChangeSet changeSet) async {

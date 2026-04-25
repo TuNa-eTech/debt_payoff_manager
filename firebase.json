@@ -11,5 +11,13 @@
       "port": 4000
     },
     "singleProjectMode": true
+  },
+  "auth": {
+    "providers": {
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "Debt Payoff Manager",
+        "supportEmail": "anhtu.it.se@gmail.com"
+      }
+    }
   }
 }

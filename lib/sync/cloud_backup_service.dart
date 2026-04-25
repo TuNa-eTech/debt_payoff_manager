@@ -47,6 +47,8 @@ abstract interface class CloudBackupService {
 
   Future<void> refresh();
 
+  Future<void> init();
+
   Future<void> enableWithGoogle();
 
   Future<void> enableWithApple();
@@ -92,6 +94,19 @@ class CloudBackupCoordinator implements CloudBackupService {
       _emit(_state.copyWith(account: account, clearAccount: account == null));
     } catch (error) {
       _emit(_state.copyWith(lastError: error));
+    }
+  }
+
+  @override
+  Future<void> init() async {
+    final settings = await _settingsRepository.getSettings();
+    final uid = settings.firebaseUid;
+    if (settings.trustLevel >= 1 && uid != null && uid.isNotEmpty) {
+      try {
+        await _syncEngine.start(uid: uid);
+      } catch (error) {
+        _emit(_state.copyWith(lastError: error));
+      }
     }
   }
 

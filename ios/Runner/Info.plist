@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>GIDClientID</key>
-	<string>931230818628-4pqgs5gcumbb0mjtpp4aerdssve7mmbh.apps.googleusercontent.com</string>
+	<string>931230818628-lg9qnes9jt3nt8785f18m48drplrgn7q.apps.googleusercontent.com</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -11,7 +11,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.931230818628-4pqgs5gcumbb0mjtpp4aerdssve7mmbh</string>
+				<string>com.googleusercontent.apps.931230818628-lg9qnes9jt3nt8785f18m48drplrgn7q</string>
 			</array>
 		</dict>
 	</array>

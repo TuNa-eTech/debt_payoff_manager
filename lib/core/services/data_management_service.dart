@@ -219,10 +219,14 @@ class DataManagementService {
     String filePrefix = 'debt_payoff_report',
   }) async {
     final tempDir = await _temporaryDirectoryProvider();
-    final timestamp = _nowProvider().toIso8601String().replaceAll(':', '-').split('.').first;
+    final timestamp = _nowProvider()
+        .toIso8601String()
+        .replaceAll(':', '-')
+        .split('.')
+        .first;
     final fileName = '${filePrefix}_$timestamp.pdf';
     final filePath = path.join(tempDir.path, fileName);
-    
+
     final file = File(filePath);
     await file.writeAsBytes(pdfBytes);
 

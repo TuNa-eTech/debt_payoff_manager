@@ -30,6 +30,8 @@ class SyncPushBatch {
 abstract interface class SyncPushQueue {
   Future<SyncPushBatch> collectPendingWrites({required String uid});
 
+  Stream<void> watchPendingWrites();
+
   Future<void> markPushed({
     required SyncPushBatch batch,
     required DateTime pushedAt,
@@ -117,6 +119,16 @@ class DriftSyncPushQueue implements SyncPushQueue {
     ];
 
     return SyncPushBatch(uid: uid, entries: entries);
+  }
+
+  @override
+  Stream<void> watchPendingWrites() {
+    return _syncStateStore
+        .watchAllStates()
+        .where((states) {
+          return states.any((state) => state.pendingWrites > 0);
+        })
+        .map((_) {});
   }
 
   @override

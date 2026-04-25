@@ -78,6 +78,10 @@ class _FakePushQueue implements SyncPushQueue {
 
   final SyncPushBatch batch;
   SyncPushBatch? markedBatch;
+  final _pendingWritesController = StreamController<void>.broadcast();
+
+  @override
+  Stream<void> watchPendingWrites() => _pendingWritesController.stream;
 
   @override
   Future<SyncPushBatch> collectPendingWrites({required String uid}) async {
