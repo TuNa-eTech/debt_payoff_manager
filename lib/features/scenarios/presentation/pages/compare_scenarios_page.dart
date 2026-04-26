@@ -10,9 +10,11 @@ import '../../../../core/utils/formatters.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../domain/entities/plan.dart';
 import '../../../../domain/entities/scenario.dart';
+import '../../../../domain/entities/user_settings.dart';
 import '../../../../domain/repositories/debt_repository.dart';
 import '../../../../domain/repositories/plan_repository.dart';
 import '../../../../domain/repositories/scenario_repository.dart';
+import '../../../../domain/repositories/settings_repository.dart';
 
 // ---------------------------------------------------------------------------
 // Data model
@@ -51,6 +53,8 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
   late final ScenarioRepository _scenarioRepo = getIt<ScenarioRepository>();
   late final DebtRepository _debtRepo = getIt<DebtRepository>();
   late final PlanRepository _planRepo = getIt<PlanRepository>();
+  late final Stream<UserSettings> _settingsStream =
+      getIt<SettingsRepository>().watchSettings();
 
   List<Scenario> _scenarios = [];
   Scenario? _selectedA;
@@ -103,62 +107,68 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Scaffold(
-      backgroundColor: AppColors.mdSurface,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(l10n.scenariosCompareTitle),
-      ),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(
-            AppDimensions.pagePaddingH,
-            AppDimensions.md,
-            AppDimensions.pagePaddingH,
-            AppDimensions.xxl,
+    return StreamBuilder<UserSettings>(
+      stream: _settingsStream,
+      builder: (context, settingsSnap) {
+        final settings = settingsSnap.data;
+        return Scaffold(
+          backgroundColor: AppColors.mdSurface,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            title: Text(l10n.scenariosCompareTitle),
           ),
-          children: [
-            // Scenario selectors
-            Row(
+          body: SafeArea(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(
+                AppDimensions.pagePaddingH,
+                AppDimensions.md,
+                AppDimensions.pagePaddingH,
+                AppDimensions.xxl,
+              ),
               children: [
-                Expanded(
-                  child: _ScenarioSelector(
-                    label: l10n.scenariosCompareSelectA,
-                    scenarios: _scenarios,
-                    selected: _selectedA,
-                    exclude: _selectedB,
-                    onChanged: (s) {
-                      setState(() => _selectedA = s);
-                      if (s != null) _loadSnapshot('a', s);
-                    },
-                  ),
+                // Scenario selectors
+                Row(
+                  children: [
+                    Expanded(
+                      child: _ScenarioSelector(
+                        label: l10n.scenariosCompareSelectA,
+                        scenarios: _scenarios,
+                        selected: _selectedA,
+                        exclude: _selectedB,
+                        onChanged: (s) {
+                          setState(() => _selectedA = s);
+                          if (s != null) _loadSnapshot('a', s);
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: AppDimensions.md),
+                    Expanded(
+                      child: _ScenarioSelector(
+                        label: l10n.scenariosCompareSelectB,
+                        scenarios: _scenarios,
+                        selected: _selectedB,
+                        exclude: _selectedA,
+                        onChanged: (s) {
+                          setState(() => _selectedB = s);
+                          if (s != null) _loadSnapshot('b', s);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: AppDimensions.md),
-                Expanded(
-                  child: _ScenarioSelector(
-                    label: l10n.scenariosCompareSelectB,
-                    scenarios: _scenarios,
-                    selected: _selectedB,
-                    exclude: _selectedA,
-                    onChanged: (s) {
-                      setState(() => _selectedB = s);
-                      if (s != null) _loadSnapshot('b', s);
-                    },
-                  ),
-                ),
+                const SizedBox(height: AppDimensions.xl),
+                if (_loading)
+                  const Center(child: CircularProgressIndicator())
+                else if (_snapA == null || _snapB == null)
+                  _buildPickPrompt(context)
+                else
+                  _buildComparison(context, _snapA!, _snapB!, settings),
               ],
             ),
-            const SizedBox(height: AppDimensions.xl),
-            if (_loading)
-              const Center(child: CircularProgressIndicator())
-            else if (_snapA == null || _snapB == null)
-              _buildPickPrompt(context)
-            else
-              _buildComparison(context, _snapA!, _snapB!),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -190,11 +200,11 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
     BuildContext context,
     _ScenarioSnapshot a,
     _ScenarioSnapshot b,
+    UserSettings? settings,
   ) {
     final l10n = context.l10n;
-    // Default formatting values — can be extended to read from Settings bloc
-    const currency = 'USD';
-    const locale = 'en';
+    final currencyCode = settings?.currencyCode ?? 'USD';
+    final localeCode = settings?.localeCode ?? 'en';
 
     // Determine winners
     final aFasterByMonths = _monthsBetween(a.debtFreeDate, b.debtFreeDate);
@@ -239,13 +249,13 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
           icon: LucideIcons.dollarSign,
           valueA: AppFormatters.formatCents(
             a.totalBalance,
-            currencyCode: currency,
-            localeCode: locale,
+            currencyCode: currencyCode,
+            localeCode: localeCode,
           ),
           valueB: AppFormatters.formatCents(
             b.totalBalance,
-            currencyCode: currency,
-            localeCode: locale,
+            currencyCode: currencyCode,
+            localeCode: localeCode,
           ),
           highlightA: a.totalBalance <= b.totalBalance,
           highlightB: b.totalBalance <= a.totalBalance,
@@ -255,12 +265,12 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
           rowLabel: l10n.scenariosCompareDebtFreeDate,
           icon: LucideIcons.calendarCheck2,
           valueA: a.debtFreeDate != null
-              ? AppFormatters.formatDate(a.debtFreeDate!, localeCode: locale)
+              ? AppFormatters.formatDate(a.debtFreeDate!, localeCode: localeCode)
               : (a.plan == null
                     ? l10n.scenariosCompareNoPlan
                     : l10n.scenariosCompareNotAvailable),
           valueB: b.debtFreeDate != null
-              ? AppFormatters.formatDate(b.debtFreeDate!, localeCode: locale)
+              ? AppFormatters.formatDate(b.debtFreeDate!, localeCode: localeCode)
               : (b.plan == null
                     ? l10n.scenariosCompareNoPlan
                     : l10n.scenariosCompareNotAvailable),
@@ -280,15 +290,15 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
           valueA: a.projectedInterest != null
               ? AppFormatters.formatCents(
                   a.projectedInterest!,
-                  currencyCode: currency,
-                  localeCode: locale,
+                  currencyCode: currencyCode,
+                  localeCode: localeCode,
                 )
               : l10n.scenariosCompareNotAvailable,
           valueB: b.projectedInterest != null
               ? AppFormatters.formatCents(
                   b.projectedInterest!,
-                  currencyCode: currency,
-                  localeCode: locale,
+                  currencyCode: currencyCode,
+                  localeCode: localeCode,
                 )
               : l10n.scenariosCompareNotAvailable,
           highlightA: aCheaperBy != null && aCheaperBy > 0,
@@ -297,8 +307,8 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
               ? l10n.scenariosCompareCheaper(
                   AppFormatters.formatCents(
                     aCheaperBy,
-                    currencyCode: currency,
-                    localeCode: locale,
+                    currencyCode: currencyCode,
+                    localeCode: localeCode,
                   ),
                 )
               : null,
@@ -306,8 +316,8 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
               ? l10n.scenariosCompareCheaper(
                   AppFormatters.formatCents(
                     bCheaperBy,
-                    currencyCode: currency,
-                    localeCode: locale,
+                    currencyCode: currencyCode,
+                    localeCode: localeCode,
                   ),
                 )
               : null,
@@ -319,15 +329,15 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
           valueA: a.savedVsMinimum != null
               ? AppFormatters.formatCents(
                   a.savedVsMinimum!,
-                  currencyCode: currency,
-                  localeCode: locale,
+                  currencyCode: currencyCode,
+                  localeCode: localeCode,
                 )
               : l10n.scenariosCompareNotAvailable,
           valueB: b.savedVsMinimum != null
               ? AppFormatters.formatCents(
                   b.savedVsMinimum!,
-                  currencyCode: currency,
-                  localeCode: locale,
+                  currencyCode: currencyCode,
+                  localeCode: localeCode,
                 )
               : l10n.scenariosCompareNotAvailable,
           highlightA:
