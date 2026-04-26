@@ -21,18 +21,6 @@ class ScenariosPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ScenariosCubit>(
-      create: (_) => getIt<ScenariosCubit>()..start(),
-      child: const _ScenariosView(),
-    );
-  }
-}
-
-class _ScenariosView extends StatelessWidget {
-  const _ScenariosView();
-
-  @override
-  Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(

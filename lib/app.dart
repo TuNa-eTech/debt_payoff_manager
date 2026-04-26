@@ -18,6 +18,7 @@ import 'features/onboarding/services/onboarding_analytics.dart';
 import 'features/settings/cubit/settings_cubit.dart';
 import 'features/settings/cubit/settings_state.dart';
 import 'features/progress/presentation/widgets/milestone_celebration_overlay.dart';
+import 'features/scenarios/cubit/scenarios_cubit.dart';
 import 'l10n/app_localizations.dart';
 
 /// Root application widget.
@@ -43,6 +44,7 @@ class _DebtPayoffAppState extends State<DebtPayoffApp> {
     onboardingAnalytics: getIt<OnboardingAnalytics>(),
   )..start();
   late final SettingsCubit _settingsCubit = getIt<SettingsCubit>();
+  late final ScenariosCubit _scenariosCubit = getIt<ScenariosCubit>()..start();
   late final router = createRouter(
     settingsRepository: _settingsRepository,
     debtRepository: _debtRepository,
@@ -95,6 +97,7 @@ class _DebtPayoffAppState extends State<DebtPayoffApp> {
     _celebrationEntry?.remove();
     _debtsCubit.close();
     _onboardingCubit.close();
+    _scenariosCubit.close();
     router.dispose();
     super.dispose();
   }
@@ -113,6 +116,7 @@ class _DebtPayoffAppState extends State<DebtPayoffApp> {
             providers: [
               BlocProvider<OnboardingCubit>.value(value: _onboardingCubit),
               BlocProvider<DebtsCubit>.value(value: _debtsCubit),
+              BlocProvider<ScenariosCubit>.value(value: _scenariosCubit),
             ],
             child: MaterialApp.router(
               locale: locale,
