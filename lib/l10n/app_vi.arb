@@ -28,6 +28,15 @@
   "@commonAddDebt": {
     "description": "Generic action to add a new debt."
   },
+  "whatCanYouDoNow": "Bạn có thể làm gì ngay bây giờ?",
+  "@whatCanYouDoNow": {
+    "description": "Section title on home empty state explaining capabilities."
+  },
+  "debtDueDay": "Ngày {day}",
+  "@debtDueDay": {
+    "parameters": ["day"],
+    "description": "Due day label for debt card showing day of month."
+  },
   "commonSavePayment": "Lưu thanh toán",
   "@commonSavePayment": {
     "description": "Generic action to save a payment."
@@ -175,6 +184,91 @@
   "homeViewPlanDetails": "Xem kế hoạch chi tiết",
   "@homeViewPlanDetails": {
     "description": "CTA on the home plan summary card."
+  },
+  "homeTotalBalanceLabel": "Tổng dư nợ hiện tại",
+  "@homeTotalBalanceLabel": {
+    "description": "Hero card title on home screen showing total balance."
+  },
+  "homeStrategyLabel": "Chiến lược",
+  "@homeStrategyLabel": {
+    "description": "Label for strategy stat card on home screen."
+  },
+  "homeExtraMonthlyLabel": "Extra / tháng",
+  "@homeExtraMonthlyLabel": {
+    "description": "Label for extra monthly payment stat on home screen."
+  },
+  "homePaidProgress": "Đã trả {amount}",
+  "@homePaidProgress": {
+    "parameters": ["amount"],
+    "description": "Progress label showing paid amount on home screen."
+  },
+  "homeTrackingCountLabel": "Đang theo dõi",
+  "@homeTrackingCountLabel": {
+    "description": "Label for active debts count on home screen."
+  },
+  "homePaidOffCountLabel": "Đã trả xong",
+  "@homePaidOffCountLabel": {
+    "description": "Label for paid off debts count on home screen."
+  },
+  "homePausedCountLabel": "Tạm dừng",
+  "@homePausedCountLabel": {
+    "description": "Label for paused debts count on home screen."
+  },
+  "homeDebtsToTrackTitle": "Khoản nợ cần theo dõi",
+  "@homeDebtsToTrackTitle": {
+    "description": "Section title for debts list on home screen."
+  },
+  "homeDebtsToTrackSubtitle": "Danh sách này lấy trực tiếp từ dữ liệu bạn đã lưu.",
+  "@homeDebtsToTrackSubtitle": {
+    "description": "Section subtitle for debts list on home screen."
+  },
+  "homeNoDebtsToTrackMessage": "Hiện chưa có khoản nợ nào cần theo dõi.",
+  "@homeNoDebtsToTrackMessage": {
+    "description": "Message when no active debts on home screen."
+  },
+  "homeTimelineConnectingTitle": "Timeline chi tiết đang được kết nối",
+  "@homeTimelineConnectingTitle": {
+    "description": "Card title for timeline connection status on home screen."
+  },
+  "homeTimelineConnectingSubtitle": "Bạn đã có đủ dữ liệu nền để vào tab Kế hoạch và xem cấu hình hiện tại. Ngày hết nợ và dự phóng chi tiết sẽ xuất hiện khi phần mô phỏng kế hoạch được bật.",
+  "@homeTimelineConnectingSubtitle": {
+    "description": "Card subtitle for timeline connection status on home screen."
+  },
+  "homeOpenPlanTabButton": "Mở tab Kế hoạch",
+  "@homeOpenPlanTabButton": {
+    "description": "Button to navigate to Plan tab from home screen."
+  },
+  "homeEmptyTitle": "Chưa có khoản nợ nào",
+  "@homeEmptyTitle": {
+    "description": "Empty state title when no debts exist on home screen."
+  },
+  "homeEmptySubtitle": "Thêm khoản nợ đầu tiên để app bắt đầu lưu dữ liệu và dựng kế hoạch trả nợ của bạn.",
+  "@homeEmptySubtitle": {
+    "description": "Empty state subtitle when no debts exist on home screen."
+  },
+  "homeFeatureMultiDebtTitle": "Nhập nhiều loại nợ",
+  "@homeFeatureMultiDebtTitle": {
+    "description": "Feature row title for multi-debt support on home empty state."
+  },
+  "homeFeatureMultiDebtSubtitle": "Credit card, student loan, car loan, mortgage và hơn thế nữa.",
+  "@homeFeatureMultiDebtSubtitle": {
+    "description": "Feature row subtitle for multi-debt support on home empty state."
+  },
+  "homeFeatureEditAnytimeTitle": "Chỉnh sửa bất kỳ lúc nào",
+  "@homeFeatureEditAnytimeTitle": {
+    "description": "Feature row title for edit flexibility on home empty state."
+  },
+  "homeFeatureEditAnytimeSubtitle": "Mọi thay đổi đều được lưu local và phản ánh lại trong danh sách nợ.",
+  "@homeFeatureEditAnytimeSubtitle": {
+    "description": "Feature row subtitle for edit flexibility on home empty state."
+  },
+  "homeFeatureLocalFirstTitle": "Local-first",
+  "@homeFeatureLocalFirstTitle": {
+    "description": "Feature row title for local-first approach on home empty state."
+  },
+  "homeFeatureLocalFirstSubtitle": "Bạn không cần tài khoản để bắt đầu và dữ liệu ở lại trên thiết bị.",
+  "@homeFeatureLocalFirstSubtitle": {
+    "description": "Feature row subtitle for local-first approach on home empty state."
   },
   "monthlyActionStandaloneTitle": "Việc tháng này",
   "@monthlyActionStandaloneTitle": {

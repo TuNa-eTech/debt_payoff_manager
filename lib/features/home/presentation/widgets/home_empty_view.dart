@@ -8,12 +8,15 @@ import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class HomeEmptyView extends StatelessWidget {
   const HomeEmptyView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimensions.pagePaddingH,
@@ -43,13 +46,13 @@ class HomeEmptyView extends StatelessWidget {
                 ),
                 const SizedBox(height: AppDimensions.lg),
                 Text(
-                  'Chưa có khoản nợ nào',
+                  l10n.homeEmptyTitle,
                   style: AppTextStyles.headlineSmall,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: AppDimensions.sm),
                 Text(
-                  'Thêm khoản nợ đầu tiên để app bắt đầu lưu dữ liệu và dựng kế hoạch trả nợ của bạn.',
+                  l10n.homeEmptySubtitle,
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.mdOnSurfaceVariant,
                   ),
@@ -57,7 +60,7 @@ class HomeEmptyView extends StatelessWidget {
                 ),
                 const SizedBox(height: AppDimensions.xl),
                 AppButton.filledLg(
-                  label: 'Thêm khoản nợ',
+                  label: l10n.commonAddDebt,
                   icon: LucideIcons.plus,
                   fullWidth: true,
                   onPressed: () => context.push(AppRoutes.addDebt),
@@ -72,29 +75,26 @@ class HomeEmptyView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Bạn có thể làm gì ngay bây giờ?',
+                  l10n.whatCanYouDoNow,
                   style: AppTextStyles.titleMedium,
                 ),
                 const SizedBox(height: AppDimensions.md),
-                const _FeatureRow(
+                _FeatureRow(
                   icon: LucideIcons.creditCard,
-                  title: 'Nhập nhiều loại nợ',
-                  subtitle:
-                      'Credit card, student loan, car loan, mortgage và hơn thế nữa.',
+                  title: l10n.homeFeatureMultiDebtTitle,
+                  subtitle: l10n.homeFeatureMultiDebtSubtitle,
                 ),
                 const SizedBox(height: AppDimensions.md),
-                const _FeatureRow(
+                _FeatureRow(
                   icon: LucideIcons.pencil,
-                  title: 'Chỉnh sửa bất kỳ lúc nào',
-                  subtitle:
-                      'Mọi thay đổi đều được lưu local và phản ánh lại trong danh sách nợ.',
+                  title: l10n.homeFeatureEditAnytimeTitle,
+                  subtitle: l10n.homeFeatureEditAnytimeSubtitle,
                 ),
                 const SizedBox(height: AppDimensions.md),
-                const _FeatureRow(
+                _FeatureRow(
                   icon: LucideIcons.shield,
-                  title: 'Local-first',
-                  subtitle:
-                      'Bạn không cần tài khoản để bắt đầu và dữ liệu ở lại trên thiết bị.',
+                  title: l10n.homeFeatureLocalFirstTitle,
+                  subtitle: l10n.homeFeatureLocalFirstSubtitle,
                 ),
               ],
             ),
@@ -139,7 +139,12 @@ class _FeatureRow extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: AppTextStyles.titleSmall),
+              Text(
+                title,
+                style: AppTextStyles.titleSmall,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
               const SizedBox(height: AppDimensions.xs),
               Text(
                 subtitle,

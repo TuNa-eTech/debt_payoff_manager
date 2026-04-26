@@ -14,6 +14,7 @@ import '../../../../domain/entities/debt.dart';
 import '../../../../domain/entities/plan.dart';
 import '../../../../domain/enums/debt_status.dart';
 import '../../../debts/presentation/debt_ui_utils.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class HomePopulatedView extends StatelessWidget {
   const HomePopulatedView({super.key, required this.debts, required this.plan});
@@ -23,6 +24,7 @@ class HomePopulatedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final trackedDebts =
         debts.where((debt) => debt.status != DebtStatus.archived).toList()
           ..sort((a, b) => b.currentBalance.compareTo(a.currentBalance));
@@ -57,7 +59,7 @@ class HomePopulatedView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Tổng dư nợ hiện tại',
+                  l10n.homeTotalBalanceLabel,
                   style: AppTextStyles.labelMedium.copyWith(
                     color: AppColors.mdPrimaryContainer,
                   ),
@@ -74,14 +76,14 @@ class HomePopulatedView extends StatelessWidget {
                   children: [
                     Expanded(
                       child: _HeroStat(
-                        label: 'Chiến lược',
+                        label: l10n.homeStrategyLabel,
                         value: plan?.strategy.label ?? 'Snowball',
                       ),
                     ),
                     const SizedBox(width: AppDimensions.md),
                     Expanded(
                       child: _HeroStat(
-                        label: 'Extra / tháng',
+                        label: l10n.homeExtraMonthlyLabel,
                         value: AppFormatters.formatCents(
                           plan?.extraMonthlyAmount ?? 0,
                         ),
@@ -93,10 +95,13 @@ class HomePopulatedView extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Đã trả ${AppFormatters.formatCents(totalPaid)}',
-                      style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.mdOnPrimary.withValues(alpha: 0.82),
+                    Flexible(
+                      child: Text(
+                        l10n.homePaidProgress(AppFormatters.formatCents(totalPaid)),
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.mdOnPrimary.withValues(alpha: 0.82),
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     Text(
@@ -125,7 +130,7 @@ class HomePopulatedView extends StatelessWidget {
               children: [
                 Expanded(
                   child: _SummaryStat(
-                    label: 'Đang theo dõi',
+                    label: l10n.homeTrackingCountLabel,
                     value:
                         '${trackedDebts.where((debt) => debt.currentBalance > 0).length}',
                   ),
@@ -133,23 +138,26 @@ class HomePopulatedView extends StatelessWidget {
                 _VerticalDivider(),
                 Expanded(
                   child: _SummaryStat(
-                    label: 'Đã trả xong',
+                    label: l10n.homePaidOffCountLabel,
                     value: '$paidOffCount',
                     valueColor: AppColors.mdPrimary,
                   ),
                 ),
                 _VerticalDivider(),
                 Expanded(
-                  child: _SummaryStat(label: 'Tạm dừng', value: '$pausedCount'),
+                  child: _SummaryStat(
+                    label: l10n.homePausedCountLabel,
+                    value: '$pausedCount',
+                  ),
                 ),
               ],
             ),
           ),
           const SizedBox(height: AppDimensions.sectionGap),
           SectionHeader(
-            title: 'Khoản nợ cần theo dõi',
-            subtitle: 'Danh sách này lấy trực tiếp từ dữ liệu bạn đã lưu.',
-            trailingLabel: 'Xem tất cả',
+            title: l10n.homeDebtsToTrackTitle,
+            subtitle: l10n.homeDebtsToTrackSubtitle,
+            trailingLabel: l10n.commonViewAll,
             onTrailingTap: () => context.go(AppRoutes.debts),
           ),
           const SizedBox(height: AppDimensions.md),
@@ -162,8 +170,8 @@ class HomePopulatedView extends StatelessWidget {
                 apr: AppFormatters.formatApr(double.parse(debt.apr.toString())),
                 minPayment: AppFormatters.formatCents(debt.minimumPayment),
                 dueDate: debt.status == DebtStatus.paused
-                    ? 'Tạm dừng'
-                    : 'Ngày ${debt.dueDayOfMonth}',
+                    ? l10n.debtStatusPaused
+                    : l10n.debtDueDay(debt.dueDayOfMonth),
                 state: debt.status == DebtStatus.paidOff
                     ? design_system.DebtCardState.paid
                     : design_system.DebtCardState.normal,
@@ -176,7 +184,7 @@ class HomePopulatedView extends StatelessWidget {
             AppCard(
               color: AppColors.mdSurfaceContainerLow,
               child: Text(
-                'Hiện chưa có khoản nợ nào cần theo dõi.',
+                l10n.homeNoDebtsToTrackMessage,
                 style: AppTextStyles.bodyMedium,
               ),
             ),
@@ -197,21 +205,24 @@ class HomePopulatedView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Timeline chi tiết đang được kết nối',
+                        l10n.homeTimelineConnectingTitle,
                         style: AppTextStyles.titleSmall,
                       ),
                       const SizedBox(height: AppDimensions.xs),
                       Text(
-                        'Bạn đã có đủ dữ liệu nền để vào tab Kế hoạch và xem cấu hình hiện tại. Ngày hết nợ và dự phóng chi tiết sẽ xuất hiện khi phần mô phỏng kế hoạch được bật.',
+                        l10n.homeTimelineConnectingSubtitle,
                         style: AppTextStyles.bodySmall.copyWith(
                           color: AppColors.mdOnSurfaceVariant,
                         ),
                       ),
                       const SizedBox(height: AppDimensions.md),
-                      AppButton.tonal(
-                        label: 'Mở tab Kế hoạch',
-                        icon: LucideIcons.arrowRight,
-                        onPressed: () => context.go(AppRoutes.plan),
+                      SizedBox(
+                        width: 180,
+                        child: AppButton.tonal(
+                          label: l10n.homeOpenPlanTabButton,
+                          icon: LucideIcons.arrowRight,
+                          onPressed: () => context.go(AppRoutes.plan),
+                        ),
                       ),
                     ],
                   ),
@@ -248,6 +259,8 @@ class _HeroStat extends StatelessWidget {
             style: AppTextStyles.labelSmall.copyWith(
               color: AppColors.mdPrimaryContainer,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: AppDimensions.xs),
           Text(
@@ -255,6 +268,8 @@ class _HeroStat extends StatelessWidget {
             style: AppTextStyles.titleMedium.copyWith(
               color: AppColors.mdOnPrimary,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
@@ -283,6 +298,8 @@ class _SummaryStat extends StatelessWidget {
           style: AppTextStyles.labelSmall.copyWith(
             color: AppColors.mdOnSurfaceVariant,
           ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(height: AppDimensions.xs),
         Text(
@@ -290,6 +307,8 @@ class _SummaryStat extends StatelessWidget {
           style: AppTextStyles.titleMedium.copyWith(
             color: valueColor ?? AppColors.mdOnSurface,
           ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );
