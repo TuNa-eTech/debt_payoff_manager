@@ -28,6 +28,15 @@
   "@commonAddDebt": {
     "description": "Generic action to add a new debt."
   },
+  "whatCanYouDoNow": "What can you do right now?",
+  "@whatCanYouDoNow": {
+    "description": "Section title on home empty state explaining capabilities."
+  },
+  "debtDueDay": "Day {day}",
+  "@debtDueDay": {
+    "parameters": ["day"],
+    "description": "Due day label for debt card showing day of month."
+  },
   "commonSavePayment": "Save payment",
   "@commonSavePayment": {
     "description": "Generic action to save a payment."
@@ -175,6 +184,91 @@
   "homeViewPlanDetails": "View detailed plan",
   "@homeViewPlanDetails": {
     "description": "CTA on the home plan summary card."
+  },
+  "homeTotalBalanceLabel": "Current total balance",
+  "@homeTotalBalanceLabel": {
+    "description": "Hero card title on home screen showing total balance."
+  },
+  "homeStrategyLabel": "Strategy",
+  "@homeStrategyLabel": {
+    "description": "Label for strategy stat card on home screen."
+  },
+  "homeExtraMonthlyLabel": "Extra / month",
+  "@homeExtraMonthlyLabel": {
+    "description": "Label for extra monthly payment stat on home screen."
+  },
+  "homePaidProgress": "Paid {amount}",
+  "@homePaidProgress": {
+    "parameters": ["amount"],
+    "description": "Progress label showing paid amount on home screen."
+  },
+  "homeTrackingCountLabel": "Tracking",
+  "@homeTrackingCountLabel": {
+    "description": "Label for active debts count on home screen."
+  },
+  "homePaidOffCountLabel": "Paid off",
+  "@homePaidOffCountLabel": {
+    "description": "Label for paid off debts count on home screen."
+  },
+  "homePausedCountLabel": "Paused",
+  "@homePausedCountLabel": {
+    "description": "Label for paused debts count on home screen."
+  },
+  "homeDebtsToTrackTitle": "Debts to track",
+  "@homeDebtsToTrackTitle": {
+    "description": "Section title for debts list on home screen."
+  },
+  "homeDebtsToTrackSubtitle": "This list is pulled directly from your saved data.",
+  "@homeDebtsToTrackSubtitle": {
+    "description": "Section subtitle for debts list on home screen."
+  },
+  "homeNoDebtsToTrackMessage": "No debts to track yet.",
+  "@homeNoDebtsToTrackMessage": {
+    "description": "Message when no active debts on home screen."
+  },
+  "homeTimelineConnectingTitle": "Detailed timeline is connecting",
+  "@homeTimelineConnectingTitle": {
+    "description": "Card title for timeline connection status on home screen."
+  },
+  "homeTimelineConnectingSubtitle": "You have enough background data to visit the Plan tab and see your current setup. The debt-free date and detailed projections will appear when the plan simulation is enabled.",
+  "@homeTimelineConnectingSubtitle": {
+    "description": "Card subtitle for timeline connection status on home screen."
+  },
+  "homeOpenPlanTabButton": "Open Plan tab",
+  "@homeOpenPlanTabButton": {
+    "description": "Button to navigate to Plan tab from home screen."
+  },
+  "homeEmptyTitle": "No debts yet",
+  "@homeEmptyTitle": {
+    "description": "Empty state title when no debts exist on home screen."
+  },
+  "homeEmptySubtitle": "Add your first debt for the app to start saving data and building your payoff plan.",
+  "@homeEmptySubtitle": {
+    "description": "Empty state subtitle when no debts exist on home screen."
+  },
+  "homeFeatureMultiDebtTitle": "Enter multiple debt types",
+  "@homeFeatureMultiDebtTitle": {
+    "description": "Feature row title for multi-debt support on home empty state."
+  },
+  "homeFeatureMultiDebtSubtitle": "Credit cards, student loans, car loans, mortgages, and more.",
+  "@homeFeatureMultiDebtSubtitle": {
+    "description": "Feature row subtitle for multi-debt support on home empty state."
+  },
+  "homeFeatureEditAnytimeTitle": "Edit anytime",
+  "@homeFeatureEditAnytimeTitle": {
+    "description": "Feature row title for edit flexibility on home empty state."
+  },
+  "homeFeatureEditAnytimeSubtitle": "All changes are saved locally and reflected in your debt list.",
+  "@homeFeatureEditAnytimeSubtitle": {
+    "description": "Feature row subtitle for edit flexibility on home empty state."
+  },
+  "homeFeatureLocalFirstTitle": "Local-first",
+  "@homeFeatureLocalFirstTitle": {
+    "description": "Feature row title for local-first approach on home empty state."
+  },
+  "homeFeatureLocalFirstSubtitle": "You don't need an account to start and your data stays on your device.",
+  "@homeFeatureLocalFirstSubtitle": {
+    "description": "Feature row subtitle for local-first approach on home empty state."
   },
   "monthlyActionStandaloneTitle": "This month's actions",
   "@monthlyActionStandaloneTitle": {
@@ -2131,5 +2225,45 @@
   "reportsPdfColBalance": "Balance",
   "@reportsPdfColBalance": {
     "description": "Column header in PDF"
+  },
+  "scenariosTitle": "What-If Scenarios",
+  "@scenariosTitle": {
+    "description": "App bar title for scenarios page"
+  },
+  "scenariosEmptyTitle": "No scenarios yet",
+  "@scenariosEmptyTitle": {
+    "description": "Empty state title"
+  },
+  "scenariosEmptySubtitle": "Create a scenario to explore different payoff strategies side by side.",
+  "@scenariosEmptySubtitle": {
+    "description": "Empty state subtitle"
+  },
+  "scenariosAddTitle": "New scenario",
+  "@scenariosAddTitle": {
+    "description": "Dialog title for adding a scenario"
+  },
+  "scenariosNameHint": "Scenario name",
+  "@scenariosNameHint": {
+    "description": "Text field hint for scenario name"
+  },
+  "scenariosDuplicateTitle": "Duplicate scenario",
+  "@scenariosDuplicateTitle": {
+    "description": "Dialog title for duplicating a scenario"
+  },
+  "scenariosActiveBadge": "Active",
+  "@scenariosActiveBadge": {
+    "description": "Badge shown on the active scenario"
+  },
+  "scenariosMainBadge": "Main",
+  "@scenariosMainBadge": {
+    "description": "Badge shown on the main scenario"
+  },
+  "scenariosDeleteConfirm": "Delete scenario",
+  "@scenariosDeleteConfirm": {
+    "description": "Confirm button in delete dialog"
+  },
+  "scenariosDeleteMessage": "This scenario and its debts will be deleted. Payments are not affected.",
+  "@scenariosDeleteMessage": {
+    "description": "Delete confirmation message"
   }
 }

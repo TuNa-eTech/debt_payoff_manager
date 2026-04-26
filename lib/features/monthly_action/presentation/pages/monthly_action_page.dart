@@ -602,22 +602,23 @@ class _DoneProofDashboard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppDimensions.md),
-          Wrap(
-            spacing: AppDimensions.sm,
-            runSpacing: AppDimensions.sm,
+          Row(
             children: [
-              AppButton.tonal(
+              _IconButtonWithLabel(
                 label: context.l10n.monthlyActionViewHistory,
                 icon: LucideIcons.history,
                 onPressed: onViewHistory,
               ),
-              if (canLogAnother)
-                AppButton.outlined(
+              if (canLogAnother) ...[
+                const SizedBox(width: AppDimensions.sm),
+                _IconButtonWithLabel(
                   label: context.l10n.monthlyActionLogAnother,
                   icon: LucideIcons.plus,
                   onPressed: onLogAnother,
                 ),
-              AppButton.text(
+              ],
+              const SizedBox(width: AppDimensions.sm),
+              _IconButtonWithLabel(
                 label: context.l10n.monthlyActionNextActionPrimary,
                 icon: LucideIcons.map,
                 onPressed: onViewPlan,
@@ -810,7 +811,7 @@ class _CompletionCard extends StatelessWidget {
                 ],
                 if (onViewPlan != null) ...[
                   const SizedBox(height: AppDimensions.md),
-                  AppButton.tonal(
+                  _IconButtonWithLabel(
                     label: context.l10n.monthlyActionNextActionPrimary,
                     icon: LucideIcons.map,
                     onPressed: onViewPlan,
@@ -1316,19 +1317,35 @@ class _ActionRow extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: AppDimensions.sm),
-              SizedBox(
-                key: AppTestKeys.monthlyActionCheckOff(item.id),
-                child: AppButton.tonal(
-                  label: item.isCompleted
-                      ? context.l10n.monthlyActionLogged
-                      : context.l10n.monthlyActionCheckOff,
-                  icon: item.isCompleted
-                      ? LucideIcons.checkCircle2
-                      : LucideIcons.check,
-                  loading: isSubmitting,
-                  onPressed: item.isCompleted || isSubmitting
-                      ? null
-                      : onCheckOff,
+              Tooltip(
+                message: item.isCompleted
+                    ? context.l10n.monthlyActionLogged
+                    : context.l10n.monthlyActionCheckOff,
+                child: SizedBox(
+                  key: AppTestKeys.monthlyActionCheckOff(item.id),
+                  child: InkWell(
+                    onTap: item.isCompleted || isSubmitting ? null : onCheckOff,
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: item.isCompleted
+                            ? AppColors.mdPrimary
+                            : AppColors.mdPrimaryContainer,
+                        borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
+                      ),
+                      child: Icon(
+                        item.isCompleted
+                            ? LucideIcons.checkCircle2
+                            : LucideIcons.check,
+                        size: AppDimensions.iconMd,
+                        color: item.isCompleted
+                            ? AppColors.mdOnPrimary
+                            : AppColors.mdPrimary,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -1430,4 +1447,59 @@ String? _statusChipLabel(BuildContext context, MonthlyActionItem item) {
     return context.l10n.monthlyActionPriorityChip(item.priorityRank!);
   }
   return null;
+}
+
+/// Compact icon button with tooltip label for space-efficient action rows.
+class _IconButtonWithLabel extends StatelessWidget {
+  const _IconButtonWithLabel({
+    required this.label,
+    required this.icon,
+    required this.onPressed,
+  });
+
+  final String label;
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: label,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.sm,
+            vertical: AppDimensions.sm,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.mdPrimaryContainer.withValues(alpha: 0.5),
+            borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                size: AppDimensions.iconSm,
+                color: AppColors.mdPrimary,
+              ),
+              const SizedBox(width: AppDimensions.xs),
+              Flexible(
+                child: Text(
+                  label,
+                  style: AppTextStyles.labelSmall.copyWith(
+                    color: AppColors.mdPrimary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
