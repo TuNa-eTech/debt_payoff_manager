@@ -2265,5 +2265,95 @@
   "scenariosDeleteMessage": "This scenario and its debts will be deleted. Payments are not affected.",
   "@scenariosDeleteMessage": {
     "description": "Delete confirmation message"
+  },
+  "scenariosCompareTitle": "Compare Scenarios",
+  "@scenariosCompareTitle": {
+    "description": "App bar title for scenario comparison page"
+  },
+  "scenariosComparePickPrompt": "Select a scenario to compare",
+  "@scenariosComparePickPrompt": {
+    "description": "Prompt shown when no scenario is selected for comparison"
+  },
+  "scenariosCompareSelectA": "Scenario A",
+  "@scenariosCompareSelectA": {
+    "description": "Label for the first scenario selector"
+  },
+  "scenariosCompareSelectB": "Scenario B",
+  "@scenariosCompareSelectB": {
+    "description": "Label for the second scenario selector"
+  },
+  "scenariosCompareDebtFreeDate": "Debt-free date",
+  "@scenariosCompareDebtFreeDate": {
+    "description": "Label for debt-free date in comparison"
+  },
+  "scenariosCompareTotalBalance": "Total balance",
+  "@scenariosCompareTotalBalance": {
+    "description": "Label for total balance in comparison"
+  },
+  "scenariosCompareProjectedInterest": "Projected interest",
+  "@scenariosCompareProjectedInterest": {
+    "description": "Label for projected interest in comparison"
+  },
+  "scenariosCompareSavedVsMinimum": "Saved vs minimum",
+  "@scenariosCompareSavedVsMinimum": {
+    "description": "Label for savings vs minimum-only in comparison"
+  },
+  "scenariosCompareTotalDebts": "Debts tracked",
+  "@scenariosCompareTotalDebts": {
+    "description": "Label for debt count in comparison"
+  },
+  "scenariosCompareNoPlan": "No plan yet",
+  "@scenariosCompareNoPlan": {
+    "description": "Shown when a scenario has no plan data"
+  },
+  "scenariosCompareNotAvailable": "—",
+  "@scenariosCompareNotAvailable": {
+    "description": "Placeholder when data is not available"
+  },
+  "scenariosCompareFaster": "{months} mo faster",
+  "@scenariosCompareFaster": {
+    "description": "Badge shown on the scenario with an earlier payoff date",
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "scenariosCompareCheaper": "{amount} less interest",
+  "@scenariosCompareCheaper": {
+    "description": "Badge shown on the scenario with lower projected interest",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "scenariosCompareAction": "Compare",
+  "@scenariosCompareAction": {
+    "description": "Button label to open comparison page"
+  },
+  "scenariosCopyDebtsTitle": "Copy debts to another scenario",
+  "@scenariosCopyDebtsTitle": {
+    "description": "Dialog title for copying debts between scenarios"
+  },
+  "scenariosCopyDebtsMessage": "Debts from '{source}' will be copied to '{target}'. Existing debts in the target are kept. Payments are not copied.",
+  "@scenariosCopyDebtsMessage": {
+    "description": "Confirmation message for copying debts",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "scenariosCopyDebtsConfirm": "Copy debts",
+  "@scenariosCopyDebtsConfirm": {
+    "description": "Confirm button for copying debts"
+  },
+  "scenariosCopyDebtsSuccess": "Debts copied successfully",
+  "@scenariosCopyDebtsSuccess": {
+    "description": "Snackbar after copying debts"
   }
 }

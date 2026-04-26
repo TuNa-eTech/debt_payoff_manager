@@ -67,6 +67,11 @@ class ScenariosCubit extends Cubit<ScenariosState> {
     }
   }
 
+  /// Copies all active debts from [sourceId] into [targetId].
+  /// Returns the number of debts copied.
+  Future<int> copyDebtsToScenario(String sourceId, String targetId) =>
+      _scenarioRepository.copyDebtsToScenario(sourceId, targetId);
+
   @override
   Future<void> close() {
     _sub?.cancel();

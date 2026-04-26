@@ -21,4 +21,10 @@ abstract class ScenarioRepository {
   /// Returns the ID of the newly created scenario.
   /// Payments are NOT copied — what-if scenarios start fresh.
   Future<String> duplicateScenario(String sourceId, String newName);
+
+  /// Copy debts from [sourceId] into [targetId] without overwriting
+  /// existing debts in the target or copying payment history.
+  ///
+  /// Returns the number of debts that were copied.
+  Future<int> copyDebtsToScenario(String sourceId, String targetId);
 }

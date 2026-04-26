@@ -2265,5 +2265,95 @@
   "scenariosDeleteMessage": "Kịch bản và các khoản nợ của nó sẽ bị xóa. Lịch sử thanh toán không bị ảnh hưởng.",
   "@scenariosDeleteMessage": {
     "description": "Delete confirmation message"
+  },
+  "scenariosCompareTitle": "So sánh kịch bản",
+  "@scenariosCompareTitle": {
+    "description": "App bar title for scenario comparison page"
+  },
+  "scenariosComparePickPrompt": "Chọn kịch bản để so sánh",
+  "@scenariosComparePickPrompt": {
+    "description": "Prompt shown when no scenario is selected for comparison"
+  },
+  "scenariosCompareSelectA": "Kịch bản A",
+  "@scenariosCompareSelectA": {
+    "description": "Label for the first scenario selector"
+  },
+  "scenariosCompareSelectB": "Kịch bản B",
+  "@scenariosCompareSelectB": {
+    "description": "Label for the second scenario selector"
+  },
+  "scenariosCompareDebtFreeDate": "Ngày debt-free",
+  "@scenariosCompareDebtFreeDate": {
+    "description": "Label for debt-free date in comparison"
+  },
+  "scenariosCompareTotalBalance": "Tổng dư nợ",
+  "@scenariosCompareTotalBalance": {
+    "description": "Label for total balance in comparison"
+  },
+  "scenariosCompareProjectedInterest": "Lãi dự kiến",
+  "@scenariosCompareProjectedInterest": {
+    "description": "Label for projected interest in comparison"
+  },
+  "scenariosCompareSavedVsMinimum": "Tiết kiệm so với tối thiểu",
+  "@scenariosCompareSavedVsMinimum": {
+    "description": "Label for savings vs minimum-only in comparison"
+  },
+  "scenariosCompareTotalDebts": "Số khoản nợ",
+  "@scenariosCompareTotalDebts": {
+    "description": "Label for debt count in comparison"
+  },
+  "scenariosCompareNoPlan": "Chưa có kế hoạch",
+  "@scenariosCompareNoPlan": {
+    "description": "Shown when a scenario has no plan data"
+  },
+  "scenariosCompareNotAvailable": "—",
+  "@scenariosCompareNotAvailable": {
+    "description": "Placeholder when data is not available"
+  },
+  "scenariosCompareFaster": "Nhanh hơn {months} tháng",
+  "@scenariosCompareFaster": {
+    "description": "Badge shown on the scenario with an earlier payoff date",
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "scenariosCompareCheaper": "Ít lãi hơn {amount}",
+  "@scenariosCompareCheaper": {
+    "description": "Badge shown on the scenario with lower projected interest",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "scenariosCompareAction": "So sánh",
+  "@scenariosCompareAction": {
+    "description": "Button label to open comparison page"
+  },
+  "scenariosCopyDebtsTitle": "Sao chép khoản nợ sang kịch bản khác",
+  "@scenariosCopyDebtsTitle": {
+    "description": "Dialog title for copying debts between scenarios"
+  },
+  "scenariosCopyDebtsMessage": "Các khoản nợ từ '{source}' sẽ được copy sang '{target}'. Các khoản nợ đang có ở kịch bản đích được giữ nguyên. Lịch sử thanh toán không được copy.",
+  "@scenariosCopyDebtsMessage": {
+    "description": "Confirmation message for copying debts",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "scenariosCopyDebtsConfirm": "Sao chép khoản nợ",
+  "@scenariosCopyDebtsConfirm": {
+    "description": "Confirm button for copying debts"
+  },
+  "scenariosCopyDebtsSuccess": "Đã sao chép khoản nợ thành công",
+  "@scenariosCopyDebtsSuccess": {
+    "description": "Snackbar after copying debts"
   }
 }

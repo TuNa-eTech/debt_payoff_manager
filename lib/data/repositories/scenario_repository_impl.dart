@@ -112,4 +112,33 @@ class ScenarioRepositoryImpl implements ScenarioRepository {
 
     return newId;
   }
+
+  @override
+  Future<int> copyDebtsToScenario(String sourceId, String targetId) async {
+    int copied = 0;
+    await _db.transaction(() async {
+      final sourceDebts = await (_db.select(_db.debtsTable)
+            ..where((d) => d.scenarioId.equals(sourceId))
+            ..where((d) => d.deletedAt.isNull()))
+          .get();
+
+      for (final debtRow in sourceDebts) {
+        final debt = debtRow.toDomain();
+        final now = DateTime.now().toUtc();
+        await _db.into(_db.debtsTable).insert(
+          debt
+              .copyWith(
+                id: _uuid.v4(),
+                scenarioId: targetId,
+                currentBalance: debt.originalPrincipal,
+                createdAt: now,
+                updatedAt: now,
+              )
+              .toCompanion(),
+        );
+        copied++;
+      }
+    });
+    return copied;
+  }
 }

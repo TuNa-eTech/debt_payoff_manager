@@ -23,6 +23,7 @@ import '../../features/debts/presentation/pages/payment_history_page.dart';
 import '../../features/progress/presentation/pages/progress_page.dart';
 import '../../features/pricing/presentation/pages/pricing_page.dart';
 import '../../features/reports/presentation/pages/reports_preview_page.dart';
+import '../../features/scenarios/presentation/pages/compare_scenarios_page.dart';
 import '../../features/scenarios/presentation/pages/scenarios_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/sync_backup_page.dart';
@@ -59,6 +60,7 @@ class AppRoutes {
   static const String reportsPreview = '/settings/reports';
   static const String pricing = '/settings/pricing';
   static const String scenarios = '/settings/scenarios';
+  static const String compareScenarios = '/settings/scenarios/compare';
 
   static String debtDetailPath(String id) => '/debts/$id';
   static String editDebtPath(String id) => '/debts/$id/edit';
@@ -251,6 +253,10 @@ GoRouter createRouter({
       GoRoute(
         path: AppRoutes.scenarios,
         builder: (context, state) => const ScenariosPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.compareScenarios,
+        builder: (context, state) => const CompareScenariosPage(),
       ),
     ],
   );

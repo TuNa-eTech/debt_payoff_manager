@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/di/injection.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -36,6 +38,11 @@ class _ScenariosView extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.scenariosTitle),
         actions: [
+          IconButton(
+            icon: const Icon(LucideIcons.gitCompare),
+            tooltip: l10n.scenariosCompareAction,
+            onPressed: () => context.push(AppRoutes.compareScenarios),
+          ),
           IconButton(
             icon: const Icon(LucideIcons.plusCircle),
             onPressed: () => _showAddDialog(context),
@@ -140,6 +147,10 @@ class _ScenarioCard extends StatelessWidget {
                 value: _ScenarioAction.duplicate,
                 child: const Text('Duplicate'),
               ),
+              PopupMenuItem(
+                value: _ScenarioAction.copyDebts,
+                child: Text(l10n.scenariosCopyDebtsTitle),
+              ),
               if (!scenario.isMain)
                 PopupMenuItem(
                   value: _ScenarioAction.delete,
@@ -196,11 +207,96 @@ class _ScenarioCard extends StatelessWidget {
           ),
         );
         if (confirmed == true) await cubit.deleteScenario(scenario.id);
+      case _ScenarioAction.copyDebts:
+        if (!context.mounted) return;
+        await _showCopyDebtsDialog(context, cubit);
+    }
+  }
+
+  Future<void> _showCopyDebtsDialog(
+    BuildContext context,
+    ScenariosCubit cubit,
+  ) async {
+    final l10n = context.l10n;
+    final allScenarios = cubit.state.scenarios
+        .where((s) => s.id != scenario.id)
+        .toList();
+    if (allScenarios.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No other scenarios available.')),
+      );
+      return;
+    }
+    Scenario? target = allScenarios.first;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (ctx, setDialogState) {
+            return AlertDialog(
+              title: Text(l10n.scenariosCopyDebtsTitle),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DropdownButtonFormField<String>(
+                    initialValue: target!.id,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      border: OutlineInputBorder(),
+                    ),
+                    items: allScenarios
+                        .map(
+                          (s) => DropdownMenuItem(
+                            value: s.id,
+                            child: Text(s.name),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (id) {
+                      setDialogState(() {
+                        target = allScenarios
+                            .firstWhere((s) => s.id == id);
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    l10n.scenariosCopyDebtsMessage(
+                      scenario.name,
+                      target!.name,
+                    ),
+                    style: AppTextStyles.bodySmall,
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(dialogContext, false),
+                  child: const Text('Cancel'),
+                ),
+                FilledButton(
+                  onPressed: () => Navigator.pop(dialogContext, true),
+                  child: Text(l10n.scenariosCopyDebtsConfirm),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+    if (confirmed == true && context.mounted) {
+      await cubit.copyDebtsToScenario(scenario.id, target!.id);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.scenariosCopyDebtsSuccess)),
+        );
+      }
     }
   }
 }
 
-enum _ScenarioAction { setActive, duplicate, delete }
+enum _ScenarioAction { setActive, duplicate, copyDebts, delete }
 
 class _ScenarioNameDialog extends StatefulWidget {
   const _ScenarioNameDialog({
