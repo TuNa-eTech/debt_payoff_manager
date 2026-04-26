@@ -3111,6 +3111,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This scenario and its debts will be deleted. Payments are not affected.'**
   String get scenariosDeleteMessage;
+
+  /// App bar title for scenario comparison page
+  ///
+  /// In en, this message translates to:
+  /// **'Compare Scenarios'**
+  String get scenariosCompareTitle;
+
+  /// Prompt shown when no scenario is selected for comparison
+  ///
+  /// In en, this message translates to:
+  /// **'Select a scenario to compare'**
+  String get scenariosComparePickPrompt;
+
+  /// Label for the first scenario selector
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario A'**
+  String get scenariosCompareSelectA;
+
+  /// Label for the second scenario selector
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario B'**
+  String get scenariosCompareSelectB;
+
+  /// Label for debt-free date in comparison
+  ///
+  /// In en, this message translates to:
+  /// **'Debt-free date'**
+  String get scenariosCompareDebtFreeDate;
+
+  /// Label for total balance in comparison
+  ///
+  /// In en, this message translates to:
+  /// **'Total balance'**
+  String get scenariosCompareTotalBalance;
+
+  /// Label for projected interest in comparison
+  ///
+  /// In en, this message translates to:
+  /// **'Projected interest'**
+  String get scenariosCompareProjectedInterest;
+
+  /// Label for savings vs minimum-only in comparison
+  ///
+  /// In en, this message translates to:
+  /// **'Saved vs minimum'**
+  String get scenariosCompareSavedVsMinimum;
+
+  /// Label for debt count in comparison
+  ///
+  /// In en, this message translates to:
+  /// **'Debts tracked'**
+  String get scenariosCompareTotalDebts;
+
+  /// Shown when a scenario has no plan data
+  ///
+  /// In en, this message translates to:
+  /// **'No plan yet'**
+  String get scenariosCompareNoPlan;
+
+  /// Placeholder when data is not available
+  ///
+  /// In en, this message translates to:
+  /// **'—'**
+  String get scenariosCompareNotAvailable;
+
+  /// Badge shown on the scenario with an earlier payoff date
+  ///
+  /// In en, this message translates to:
+  /// **'{months} mo faster'**
+  String scenariosCompareFaster(int months);
+
+  /// Badge shown on the scenario with lower projected interest
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} less interest'**
+  String scenariosCompareCheaper(String amount);
+
+  /// Button label to open comparison page
+  ///
+  /// In en, this message translates to:
+  /// **'Compare'**
+  String get scenariosCompareAction;
+
+  /// Dialog title for copying debts between scenarios
+  ///
+  /// In en, this message translates to:
+  /// **'Copy debts to another scenario'**
+  String get scenariosCopyDebtsTitle;
+
+  /// Confirmation message for copying debts
+  ///
+  /// In en, this message translates to:
+  /// **'Debts from \'{source}\' will be copied to \'{target}\'. Existing debts in the target are kept. Payments are not copied.'**
+  String scenariosCopyDebtsMessage(String source, String target);
+
+  /// Confirm button for copying debts
+  ///
+  /// In en, this message translates to:
+  /// **'Copy debts'**
+  String get scenariosCopyDebtsConfirm;
+
+  /// Snackbar after copying debts
+  ///
+  /// In en, this message translates to:
+  /// **'Debts copied successfully'**
+  String get scenariosCopyDebtsSuccess;
 }
 
 class _AppLocalizationsDelegate

@@ -144,7 +144,6 @@ class SyncEngine {
       if (!batch.isEmpty) {
         await _remoteWriter.pushBatch(batch);
         await _pushQueue.markPushed(batch: batch, pushedAt: syncedAt);
-      } else {
       }
 
       _setState(

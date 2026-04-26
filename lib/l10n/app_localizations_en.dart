@@ -1732,4 +1732,64 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get scenariosDeleteMessage =>
       'This scenario and its debts will be deleted. Payments are not affected.';
+
+  @override
+  String get scenariosCompareTitle => 'Compare Scenarios';
+
+  @override
+  String get scenariosComparePickPrompt => 'Select a scenario to compare';
+
+  @override
+  String get scenariosCompareSelectA => 'Scenario A';
+
+  @override
+  String get scenariosCompareSelectB => 'Scenario B';
+
+  @override
+  String get scenariosCompareDebtFreeDate => 'Debt-free date';
+
+  @override
+  String get scenariosCompareTotalBalance => 'Total balance';
+
+  @override
+  String get scenariosCompareProjectedInterest => 'Projected interest';
+
+  @override
+  String get scenariosCompareSavedVsMinimum => 'Saved vs minimum';
+
+  @override
+  String get scenariosCompareTotalDebts => 'Debts tracked';
+
+  @override
+  String get scenariosCompareNoPlan => 'No plan yet';
+
+  @override
+  String get scenariosCompareNotAvailable => '—';
+
+  @override
+  String scenariosCompareFaster(int months) {
+    return '$months mo faster';
+  }
+
+  @override
+  String scenariosCompareCheaper(String amount) {
+    return '$amount less interest';
+  }
+
+  @override
+  String get scenariosCompareAction => 'Compare';
+
+  @override
+  String get scenariosCopyDebtsTitle => 'Copy debts to another scenario';
+
+  @override
+  String scenariosCopyDebtsMessage(String source, String target) {
+    return 'Debts from \'$source\' will be copied to \'$target\'. Existing debts in the target are kept. Payments are not copied.';
+  }
+
+  @override
+  String get scenariosCopyDebtsConfirm => 'Copy debts';
+
+  @override
+  String get scenariosCopyDebtsSuccess => 'Debts copied successfully';
 }

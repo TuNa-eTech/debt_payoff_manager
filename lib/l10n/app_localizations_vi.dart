@@ -1743,4 +1743,64 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get scenariosDeleteMessage =>
       'Kịch bản và các khoản nợ của nó sẽ bị xóa. Lịch sử thanh toán không bị ảnh hưởng.';
+
+  @override
+  String get scenariosCompareTitle => 'So sánh kịch bản';
+
+  @override
+  String get scenariosComparePickPrompt => 'Chọn kịch bản để so sánh';
+
+  @override
+  String get scenariosCompareSelectA => 'Kịch bản A';
+
+  @override
+  String get scenariosCompareSelectB => 'Kịch bản B';
+
+  @override
+  String get scenariosCompareDebtFreeDate => 'Ngày debt-free';
+
+  @override
+  String get scenariosCompareTotalBalance => 'Tổng dư nợ';
+
+  @override
+  String get scenariosCompareProjectedInterest => 'Lãi dự kiến';
+
+  @override
+  String get scenariosCompareSavedVsMinimum => 'Tiết kiệm so với tối thiểu';
+
+  @override
+  String get scenariosCompareTotalDebts => 'Số khoản nợ';
+
+  @override
+  String get scenariosCompareNoPlan => 'Chưa có kế hoạch';
+
+  @override
+  String get scenariosCompareNotAvailable => '—';
+
+  @override
+  String scenariosCompareFaster(int months) {
+    return 'Nhanh hơn $months tháng';
+  }
+
+  @override
+  String scenariosCompareCheaper(String amount) {
+    return 'Ít lãi hơn $amount';
+  }
+
+  @override
+  String get scenariosCompareAction => 'So sánh';
+
+  @override
+  String get scenariosCopyDebtsTitle => 'Sao chép khoản nợ sang kịch bản khác';
+
+  @override
+  String scenariosCopyDebtsMessage(String source, String target) {
+    return 'Các khoản nợ từ \'$source\' sẽ được copy sang \'$target\'. Các khoản nợ đang có ở kịch bản đích được giữ nguyên. Lịch sử thanh toán không được copy.';
+  }
+
+  @override
+  String get scenariosCopyDebtsConfirm => 'Sao chép khoản nợ';
+
+  @override
+  String get scenariosCopyDebtsSuccess => 'Đã sao chép khoản nợ thành công';
 }
