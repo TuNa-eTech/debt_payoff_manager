@@ -119,6 +119,7 @@ class DriftSyncPushQueue implements SyncPushQueue {
   Future<SyncPushBatch> collectPendingWrites({required String uid}) async {
     await _ensureMetadata();
     final entries = <SyncQueueEntry>[
+      ...await _collectScenarios(),
       ...await _collectDebts(),
       ...await _collectPayments(),
       ...await _collectPlans(),
@@ -149,6 +150,23 @@ class DriftSyncPushQueue implements SyncPushQueue {
         in batch.entries.map((entry) => entry.collection).toSet()) {
       await _syncStateStore.markPushed(collection.path, pushedAt: pushedAt);
     }
+  }
+
+  Future<List<SyncQueueEntry>> _collectScenarios() async {
+    final state = await _syncStateStore.getState(
+      FirestoreSyncCollection.scenarios.path,
+    );
+    final rows = await _db.select(_db.scenariosTable).get();
+    return rows
+        .where((row) => _shouldPush(state, row.createdAt, row.deletedAt))
+        .map(
+          (row) => SyncQueueEntry(
+            collection: FirestoreSyncCollection.scenarios,
+            documentId: row.id,
+            data: FirestoreScenarioSerializer.toFirestoreJson(row, _metadata!),
+          ),
+        )
+        .toList();
   }
 
   Future<List<SyncQueueEntry>> _collectDebts() async {

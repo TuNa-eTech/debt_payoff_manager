@@ -34,9 +34,6 @@ class _ReportsPreviewPageState extends State<ReportsPreviewPage> {
   final _reportGenerator = getIt<ReportGeneratorService>();
   final _dataManagement = getIt<DataManagementService>();
   final _shareLauncher = getIt<ShareLauncher>();
-  final _settingsRepository = getIt<SettingsRepository>();
-  late final _settingsStream = _settingsRepository.watchSettings();
-
   bool _isGenerating = false;
   ReportTimeRange _selectedRange = ReportTimeRange.fullHistory;
 
@@ -62,21 +59,16 @@ class _ReportsPreviewPageState extends State<ReportsPreviewPage> {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                return StreamBuilder<UserSettings>(
-                  stream: _settingsStream,
-                  builder: (context, settingsSnapshot) {
-                    final settings = settingsSnapshot.data;
-                    if (settings == null) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
+                final settings = context.userSettings;
+                if (settings == null) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-                    return _buildContent(
-                      context,
-                      debtsState: debtsState,
-                      planState: planState,
-                      settings: settings,
-                    );
-                  },
+                return _buildContent(
+                  context,
+                  debtsState: debtsState,
+                  planState: planState,
+                  settings: settings,
                 );
               },
             );

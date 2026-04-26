@@ -11,6 +11,8 @@ import 'package:debt_payoff_manager/features/settings/presentation/pages/sync_ba
 import 'package:debt_payoff_manager/l10n/app_localizations.dart';
 import 'package:debt_payoff_manager/sync/cloud_backup_service.dart';
 import 'package:debt_payoff_manager/sync/sync_auth_service.dart';
+import 'package:debt_payoff_manager/features/settings/cubit/settings_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/repositories/repository_test_helpers.dart';
 
@@ -72,15 +74,24 @@ Future<void> _pumpPage(
     ..registerSingleton<SettingsRepository>(settingsRepository)
     ..registerSingleton<CloudBackupService>(cloudBackupService);
 
+  final settingsCubit = SettingsCubit(settingsRepository: settingsRepository);
+
   await tester.pumpWidget(
-    const MaterialApp(
-      locale: Locale('en'),
+    MaterialApp(
+      locale: const Locale('en'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: SyncBackupPage(),
+      home: BlocProvider<SettingsCubit>.value(
+        value: settingsCubit,
+        child: const SyncBackupPage(),
+      ),
     ),
   );
   settingsRepository.emit();
+  await tester.pump();
+  
+  await tester.pump(const Duration(milliseconds: 100)); // To ensure tear down works, but we also need to close it.
+  addTearDown(() => settingsCubit.close());
   await tester.pump();
 }
 

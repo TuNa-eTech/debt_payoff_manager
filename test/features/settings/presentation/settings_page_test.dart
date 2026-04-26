@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:debt_payoff_manager/features/settings/cubit/settings_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -80,10 +82,13 @@ void main() {
 }
 
 Widget _settingsTestApp() {
-  return const MaterialApp(
-    locale: Locale('en'),
+  return MaterialApp(
+    locale: const Locale('en'),
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
-    home: SettingsPage(),
+    home: BlocProvider(
+      create: (context) => SettingsCubit(settingsRepository: getIt<SettingsRepository>()),
+      child: const SettingsPage(),
+    ),
   );
 }

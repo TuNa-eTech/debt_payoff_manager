@@ -85,38 +85,33 @@ class WelcomePage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      StreamBuilder<UserSettings>(
-                        stream: settingsRepository.watchSettings(),
-                        builder: (context, snapshot) {
-                          final settings = snapshot.data;
-
-                          return Align(
-                            alignment: Alignment.centerLeft,
-                            child: SizedBox(
-                              key: AppTestKeys.welcomeChangeLanguage,
-                              child: AppButton.text(
-                                label: l10n.welcomeChangeLanguage,
-                                icon: LucideIcons.languages,
-                                onPressed: settings == null
-                                    ? null
-                                    : () => showAppLocalePickerSheet(
-                                        context,
-                                        selectedLocaleCode: settings.localeCode,
-                                        onSelected: (localeCode) {
-                                          return settingsRepository.updateSettings(
-                                            settings.copyWith(
-                                              localeCode:
-                                                  AppLocale.resolveSupportedLocaleCode(
-                                                    localeCode,
-                                                  ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                              ),
-                            ),
-                          );
-                        },
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          key: AppTestKeys.welcomeChangeLanguage,
+                          child: AppButton.text(
+                            label: l10n.welcomeChangeLanguage,
+                            icon: LucideIcons.languages,
+                            onPressed: () {
+                              final settings = context.readSettings;
+                              if (settings == null) return;
+                              showAppLocalePickerSheet(
+                                context,
+                                selectedLocaleCode: settings.localeCode,
+                                onSelected: (localeCode) {
+                                  return settingsRepository.updateSettings(
+                                    settings.copyWith(
+                                      localeCode:
+                                          AppLocale.resolveSupportedLocaleCode(
+                                            localeCode,
+                                          ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ],
                   ),

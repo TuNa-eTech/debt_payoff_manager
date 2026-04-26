@@ -15,6 +15,8 @@ import 'domain/repositories/settings_repository.dart';
 import 'features/debts/cubit/debts_cubit.dart';
 import 'features/onboarding/cubit/onboarding_cubit.dart';
 import 'features/onboarding/services/onboarding_analytics.dart';
+import 'features/settings/cubit/settings_cubit.dart';
+import 'features/settings/cubit/settings_state.dart';
 import 'features/progress/presentation/widgets/milestone_celebration_overlay.dart';
 import 'l10n/app_localizations.dart';
 
@@ -40,6 +42,7 @@ class _DebtPayoffAppState extends State<DebtPayoffApp> {
     settingsRepository: _settingsRepository,
     onboardingAnalytics: getIt<OnboardingAnalytics>(),
   )..start();
+  late final SettingsCubit _settingsCubit = getIt<SettingsCubit>();
   late final router = createRouter(
     settingsRepository: _settingsRepository,
     debtRepository: _debtRepository,
@@ -98,31 +101,33 @@ class _DebtPayoffAppState extends State<DebtPayoffApp> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<UserSettings>(
-      stream: _settingsRepository.watchSettings(),
-      builder: (context, settingsSnapshot) {
-        final locale = AppLocale.flutterLocaleForCode(
-          settingsSnapshot.data?.localeCode,
-        );
+    return BlocProvider<SettingsCubit>.value(
+      value: _settingsCubit,
+      child: BlocBuilder<SettingsCubit, SettingsState>(
+        builder: (context, settingsState) {
+          final locale = AppLocale.flutterLocaleForCode(
+            settingsState.settings?.localeCode,
+          );
 
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider<OnboardingCubit>.value(value: _onboardingCubit),
-            BlocProvider<DebtsCubit>.value(value: _debtsCubit),
-          ],
-          child: MaterialApp.router(
-            locale: locale,
-            onGenerateTitle: (context) =>
-                AppLocalizations.of(context)?.appName ?? 'Debt Payoff X',
-            title: 'Debt Payoff X',
-            debugShowCheckedModeBanner: false,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            theme: AppTheme.lightTheme,
-            routerConfig: router,
-          ),
-        );
-      },
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<OnboardingCubit>.value(value: _onboardingCubit),
+              BlocProvider<DebtsCubit>.value(value: _debtsCubit),
+            ],
+            child: MaterialApp.router(
+              locale: locale,
+              onGenerateTitle: (context) =>
+                  AppLocalizations.of(context)?.appName ?? 'Debt Payoff X',
+              title: 'Debt Payoff X',
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              theme: AppTheme.lightTheme,
+              routerConfig: router,
+            ),
+          );
+        },
+      ),
     );
   }
 }

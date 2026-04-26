@@ -41,7 +41,6 @@ class _SettingsPageState extends State<SettingsPage> {
   late final DataManagementService _dataManagementService =
       getIt<DataManagementService>();
   late final ShareLauncher _shareLauncher = getIt<ShareLauncher>();
-  late final _settingsStream = _settingsRepository.watchSettings();
   late final _planStream = _planRepository.watchCurrentPlan();
 
   _SettingsDataAction? _pendingAction;
@@ -51,21 +50,17 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final settings = context.userSettings;
+    if (settings == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
-    return StreamBuilder<UserSettings>(
-      stream: _settingsStream,
-      builder: (context, settingsSnapshot) {
-        final settings = settingsSnapshot.data;
-        if (settings == null) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-
-        return StreamBuilder(
-          stream: _planStream,
-          builder: (context, planSnapshot) {
-            final plan = planSnapshot.data;
+    return StreamBuilder(
+      stream: _planStream,
+      builder: (context, planSnapshot) {
+        final plan = planSnapshot.data;
 
             return Scaffold(
               backgroundColor: AppColors.mdSurfaceContainerLow,
@@ -292,8 +287,6 @@ class _SettingsPageState extends State<SettingsPage> {
             );
           },
         );
-      },
-    );
   }
 
   Future<void> _updateSettings(UserSettings settings) {

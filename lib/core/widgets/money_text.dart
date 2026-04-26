@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../extensions/context_extensions.dart';
+import '../i18n/app_locale.dart';
+import '../utils/formatters.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_text_styles.dart';
 
@@ -17,8 +21,8 @@ class MoneyText extends StatelessWidget {
   const MoneyText({
     super.key,
     required this.amount,
-    this.currency = 'USD',
-    this.locale = 'en_US',
+    this.currency,
+    this.locale,
     this.style,
     this.color,
     this.showSign = false,
@@ -29,20 +33,20 @@ class MoneyText extends StatelessWidget {
   const MoneyText._sized({
     super.key,
     required this.amount,
-    this.currency = 'USD',
+    this.currency,
     this.color,
     this.showSign = false,
     this.isPositive,
     this.compact = false,
     required _MoneySize size,
   }) : _size = size,
-       locale = 'en_US',
+       locale = null,
        style = null;
 
   factory MoneyText.large({
     Key? key,
     required double amount,
-    String currency = 'USD',
+    String? currency,
     Color? color,
     bool showSign = false,
     bool? isPositive,
@@ -61,7 +65,7 @@ class MoneyText extends StatelessWidget {
   factory MoneyText.small({
     Key? key,
     required double amount,
-    String currency = 'USD',
+    String? currency,
     Color? color,
     bool showSign = false,
     bool? isPositive,
@@ -78,8 +82,8 @@ class MoneyText extends StatelessWidget {
   );
 
   final double amount;
-  final String currency;
-  final String locale;
+  final String? currency;
+  final String? locale;
   final TextStyle? style;
   final Color? color;
   final bool showSign;
@@ -89,9 +93,13 @@ class MoneyText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userSettings = context.userSettings;
+    final effectiveCurrency = currency ?? userSettings?.currencyCode ?? 'USD';
+    final effectiveLocale = locale ?? userSettings?.localeCode ?? 'en_US';
+
     final effectiveColor = color ?? _semanticColor();
     final baseStyle = _baseStyle();
-    final formatted = _format();
+    final formatted = _format(effectiveCurrency, effectiveLocale);
 
     return Text(
       formatted,
@@ -99,10 +107,17 @@ class MoneyText extends StatelessWidget {
     );
   }
 
-  String _format() {
+  String _format(String effectiveCurrency, String effectiveLocale) {
     final NumberFormat fmt = compact
-        ? NumberFormat.compactCurrency(symbol: '\$', locale: locale)
-        : NumberFormat.currency(symbol: '\$', locale: locale, decimalDigits: 2);
+        ? NumberFormat.compactCurrency(
+            symbol: AppFormatters.currencySymbolFor(effectiveCurrency),
+            locale: AppLocale.intlFormatTag(effectiveLocale),
+          )
+        : NumberFormat.currency(
+            symbol: AppFormatters.currencySymbolFor(effectiveCurrency),
+            locale: AppLocale.intlFormatTag(effectiveLocale),
+            decimalDigits: effectiveCurrency.toUpperCase() == 'VND' ? 0 : 2,
+          );
 
     final str = fmt.format(amount.abs());
     if (showSign) {

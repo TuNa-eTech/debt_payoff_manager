@@ -22,6 +22,8 @@ import 'package:debt_payoff_manager/features/debts/cubit/debts_state.dart';
 import 'package:debt_payoff_manager/features/plan/cubit/plan_timeline_cubit.dart';
 import 'package:debt_payoff_manager/features/plan/cubit/plan_timeline_state.dart';
 import 'package:debt_payoff_manager/features/reports/presentation/pages/reports_preview_page.dart';
+import 'package:debt_payoff_manager/features/settings/cubit/settings_cubit.dart';
+import 'package:debt_payoff_manager/features/settings/cubit/settings_state.dart';
 import 'package:debt_payoff_manager/l10n/app_localizations.dart';
 
 import '../../../data/repositories/repository_test_helpers.dart';
@@ -63,11 +65,10 @@ class _TestPlanTimelineCubit extends PlanTimelineCubit {
 }
 
 void main() {
-  testWidgets('reports preview keeps settings stream across range changes', (
+  testWidgets('reports preview changes range correctly', (
     tester,
   ) async {
     final settingsRepository = _MockSettingsRepository();
-    final settingsStream = StreamController<dynamic>.broadcast();
     final debtsCubit = _TestDebtsCubit()
       ..seed(
         DebtsState(
@@ -85,9 +86,16 @@ void main() {
         ),
       );
     var settingsWatchCalls = 0;
+    
+    when(() => settingsRepository.watchSettings()).thenAnswer((_) {
+      settingsWatchCalls += 1;
+      return Stream.value(makeRepoSettings());
+    });
+
+    final settingsCubit = SettingsCubit(settingsRepository: settingsRepository);
 
     addTearDown(() async {
-      await settingsStream.close();
+      await settingsCubit.close();
       await debtsCubit.close();
       await planTimelineCubit.close();
       await getIt.reset();
@@ -99,10 +107,6 @@ void main() {
       ..registerSingleton<ReportGeneratorService>(_MockReportGeneratorService())
       ..registerSingleton<DataManagementService>(_MockDataManagementService())
       ..registerSingleton<ShareLauncher>(_MockShareLauncher());
-    when(() => settingsRepository.watchSettings()).thenAnswer((_) {
-      settingsWatchCalls += 1;
-      return settingsStream.stream.cast<UserSettings>();
-    });
 
     await tester.pumpWidget(
       MaterialApp(
@@ -113,26 +117,24 @@ void main() {
           providers: [
             BlocProvider<DebtsCubit>.value(value: debtsCubit),
             BlocProvider<PlanTimelineCubit>.value(value: planTimelineCubit),
+            BlocProvider<SettingsCubit>.value(value: settingsCubit),
           ],
           child: const ReportsPreviewPage(),
         ),
       ),
     );
-    settingsStream.add(makeRepoSettings());
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(find.text('Reports'), findsWidgets);
-    expect(settingsWatchCalls, 1);
 
     await tester.tap(
       find.byKey(
         AppTestKeys.reportsPreviewRange(ReportTimeRange.monthly.fileStem),
       ),
     );
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(find.text('Reports'), findsWidgets);
-    expect(settingsWatchCalls, 1);
   });
 }
 

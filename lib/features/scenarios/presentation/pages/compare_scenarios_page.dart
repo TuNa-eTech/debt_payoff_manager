@@ -53,8 +53,6 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
   late final ScenarioRepository _scenarioRepo = getIt<ScenarioRepository>();
   late final DebtRepository _debtRepo = getIt<DebtRepository>();
   late final PlanRepository _planRepo = getIt<PlanRepository>();
-  late final Stream<UserSettings> _settingsStream =
-      getIt<SettingsRepository>().watchSettings();
 
   List<Scenario> _scenarios = [];
   Scenario? _selectedA;
@@ -107,19 +105,22 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return StreamBuilder<UserSettings>(
-      stream: _settingsStream,
-      builder: (context, settingsSnap) {
-        final settings = settingsSnap.data;
-        return Scaffold(
-          backgroundColor: AppColors.mdSurface,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            title: Text(l10n.scenariosCompareTitle),
-          ),
-          body: SafeArea(
-            child: ListView(
+    final settings = context.userSettings;
+    if (settings == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: AppColors.mdSurface,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(l10n.scenariosCompareTitle),
+      ),
+      body: SafeArea(
+        child: ListView(
               padding: const EdgeInsets.fromLTRB(
                 AppDimensions.pagePaddingH,
                 AppDimensions.md,
@@ -168,8 +169,6 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
             ),
           ),
         );
-      },
-    );
   }
 
   Widget _buildPickPrompt(BuildContext context) {

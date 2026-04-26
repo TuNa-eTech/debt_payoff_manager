@@ -190,23 +190,27 @@ class DriftSyncPullApplier implements SyncPullApplier {
 
   int _collectionOrder(FirestoreSyncCollection collection) {
     switch (collection) {
-      case FirestoreSyncCollection.debts:
+      case FirestoreSyncCollection.scenarios:
         return 0;
-      case FirestoreSyncCollection.plans:
+      case FirestoreSyncCollection.debts:
         return 1;
-      case FirestoreSyncCollection.settings:
+      case FirestoreSyncCollection.plans:
         return 2;
-      case FirestoreSyncCollection.interestRateHistory:
+      case FirestoreSyncCollection.settings:
         return 3;
-      case FirestoreSyncCollection.payments:
+      case FirestoreSyncCollection.interestRateHistory:
         return 4;
-      case FirestoreSyncCollection.milestones:
+      case FirestoreSyncCollection.payments:
         return 5;
+      case FirestoreSyncCollection.milestones:
+        return 6;
     }
   }
 
   Future<bool> _applyChange(PullChange change) {
     switch (change.collection) {
+      case FirestoreSyncCollection.scenarios:
+        return _applyScenario(change.data);
       case FirestoreSyncCollection.debts:
         return _applyDebt(change.data);
       case FirestoreSyncCollection.payments:
@@ -220,6 +224,25 @@ class DriftSyncPullApplier implements SyncPullApplier {
       case FirestoreSyncCollection.interestRateHistory:
         return _applyInterestRateHistory(change.data);
     }
+  }
+
+  Future<bool> _applyScenario(FirestoreJson json) async {
+    final input = FirestoreScenarioSerializer.fromFirestoreJson(json);
+    final local = await (_db.select(
+      _db.scenariosTable,
+    )..where((row) => row.id.equals(input.id))).getSingleOrNull();
+
+    if (!_shouldApply(
+      local?.createdAt, // We don't have updatedAt for scenarios in the DB, so we use createdAt as approximation or just allow overwrite if it's newer based on other data
+      input.updatedAt,
+      local?.deletedAt,
+      input.deletedAt,
+    )) {
+      return false;
+    }
+
+    await _db.into(_db.scenariosTable).insertOnConflictUpdate(input.companion);
+    return true;
   }
 
   Future<bool> _applyDebt(FirestoreJson json) async {

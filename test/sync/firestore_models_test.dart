@@ -280,6 +280,32 @@ void main() {
       expect(_value(companion.notifPaymentReminderDaysBefore), 7);
       expect(_value(companion.onboardingCompletedAt), updatedAt);
       expect(_value(companion.premiumExpiresAt), isNull);
+      expect(_value(companion.activeScenarioId), 'main');
+    });
+  });
+
+  group('FirestoreScenarioSerializer', () {
+    test('round-trips scenario fields and defaults appropriately', () {
+      final row = ScenarioRow(
+        id: 'scenario-2',
+        name: 'Aggressive Payoff',
+        isMain: false,
+        createdAt: createdAt,
+        deletedAt: null,
+      );
+
+      final json = FirestoreScenarioSerializer.toFirestoreJson(row, metadata);
+      expect(json['id'], 'scenario-2');
+      expect(json['scenarioId'], 'scenario-2'); // Self-referential
+      expect(json['name'], 'Aggressive Payoff');
+      expect(json['isMain'], false);
+
+      final input = FirestoreScenarioSerializer.fromFirestoreJson(json);
+      final companion = input.companion;
+      expect(input.scenarioId, 'scenario-2');
+      expect(_value(companion.id), 'scenario-2');
+      expect(_value(companion.name), 'Aggressive Payoff');
+      expect(_value(companion.isMain), false);
     });
   });
 

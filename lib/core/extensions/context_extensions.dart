@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../domain/entities/user_settings.dart';
+import '../../features/settings/cubit/settings_cubit.dart';
 import '../../l10n/app_localizations.dart';
 
 /// Extensions on [BuildContext] for convenient access to theme and media.
@@ -38,6 +42,12 @@ extension ContextExtensions on BuildContext {
 
   /// Top padding (status bar).
   double get topPadding => mediaQuery.padding.top;
+
+  /// Access current user settings.
+  UserSettings? get userSettings => watch<SettingsCubit>().state.settings;
+
+  /// Access current user settings without listening (for event handlers).
+  UserSettings? get readSettings => read<SettingsCubit>().state.settings;
 
   /// Show a snackbar with [message].
   void showSnackBar(String message, {bool isError = false}) {

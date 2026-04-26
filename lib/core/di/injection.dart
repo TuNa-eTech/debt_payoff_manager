@@ -52,6 +52,7 @@ import '../../data/repositories/scenario_repository_impl.dart';
 import '../../domain/repositories/scenario_repository.dart';
 import '../../features/progress/cubit/progress_cubit.dart';
 import '../../features/scenarios/cubit/scenarios_cubit.dart';
+import '../../features/settings/cubit/settings_cubit.dart';
 
 /// Global service locator instance.
 final getIt = GetIt.instance;
@@ -308,6 +309,11 @@ void configureDependencies({
       milestoneRepository: getIt<MilestoneRepository>(),
       streakService: getIt<StreakService>(),
     ),
+  );
+
+  // Settings state
+  getIt.registerLazySingleton<SettingsCubit>(
+    () => SettingsCubit(settingsRepository: getIt<SettingsRepository>()),
   );
 
   // Feature state

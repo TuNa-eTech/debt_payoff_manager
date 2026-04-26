@@ -31,6 +31,7 @@ import 'package:debt_payoff_manager/domain/repositories/settings_repository.dart
 import 'package:debt_payoff_manager/features/debts/cubit/debts_cubit.dart';
 import 'package:debt_payoff_manager/features/onboarding/cubit/onboarding_cubit.dart';
 import 'package:debt_payoff_manager/features/onboarding/services/onboarding_analytics.dart';
+import 'package:debt_payoff_manager/features/settings/cubit/settings_cubit.dart';
 import 'package:debt_payoff_manager/l10n/app_localizations.dart';
 import 'package:debt_payoff_manager/sync/cloud_backup_service.dart';
 
@@ -75,6 +76,8 @@ class TestAppHarness {
   DebtsCubit get debtsCubit => _appScope.debtsCubit;
 
   OnboardingCubit get onboardingCubit => _appScope.onboardingCubit;
+
+  SettingsCubit get settingsCubit => _appScope.settingsCubit;
 
   GoRouter get router => _appScope.router;
 
@@ -183,6 +186,10 @@ class TestAppHarness {
     );
     await onboardingCubit.start();
 
+    final settingsCubit = SettingsCubit(
+      settingsRepository: settingsRepository,
+    );
+
     final router = createRouter(
       settingsRepository: getIt<SettingsRepository>(),
       debtRepository: getIt<DebtRepository>(),
@@ -191,6 +198,7 @@ class TestAppHarness {
     _appScope = _TestAppScope(
       debtsCubit: debtsCubit,
       onboardingCubit: onboardingCubit,
+      settingsCubit: settingsCubit,
       router: router,
     );
   }
@@ -199,6 +207,7 @@ class TestAppHarness {
     scope.router.dispose();
     await scope.debtsCubit.close();
     await scope.onboardingCubit.close();
+    await scope.settingsCubit.close();
   }
 
   Widget _buildApp() {
@@ -209,6 +218,7 @@ class TestAppHarness {
           providers: [
             BlocProvider<DebtsCubit>.value(value: debtsCubit),
             BlocProvider<OnboardingCubit>.value(value: onboardingCubit),
+            BlocProvider<SettingsCubit>.value(value: settingsCubit),
           ],
           child: MaterialApp.router(
             locale: AppLocale.flutterLocaleForCode(snapshot.data?.localeCode),
@@ -254,11 +264,13 @@ class _TestAppScope {
   const _TestAppScope({
     required this.debtsCubit,
     required this.onboardingCubit,
+    required this.settingsCubit,
     required this.router,
   });
 
   final DebtsCubit debtsCubit;
   final OnboardingCubit onboardingCubit;
+  final SettingsCubit settingsCubit;
   final GoRouter router;
 }
 

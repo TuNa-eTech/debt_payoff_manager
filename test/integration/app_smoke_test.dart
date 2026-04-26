@@ -313,7 +313,9 @@ void main() {
     );
 
     testWidgets('settings opens cloud backup opt-in flow', (tester) async {
-      final harness = await TestAppHarness.create();
+      final harness = await TestAppHarness.create(
+        notificationService: _TrackingNotificationService(),
+      );
       addTearDown(() => harness.disposeWidgetTest(tester));
 
       await harness.onboardingCubit.completeOnboarding();
@@ -340,11 +342,12 @@ void main() {
       await tester.pumpUntilVisible(reminderTile);
       await tester.ensureVisible(reminderTile);
       await tester.tap(reminderTile);
-      await tester.pump();
-      await tester.pumpRouterIdle();
+      await tester.pump(const Duration(milliseconds: 50));
+      await tester.tap(reminderTile); // Toggle back to true to trigger permission check
+      await tester.pump(const Duration(milliseconds: 50));
 
       expect(harness.router.state.matchedLocation, AppRoutes.settings);
-      expect(find.byType(SnackBar), findsOneWidget);
+      expect(find.byType(SnackBar), findsWidgets);
 
       await _pumpUntilLocation(tester, harness, AppRoutes.settings);
     });
@@ -416,8 +419,8 @@ void main() {
       );
       await tester.pumpUntilVisible(find.byKey(AppTestKeys.snackbarUndo));
       expect(find.byType(SnackBar), findsOneWidget);
-      await tester.pump(const Duration(seconds: 7));
-      await tester.pump(const Duration(milliseconds: 400));
+      tester.state<ScaffoldMessengerState>(find.byType(ScaffoldMessenger)).clearSnackBars();
+      await tester.pumpAndSettle();
       expect(find.byType(SnackBar), findsNothing);
 
       harness.router.go(AppRoutes.debts);

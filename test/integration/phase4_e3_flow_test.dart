@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:debt_payoff_manager/core/constants/app_test_keys.dart';
 import 'package:debt_payoff_manager/core/router/app_router.dart';
@@ -75,17 +76,18 @@ void main() {
         );
         expect(find.text('Phase 4 Visa'), findsWidgets);
 
-        final checkOffFinder = find
-            .descendant(
-              of: find.byKey(AppTestKeys.monthlyActionSection('phase4-visa')),
-              matching: find.widgetWithText(FilledButton, 'Check off'),
-            )
-            .first;
-        await tester.pumpUntilVisible(checkOffFinder);
-        await tester.ensureVisible(checkOffFinder);
-        final checkOffButton = tester.widget<FilledButton>(checkOffFinder);
-        expect(checkOffButton.onPressed, isNotNull);
-        checkOffButton.onPressed!.call();
+        final baseCheckOffFinder = find.ancestor(
+          of: find.descendant(
+            of: find.byKey(AppTestKeys.monthlyActionSection('phase4-visa')),
+            matching: find.byIcon(LucideIcons.check),
+          ),
+          matching: find.byType(InkWell),
+        );
+        await tester.pumpUntilVisible(baseCheckOffFinder);
+        final checkOffFinder = baseCheckOffFinder.first;
+        final inkWell = tester.widget<InkWell>(checkOffFinder);
+        expect(inkWell.onTap, isNotNull);
+        inkWell.onTap!.call();
         await tester.pumpRouterIdle();
         await tester.pumpUntilVisible(
           find.byKey(AppTestKeys.monthlyActionConfirmPrimary),
@@ -224,15 +226,18 @@ void main() {
           find.byKey(AppTestKeys.monthlyActionSection('done-visa')),
         );
 
-        final checkOffFinder = find
-            .descendant(
-              of: find.byKey(AppTestKeys.monthlyActionSection('done-visa')),
-              matching: find.widgetWithText(FilledButton, 'Check off'),
-            )
-            .first;
-        final checkOffButton = tester.widget<FilledButton>(checkOffFinder);
-        expect(checkOffButton.onPressed, isNotNull);
-        checkOffButton.onPressed!.call();
+        final baseCheckOffFinder = find.ancestor(
+          of: find.descendant(
+            of: find.byKey(AppTestKeys.monthlyActionSection('done-visa')),
+            matching: find.byIcon(LucideIcons.check),
+          ),
+          matching: find.byType(InkWell),
+        );
+        await tester.pumpUntilVisible(baseCheckOffFinder);
+        final checkOffFinder = baseCheckOffFinder.first;
+        final inkWell = tester.widget<InkWell>(checkOffFinder);
+        expect(inkWell.onTap, isNotNull);
+        inkWell.onTap!.call();
         await tester.pumpRouterIdle();
         await tester.pumpUntilVisible(
           find.byKey(AppTestKeys.monthlyActionConfirmPrimary),

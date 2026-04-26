@@ -25,7 +25,7 @@ class AppFormatters {
     final format = NumberFormat.currency(
       locale: locale,
       name: currencyCode,
-      symbol: _currencySymbolFor(currencyCode),
+      symbol: currencySymbolFor(currencyCode),
       decimalDigits: currencyCode.toUpperCase() == 'VND' ? 0 : 2,
     );
     return format.format(cents / 100);
@@ -91,7 +91,7 @@ class AppFormatters {
         '$months month${months != 1 ? 's' : ''}';
   }
 
-  static String _currencySymbolFor(String currencyCode) {
+  static String currencySymbolFor(String currencyCode) {
     switch (currencyCode.toUpperCase()) {
       case 'USD':
         return r'$';

@@ -29,11 +29,8 @@ class SyncBackupPage extends StatefulWidget {
 }
 
 class _SyncBackupPageState extends State<SyncBackupPage> {
-  late final SettingsRepository _settingsRepository =
-      getIt<SettingsRepository>();
   late final CloudBackupService _cloudBackupService =
       getIt<CloudBackupService>();
-  late final _settingsStream = _settingsRepository.watchSettings();
   late final _runtimeStream = _cloudBackupService.watchRuntimeState();
 
   _CloudBackupAction? _pendingAction;
@@ -44,29 +41,26 @@ class _SyncBackupPageState extends State<SyncBackupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<UserSettings>(
-      stream: _settingsStream,
-      builder: (context, settingsSnapshot) {
-        final settings = settingsSnapshot.data;
-        if (settings == null) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
+    final settings = context.userSettings;
+    if (settings == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
-        if (settings.trustLevel >= 1 && !_refreshQueued) {
-          _refreshQueued = true;
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) {
-              unawaited(_cloudBackupService.refresh());
-            }
-          });
+    if (settings.trustLevel >= 1 && !_refreshQueued) {
+      _refreshQueued = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          unawaited(_cloudBackupService.refresh());
         }
+      });
+    }
 
-        return StreamBuilder<CloudBackupRuntimeState>(
-          stream: _runtimeStream,
-          initialData: _cloudBackupService.currentState,
-          builder: (context, runtimeSnapshot) {
+    return StreamBuilder<CloudBackupRuntimeState>(
+      stream: _runtimeStream,
+      initialData: _cloudBackupService.currentState,
+      builder: (context, runtimeSnapshot) {
             final runtime =
                 runtimeSnapshot.data ?? _cloudBackupService.currentState;
             return Scaffold(
@@ -101,8 +95,6 @@ class _SyncBackupPageState extends State<SyncBackupPage> {
             );
           },
         );
-      },
-    );
   }
 
   Widget _buildHeader(UserSettings settings) {

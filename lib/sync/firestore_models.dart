@@ -22,7 +22,8 @@ enum FirestoreSyncCollection {
   plans('plans'),
   interestRateHistory('interestRateHistory'),
   milestones('milestones'),
-  settings('settings');
+  settings('settings'),
+  scenarios('scenarios');
 
   const FirestoreSyncCollection(this.path);
 
@@ -370,6 +371,7 @@ class FirestoreSettingsSerializer {
         'onboardingCompletedAt': row.onboardingCompletedAt?.toUtc(),
         'isPremium': row.isPremium,
         'premiumExpiresAt': row.premiumExpiresAt?.toUtc(),
+        'activeScenarioId': row.activeScenarioId,
       },
     );
   }
@@ -402,6 +404,9 @@ class FirestoreSettingsSerializer {
         isPremium: Value(_requiredBool(json, 'isPremium')),
         premiumExpiresAt: Value(
           _nullableUtcTimestamp(json, 'premiumExpiresAt'),
+        ),
+        activeScenarioId: Value(
+          _nullableString(json, 'activeScenarioId') ?? firestoreDefaultScenarioId,
         ),
         createdAt: Value(_requiredUtcTimestamp(json, 'createdAt')),
         updatedAt: Value(_requiredUtcTimestamp(json, 'updatedAt')),
@@ -448,6 +453,44 @@ class FirestoreMilestoneSerializer {
         achievedAt: Value(_requiredUtcTimestamp(json, 'achievedAt')),
         seen: Value(_requiredBool(json, 'seen')),
         metadata: Value(_nullableString(json, 'metadata')),
+        createdAt: Value(_requiredUtcTimestamp(json, 'createdAt')),
+        deletedAt: Value(_nullableUtcTimestamp(json, 'deletedAt')),
+      ),
+    );
+  }
+}
+
+class FirestoreScenarioSerializer {
+  const FirestoreScenarioSerializer._();
+
+  static FirestoreJson toFirestoreJson(
+    ScenarioRow row,
+    FirestoreSyncMetadata metadata, {
+    DateTime? updatedAt,
+  }) {
+    return _withMirrorFields(
+      id: row.id,
+      scenarioId: row.id, // Scenario's own ID is its scenario ID context
+      createdAt: row.createdAt,
+      updatedAt: updatedAt ?? row.createdAt,
+      deletedAt: row.deletedAt,
+      metadata: metadata,
+      data: <String, Object?>{
+        'name': row.name,
+        'isMain': row.isMain,
+      },
+    );
+  }
+
+  static FirestoreMirrorInput<ScenariosTableCompanion> fromFirestoreJson(
+    FirestoreJson json,
+  ) {
+    return _mirrorInput(
+      json,
+      ScenariosTableCompanion(
+        id: Value(_requiredString(json, 'id')),
+        name: Value(_requiredString(json, 'name')),
+        isMain: Value(_requiredBool(json, 'isMain')),
         createdAt: Value(_requiredUtcTimestamp(json, 'createdAt')),
         deletedAt: Value(_nullableUtcTimestamp(json, 'deletedAt')),
       ),
