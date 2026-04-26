@@ -2626,6 +2626,78 @@ abstract class AppLocalizations {
   /// **'Based on current balance versus original principal for each debt.'**
   String get progressByDebtHelper;
 
+  /// Payment streak label
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No streak yet} =1{1 month streak} other{{count} month streak}}'**
+  String progressStreakMonths(int count);
+
+  /// Label for interest saved vs minimum-only plan
+  ///
+  /// In en, this message translates to:
+  /// **'Interest saved'**
+  String get progressInterestSaved;
+
+  /// Section title for earned milestones
+  ///
+  /// In en, this message translates to:
+  /// **'Achievements'**
+  String get progressAchievements;
+
+  /// Celebration text for first payment milestone
+  ///
+  /// In en, this message translates to:
+  /// **'First payment made!'**
+  String get milestoneCelebrationFirstPayment;
+
+  /// Celebration text for debt paid off milestone
+  ///
+  /// In en, this message translates to:
+  /// **'Debt paid off!'**
+  String get milestoneCelebrationDebtPaidOff;
+
+  /// Celebration text for all-debt-free milestone
+  ///
+  /// In en, this message translates to:
+  /// **'All debt-free!'**
+  String get milestoneCelebrationAllDebtFree;
+
+  /// Celebration text for 25% progress milestone
+  ///
+  /// In en, this message translates to:
+  /// **'25% there!'**
+  String get milestoneCelebrationProgress25;
+
+  /// Celebration text for 50% progress milestone
+  ///
+  /// In en, this message translates to:
+  /// **'Halfway there!'**
+  String get milestoneCelebrationProgress50;
+
+  /// Celebration text for 75% progress milestone
+  ///
+  /// In en, this message translates to:
+  /// **'75% complete!'**
+  String get milestoneCelebrationProgress75;
+
+  /// Celebration text for 3-month streak milestone
+  ///
+  /// In en, this message translates to:
+  /// **'3-month streak!'**
+  String get milestoneCelebrationStreak3;
+
+  /// Celebration text for 6-month streak milestone
+  ///
+  /// In en, this message translates to:
+  /// **'6-month streak!'**
+  String get milestoneCelebrationStreak6;
+
+  /// Celebration text for 12-month streak milestone
+  ///
+  /// In en, this message translates to:
+  /// **'1 year streak!'**
+  String get milestoneCelebrationStreak12;
+
   /// Status text
   ///
   /// In en, this message translates to:

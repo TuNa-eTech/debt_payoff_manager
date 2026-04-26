@@ -1898,6 +1898,59 @@
   "@progressByDebtHelper": {
     "description": "Helper text"
   },
+  "progressStreakMonths": "{count, plural, =0{No streak yet} =1{1 month streak} other{{count} month streak}}",
+  "@progressStreakMonths": {
+    "description": "Payment streak label",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "progressInterestSaved": "Interest saved",
+  "@progressInterestSaved": {
+    "description": "Label for interest saved vs minimum-only plan"
+  },
+  "progressAchievements": "Achievements",
+  "@progressAchievements": {
+    "description": "Section title for earned milestones"
+  },
+  "milestoneCelebrationFirstPayment": "First payment made!",
+  "@milestoneCelebrationFirstPayment": {
+    "description": "Celebration text for first payment milestone"
+  },
+  "milestoneCelebrationDebtPaidOff": "Debt paid off!",
+  "@milestoneCelebrationDebtPaidOff": {
+    "description": "Celebration text for debt paid off milestone"
+  },
+  "milestoneCelebrationAllDebtFree": "All debt-free!",
+  "@milestoneCelebrationAllDebtFree": {
+    "description": "Celebration text for all-debt-free milestone"
+  },
+  "milestoneCelebrationProgress25": "25% there!",
+  "@milestoneCelebrationProgress25": {
+    "description": "Celebration text for 25% progress milestone"
+  },
+  "milestoneCelebrationProgress50": "Halfway there!",
+  "@milestoneCelebrationProgress50": {
+    "description": "Celebration text for 50% progress milestone"
+  },
+  "milestoneCelebrationProgress75": "75% complete!",
+  "@milestoneCelebrationProgress75": {
+    "description": "Celebration text for 75% progress milestone"
+  },
+  "milestoneCelebrationStreak3": "3-month streak!",
+  "@milestoneCelebrationStreak3": {
+    "description": "Celebration text for 3-month streak milestone"
+  },
+  "milestoneCelebrationStreak6": "6-month streak!",
+  "@milestoneCelebrationStreak6": {
+    "description": "Celebration text for 6-month streak milestone"
+  },
+  "milestoneCelebrationStreak12": "1 year streak!",
+  "@milestoneCelebrationStreak12": {
+    "description": "Celebration text for 12-month streak milestone"
+  },
   "progressDebtPaidOffStatus": "This debt is marked as paid off.",
   "@progressDebtPaidOffStatus": {
     "description": "Status text"

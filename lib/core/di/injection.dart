@@ -47,6 +47,8 @@ import '../services/plan_recast_service.dart';
 import '../services/reminder_scheduler_service.dart';
 import '../services/report_generator_service.dart';
 import '../services/share_launcher.dart';
+import '../services/streak_service.dart';
+import '../../features/progress/cubit/progress_cubit.dart';
 
 /// Global service locator instance.
 final getIt = GetIt.instance;
@@ -280,6 +282,18 @@ void configureDependencies({
   // Reports
   getIt.registerLazySingleton<ReportGeneratorService>(
     () => ReportGeneratorService(),
+  );
+
+  // Progress
+  getIt.registerLazySingleton<StreakService>(() => const StreakService());
+  getIt.registerFactory<ProgressCubit>(
+    () => ProgressCubit(
+      debtRepository: getIt<DebtRepository>(),
+      planRepository: getIt<PlanRepository>(),
+      paymentRepository: getIt<PaymentRepository>(),
+      milestoneRepository: getIt<MilestoneRepository>(),
+      streakService: getIt<StreakService>(),
+    ),
   );
 
   // Feature state

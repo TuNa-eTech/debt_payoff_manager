@@ -1461,6 +1461,51 @@ class AppLocalizationsEn extends AppLocalizations {
       'Based on current balance versus original principal for each debt.';
 
   @override
+  String progressStreakMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count month streak',
+      one: '1 month streak',
+      zero: 'No streak yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get progressInterestSaved => 'Interest saved';
+
+  @override
+  String get progressAchievements => 'Achievements';
+
+  @override
+  String get milestoneCelebrationFirstPayment => 'First payment made!';
+
+  @override
+  String get milestoneCelebrationDebtPaidOff => 'Debt paid off!';
+
+  @override
+  String get milestoneCelebrationAllDebtFree => 'All debt-free!';
+
+  @override
+  String get milestoneCelebrationProgress25 => '25% there!';
+
+  @override
+  String get milestoneCelebrationProgress50 => 'Halfway there!';
+
+  @override
+  String get milestoneCelebrationProgress75 => '75% complete!';
+
+  @override
+  String get milestoneCelebrationStreak3 => '3-month streak!';
+
+  @override
+  String get milestoneCelebrationStreak6 => '6-month streak!';
+
+  @override
+  String get milestoneCelebrationStreak12 => '1 year streak!';
+
+  @override
   String get progressDebtPaidOffStatus => 'This debt is marked as paid off.';
 
   @override

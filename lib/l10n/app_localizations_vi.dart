@@ -1469,6 +1469,51 @@ class AppLocalizationsVi extends AppLocalizations {
       'Dựa trên số dư hiện tại so với gốc ban đầu của từng khoản.';
 
   @override
+  String progressStreakMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Chuỗi $count tháng',
+      one: 'Chuỗi 1 tháng',
+      zero: 'Chưa có chuỗi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get progressInterestSaved => 'Lãi tiết kiệm được';
+
+  @override
+  String get progressAchievements => 'Thành tích';
+
+  @override
+  String get milestoneCelebrationFirstPayment => 'Thanh toán đầu tiên!';
+
+  @override
+  String get milestoneCelebrationDebtPaidOff => 'Đã trả xong khoản nợ!';
+
+  @override
+  String get milestoneCelebrationAllDebtFree => 'Thoát nợ hoàn toàn!';
+
+  @override
+  String get milestoneCelebrationProgress25 => 'Đã đi được 25%!';
+
+  @override
+  String get milestoneCelebrationProgress50 => 'Đã đi được nửa đường!';
+
+  @override
+  String get milestoneCelebrationProgress75 => '75% hoàn thành!';
+
+  @override
+  String get milestoneCelebrationStreak3 => 'Chuỗi 3 tháng!';
+
+  @override
+  String get milestoneCelebrationStreak6 => 'Chuỗi 6 tháng!';
+
+  @override
+  String get milestoneCelebrationStreak12 => 'Chuỗi 1 năm!';
+
+  @override
   String get progressDebtPaidOffStatus =>
       'Khoản nợ này đã được đánh dấu trả xong.';
 

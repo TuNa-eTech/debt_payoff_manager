@@ -12,68 +12,68 @@ import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_chip.dart';
 import '../../../../core/widgets/empty_state.dart';
 import '../../../../domain/entities/debt.dart';
-import '../../../../domain/entities/plan.dart';
+import '../../../../domain/entities/milestone.dart';
 import '../../../../domain/enums/debt_status.dart';
+import '../../../../domain/enums/milestone_type.dart';
 import '../../../../domain/repositories/plan_repository.dart';
 import '../../../debts/cubit/debts_cubit.dart';
 import '../../../debts/cubit/debts_state.dart';
+import '../../cubit/progress_cubit.dart';
+import '../../cubit/progress_state.dart';
 
 class ProgressPage extends StatelessWidget {
   const ProgressPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final planRepository = getIt.get<PlanRepository>();
+    return BlocProvider<ProgressCubit>(
+      create: (_) => getIt<ProgressCubit>()..start(),
+      child: const _ProgressView(),
+    );
+  }
+}
 
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.progressTitle)),
-      body: StreamBuilder<Plan?>(
-        stream: planRepository.watchCurrentPlan(),
-        builder: (context, planSnapshot) {
-          return BlocBuilder<DebtsCubit, DebtsState>(
-            builder: (context, state) {
-              if (state.isLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
+class _ProgressView extends StatelessWidget {
+  const _ProgressView();
 
-              final debts = state.debts
-                  .where((debt) => debt.status != DebtStatus.archived)
-                  .toList(growable: false);
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProgressCubit, ProgressState>(
+      builder: (context, progressState) {
+        return BlocBuilder<DebtsCubit, DebtsState>(
+          builder: (context, debtsState) {
+            if (progressState.isLoading || debtsState.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-              if (debts.isEmpty) {
-                return EmptyState(
+            final debts = debtsState.debts
+                .where((debt) => debt.status != DebtStatus.archived)
+                .toList(growable: false);
+
+            if (debts.isEmpty) {
+              return Scaffold(
+                appBar: AppBar(title: Text(context.l10n.progressTitle)),
+                body: EmptyState(
                   title: context.l10n.progressNoProgress,
                   subtitle: context.l10n.progressEmptySubtitle,
                   icon: LucideIcons.barChart2,
-                );
-              }
+                ),
+              );
+            }
 
-              final totalOriginal = debts.fold<int>(
-                0,
-                (sum, debt) => sum + debt.originalPrincipal,
-              );
-              final totalRemaining = debts.fold<int>(
-                0,
-                (sum, debt) => sum + debt.currentBalance,
-              );
-              final totalPaid = (totalOriginal - totalRemaining).clamp(
-                0,
-                totalOriginal,
-              );
-              final overallProgress = totalOriginal == 0
-                  ? 0.0
-                  : totalPaid / totalOriginal;
-              final paidOffCount = debts
-                  .where((debt) => debt.status == DebtStatus.paidOff)
-                  .length;
-              final pausedCount = debts
-                  .where((debt) => debt.status == DebtStatus.paused)
-                  .length;
-              final activeCount = debts
-                  .where((debt) => debt.status == DebtStatus.active)
-                  .length;
+            final paidOffCount = debts
+                .where((d) => d.status == DebtStatus.paidOff)
+                .length;
+            final pausedCount = debts
+                .where((d) => d.status == DebtStatus.paused)
+                .length;
+            final activeCount = debts
+                .where((d) => d.status == DebtStatus.active)
+                .length;
 
-              return SingleChildScrollView(
+            return Scaffold(
+              appBar: AppBar(title: Text(context.l10n.progressTitle)),
+              body: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppDimensions.pagePaddingH,
                   vertical: AppDimensions.pagePaddingV,
@@ -81,6 +81,7 @@ class ProgressPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    // Hero: paid so far + overall %
                     AppHeroCard(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +94,9 @@ class ProgressPage extends StatelessWidget {
                           ),
                           const SizedBox(height: AppDimensions.xs),
                           Text(
-                            AppFormatters.formatCents(totalPaid),
+                            AppFormatters.formatCents(
+                              progressState.totalPaidCents,
+                            ),
                             style: AppTextStyles.moneyLarge.copyWith(
                               color: AppColors.mdOnPrimary,
                             ),
@@ -101,7 +104,9 @@ class ProgressPage extends StatelessWidget {
                           const SizedBox(height: AppDimensions.sm),
                           Text(
                             context.l10n.progressRemainingAmount(
-                              AppFormatters.formatCents(totalRemaining),
+                              AppFormatters.formatCents(
+                                progressState.totalRemainingCents,
+                              ),
                             ),
                             style: AppTextStyles.bodyMedium.copyWith(
                               color: AppColors.mdOnPrimary.withValues(
@@ -122,7 +127,7 @@ class ProgressPage extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '${(overallProgress * 100).round()}%',
+                                '${(progressState.overallProgress * 100).round()}%',
                                 style: AppTextStyles.labelMedium.copyWith(
                                   color: AppColors.mdPrimaryContainer,
                                 ),
@@ -131,7 +136,7 @@ class ProgressPage extends StatelessWidget {
                           ),
                           const SizedBox(height: AppDimensions.sm),
                           LinearProgressIndicator(
-                            value: overallProgress.clamp(0.0, 1.0),
+                            value: progressState.overallProgress,
                             backgroundColor: Colors.white.withValues(
                               alpha: 0.18,
                             ),
@@ -144,10 +149,40 @@ class ProgressPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    if (planSnapshot.data != null) ...[
-                      const SizedBox(height: AppDimensions.sectionGap),
-                      _PlanSummaryCard(plan: planSnapshot.data!),
-                    ],
+
+                    // Streak + interest saved stats
+                    const SizedBox(height: AppDimensions.sectionGap),
+                    AppCard(
+                      color: AppColors.mdSurfaceContainerLow,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _ProgressStat(
+                              label: context.l10n.progressInterestSaved,
+                              value: AppFormatters.formatCents(
+                                progressState.interestSavedCents,
+                              ),
+                              valueColor: AppColors.mdPrimary,
+                            ),
+                          ),
+                          const _ProgressDivider(),
+                          Expanded(
+                            child: _ProgressStat(
+                              label: '🔥',
+                              value: context.l10n.progressStreakMonths(
+                                progressState.streak,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Plan summary (debt-free date, extra, projected interest)
+                    const SizedBox(height: AppDimensions.sectionGap),
+                    _PlanSummaryCard(planRepository: getIt<PlanRepository>()),
+
+                    // Status counts
                     const SizedBox(height: AppDimensions.sectionGap),
                     AppCard(
                       color: AppColors.mdSurfaceContainerLow,
@@ -177,6 +212,17 @@ class ProgressPage extends StatelessWidget {
                         ],
                       ),
                     ),
+
+                    // Achievements (earned milestones)
+                    if (progressState.unseenMilestones.isNotEmpty) ...[
+                      const SizedBox(height: AppDimensions.sectionGap),
+                      SectionHeader(title: context.l10n.progressAchievements),
+                      const SizedBox(height: AppDimensions.md),
+                      _MilestoneBadgesRow(
+                        milestones: progressState.unseenMilestones,
+                      ),
+                    ],
+
                     const SizedBox(height: AppDimensions.sectionGap),
                     AppCard(
                       color: AppColors.mdSurfaceContainerLow,
@@ -204,82 +250,135 @@ class ProgressPage extends StatelessWidget {
                     const SizedBox(height: 100),
                   ],
                 ),
-              );
-            },
-          );
-        },
-      ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
 
 class _PlanSummaryCard extends StatelessWidget {
-  const _PlanSummaryCard({required this.plan});
+  const _PlanSummaryCard({required this.planRepository});
 
-  final Plan plan;
+  final PlanRepository planRepository;
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
-      color: AppColors.mdSurfaceContainerLow,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    return StreamBuilder(
+      stream: planRepository.watchCurrentPlan(),
+      builder: (context, snapshot) {
+        final plan = snapshot.data;
+        if (plan == null) return const SizedBox.shrink();
+        return AppCard(
+          color: AppColors.mdSurfaceContainerLow,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                context.l10n.progressPlanSummary,
-                style: AppTextStyles.titleSmall,
-              ),
-              const Spacer(),
-              AppChip.status(label: plan.strategy.label, icon: LucideIcons.map),
-            ],
-          ),
-          const SizedBox(height: AppDimensions.md),
-          Row(
-            children: [
-              Expanded(
-                child: _ProgressStat(
-                  label: context.l10n.progressDebtFreeDate,
-                  value: plan.projectedDebtFreeDate == null
-                      ? context.l10n.monthlyActionRecasting
-                      : AppFormatters.formatShortMonthYear(
-                          plan.projectedDebtFreeDate!,
-                        ),
-                  valueColor: AppColors.mdPrimary,
-                ),
-              ),
-              Expanded(
-                child: _ProgressStat(
-                  label: context.l10n.homeExtraMonthlyLabel,
-                  value: AppFormatters.formatCents(plan.extraMonthlyAmount),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppDimensions.md),
-          Row(
-            children: [
-              Expanded(
-                child: _ProgressStat(
-                  label: context.l10n.progressProjectedInterest,
-                  value: AppFormatters.formatCents(
-                    plan.totalInterestProjected ?? 0,
+              Row(
+                children: [
+                  Text(
+                    context.l10n.progressPlanSummary,
+                    style: AppTextStyles.titleSmall,
                   ),
-                ),
-              ),
-              Expanded(
-                child: _ProgressStat(
-                  label: context.l10n.progressSavedVsMinimum,
-                  value: AppFormatters.formatCents(
-                    plan.totalInterestSaved ?? 0,
+                  const Spacer(),
+                  AppChip.status(
+                    label: plan.strategy.label,
+                    icon: LucideIcons.map,
                   ),
-                  valueColor: AppColors.mdPrimary,
-                ),
+                ],
+              ),
+              const SizedBox(height: AppDimensions.md),
+              Row(
+                children: [
+                  Expanded(
+                    child: _ProgressStat(
+                      label: context.l10n.progressDebtFreeDate,
+                      value: plan.projectedDebtFreeDate == null
+                          ? context.l10n.monthlyActionRecasting
+                          : AppFormatters.formatShortMonthYear(
+                              plan.projectedDebtFreeDate!,
+                            ),
+                      valueColor: AppColors.mdPrimary,
+                    ),
+                  ),
+                  Expanded(
+                    child: _ProgressStat(
+                      label: context.l10n.homeExtraMonthlyLabel,
+                      value: AppFormatters.formatCents(plan.extraMonthlyAmount),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppDimensions.md),
+              Row(
+                children: [
+                  Expanded(
+                    child: _ProgressStat(
+                      label: context.l10n.progressProjectedInterest,
+                      value: AppFormatters.formatCents(
+                        plan.totalInterestProjected ?? 0,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: _ProgressStat(
+                      label: context.l10n.progressSavedVsMinimum,
+                      value: AppFormatters.formatCents(
+                        plan.totalInterestSaved ?? 0,
+                      ),
+                      valueColor: AppColors.mdPrimary,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        );
+      },
+    );
+  }
+}
+
+class _MilestoneBadgesRow extends StatelessWidget {
+  const _MilestoneBadgesRow({required this.milestones});
+
+  final List<Milestone> milestones;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: AppDimensions.sm,
+      runSpacing: AppDimensions.sm,
+      children: milestones
+          .map((m) => _MilestoneBadge(type: m.type))
+          .toList(growable: false),
+    );
+  }
+}
+
+class _MilestoneBadge extends StatelessWidget {
+  const _MilestoneBadge({required this.type});
+
+  final MilestoneType type;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.sm,
+        vertical: AppDimensions.xs,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.mdPrimaryContainer,
+        borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
+      ),
+      child: Text(
+        type.label,
+        style: AppTextStyles.labelSmall.copyWith(
+          color: AppColors.mdOnPrimaryContainer,
+        ),
       ),
     );
   }
