@@ -89,8 +89,9 @@ class AppChip extends StatelessWidget {
   }
 
   bool get _showIcon {
-    if (chipVariant == _ChipVariant.filter && selected && selectedIcon != null)
+    if (chipVariant == _ChipVariant.filter && selected && selectedIcon != null) {
       return true;
+    }
     return icon != null;
   }
 

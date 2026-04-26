@@ -117,6 +117,7 @@ void configureDependencies({
       paymentRepository: getIt<PaymentRepositoryImpl>(),
       syncStateStore: getIt<SyncStateStore>(),
       planRecastService: getIt<PlanRecastService>(),
+      settingsRepository: getIt<SettingsRepositoryImpl>(),
       milestoneService: getIt<MilestoneService>(),
     ),
   );

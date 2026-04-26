@@ -7,7 +7,6 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:debt_payoff_manager/core/di/injection.dart';
 import 'package:debt_payoff_manager/domain/entities/scenario.dart';
-import 'package:debt_payoff_manager/domain/entities/user_settings.dart';
 import 'package:debt_payoff_manager/domain/repositories/debt_repository.dart';
 import 'package:debt_payoff_manager/domain/repositories/plan_repository.dart';
 import 'package:debt_payoff_manager/domain/repositories/scenario_repository.dart';

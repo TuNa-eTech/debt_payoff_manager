@@ -4,6 +4,7 @@ import '../../data/local/database.dart';
 import '../../data/local/stores/sync_state_store.dart';
 import '../../data/repositories/debt_repository_impl.dart';
 import '../../data/repositories/payment_repository_impl.dart';
+import '../../data/repositories/settings_repository_impl.dart';
 import '../../domain/entities/payment.dart';
 import '../../domain/enums/debt_status.dart';
 import '../../domain/enums/payment_type.dart';
@@ -19,12 +20,14 @@ class PaymentLoggingService {
     required PaymentRepositoryImpl paymentRepository,
     required SyncStateStore syncStateStore,
     required PlanRecastService planRecastService,
+    required SettingsRepositoryImpl settingsRepository,
     MilestoneService? milestoneService,
   }) : _db = db,
        _debtRepository = debtRepository,
        _paymentRepository = paymentRepository,
        _syncStateStore = syncStateStore,
        _planRecastService = planRecastService,
+       _settingsRepository = settingsRepository,
        _milestoneService = milestoneService;
 
   final AppDatabase _db;
@@ -32,6 +35,7 @@ class PaymentLoggingService {
   final PaymentRepositoryImpl _paymentRepository;
   final SyncStateStore _syncStateStore;
   final PlanRecastService _planRecastService;
+  final SettingsRepositoryImpl _settingsRepository;
   final MilestoneService? _milestoneService;
   final Uuid _uuid = const Uuid();
 
@@ -62,6 +66,11 @@ class PaymentLoggingService {
     }
     if (amountCents > debt.currentBalance) {
       throw ArgumentError('Payment exceeds the current balance.');
+    }
+
+    final settings = await _settingsRepository.getSettings();
+    if (debt.scenarioId != settings.activeScenarioId) {
+      throw ArgumentError('You can only log payments against debts in the active scenario.');
     }
 
     final paymentDate = _localDay(date ?? DateTime.now());

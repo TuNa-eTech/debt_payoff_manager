@@ -14,7 +14,6 @@ import '../../../../domain/entities/user_settings.dart';
 import '../../../../domain/repositories/debt_repository.dart';
 import '../../../../domain/repositories/plan_repository.dart';
 import '../../../../domain/repositories/scenario_repository.dart';
-import '../../../../domain/repositories/settings_repository.dart';
 
 // ---------------------------------------------------------------------------
 // Data model

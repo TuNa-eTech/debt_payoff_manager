@@ -13,20 +13,27 @@ class AppFormatters {
     decimalDigits: 2,
   );
 
+  /// Global defaults updated by the app when settings change.
+  static String defaultCurrencyCode = 'USD';
+  static String defaultLocaleCode = AppLocale.fallbackLocaleCode;
+
   /// Format cents as currency string.
   ///
   /// Example: 123456 → "$1,234.56"
   static String formatCents(
     int cents, {
-    String currencyCode = 'USD',
-    String localeCode = AppLocale.fallbackLocaleCode,
+    String? currencyCode,
+    String? localeCode,
   }) {
-    final locale = AppLocale.intlFormatTag(localeCode);
+    final effectiveCurrencyCode = currencyCode ?? defaultCurrencyCode;
+    final effectiveLocaleCode = localeCode ?? defaultLocaleCode;
+
+    final locale = AppLocale.intlFormatTag(effectiveLocaleCode);
     final format = NumberFormat.currency(
       locale: locale,
-      name: currencyCode,
-      symbol: currencySymbolFor(currencyCode),
-      decimalDigits: currencyCode.toUpperCase() == 'VND' ? 0 : 2,
+      name: effectiveCurrencyCode,
+      symbol: currencySymbolFor(effectiveCurrencyCode),
+      decimalDigits: effectiveCurrencyCode.toUpperCase() == 'VND' ? 0 : 2,
     );
     return format.format(cents / 100);
   }
@@ -43,9 +50,10 @@ class AppFormatters {
   /// Example: DateTime(2026, 4, 16) → "Apr 16, 2026"
   static String formatDate(
     DateTime date, {
-    String localeCode = AppLocale.fallbackLocaleCode,
+    String? localeCode,
   }) {
-    return DateFormat.yMMMd(AppLocale.intlFormatTag(localeCode)).format(date);
+    final effectiveLocaleCode = localeCode ?? defaultLocaleCode;
+    return DateFormat.yMMMd(AppLocale.intlFormatTag(effectiveLocaleCode)).format(date);
   }
 
   /// Format month and year.
@@ -53,9 +61,10 @@ class AppFormatters {
   /// Example: DateTime(2028, 7) → "July 2028"
   static String formatMonthYear(
     DateTime date, {
-    String localeCode = AppLocale.fallbackLocaleCode,
+    String? localeCode,
   }) {
-    return DateFormat.yMMMM(AppLocale.intlFormatTag(localeCode)).format(date);
+    final effectiveLocaleCode = localeCode ?? defaultLocaleCode;
+    return DateFormat.yMMMM(AppLocale.intlFormatTag(effectiveLocaleCode)).format(date);
   }
 
   /// Format short month and year.
@@ -63,18 +72,20 @@ class AppFormatters {
   /// Example: DateTime(2028, 7) → "Jul 2028"
   static String formatShortMonthYear(
     DateTime date, {
-    String localeCode = AppLocale.fallbackLocaleCode,
+    String? localeCode,
   }) {
-    return DateFormat.yMMM(AppLocale.intlFormatTag(localeCode)).format(date);
+    final effectiveLocaleCode = localeCode ?? defaultLocaleCode;
+    return DateFormat.yMMM(AppLocale.intlFormatTag(effectiveLocaleCode)).format(date);
   }
 
   /// Format date and time for lightweight previews and settings surfaces.
   static String formatDateTime(
     DateTime date, {
-    String localeCode = AppLocale.fallbackLocaleCode,
+    String? localeCode,
   }) {
+    final effectiveLocaleCode = localeCode ?? defaultLocaleCode;
     return DateFormat.yMd(
-      AppLocale.intlFormatTag(localeCode),
+      AppLocale.intlFormatTag(effectiveLocaleCode),
     ).add_Hm().format(date);
   }
 

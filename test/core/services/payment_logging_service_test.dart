@@ -9,6 +9,7 @@ import 'package:debt_payoff_manager/data/local/stores/timeline_cache_store.dart'
 import 'package:debt_payoff_manager/data/repositories/debt_repository_impl.dart';
 import 'package:debt_payoff_manager/data/repositories/payment_repository_impl.dart';
 import 'package:debt_payoff_manager/data/repositories/plan_repository_impl.dart';
+import 'package:debt_payoff_manager/data/repositories/settings_repository_impl.dart';
 import 'package:debt_payoff_manager/domain/enums/debt_status.dart';
 import 'package:debt_payoff_manager/domain/enums/payment_type.dart';
 
@@ -22,6 +23,7 @@ void main() {
   late SyncStateStore syncStateStore;
   late TimelineCacheStore timelineCacheStore;
   late PlanRecastService planRecastService;
+  late SettingsRepositoryImpl settingsRepository;
   late PaymentLoggingService service;
 
   setUp(() {
@@ -37,12 +39,16 @@ void main() {
       syncStateStore: syncStateStore,
       timelineCacheStore: timelineCacheStore,
     );
+    settingsRepository = SettingsRepositoryImpl(
+      db: db,
+    );
     service = PaymentLoggingService(
       db: db,
       debtRepository: debtRepository,
       paymentRepository: paymentRepository,
       syncStateStore: syncStateStore,
       planRecastService: planRecastService,
+      settingsRepository: settingsRepository,
     );
   });
 

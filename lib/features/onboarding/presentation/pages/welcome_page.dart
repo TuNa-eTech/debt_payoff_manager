@@ -10,7 +10,6 @@ import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/app_button.dart';
-import '../../../../domain/entities/user_settings.dart';
 import '../../../../domain/repositories/settings_repository.dart';
 import '../../cubit/onboarding_state.dart';
 import '../../services/onboarding_analytics.dart';

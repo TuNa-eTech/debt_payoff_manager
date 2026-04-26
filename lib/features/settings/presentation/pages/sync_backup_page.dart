@@ -15,7 +15,6 @@ import '../../../../core/utils/formatters.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../domain/entities/user_settings.dart';
-import '../../../../domain/repositories/settings_repository.dart';
 import '../../../../sync/cloud_backup_service.dart';
 import '../../../../sync/sync_auth_service.dart';
 

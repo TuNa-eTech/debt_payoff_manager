@@ -13,7 +13,6 @@ import 'package:debt_payoff_manager/core/services/report_generator_service.dart'
 import 'package:debt_payoff_manager/core/services/share_launcher.dart';
 import 'package:debt_payoff_manager/data/local/stores/timeline_cache_store.dart';
 import 'package:debt_payoff_manager/domain/entities/timeline_projection.dart';
-import 'package:debt_payoff_manager/domain/entities/user_settings.dart';
 import 'package:debt_payoff_manager/domain/repositories/debt_repository.dart';
 import 'package:debt_payoff_manager/domain/repositories/plan_repository.dart';
 import 'package:debt_payoff_manager/domain/repositories/settings_repository.dart';
@@ -23,7 +22,6 @@ import 'package:debt_payoff_manager/features/plan/cubit/plan_timeline_cubit.dart
 import 'package:debt_payoff_manager/features/plan/cubit/plan_timeline_state.dart';
 import 'package:debt_payoff_manager/features/reports/presentation/pages/reports_preview_page.dart';
 import 'package:debt_payoff_manager/features/settings/cubit/settings_cubit.dart';
-import 'package:debt_payoff_manager/features/settings/cubit/settings_state.dart';
 import 'package:debt_payoff_manager/l10n/app_localizations.dart';
 
 import '../../../data/repositories/repository_test_helpers.dart';
@@ -85,10 +83,7 @@ void main() {
           projection: _projection(),
         ),
       );
-    var settingsWatchCalls = 0;
-    
     when(() => settingsRepository.watchSettings()).thenAnswer((_) {
-      settingsWatchCalls += 1;
       return Stream.value(makeRepoSettings());
     });
 

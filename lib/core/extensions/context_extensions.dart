@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/entities/user_settings.dart';
 import '../../features/settings/cubit/settings_cubit.dart';
 import '../../l10n/app_localizations.dart';
+import '../utils/formatters.dart';
 
 /// Extensions on [BuildContext] for convenient access to theme and media.
 extension ContextExtensions on BuildContext {
@@ -48,6 +48,15 @@ extension ContextExtensions on BuildContext {
 
   /// Access current user settings without listening (for event handlers).
   UserSettings? get readSettings => read<SettingsCubit>().state.settings;
+
+  /// Format cents as currency string using the user's settings.
+  String formatCents(int cents) {
+    return AppFormatters.formatCents(
+      cents,
+      currencyCode: userSettings?.currencyCode ?? 'USD',
+      localeCode: userSettings?.localeCode ?? 'en_US',
+    );
+  }
 
   /// Show a snackbar with [message].
   void showSnackBar(String message, {bool isError = false}) {

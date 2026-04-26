@@ -17,7 +17,6 @@ import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_chip.dart';
 import '../../../../domain/entities/timeline_projection.dart';
 import '../../../../domain/entities/user_settings.dart';
-import '../../../../domain/repositories/settings_repository.dart';
 import '../../../debts/cubit/debts_cubit.dart';
 import '../../../debts/cubit/debts_state.dart';
 import '../../../plan/cubit/plan_timeline_cubit.dart';

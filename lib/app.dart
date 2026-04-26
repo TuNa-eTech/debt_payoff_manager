@@ -7,8 +7,8 @@ import 'core/di/injection.dart';
 import 'core/i18n/app_locale.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'core/utils/formatters.dart';
 import 'domain/entities/milestone.dart';
-import 'domain/entities/user_settings.dart';
 import 'domain/repositories/debt_repository.dart';
 import 'domain/repositories/milestone_repository.dart';
 import 'domain/repositories/settings_repository.dart';
@@ -111,6 +111,11 @@ class _DebtPayoffAppState extends State<DebtPayoffApp> {
           final locale = AppLocale.flutterLocaleForCode(
             settingsState.settings?.localeCode,
           );
+          
+          if (settingsState.settings != null) {
+            AppFormatters.defaultCurrencyCode = settingsState.settings!.currencyCode;
+            AppFormatters.defaultLocaleCode = settingsState.settings!.localeCode;
+          }
 
           return MultiBlocProvider(
             providers: [
