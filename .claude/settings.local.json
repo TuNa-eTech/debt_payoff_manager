@@ -4,7 +4,14 @@
       "Bash(fvm flutter:*)",
       "Bash(gh repo:*)",
       "mcp__context7__resolve-library-id",
-      "mcp__context7__query-docs"
+      "mcp__context7__query-docs",
+      "Bash(rtk git *)",
+      "Bash(rtk ls *)",
+      "Bash(rtk grep *)",
+      "Bash(rtk wc *)",
+      "Bash(rtk find *)",
+      "Bash(rtk read *)",
+      "Bash(rtk npx *)"
     ]
   }
 }
