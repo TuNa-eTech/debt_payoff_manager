@@ -19,6 +19,7 @@ import 'tables/interest_rate_history_table.dart';
 import 'tables/milestones_table.dart';
 import 'tables/payments_table.dart';
 import 'tables/plans_table.dart';
+import 'tables/scenarios_table.dart';
 import 'tables/sync_state_table.dart';
 import 'tables/timeline_cache_table.dart';
 import 'tables/user_settings_table.dart';
@@ -42,6 +43,7 @@ part 'database.g.dart';
     InterestRateHistoryTable,
     SyncStateTable,
     TimelineCacheTable,
+    ScenariosTable,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -55,13 +57,19 @@ class AppDatabase extends _$AppDatabase {
   final String _initialLocaleCode;
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (m) async => await m.createAll(),
     onUpgrade: (m, from, to) async {
-      // Future migrations here
+      if (from < 2) {
+        await m.createTable(scenariosTable);
+        await m.addColumn(
+          userSettingsTable,
+          userSettingsTable.activeScenarioId,
+        );
+      }
     },
     beforeOpen: (details) async {
       // Enable foreign keys
@@ -79,6 +87,7 @@ class AppDatabase extends _$AppDatabase {
   Future<void> seedFactoryDefaults() async {
     await _ensureSingletonSettingsSeeded();
     await _ensureMainPlanSeeded();
+    await _ensureMainScenarioSeeded();
   }
 
   Future<void> clearAllUserData({bool reseedFactoryDefaults = false}) async {
@@ -89,6 +98,7 @@ class AppDatabase extends _$AppDatabase {
     await delete(syncStateTable).go();
     await delete(debtsTable).go();
     await delete(plansTable).go();
+    await delete(scenariosTable).go();
     await delete(userSettingsTable).go();
 
     if (reseedFactoryDefaults) {
@@ -174,6 +184,25 @@ class AppDatabase extends _$AppDatabase {
         lastRecastAt: now,
         createdAt: now,
         updatedAt: now,
+      ),
+    );
+  }
+
+  Future<void> _ensureMainScenarioSeeded() async {
+    final existing = await customSelect(
+      'SELECT 1 FROM scenarios WHERE id = ? LIMIT 1',
+      variables: [Variable.withString('main')],
+    ).getSingleOrNull();
+
+    if (existing != null) return;
+
+    final now = DateTime.now().toUtc();
+    await into(scenariosTable).insert(
+      ScenariosTableCompanion.insert(
+        id: const Value('main'),
+        name: 'Main',
+        isMain: const Value(true),
+        createdAt: now,
       ),
     );
   }

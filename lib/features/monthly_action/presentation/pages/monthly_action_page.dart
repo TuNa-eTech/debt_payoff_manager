@@ -814,7 +814,7 @@ class _CompletionCard extends StatelessWidget {
                   _IconButtonWithLabel(
                     label: context.l10n.monthlyActionNextActionPrimary,
                     icon: LucideIcons.map,
-                    onPressed: onViewPlan,
+                    onPressed: onViewPlan!,
                   ),
                 ],
               ],

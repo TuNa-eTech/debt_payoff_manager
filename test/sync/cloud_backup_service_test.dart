@@ -144,20 +144,18 @@ class _FakeSettingsRepository implements SettingsRepository {
 }
 
 class _FakeSyncAuthService implements SyncAuthService {
-  _FakeSyncAuthService({this.current, this.googleAccount, this.appleAccount});
+  _FakeSyncAuthService({this.current, this.googleAccount});
 
   SyncAuthAccount? current;
   SyncAuthAccount? googleAccount;
-  SyncAuthAccount? appleAccount;
   int signOutCalls = 0;
 
   @override
   Future<SyncAuthAccount?> currentAccount() async => current;
 
   @override
-  Future<SyncAuthAccount> signInWithApple() async {
-    current = appleAccount;
-    return appleAccount!;
+  Future<SyncAuthAccount> signInWithApple() {
+    throw UnimplementedError('signInWithApple not exercised in these tests');
   }
 
   @override

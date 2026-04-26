@@ -140,6 +140,18 @@ abstract class AppLocalizations {
   /// **'Add debt'**
   String get commonAddDebt;
 
+  /// Section title on home empty state explaining capabilities.
+  ///
+  /// In en, this message translates to:
+  /// **'What can you do right now?'**
+  String get whatCanYouDoNow;
+
+  /// Due day label for debt card showing day of month.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {day}'**
+  String debtDueDay(Object day);
+
   /// Generic action to save a payment.
   ///
   /// In en, this message translates to:
@@ -224,13 +236,13 @@ abstract class AppLocalizations {
   /// **'Current total balance'**
   String get homeCurrentBalanceTitle;
 
-  /// Label for the active payoff strategy on the home hero card.
+  /// Label for strategy stat card on home screen.
   ///
   /// In en, this message translates to:
   /// **'Strategy'**
   String get homeStrategyLabel;
 
-  /// Label for the extra monthly amount on the home hero card.
+  /// Label for extra monthly payment stat on home screen.
   ///
   /// In en, this message translates to:
   /// **'Extra / month'**
@@ -319,6 +331,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View detailed plan'**
   String get homeViewPlanDetails;
+
+  /// Hero card title on home screen showing total balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Current total balance'**
+  String get homeTotalBalanceLabel;
+
+  /// Progress label showing paid amount on home screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid {amount}'**
+  String homePaidProgress(Object amount);
+
+  /// Label for active debts count on home screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracking'**
+  String get homeTrackingCountLabel;
+
+  /// Label for paid off debts count on home screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid off'**
+  String get homePaidOffCountLabel;
+
+  /// Label for paused debts count on home screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get homePausedCountLabel;
+
+  /// Section title for debts list on home screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Debts to track'**
+  String get homeDebtsToTrackTitle;
+
+  /// Section subtitle for debts list on home screen.
+  ///
+  /// In en, this message translates to:
+  /// **'This list is pulled directly from your saved data.'**
+  String get homeDebtsToTrackSubtitle;
+
+  /// Message when no active debts on home screen.
+  ///
+  /// In en, this message translates to:
+  /// **'No debts to track yet.'**
+  String get homeNoDebtsToTrackMessage;
+
+  /// Card title for timeline connection status on home screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Detailed timeline is connecting'**
+  String get homeTimelineConnectingTitle;
+
+  /// Card subtitle for timeline connection status on home screen.
+  ///
+  /// In en, this message translates to:
+  /// **'You have enough background data to visit the Plan tab and see your current setup. The debt-free date and detailed projections will appear when the plan simulation is enabled.'**
+  String get homeTimelineConnectingSubtitle;
+
+  /// Button to navigate to Plan tab from home screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Plan tab'**
+  String get homeOpenPlanTabButton;
+
+  /// Empty state title when no debts exist on home screen.
+  ///
+  /// In en, this message translates to:
+  /// **'No debts yet'**
+  String get homeEmptyTitle;
+
+  /// Empty state subtitle when no debts exist on home screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first debt for the app to start saving data and building your payoff plan.'**
+  String get homeEmptySubtitle;
+
+  /// Feature row title for multi-debt support on home empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter multiple debt types'**
+  String get homeFeatureMultiDebtTitle;
+
+  /// Feature row subtitle for multi-debt support on home empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit cards, student loans, car loans, mortgages, and more.'**
+  String get homeFeatureMultiDebtSubtitle;
+
+  /// Feature row title for edit flexibility on home empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit anytime'**
+  String get homeFeatureEditAnytimeTitle;
+
+  /// Feature row subtitle for edit flexibility on home empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'All changes are saved locally and reflected in your debt list.'**
+  String get homeFeatureEditAnytimeSubtitle;
+
+  /// Feature row title for local-first approach on home empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'Local-first'**
+  String get homeFeatureLocalFirstTitle;
+
+  /// Feature row subtitle for local-first approach on home empty state.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t need an account to start and your data stays on your device.'**
+  String get homeFeatureLocalFirstSubtitle;
 
   /// App bar title for the standalone monthly action page.
   ///
@@ -2925,6 +3051,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Balance'**
   String get reportsPdfColBalance;
+
+  /// App bar title for scenarios page
+  ///
+  /// In en, this message translates to:
+  /// **'What-If Scenarios'**
+  String get scenariosTitle;
+
+  /// Empty state title
+  ///
+  /// In en, this message translates to:
+  /// **'No scenarios yet'**
+  String get scenariosEmptyTitle;
+
+  /// Empty state subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Create a scenario to explore different payoff strategies side by side.'**
+  String get scenariosEmptySubtitle;
+
+  /// Dialog title for adding a scenario
+  ///
+  /// In en, this message translates to:
+  /// **'New scenario'**
+  String get scenariosAddTitle;
+
+  /// Text field hint for scenario name
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario name'**
+  String get scenariosNameHint;
+
+  /// Dialog title for duplicating a scenario
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate scenario'**
+  String get scenariosDuplicateTitle;
+
+  /// Badge shown on the active scenario
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get scenariosActiveBadge;
+
+  /// Badge shown on the main scenario
+  ///
+  /// In en, this message translates to:
+  /// **'Main'**
+  String get scenariosMainBadge;
+
+  /// Confirm button in delete dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Delete scenario'**
+  String get scenariosDeleteConfirm;
+
+  /// Delete confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'This scenario and its debts will be deleted. Payments are not affected.'**
+  String get scenariosDeleteMessage;
 }
 
 class _AppLocalizationsDelegate

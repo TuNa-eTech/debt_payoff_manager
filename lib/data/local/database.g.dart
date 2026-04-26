@@ -3362,6 +3362,18 @@ class $UserSettingsTableTable extends UserSettingsTable
       ).withConverter<DateTime?>(
         $UserSettingsTableTable.$converteronboardingCompletedAtn,
       );
+  static const VerificationMeta _activeScenarioIdMeta = const VerificationMeta(
+    'activeScenarioId',
+  );
+  @override
+  late final GeneratedColumn<String> activeScenarioId = GeneratedColumn<String>(
+    'active_scenario_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('main'),
+  );
   static const VerificationMeta _isPremiumMeta = const VerificationMeta(
     'isPremium',
   );
@@ -3422,6 +3434,7 @@ class $UserSettingsTableTable extends UserSettingsTable
     onboardingStep,
     onboardingCompleted,
     onboardingCompletedAt,
+    activeScenarioId,
     isPremium,
     premiumExpiresAt,
     createdAt,
@@ -3535,6 +3548,15 @@ class $UserSettingsTableTable extends UserSettingsTable
         ),
       );
     }
+    if (data.containsKey('active_scenario_id')) {
+      context.handle(
+        _activeScenarioIdMeta,
+        activeScenarioId.isAcceptableOrUnknown(
+          data['active_scenario_id']!,
+          _activeScenarioIdMeta,
+        ),
+      );
+    }
     if (data.containsKey('is_premium')) {
       context.handle(
         _isPremiumMeta,
@@ -3606,6 +3628,10 @@ class $UserSettingsTableTable extends UserSettingsTable
               data['${effectivePrefix}onboarding_completed_at'],
             ),
           ),
+      activeScenarioId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}active_scenario_id'],
+      )!,
       isPremium: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}is_premium'],
@@ -3665,6 +3691,7 @@ class UserSettingsRow extends DataClass implements Insertable<UserSettingsRow> {
   final int onboardingStep;
   final bool onboardingCompleted;
   final DateTime? onboardingCompletedAt;
+  final String activeScenarioId;
   final bool isPremium;
   final DateTime? premiumExpiresAt;
   final DateTime createdAt;
@@ -3683,6 +3710,7 @@ class UserSettingsRow extends DataClass implements Insertable<UserSettingsRow> {
     required this.onboardingStep,
     required this.onboardingCompleted,
     this.onboardingCompletedAt,
+    required this.activeScenarioId,
     required this.isPremium,
     this.premiumExpiresAt,
     required this.createdAt,
@@ -3714,6 +3742,7 @@ class UserSettingsRow extends DataClass implements Insertable<UserSettingsRow> {
         ),
       );
     }
+    map['active_scenario_id'] = Variable<String>(activeScenarioId);
     map['is_premium'] = Variable<bool>(isPremium);
     if (!nullToAbsent || premiumExpiresAt != null) {
       map['premium_expires_at'] = Variable<String>(
@@ -3754,6 +3783,7 @@ class UserSettingsRow extends DataClass implements Insertable<UserSettingsRow> {
       onboardingCompletedAt: onboardingCompletedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(onboardingCompletedAt),
+      activeScenarioId: Value(activeScenarioId),
       isPremium: Value(isPremium),
       premiumExpiresAt: premiumExpiresAt == null && nullToAbsent
           ? const Value.absent()
@@ -3792,6 +3822,7 @@ class UserSettingsRow extends DataClass implements Insertable<UserSettingsRow> {
       onboardingCompletedAt: serializer.fromJson<DateTime?>(
         json['onboardingCompletedAt'],
       ),
+      activeScenarioId: serializer.fromJson<String>(json['activeScenarioId']),
       isPremium: serializer.fromJson<bool>(json['isPremium']),
       premiumExpiresAt: serializer.fromJson<DateTime?>(
         json['premiumExpiresAt'],
@@ -3821,6 +3852,7 @@ class UserSettingsRow extends DataClass implements Insertable<UserSettingsRow> {
       'onboardingCompletedAt': serializer.toJson<DateTime?>(
         onboardingCompletedAt,
       ),
+      'activeScenarioId': serializer.toJson<String>(activeScenarioId),
       'isPremium': serializer.toJson<bool>(isPremium),
       'premiumExpiresAt': serializer.toJson<DateTime?>(premiumExpiresAt),
       'createdAt': serializer.toJson<DateTime>(createdAt),
@@ -3842,6 +3874,7 @@ class UserSettingsRow extends DataClass implements Insertable<UserSettingsRow> {
     int? onboardingStep,
     bool? onboardingCompleted,
     Value<DateTime?> onboardingCompletedAt = const Value.absent(),
+    String? activeScenarioId,
     bool? isPremium,
     Value<DateTime?> premiumExpiresAt = const Value.absent(),
     DateTime? createdAt,
@@ -3863,6 +3896,7 @@ class UserSettingsRow extends DataClass implements Insertable<UserSettingsRow> {
     onboardingCompletedAt: onboardingCompletedAt.present
         ? onboardingCompletedAt.value
         : this.onboardingCompletedAt,
+    activeScenarioId: activeScenarioId ?? this.activeScenarioId,
     isPremium: isPremium ?? this.isPremium,
     premiumExpiresAt: premiumExpiresAt.present
         ? premiumExpiresAt.value
@@ -3910,6 +3944,9 @@ class UserSettingsRow extends DataClass implements Insertable<UserSettingsRow> {
       onboardingCompletedAt: data.onboardingCompletedAt.present
           ? data.onboardingCompletedAt.value
           : this.onboardingCompletedAt,
+      activeScenarioId: data.activeScenarioId.present
+          ? data.activeScenarioId.value
+          : this.activeScenarioId,
       isPremium: data.isPremium.present ? data.isPremium.value : this.isPremium,
       premiumExpiresAt: data.premiumExpiresAt.present
           ? data.premiumExpiresAt.value
@@ -3937,6 +3974,7 @@ class UserSettingsRow extends DataClass implements Insertable<UserSettingsRow> {
           ..write('onboardingStep: $onboardingStep, ')
           ..write('onboardingCompleted: $onboardingCompleted, ')
           ..write('onboardingCompletedAt: $onboardingCompletedAt, ')
+          ..write('activeScenarioId: $activeScenarioId, ')
           ..write('isPremium: $isPremium, ')
           ..write('premiumExpiresAt: $premiumExpiresAt, ')
           ..write('createdAt: $createdAt, ')
@@ -3960,6 +3998,7 @@ class UserSettingsRow extends DataClass implements Insertable<UserSettingsRow> {
     onboardingStep,
     onboardingCompleted,
     onboardingCompletedAt,
+    activeScenarioId,
     isPremium,
     premiumExpiresAt,
     createdAt,
@@ -3983,6 +4022,7 @@ class UserSettingsRow extends DataClass implements Insertable<UserSettingsRow> {
           other.onboardingStep == this.onboardingStep &&
           other.onboardingCompleted == this.onboardingCompleted &&
           other.onboardingCompletedAt == this.onboardingCompletedAt &&
+          other.activeScenarioId == this.activeScenarioId &&
           other.isPremium == this.isPremium &&
           other.premiumExpiresAt == this.premiumExpiresAt &&
           other.createdAt == this.createdAt &&
@@ -4003,6 +4043,7 @@ class UserSettingsTableCompanion extends UpdateCompanion<UserSettingsRow> {
   final Value<int> onboardingStep;
   final Value<bool> onboardingCompleted;
   final Value<DateTime?> onboardingCompletedAt;
+  final Value<String> activeScenarioId;
   final Value<bool> isPremium;
   final Value<DateTime?> premiumExpiresAt;
   final Value<DateTime> createdAt;
@@ -4022,6 +4063,7 @@ class UserSettingsTableCompanion extends UpdateCompanion<UserSettingsRow> {
     this.onboardingStep = const Value.absent(),
     this.onboardingCompleted = const Value.absent(),
     this.onboardingCompletedAt = const Value.absent(),
+    this.activeScenarioId = const Value.absent(),
     this.isPremium = const Value.absent(),
     this.premiumExpiresAt = const Value.absent(),
     this.createdAt = const Value.absent(),
@@ -4042,6 +4084,7 @@ class UserSettingsTableCompanion extends UpdateCompanion<UserSettingsRow> {
     this.onboardingStep = const Value.absent(),
     this.onboardingCompleted = const Value.absent(),
     this.onboardingCompletedAt = const Value.absent(),
+    this.activeScenarioId = const Value.absent(),
     this.isPremium = const Value.absent(),
     this.premiumExpiresAt = const Value.absent(),
     required DateTime createdAt,
@@ -4063,6 +4106,7 @@ class UserSettingsTableCompanion extends UpdateCompanion<UserSettingsRow> {
     Expression<int>? onboardingStep,
     Expression<bool>? onboardingCompleted,
     Expression<String>? onboardingCompletedAt,
+    Expression<String>? activeScenarioId,
     Expression<bool>? isPremium,
     Expression<String>? premiumExpiresAt,
     Expression<String>? createdAt,
@@ -4088,6 +4132,7 @@ class UserSettingsTableCompanion extends UpdateCompanion<UserSettingsRow> {
         'onboarding_completed': onboardingCompleted,
       if (onboardingCompletedAt != null)
         'onboarding_completed_at': onboardingCompletedAt,
+      if (activeScenarioId != null) 'active_scenario_id': activeScenarioId,
       if (isPremium != null) 'is_premium': isPremium,
       if (premiumExpiresAt != null) 'premium_expires_at': premiumExpiresAt,
       if (createdAt != null) 'created_at': createdAt,
@@ -4110,6 +4155,7 @@ class UserSettingsTableCompanion extends UpdateCompanion<UserSettingsRow> {
     Value<int>? onboardingStep,
     Value<bool>? onboardingCompleted,
     Value<DateTime?>? onboardingCompletedAt,
+    Value<String>? activeScenarioId,
     Value<bool>? isPremium,
     Value<DateTime?>? premiumExpiresAt,
     Value<DateTime>? createdAt,
@@ -4132,6 +4178,7 @@ class UserSettingsTableCompanion extends UpdateCompanion<UserSettingsRow> {
       onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
       onboardingCompletedAt:
           onboardingCompletedAt ?? this.onboardingCompletedAt,
+      activeScenarioId: activeScenarioId ?? this.activeScenarioId,
       isPremium: isPremium ?? this.isPremium,
       premiumExpiresAt: premiumExpiresAt ?? this.premiumExpiresAt,
       createdAt: createdAt ?? this.createdAt,
@@ -4190,6 +4237,9 @@ class UserSettingsTableCompanion extends UpdateCompanion<UserSettingsRow> {
         ),
       );
     }
+    if (activeScenarioId.present) {
+      map['active_scenario_id'] = Variable<String>(activeScenarioId.value);
+    }
     if (isPremium.present) {
       map['is_premium'] = Variable<bool>(isPremium.value);
     }
@@ -4234,6 +4284,7 @@ class UserSettingsTableCompanion extends UpdateCompanion<UserSettingsRow> {
           ..write('onboardingStep: $onboardingStep, ')
           ..write('onboardingCompleted: $onboardingCompleted, ')
           ..write('onboardingCompletedAt: $onboardingCompletedAt, ')
+          ..write('activeScenarioId: $activeScenarioId, ')
           ..write('isPremium: $isPremium, ')
           ..write('premiumExpiresAt: $premiumExpiresAt, ')
           ..write('createdAt: $createdAt, ')
@@ -6403,6 +6454,371 @@ class TimelineCacheTableCompanion extends UpdateCompanion<TimelineCacheRow> {
   }
 }
 
+class $ScenariosTableTable extends ScenariosTable
+    with TableInfo<$ScenariosTableTable, ScenarioRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ScenariosTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: () => Uuid().v4(),
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 80,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _isMainMeta = const VerificationMeta('isMain');
+  @override
+  late final GeneratedColumn<bool> isMain = GeneratedColumn<bool>(
+    'is_main',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_main" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, String> createdAt =
+      GeneratedColumn<String>(
+        'created_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($ScenariosTableTable.$convertercreatedAt);
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime?, String> deletedAt =
+      GeneratedColumn<String>(
+        'deleted_at',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      ).withConverter<DateTime?>($ScenariosTableTable.$converterdeletedAtn);
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    isMain,
+    createdAt,
+    deletedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'scenarios';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ScenarioRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('is_main')) {
+      context.handle(
+        _isMainMeta,
+        isMain.isAcceptableOrUnknown(data['is_main']!, _isMainMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ScenarioRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ScenarioRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      isMain: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_main'],
+      )!,
+      createdAt: $ScenariosTableTable.$convertercreatedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}created_at'],
+        )!,
+      ),
+      deletedAt: $ScenariosTableTable.$converterdeletedAtn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}deleted_at'],
+        ),
+      ),
+    );
+  }
+
+  @override
+  $ScenariosTableTable createAlias(String alias) {
+    return $ScenariosTableTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<DateTime, String> $convertercreatedAt =
+      const UtcDateTimeConverter();
+  static TypeConverter<DateTime, String> $converterdeletedAt =
+      const UtcDateTimeConverter();
+  static TypeConverter<DateTime?, String?> $converterdeletedAtn =
+      NullAwareTypeConverter.wrap($converterdeletedAt);
+}
+
+class ScenarioRow extends DataClass implements Insertable<ScenarioRow> {
+  final String id;
+  final String name;
+  final bool isMain;
+  final DateTime createdAt;
+  final DateTime? deletedAt;
+  const ScenarioRow({
+    required this.id,
+    required this.name,
+    required this.isMain,
+    required this.createdAt,
+    this.deletedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['name'] = Variable<String>(name);
+    map['is_main'] = Variable<bool>(isMain);
+    {
+      map['created_at'] = Variable<String>(
+        $ScenariosTableTable.$convertercreatedAt.toSql(createdAt),
+      );
+    }
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<String>(
+        $ScenariosTableTable.$converterdeletedAtn.toSql(deletedAt),
+      );
+    }
+    return map;
+  }
+
+  ScenariosTableCompanion toCompanion(bool nullToAbsent) {
+    return ScenariosTableCompanion(
+      id: Value(id),
+      name: Value(name),
+      isMain: Value(isMain),
+      createdAt: Value(createdAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+    );
+  }
+
+  factory ScenarioRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ScenarioRow(
+      id: serializer.fromJson<String>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      isMain: serializer.fromJson<bool>(json['isMain']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'name': serializer.toJson<String>(name),
+      'isMain': serializer.toJson<bool>(isMain),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+    };
+  }
+
+  ScenarioRow copyWith({
+    String? id,
+    String? name,
+    bool? isMain,
+    DateTime? createdAt,
+    Value<DateTime?> deletedAt = const Value.absent(),
+  }) => ScenarioRow(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    isMain: isMain ?? this.isMain,
+    createdAt: createdAt ?? this.createdAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+  );
+  ScenarioRow copyWithCompanion(ScenariosTableCompanion data) {
+    return ScenarioRow(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      isMain: data.isMain.present ? data.isMain.value : this.isMain,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ScenarioRow(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('isMain: $isMain, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('deletedAt: $deletedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, isMain, createdAt, deletedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ScenarioRow &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.isMain == this.isMain &&
+          other.createdAt == this.createdAt &&
+          other.deletedAt == this.deletedAt);
+}
+
+class ScenariosTableCompanion extends UpdateCompanion<ScenarioRow> {
+  final Value<String> id;
+  final Value<String> name;
+  final Value<bool> isMain;
+  final Value<DateTime> createdAt;
+  final Value<DateTime?> deletedAt;
+  final Value<int> rowid;
+  const ScenariosTableCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.isMain = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ScenariosTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+    this.isMain = const Value.absent(),
+    required DateTime createdAt,
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : name = Value(name),
+       createdAt = Value(createdAt);
+  static Insertable<ScenarioRow> custom({
+    Expression<String>? id,
+    Expression<String>? name,
+    Expression<bool>? isMain,
+    Expression<String>? createdAt,
+    Expression<String>? deletedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (isMain != null) 'is_main': isMain,
+      if (createdAt != null) 'created_at': createdAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ScenariosTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? name,
+    Value<bool>? isMain,
+    Value<DateTime>? createdAt,
+    Value<DateTime?>? deletedAt,
+    Value<int>? rowid,
+  }) {
+    return ScenariosTableCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      isMain: isMain ?? this.isMain,
+      createdAt: createdAt ?? this.createdAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (isMain.present) {
+      map['is_main'] = Variable<bool>(isMain.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<String>(
+        $ScenariosTableTable.$convertercreatedAt.toSql(createdAt.value),
+      );
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<String>(
+        $ScenariosTableTable.$converterdeletedAtn.toSql(deletedAt.value),
+      );
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ScenariosTableCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('isMain: $isMain, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -6419,6 +6835,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SyncStateTableTable syncStateTable = $SyncStateTableTable(this);
   late final $TimelineCacheTableTable timelineCacheTable =
       $TimelineCacheTableTable(this);
+  late final $ScenariosTableTable scenariosTable = $ScenariosTableTable(this);
   late final Index idxPlansScenario = Index(
     'idx_plans_scenario',
     'CREATE UNIQUE INDEX idx_plans_scenario ON plans (scenario_id) WHERE deleted_at IS NULL',
@@ -6436,6 +6853,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     interestRateHistoryTable,
     syncStateTable,
     timelineCacheTable,
+    scenariosTable,
     idxPlansScenario,
   ];
 }
@@ -8305,6 +8723,7 @@ typedef $$UserSettingsTableTableCreateCompanionBuilder =
       Value<int> onboardingStep,
       Value<bool> onboardingCompleted,
       Value<DateTime?> onboardingCompletedAt,
+      Value<String> activeScenarioId,
       Value<bool> isPremium,
       Value<DateTime?> premiumExpiresAt,
       required DateTime createdAt,
@@ -8326,6 +8745,7 @@ typedef $$UserSettingsTableTableUpdateCompanionBuilder =
       Value<int> onboardingStep,
       Value<bool> onboardingCompleted,
       Value<DateTime?> onboardingCompletedAt,
+      Value<String> activeScenarioId,
       Value<bool> isPremium,
       Value<DateTime?> premiumExpiresAt,
       Value<DateTime> createdAt,
@@ -8406,6 +8826,11 @@ class $$UserSettingsTableTableFilterComposer
   get onboardingCompletedAt => $composableBuilder(
     column: $table.onboardingCompletedAt,
     builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<String> get activeScenarioId => $composableBuilder(
+    column: $table.activeScenarioId,
+    builder: (column) => ColumnFilters(column),
   );
 
   ColumnFilters<bool> get isPremium => $composableBuilder(
@@ -8506,6 +8931,11 @@ class $$UserSettingsTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get activeScenarioId => $composableBuilder(
+    column: $table.activeScenarioId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<bool> get isPremium => $composableBuilder(
     column: $table.isPremium,
     builder: (column) => ColumnOrderings(column),
@@ -8600,6 +9030,11 @@ class $$UserSettingsTableTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<String> get activeScenarioId => $composableBuilder(
+    column: $table.activeScenarioId,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<bool> get isPremium =>
       $composableBuilder(column: $table.isPremium, builder: (column) => column);
 
@@ -8670,6 +9105,7 @@ class $$UserSettingsTableTableTableManager
                 Value<int> onboardingStep = const Value.absent(),
                 Value<bool> onboardingCompleted = const Value.absent(),
                 Value<DateTime?> onboardingCompletedAt = const Value.absent(),
+                Value<String> activeScenarioId = const Value.absent(),
                 Value<bool> isPremium = const Value.absent(),
                 Value<DateTime?> premiumExpiresAt = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
@@ -8689,6 +9125,7 @@ class $$UserSettingsTableTableTableManager
                 onboardingStep: onboardingStep,
                 onboardingCompleted: onboardingCompleted,
                 onboardingCompletedAt: onboardingCompletedAt,
+                activeScenarioId: activeScenarioId,
                 isPremium: isPremium,
                 premiumExpiresAt: premiumExpiresAt,
                 createdAt: createdAt,
@@ -8711,6 +9148,7 @@ class $$UserSettingsTableTableTableManager
                 Value<int> onboardingStep = const Value.absent(),
                 Value<bool> onboardingCompleted = const Value.absent(),
                 Value<DateTime?> onboardingCompletedAt = const Value.absent(),
+                Value<String> activeScenarioId = const Value.absent(),
                 Value<bool> isPremium = const Value.absent(),
                 Value<DateTime?> premiumExpiresAt = const Value.absent(),
                 required DateTime createdAt,
@@ -8730,6 +9168,7 @@ class $$UserSettingsTableTableTableManager
                 onboardingStep: onboardingStep,
                 onboardingCompleted: onboardingCompleted,
                 onboardingCompletedAt: onboardingCompletedAt,
+                activeScenarioId: activeScenarioId,
                 isPremium: isPremium,
                 premiumExpiresAt: premiumExpiresAt,
                 createdAt: createdAt,
@@ -10125,6 +10564,210 @@ typedef $$TimelineCacheTableTableProcessedTableManager =
       TimelineCacheRow,
       PrefetchHooks Function()
     >;
+typedef $$ScenariosTableTableCreateCompanionBuilder =
+    ScenariosTableCompanion Function({
+      Value<String> id,
+      required String name,
+      Value<bool> isMain,
+      required DateTime createdAt,
+      Value<DateTime?> deletedAt,
+      Value<int> rowid,
+    });
+typedef $$ScenariosTableTableUpdateCompanionBuilder =
+    ScenariosTableCompanion Function({
+      Value<String> id,
+      Value<String> name,
+      Value<bool> isMain,
+      Value<DateTime> createdAt,
+      Value<DateTime?> deletedAt,
+      Value<int> rowid,
+    });
+
+class $$ScenariosTableTableFilterComposer
+    extends Composer<_$AppDatabase, $ScenariosTableTable> {
+  $$ScenariosTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isMain => $composableBuilder(
+    column: $table.isMain,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get createdAt =>
+      $composableBuilder(
+        column: $table.createdAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnWithTypeConverterFilters<DateTime?, DateTime, String> get deletedAt =>
+      $composableBuilder(
+        column: $table.deletedAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+}
+
+class $$ScenariosTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $ScenariosTableTable> {
+  $$ScenariosTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isMain => $composableBuilder(
+    column: $table.isMain,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ScenariosTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ScenariosTableTable> {
+  $$ScenariosTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<bool> get isMain =>
+      $composableBuilder(column: $table.isMain, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime, String> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime?, String> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+}
+
+class $$ScenariosTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ScenariosTableTable,
+          ScenarioRow,
+          $$ScenariosTableTableFilterComposer,
+          $$ScenariosTableTableOrderingComposer,
+          $$ScenariosTableTableAnnotationComposer,
+          $$ScenariosTableTableCreateCompanionBuilder,
+          $$ScenariosTableTableUpdateCompanionBuilder,
+          (
+            ScenarioRow,
+            BaseReferences<_$AppDatabase, $ScenariosTableTable, ScenarioRow>,
+          ),
+          ScenarioRow,
+          PrefetchHooks Function()
+        > {
+  $$ScenariosTableTableTableManager(
+    _$AppDatabase db,
+    $ScenariosTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ScenariosTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ScenariosTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ScenariosTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<bool> isMain = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ScenariosTableCompanion(
+                id: id,
+                name: name,
+                isMain: isMain,
+                createdAt: createdAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                required String name,
+                Value<bool> isMain = const Value.absent(),
+                required DateTime createdAt,
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ScenariosTableCompanion.insert(
+                id: id,
+                name: name,
+                isMain: isMain,
+                createdAt: createdAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ScenariosTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ScenariosTableTable,
+      ScenarioRow,
+      $$ScenariosTableTableFilterComposer,
+      $$ScenariosTableTableOrderingComposer,
+      $$ScenariosTableTableAnnotationComposer,
+      $$ScenariosTableTableCreateCompanionBuilder,
+      $$ScenariosTableTableUpdateCompanionBuilder,
+      (
+        ScenarioRow,
+        BaseReferences<_$AppDatabase, $ScenariosTableTable, ScenarioRow>,
+      ),
+      ScenarioRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -10148,4 +10791,6 @@ class $AppDatabaseManager {
       $$SyncStateTableTableTableManager(_db, _db.syncStateTable);
   $$TimelineCacheTableTableTableManager get timelineCacheTable =>
       $$TimelineCacheTableTableTableManager(_db, _db.timelineCacheTable);
+  $$ScenariosTableTableTableManager get scenariosTable =>
+      $$ScenariosTableTableTableManager(_db, _db.scenariosTable);
 }

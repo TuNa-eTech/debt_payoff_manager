@@ -12,7 +12,8 @@
       "Bash(rtk find *)",
       "Bash(rtk read *)",
       "Bash(rtk npx *)",
-      "Bash(gitnexus analyze *)"
+      "Bash(gitnexus analyze *)",
+      "Bash(fvm dart *)"
     ]
   }
 }

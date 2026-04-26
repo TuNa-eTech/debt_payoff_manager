@@ -24,7 +24,7 @@ class HomePopulatedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final trackedDebts =
         debts.where((debt) => debt.status != DebtStatus.archived).toList()
           ..sort((a, b) => b.currentBalance.compareTo(a.currentBalance));

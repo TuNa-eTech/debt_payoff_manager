@@ -97,6 +97,13 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                           onTap: () => context.go(AppRoutes.plan),
                         ),
+                        _buildDivider(),
+                        _buildListTile(
+                          title: l10n.scenariosTitle,
+                          subtitle: l10n.scenariosEmptySubtitle,
+                          trailingText: '',
+                          onTap: () => context.push(AppRoutes.scenarios),
+                        ),
                       ],
                     ),
                     const SizedBox(height: AppDimensions.md),
@@ -541,9 +548,6 @@ class _SettingsPageState extends State<SettingsPage> {
     return granted;
   }
 
-  void _showComingSoon(String featureName) {
-    context.showSnackBar(context.l10n.commonComingSoonFeature(featureName));
-  }
 
   String _strategyLabel(Strategy strategy) {
     final l10n = context.l10n;

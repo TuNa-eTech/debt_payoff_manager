@@ -44,6 +44,10 @@ class UserSettingsTable extends Table {
   TextColumn get onboardingCompletedAt =>
       text().nullable().map(const UtcDateTimeConverter())();
 
+  // Scenario selection
+  TextColumn get activeScenarioId =>
+      text().withDefault(const Constant('main'))();
+
   // Premium
   BoolColumn get isPremium => boolean().withDefault(const Constant(false))();
   TextColumn get premiumExpiresAt =>

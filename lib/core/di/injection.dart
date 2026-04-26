@@ -48,7 +48,10 @@ import '../services/reminder_scheduler_service.dart';
 import '../services/report_generator_service.dart';
 import '../services/share_launcher.dart';
 import '../services/streak_service.dart';
+import '../../data/repositories/scenario_repository_impl.dart';
+import '../../domain/repositories/scenario_repository.dart';
 import '../../features/progress/cubit/progress_cubit.dart';
+import '../../features/scenarios/cubit/scenarios_cubit.dart';
 
 /// Global service locator instance.
 final getIt = GetIt.instance;
@@ -282,6 +285,17 @@ void configureDependencies({
   // Reports
   getIt.registerLazySingleton<ReportGeneratorService>(
     () => ReportGeneratorService(),
+  );
+
+  // Scenarios
+  getIt.registerLazySingleton<ScenarioRepository>(
+    () => ScenarioRepositoryImpl(db: getIt<AppDatabase>()),
+  );
+  getIt.registerFactory<ScenariosCubit>(
+    () => ScenariosCubit(
+      scenarioRepository: getIt<ScenarioRepository>(),
+      settingsRepository: getIt<SettingsRepository>(),
+    ),
   );
 
   // Progress

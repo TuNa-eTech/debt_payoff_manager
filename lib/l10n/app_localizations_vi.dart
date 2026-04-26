@@ -30,6 +30,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get commonAddDebt => 'Thêm khoản nợ';
 
   @override
+  String get whatCanYouDoNow => 'Bạn có thể làm gì ngay bây giờ?';
+
+  @override
+  String debtDueDay(Object day) {
+    return 'Ngày $day';
+  }
+
+  @override
   String get commonSavePayment => 'Lưu thanh toán';
 
   @override
@@ -130,6 +138,73 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get homeViewPlanDetails => 'Xem kế hoạch chi tiết';
+
+  @override
+  String get homeTotalBalanceLabel => 'Tổng dư nợ hiện tại';
+
+  @override
+  String homePaidProgress(Object amount) {
+    return 'Đã trả $amount';
+  }
+
+  @override
+  String get homeTrackingCountLabel => 'Đang theo dõi';
+
+  @override
+  String get homePaidOffCountLabel => 'Đã trả xong';
+
+  @override
+  String get homePausedCountLabel => 'Tạm dừng';
+
+  @override
+  String get homeDebtsToTrackTitle => 'Khoản nợ cần theo dõi';
+
+  @override
+  String get homeDebtsToTrackSubtitle =>
+      'Danh sách này lấy trực tiếp từ dữ liệu bạn đã lưu.';
+
+  @override
+  String get homeNoDebtsToTrackMessage =>
+      'Hiện chưa có khoản nợ nào cần theo dõi.';
+
+  @override
+  String get homeTimelineConnectingTitle =>
+      'Timeline chi tiết đang được kết nối';
+
+  @override
+  String get homeTimelineConnectingSubtitle =>
+      'Bạn đã có đủ dữ liệu nền để vào tab Kế hoạch và xem cấu hình hiện tại. Ngày hết nợ và dự phóng chi tiết sẽ xuất hiện khi phần mô phỏng kế hoạch được bật.';
+
+  @override
+  String get homeOpenPlanTabButton => 'Mở tab Kế hoạch';
+
+  @override
+  String get homeEmptyTitle => 'Chưa có khoản nợ nào';
+
+  @override
+  String get homeEmptySubtitle =>
+      'Thêm khoản nợ đầu tiên để app bắt đầu lưu dữ liệu và dựng kế hoạch trả nợ của bạn.';
+
+  @override
+  String get homeFeatureMultiDebtTitle => 'Nhập nhiều loại nợ';
+
+  @override
+  String get homeFeatureMultiDebtSubtitle =>
+      'Credit card, student loan, car loan, mortgage và hơn thế nữa.';
+
+  @override
+  String get homeFeatureEditAnytimeTitle => 'Chỉnh sửa bất kỳ lúc nào';
+
+  @override
+  String get homeFeatureEditAnytimeSubtitle =>
+      'Mọi thay đổi đều được lưu local và phản ánh lại trong danh sách nợ.';
+
+  @override
+  String get homeFeatureLocalFirstTitle => 'Local-first';
+
+  @override
+  String get homeFeatureLocalFirstSubtitle =>
+      'Bạn không cần tài khoản để bắt đầu và dữ liệu ở lại trên thiết bị.';
 
   @override
   String get monthlyActionStandaloneTitle => 'Việc tháng này';
@@ -1636,4 +1711,36 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get reportsPdfColBalance => 'Dư nợ';
+
+  @override
+  String get scenariosTitle => 'Kịch bản giả định';
+
+  @override
+  String get scenariosEmptyTitle => 'Chưa có kịch bản nào';
+
+  @override
+  String get scenariosEmptySubtitle =>
+      'Tạo kịch bản để so sánh các chiến lược trả nợ khác nhau.';
+
+  @override
+  String get scenariosAddTitle => 'Kịch bản mới';
+
+  @override
+  String get scenariosNameHint => 'Tên kịch bản';
+
+  @override
+  String get scenariosDuplicateTitle => 'Nhân đôi kịch bản';
+
+  @override
+  String get scenariosActiveBadge => 'Đang dùng';
+
+  @override
+  String get scenariosMainBadge => 'Chính';
+
+  @override
+  String get scenariosDeleteConfirm => 'Xóa kịch bản';
+
+  @override
+  String get scenariosDeleteMessage =>
+      'Kịch bản và các khoản nợ của nó sẽ bị xóa. Lịch sử thanh toán không bị ảnh hưởng.';
 }

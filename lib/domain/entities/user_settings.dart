@@ -21,6 +21,7 @@ class UserSettings extends Equatable {
     this.onboardingStep = 0,
     this.onboardingCompleted = false,
     this.onboardingCompletedAt,
+    this.activeScenarioId = 'main',
     this.isPremium = false,
     this.premiumExpiresAt,
     required this.createdAt,
@@ -52,6 +53,8 @@ class UserSettings extends Equatable {
   final bool onboardingCompleted;
   final DateTime? onboardingCompletedAt;
 
+  final String activeScenarioId;
+
   // Premium
   final bool isPremium;
   final DateTime? premiumExpiresAt;
@@ -74,6 +77,7 @@ class UserSettings extends Equatable {
     int? onboardingStep,
     bool? onboardingCompleted,
     DateTime? onboardingCompletedAt,
+    String? activeScenarioId,
     bool? isPremium,
     DateTime? premiumExpiresAt,
     DateTime? createdAt,
@@ -95,6 +99,7 @@ class UserSettings extends Equatable {
       onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
       onboardingCompletedAt:
           onboardingCompletedAt ?? this.onboardingCompletedAt,
+      activeScenarioId: activeScenarioId ?? this.activeScenarioId,
       isPremium: isPremium ?? this.isPremium,
       premiumExpiresAt: premiumExpiresAt ?? this.premiumExpiresAt,
       createdAt: createdAt ?? this.createdAt,
@@ -117,6 +122,7 @@ class UserSettings extends Equatable {
     onboardingStep,
     onboardingCompleted,
     onboardingCompletedAt,
+    activeScenarioId,
     isPremium,
     premiumExpiresAt,
     createdAt,

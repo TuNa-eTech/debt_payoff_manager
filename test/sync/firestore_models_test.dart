@@ -259,6 +259,7 @@ void main() {
         onboardingStep: 5,
         onboardingCompleted: true,
         onboardingCompletedAt: updatedAt,
+        activeScenarioId: 'main',
         isPremium: false,
         premiumExpiresAt: null,
         createdAt: createdAt,

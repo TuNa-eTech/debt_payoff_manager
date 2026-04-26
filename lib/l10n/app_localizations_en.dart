@@ -30,6 +30,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonAddDebt => 'Add debt';
 
   @override
+  String get whatCanYouDoNow => 'What can you do right now?';
+
+  @override
+  String debtDueDay(Object day) {
+    return 'Day $day';
+  }
+
+  @override
   String get commonSavePayment => 'Save payment';
 
   @override
@@ -130,6 +138,71 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeViewPlanDetails => 'View detailed plan';
+
+  @override
+  String get homeTotalBalanceLabel => 'Current total balance';
+
+  @override
+  String homePaidProgress(Object amount) {
+    return 'Paid $amount';
+  }
+
+  @override
+  String get homeTrackingCountLabel => 'Tracking';
+
+  @override
+  String get homePaidOffCountLabel => 'Paid off';
+
+  @override
+  String get homePausedCountLabel => 'Paused';
+
+  @override
+  String get homeDebtsToTrackTitle => 'Debts to track';
+
+  @override
+  String get homeDebtsToTrackSubtitle =>
+      'This list is pulled directly from your saved data.';
+
+  @override
+  String get homeNoDebtsToTrackMessage => 'No debts to track yet.';
+
+  @override
+  String get homeTimelineConnectingTitle => 'Detailed timeline is connecting';
+
+  @override
+  String get homeTimelineConnectingSubtitle =>
+      'You have enough background data to visit the Plan tab and see your current setup. The debt-free date and detailed projections will appear when the plan simulation is enabled.';
+
+  @override
+  String get homeOpenPlanTabButton => 'Open Plan tab';
+
+  @override
+  String get homeEmptyTitle => 'No debts yet';
+
+  @override
+  String get homeEmptySubtitle =>
+      'Add your first debt for the app to start saving data and building your payoff plan.';
+
+  @override
+  String get homeFeatureMultiDebtTitle => 'Enter multiple debt types';
+
+  @override
+  String get homeFeatureMultiDebtSubtitle =>
+      'Credit cards, student loans, car loans, mortgages, and more.';
+
+  @override
+  String get homeFeatureEditAnytimeTitle => 'Edit anytime';
+
+  @override
+  String get homeFeatureEditAnytimeSubtitle =>
+      'All changes are saved locally and reflected in your debt list.';
+
+  @override
+  String get homeFeatureLocalFirstTitle => 'Local-first';
+
+  @override
+  String get homeFeatureLocalFirstSubtitle =>
+      'You don\'t need an account to start and your data stays on your device.';
 
   @override
   String get monthlyActionStandaloneTitle => 'This month\'s actions';
@@ -1627,4 +1700,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reportsPdfColBalance => 'Balance';
+
+  @override
+  String get scenariosTitle => 'What-If Scenarios';
+
+  @override
+  String get scenariosEmptyTitle => 'No scenarios yet';
+
+  @override
+  String get scenariosEmptySubtitle =>
+      'Create a scenario to explore different payoff strategies side by side.';
+
+  @override
+  String get scenariosAddTitle => 'New scenario';
+
+  @override
+  String get scenariosNameHint => 'Scenario name';
+
+  @override
+  String get scenariosDuplicateTitle => 'Duplicate scenario';
+
+  @override
+  String get scenariosActiveBadge => 'Active';
+
+  @override
+  String get scenariosMainBadge => 'Main';
+
+  @override
+  String get scenariosDeleteConfirm => 'Delete scenario';
+
+  @override
+  String get scenariosDeleteMessage =>
+      'This scenario and its debts will be deleted. Payments are not affected.';
 }

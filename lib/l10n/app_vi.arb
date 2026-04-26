@@ -2225,5 +2225,45 @@
   "reportsPdfColBalance": "Dư nợ",
   "@reportsPdfColBalance": {
     "description": "Column header in PDF"
+  },
+  "scenariosTitle": "Kịch bản giả định",
+  "@scenariosTitle": {
+    "description": "App bar title for scenarios page"
+  },
+  "scenariosEmptyTitle": "Chưa có kịch bản nào",
+  "@scenariosEmptyTitle": {
+    "description": "Empty state title"
+  },
+  "scenariosEmptySubtitle": "Tạo kịch bản để so sánh các chiến lược trả nợ khác nhau.",
+  "@scenariosEmptySubtitle": {
+    "description": "Empty state subtitle"
+  },
+  "scenariosAddTitle": "Kịch bản mới",
+  "@scenariosAddTitle": {
+    "description": "Dialog title for adding a scenario"
+  },
+  "scenariosNameHint": "Tên kịch bản",
+  "@scenariosNameHint": {
+    "description": "Text field hint for scenario name"
+  },
+  "scenariosDuplicateTitle": "Nhân đôi kịch bản",
+  "@scenariosDuplicateTitle": {
+    "description": "Dialog title for duplicating a scenario"
+  },
+  "scenariosActiveBadge": "Đang dùng",
+  "@scenariosActiveBadge": {
+    "description": "Badge shown on the active scenario"
+  },
+  "scenariosMainBadge": "Chính",
+  "@scenariosMainBadge": {
+    "description": "Badge shown on the main scenario"
+  },
+  "scenariosDeleteConfirm": "Xóa kịch bản",
+  "@scenariosDeleteConfirm": {
+    "description": "Confirm button in delete dialog"
+  },
+  "scenariosDeleteMessage": "Kịch bản và các khoản nợ của nó sẽ bị xóa. Lịch sử thanh toán không bị ảnh hưởng.",
+  "@scenariosDeleteMessage": {
+    "description": "Delete confirmation message"
   }
 }
