@@ -241,6 +241,9 @@ class _NoopCloudBackupService implements CloudBackupService {
   Future<void> enableWithGoogle() async {}
 
   @override
+  Future<void> init() async {}
+
+  @override
   Future<void> refresh() async {}
 
   @override

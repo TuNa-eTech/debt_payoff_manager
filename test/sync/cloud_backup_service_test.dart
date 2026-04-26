@@ -50,7 +50,7 @@ void main() {
   );
 
   test(
-    'enableWithGoogle rolls back settings when initial sync fails',
+    'enableWithGoogle enables sync even when initial push fails',
     () async {
       final initialSettings = makeRepoSettings();
       final settingsRepository = _FakeSettingsRepository(initialSettings);
@@ -71,11 +71,13 @@ void main() {
         remoteStore: _FakeRemoteStore(),
       );
 
-      await expectLater(service.enableWithGoogle(), throwsStateError);
+      // Initial push failure is soft — sync still enables, settings are upgraded.
+      await service.enableWithGoogle();
 
-      expect(settingsRepository.current, initialSettings);
-      expect(authService.signOutCalls, 1);
-      expect(engine.state.status, SyncEngineStatus.stopped);
+      expect(settingsRepository.current.trustLevel, 1);
+      expect(settingsRepository.current.firebaseUid, 'google-uid');
+      expect(authService.signOutCalls, 0);
+      expect(engine.state.status, SyncEngineStatus.running);
 
       await service.dispose();
     },
@@ -194,6 +196,9 @@ class _FakePushQueue implements SyncPushQueue {
     required SyncPushBatch batch,
     required DateTime pushedAt,
   }) async {}
+
+  @override
+  Stream<void> watchPendingWrites() => const Stream.empty();
 }
 
 class _ThrowingPushQueue implements SyncPushQueue {
@@ -207,6 +212,9 @@ class _ThrowingPushQueue implements SyncPushQueue {
     required SyncPushBatch batch,
     required DateTime pushedAt,
   }) async {}
+
+  @override
+  Stream<void> watchPendingWrites() => const Stream.empty();
 }
 
 class _FakePullListener implements SyncPullListener {

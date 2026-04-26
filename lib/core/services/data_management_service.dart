@@ -9,6 +9,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 import '../../data/local/database.dart';
+import '../../data/local/stores/sync_state_store.dart';
 import '../../domain/enums/debt_status.dart';
 import '../../domain/enums/debt_type.dart';
 import '../../domain/enums/interest_method.dart';
@@ -28,14 +29,17 @@ class DataManagementService {
     required AppDatabase db,
     TemporaryDirectoryProvider? temporaryDirectoryProvider,
     NowProvider? nowProvider,
+    SyncStateStore? syncStateStore,
   }) : _db = db,
        _temporaryDirectoryProvider =
            temporaryDirectoryProvider ?? getTemporaryDirectory,
-       _nowProvider = nowProvider ?? DateTime.now;
+       _nowProvider = nowProvider ?? DateTime.now,
+       _syncStateStore = syncStateStore;
 
   final AppDatabase _db;
   final TemporaryDirectoryProvider _temporaryDirectoryProvider;
   final NowProvider _nowProvider;
+  final SyncStateStore? _syncStateStore;
 
   static const String _zipMimeType = 'application/zip';
   static const int _bundleVersion = 1;
@@ -279,6 +283,15 @@ class DataManagementService {
         parsed.rowsByFileStem['interest_rate_history']!,
       );
     });
+
+    await _syncStateStore?.markDirtyMany(const [
+      'debts',
+      'payments',
+      'plans',
+      'settings',
+      'milestones',
+      'interest_rate_history',
+    ]);
   }
 
   Future<void> clearAllData() async {

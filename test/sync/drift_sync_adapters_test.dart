@@ -1,4 +1,5 @@
 import 'package:decimal/decimal.dart';
+import 'package:debt_payoff_manager/core/services/device_id_service.dart';
 import 'package:debt_payoff_manager/data/local/database.dart';
 import 'package:debt_payoff_manager/data/local/stores/sync_state_store.dart';
 import 'package:debt_payoff_manager/domain/enums/debt_status.dart';
@@ -41,7 +42,7 @@ void main() {
       final queue = DriftSyncPushQueue(
         db: db,
         syncStateStore: syncStateStore,
-        deviceId: 'ios-simulator',
+        deviceIdService: _FixedDeviceIdService('ios-simulator'),
       );
 
       final batch = await queue.collectPendingWrites(uid: 'alice');
@@ -95,7 +96,7 @@ void main() {
         final queue = DriftSyncPushQueue(
           db: db,
           syncStateStore: syncStateStore,
-          deviceId: 'ios-simulator',
+          deviceIdService: _FixedDeviceIdService('ios-simulator'),
         );
 
         final batch = await queue.collectPendingWrites(uid: 'alice');
@@ -321,4 +322,12 @@ DebtRow _debtRow({
     paidOffAt: null,
     deletedAt: null,
   );
+}
+
+class _FixedDeviceIdService implements DeviceIdService {
+  const _FixedDeviceIdService(this._id);
+  final String _id;
+
+  @override
+  Future<String> getDeviceId() async => _id;
 }

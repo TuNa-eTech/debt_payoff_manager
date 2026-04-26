@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../core/services/device_id_service.dart';
 import '../data/local/database.dart';
 import '../data/local/stores/sync_state_store.dart';
 import 'firestore_models.dart';
@@ -94,21 +95,29 @@ class DriftSyncPushQueue implements SyncPushQueue {
   DriftSyncPushQueue({
     required AppDatabase db,
     required SyncStateStore syncStateStore,
-    required String deviceId,
+    required DeviceIdService deviceIdService,
     int schemaVersion = 1,
   }) : _db = db,
        _syncStateStore = syncStateStore,
-       _metadata = FirestoreSyncMetadata(
-         deviceId: deviceId,
-         schemaVersion: schemaVersion,
-       );
+       _deviceIdService = deviceIdService,
+       _schemaVersion = schemaVersion;
 
   final AppDatabase _db;
   final SyncStateStore _syncStateStore;
-  final FirestoreSyncMetadata _metadata;
+  final DeviceIdService _deviceIdService;
+  final int _schemaVersion;
+  FirestoreSyncMetadata? _metadata;
+
+  Future<void> _ensureMetadata() async {
+    _metadata ??= FirestoreSyncMetadata(
+      deviceId: await _deviceIdService.getDeviceId(),
+      schemaVersion: _schemaVersion,
+    );
+  }
 
   @override
   Future<SyncPushBatch> collectPendingWrites({required String uid}) async {
+    await _ensureMetadata();
     final entries = <SyncQueueEntry>[
       ...await _collectDebts(),
       ...await _collectPayments(),
@@ -153,7 +162,7 @@ class DriftSyncPushQueue implements SyncPushQueue {
           (row) => SyncQueueEntry(
             collection: FirestoreSyncCollection.debts,
             documentId: row.id,
-            data: FirestoreDebtSerializer.toFirestoreJson(row, _metadata),
+            data: FirestoreDebtSerializer.toFirestoreJson(row, _metadata!),
           ),
         )
         .toList();
@@ -170,7 +179,7 @@ class DriftSyncPushQueue implements SyncPushQueue {
           (row) => SyncQueueEntry(
             collection: FirestoreSyncCollection.payments,
             documentId: row.id,
-            data: FirestorePaymentSerializer.toFirestoreJson(row, _metadata),
+            data: FirestorePaymentSerializer.toFirestoreJson(row, _metadata!),
           ),
         )
         .toList();
@@ -187,7 +196,7 @@ class DriftSyncPushQueue implements SyncPushQueue {
           (row) => SyncQueueEntry(
             collection: FirestoreSyncCollection.plans,
             documentId: row.id,
-            data: FirestorePlanSerializer.toFirestoreJson(row, _metadata),
+            data: FirestorePlanSerializer.toFirestoreJson(row, _metadata!),
           ),
         )
         .toList();
@@ -204,7 +213,7 @@ class DriftSyncPushQueue implements SyncPushQueue {
           (row) => SyncQueueEntry(
             collection: FirestoreSyncCollection.settings,
             documentId: firestoreSettingsDocumentId,
-            data: FirestoreSettingsSerializer.toFirestoreJson(row, _metadata),
+            data: FirestoreSettingsSerializer.toFirestoreJson(row, _metadata!),
           ),
         )
         .toList();
@@ -221,7 +230,7 @@ class DriftSyncPushQueue implements SyncPushQueue {
           (row) => SyncQueueEntry(
             collection: FirestoreSyncCollection.milestones,
             documentId: row.id,
-            data: FirestoreMilestoneSerializer.toFirestoreJson(row, _metadata),
+            data: FirestoreMilestoneSerializer.toFirestoreJson(row, _metadata!),
           ),
         )
         .toList();
@@ -240,7 +249,7 @@ class DriftSyncPushQueue implements SyncPushQueue {
             documentId: row.id,
             data: FirestoreInterestRateHistorySerializer.toFirestoreJson(
               row,
-              _metadata,
+              _metadata!,
             ),
           ),
         )

@@ -139,6 +139,9 @@ class _FakeCloudBackupService implements CloudBackupService {
   }
 
   @override
+  Future<void> init() async {}
+
+  @override
   Future<void> refresh() async {}
 
   @override

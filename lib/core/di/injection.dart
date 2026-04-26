@@ -12,8 +12,10 @@ import '../../data/repositories/payment_repository_impl.dart';
 import '../../data/repositories/plan_repository_impl.dart';
 import '../../data/repositories/settings_repository_impl.dart';
 import '../../data/repositories/tracked_debt_repository.dart';
+import '../../data/repositories/tracked_milestone_repository.dart';
 import '../../data/repositories/tracked_payment_repository.dart';
 import '../../data/repositories/tracked_plan_repository.dart';
+import '../../data/repositories/tracked_settings_repository.dart';
 import '../../domain/repositories/debt_repository.dart';
 import '../../domain/repositories/milestone_repository.dart';
 import '../../domain/repositories/payment_repository.dart';
@@ -37,6 +39,7 @@ import '../services/data_management_service.dart';
 import '../services/milestone_notification_service.dart';
 import '../services/milestone_service.dart';
 import '../services/monthly_action_service.dart';
+import '../services/device_id_service.dart';
 import '../services/notification_permission_prompt_tracker.dart';
 import '../services/notification_service.dart';
 import '../services/payment_logging_service.dart';
@@ -122,7 +125,10 @@ void configureDependencies({
   getIt.registerLazySingleton<DataManagementService>(
     () =>
         dataManagementService ??
-        DataManagementService(db: getIt<AppDatabase>()),
+        DataManagementService(
+          db: getIt<AppDatabase>(),
+          syncStateStore: getIt<SyncStateStore>(),
+        ),
   );
   getIt.registerLazySingleton<BackupFilePicker>(
     () => backupFilePicker ?? FilePickerBackupFilePicker(),
@@ -161,14 +167,14 @@ void configureDependencies({
   getIt.registerLazySingleton<SyncRemoteWriter>(
     () => CloudFirestoreSyncRemoteWriter(firestore: getIt<FirebaseFirestore>()),
   );
+  getIt.registerLazySingleton<DeviceIdService>(
+    () => SharedPrefsDeviceIdService(),
+  );
   getIt.registerLazySingleton<SyncPushQueue>(
     () => DriftSyncPushQueue(
       db: getIt<AppDatabase>(),
       syncStateStore: getIt<SyncStateStore>(),
-      deviceId: const String.fromEnvironment(
-        'SYNC_DEVICE_ID',
-        defaultValue: 'local-device',
-      ),
+      deviceIdService: getIt<DeviceIdService>(),
     ),
   );
   getIt.registerLazySingleton<SyncPullListener>(
@@ -228,10 +234,16 @@ void configureDependencies({
     ),
   );
   getIt.registerLazySingleton<SettingsRepository>(
-    () => getIt<SettingsRepositoryImpl>(),
+    () => TrackedSettingsRepository(
+      base: getIt<SettingsRepositoryImpl>(),
+      syncStateStore: getIt<SyncStateStore>(),
+    ),
   );
   getIt.registerLazySingleton<MilestoneRepository>(
-    () => getIt<MilestoneRepositoryImpl>(),
+    () => TrackedMilestoneRepository(
+      base: getIt<MilestoneRepositoryImpl>(),
+      syncStateStore: getIt<SyncStateStore>(),
+    ),
   );
   getIt.registerLazySingleton<MilestoneService>(
     () => MilestoneService(
