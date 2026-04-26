@@ -11,7 +11,8 @@
       "Bash(rtk wc *)",
       "Bash(rtk find *)",
       "Bash(rtk read *)",
-      "Bash(rtk npx *)"
+      "Bash(rtk npx *)",
+      "Bash(gitnexus analyze *)"
     ]
   }
 }
