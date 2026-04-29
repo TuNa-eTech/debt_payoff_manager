@@ -15,6 +15,7 @@ import '../../data/repositories/tracked_debt_repository.dart';
 import '../../data/repositories/tracked_milestone_repository.dart';
 import '../../data/repositories/tracked_payment_repository.dart';
 import '../../data/repositories/tracked_plan_repository.dart';
+import '../../data/repositories/tracked_scenario_repository.dart';
 import '../../data/repositories/tracked_settings_repository.dart';
 import '../../domain/repositories/debt_repository.dart';
 import '../../domain/repositories/milestone_repository.dart';
@@ -39,6 +40,7 @@ import '../services/data_management_service.dart';
 import '../services/milestone_notification_service.dart';
 import '../services/milestone_service.dart';
 import '../services/monthly_action_service.dart';
+import '../services/monthly_summary_service.dart';
 import '../services/device_id_service.dart';
 import '../services/notification_permission_prompt_tracker.dart';
 import '../services/notification_service.dart';
@@ -50,6 +52,8 @@ import '../services/share_launcher.dart';
 import '../services/streak_service.dart';
 import '../../data/repositories/scenario_repository_impl.dart';
 import '../../domain/repositories/scenario_repository.dart';
+import '../../data/repositories/interest_rate_history_repository_impl.dart';
+import '../../domain/repositories/interest_rate_history_repository.dart';
 import '../../features/progress/cubit/progress_cubit.dart';
 import '../../features/scenarios/cubit/scenarios_cubit.dart';
 import '../../features/settings/cubit/settings_cubit.dart';
@@ -127,6 +131,13 @@ void configureDependencies({
       paymentRepository: getIt<PaymentRepository>(),
       planRepository: getIt<PlanRepository>(),
       planRecastService: getIt<PlanRecastService>(),
+    ),
+  );
+  getIt.registerLazySingleton<MonthlySummaryService>(
+    () => MonthlySummaryService(
+      debtRepository: getIt<DebtRepository>(),
+      paymentRepository: getIt<PaymentRepository>(),
+      planRepository: getIt<PlanRepository>(),
     ),
   );
   getIt.registerLazySingleton<DataManagementService>(
@@ -291,13 +302,21 @@ void configureDependencies({
 
   // Scenarios
   getIt.registerLazySingleton<ScenarioRepository>(
-    () => ScenarioRepositoryImpl(db: getIt<AppDatabase>()),
+    () => TrackedScenarioRepository(
+      base: ScenarioRepositoryImpl(db: getIt<AppDatabase>()),
+      syncStateStore: getIt<SyncStateStore>(),
+    ),
   );
   getIt.registerFactory<ScenariosCubit>(
     () => ScenariosCubit(
       scenarioRepository: getIt<ScenarioRepository>(),
       settingsRepository: getIt<SettingsRepository>(),
     ),
+  );
+
+  // Interest Rate History
+  getIt.registerLazySingleton<InterestRateHistoryRepository>(
+    () => InterestRateHistoryRepositoryImpl(db: getIt<AppDatabase>()),
   );
 
   // Progress

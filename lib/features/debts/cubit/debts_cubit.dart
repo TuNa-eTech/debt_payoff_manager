@@ -91,6 +91,38 @@ class DebtsCubit extends Cubit<DebtsState> {
     }
   }
 
+  /// Pause a debt with a resume date.
+  Future<void> pauseDebt(Debt debt, DateTime pausedUntil) async {
+    try {
+      await _debtRepository.updateDebt(
+        debt.copyWith(
+          status: DebtStatus.paused,
+          pausedUntil: pausedUntil,
+          updatedAt: DateTime.now().toUtc(),
+        ),
+      );
+      _emitFeedback('Đã tạm dừng khoản nợ "${debt.name}".');
+    } catch (error) {
+      _emitInlineError(error);
+    }
+  }
+
+  /// Resume a paused debt.
+  Future<void> resumeDebt(Debt debt) async {
+    try {
+      await _debtRepository.updateDebt(
+        debt.copyWith(
+          status: DebtStatus.active,
+          pausedUntil: null,
+          updatedAt: DateTime.now().toUtc(),
+        ),
+      );
+      _emitFeedback('Đã kích hoạt lại khoản nợ "${debt.name}".');
+    } catch (error) {
+      _emitInlineError(error);
+    }
+  }
+
   /// Delete a debt.
   Future<void> deleteDebt(Debt debt) async {
     try {

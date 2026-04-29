@@ -11,6 +11,7 @@ import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/widgets/app_chip.dart';
+import '../../../../domain/entities/debt.dart';
 import '../../../../domain/enums/debt_status.dart';
 import '../../cubit/debts_cubit.dart';
 import '../../cubit/debts_state.dart';
@@ -94,6 +95,22 @@ class DebtsListPage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: AppDimensions.sectionGap),
+                  if (state.pausedCount > 0) ...[
+                    Text(
+                      context.l10n.debtsListPausedSection(
+                        state.pausedCount,
+                      ),
+                      style: AppTextStyles.labelMedium.copyWith(
+                        color: AppColors.mdOnSurfaceVariant,
+                        letterSpacing: 0.4,
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.md),
+                    ...state.debts
+                        .where((d) => d.status == DebtStatus.paused)
+                        .map((debt) => _PausedDebtCard(debt: debt)),
+                    const SizedBox(height: AppDimensions.sectionGap),
+                  ],
                   Text(
                     _sectionTitleForFilter(context, state.filter),
                     style: AppTextStyles.labelMedium.copyWith(
@@ -299,5 +316,68 @@ class _EmptyList extends StatelessWidget {
         DebtsFilter.archived => context.l10n.debtsListEmptyArchived,
       }, style: AppTextStyles.bodyMedium),
     );
+  }
+}
+
+class _PausedDebtCard extends StatelessWidget {
+  const _PausedDebtCard({required this.debt});
+
+  final Debt debt;
+
+  @override
+  Widget build(BuildContext context) {
+    final daysUntilResume = debt.pausedUntil?.difference(DateTime.now()).inDays;
+    final isSoon = daysUntilResume != null && daysUntilResume <= 7;
+
+    return Container(
+      padding: const EdgeInsets.all(AppDimensions.md),
+      decoration: BoxDecoration(
+        color: AppColors.mdSurfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+        border: Border.all(color: AppColors.mdOutlineVariant),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            LucideIcons.pauseCircle,
+            color: AppColors.mdOutline,
+            size: 32,
+          ),
+          const SizedBox(width: AppDimensions.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  debt.name,
+                  style: AppTextStyles.titleMedium,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  debt.pausedUntil != null
+                      ? context.l10n.debtPausedUntil(
+                          AppFormatters.formatDate(debt.pausedUntil!))
+                      : context.l10n.debtPausedIndefinitely,
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: isSoon
+                        ? AppColors.mdError
+                        : AppColors.mdOnSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          TextButton.icon(
+            onPressed: () => _resumeDebt(context, debt),
+            icon: const Icon(LucideIcons.play, size: 18),
+            label: Text(context.l10n.debtResumeNow),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _resumeDebt(BuildContext context, Debt debt) async {
+    await context.read<DebtsCubit>().resumeDebt(debt);
   }
 }

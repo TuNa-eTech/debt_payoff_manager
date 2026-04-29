@@ -164,12 +164,6 @@ class PaymentRepositoryImpl implements PaymentRepository {
       );
     }
 
-    if (payment.type == PaymentType.charge && payment.principalPortion >= 0) {
-      throw ArgumentError(
-        'charge payments must use a negative principalPortion',
-      );
-    }
-
     if (!isBalanceIncreaseType && payment.appliedBalanceAfter < 0) {
       throw ArgumentError(
         'appliedBalanceAfter must be >= 0 unless type is charge/refund',

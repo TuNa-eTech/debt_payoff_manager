@@ -137,11 +137,16 @@ class AppTestKeys {
   static const debtDetailLogPayment = ValueKey<String>(
     'debt-detail:log-payment',
   );
+  static const debtDetailAddCharge = ValueKey<String>(
+    'debt-detail:add-charge',
+  );
   static const debtDetailPaymentHistory = ValueKey<String>(
     'debt-detail:payment-history',
   );
   static const debtOptionArchive = ValueKey<String>('debt-option:archive');
   static const debtOptionUnarchive = ValueKey<String>('debt-option:unarchive');
+  static const debtOptionPause = ValueKey<String>('debt-option:pause');
+  static const debtOptionResume = ValueKey<String>('debt-option:resume');
   static const debtOptionDelete = ValueKey<String>('debt-option:delete');
   static const dialogConfirmPrimary = ValueKey<String>(
     'dialog:confirm-primary',
@@ -152,6 +157,9 @@ class AppTestKeys {
   static const paymentLogAmount = ValueKey<String>('payment-log:amount');
   static const paymentLogDate = ValueKey<String>('payment-log:date');
   static const paymentLogSubmit = ValueKey<String>('payment-log:submit');
+  static const addChargeAmount = ValueKey<String>('add-charge:amount');
+  static const addChargeNote = ValueKey<String>('add-charge:note');
+  static const addChargeSubmit = ValueKey<String>('add-charge:submit');
   static const paymentTypeMinimum = ValueKey<String>(
     'payment-log:type-minimum',
   );

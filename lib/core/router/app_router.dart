@@ -20,7 +20,9 @@ import '../../features/onboarding/presentation/pages/strategy_selection_page.dar
 import '../../features/onboarding/presentation/pages/welcome_page.dart';
 import '../../features/debts/presentation/pages/log_payment_page.dart';
 import '../../features/debts/presentation/pages/payment_history_page.dart';
+import '../../features/debts/presentation/pages/rate_history_page.dart';
 import '../../features/progress/presentation/pages/progress_page.dart';
+import '../../features/progress/presentation/pages/monthly_summary_page.dart';
 import '../../features/pricing/presentation/pages/pricing_page.dart';
 import '../../features/reports/presentation/pages/reports_preview_page.dart';
 import '../../features/scenarios/presentation/pages/compare_scenarios_page.dart';
@@ -56,16 +58,19 @@ class AppRoutes {
   static const String editDebt = '/debts/:id/edit';
   static const String logPayment = '/debts/:id/log_payment';
   static const String paymentHistory = '/debts/:id/history';
+  static const String rateHistory = '/debts/:id/rate_history';
   static const String syncBackup = '/settings/sync';
   static const String reportsPreview = '/settings/reports';
   static const String pricing = '/settings/pricing';
   static const String scenarios = '/settings/scenarios';
   static const String compareScenarios = '/settings/scenarios/compare';
+  static const String monthlySummary = '/progress/summary';
 
   static String debtDetailPath(String id) => '/debts/$id';
   static String editDebtPath(String id) => '/debts/$id/edit';
   static String logPaymentPath(String id) => '/debts/$id/log_payment';
   static String paymentHistoryPath(String id) => '/debts/$id/history';
+  static String rateHistoryPath(String id) => '/debts/$id/rate_history';
 }
 
 /// GoRouter configuration.
@@ -191,6 +196,12 @@ GoRouter createRouter({
               GoRoute(
                 path: AppRoutes.progress,
                 builder: (context, state) => const ProgressPage(),
+                routes: [
+                  GoRoute(
+                    path: 'summary',
+                    builder: (context, state) => const MonthlySummaryPage(),
+                  ),
+                ],
               ),
             ],
           ),
@@ -239,6 +250,11 @@ GoRouter createRouter({
             path: 'history',
             builder: (context, state) =>
                 PaymentHistoryPage(id: state.pathParameters['id']!),
+          ),
+          GoRoute(
+            path: 'rate_history',
+            builder: (context, state) =>
+                RateHistoryPage(debtId: state.pathParameters['id']!),
           ),
         ],
       ),

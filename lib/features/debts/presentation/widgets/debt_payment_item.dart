@@ -10,6 +10,7 @@ class DebtPaymentItem extends StatelessWidget {
     required this.iconColor,
     required this.iconBgColor,
     required this.title,
+    this.note,
     required this.date,
     required this.amount,
     required this.amountColor,
@@ -20,6 +21,7 @@ class DebtPaymentItem extends StatelessWidget {
   final Color iconColor;
   final Color iconBgColor;
   final String title;
+  final String? note;
   final String date;
   final String amount;
   final Color amountColor;
@@ -51,6 +53,17 @@ class DebtPaymentItem extends StatelessWidget {
               children: [
                 Text(title, style: AppTextStyles.titleSmall),
                 const SizedBox(height: 2),
+                if (note != null && note!.isNotEmpty) ...[
+                  Text(
+                    note!,
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.mdOnSurfaceVariant,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                ],
                 Text(
                   date,
                   style: AppTextStyles.bodySmall.copyWith(

@@ -5,6 +5,7 @@ import '../../data/local/stores/sync_state_store.dart';
 import '../../data/repositories/debt_repository_impl.dart';
 import '../../data/repositories/payment_repository_impl.dart';
 import '../../data/repositories/settings_repository_impl.dart';
+import '../../domain/entities/debt.dart';
 import '../../domain/entities/payment.dart';
 import '../../domain/enums/debt_status.dart';
 import '../../domain/enums/payment_type.dart';
@@ -127,10 +128,63 @@ class PaymentLoggingService {
     return payment;
   }
 
+  Future<Payment> logNewCharge({
+    required Debt debt,
+    required int amountCents,
+    String? note,
+  }) async {
+    if (amountCents <= 0) {
+      throw ArgumentError('New charge amount must be greater than 0.');
+    }
+
+    final settings = await _settingsRepository.getSettings();
+    if (debt.scenarioId != settings.activeScenarioId) {
+      throw ArgumentError('You can only log charges against debts in the active scenario.');
+    }
+
+    final newBalance = debt.currentBalance + amountCents;
+    final now = DateTime.now().toUtc();
+    final paymentDate = _localDay(DateTime.now());
+
+    final charge = Payment(
+      id: _uuid.v4(),
+      scenarioId: debt.scenarioId,
+      debtId: debt.id,
+      amount: amountCents,
+      principalPortion: amountCents,
+      interestPortion: 0,
+      feePortion: 0,
+      date: paymentDate,
+      type: PaymentType.charge,
+      source: PaymentSource.manual,
+      note: note?.trim().isEmpty ?? true ? null : note?.trim(),
+      status: PaymentStatus.completed,
+      appliedBalanceBefore: debt.currentBalance,
+      appliedBalanceAfter: newBalance,
+      createdAt: now,
+      updatedAt: now,
+    );
+
+    final updatedDebt = debt.copyWith(
+      currentBalance: newBalance,
+      updatedAt: now,
+    );
+
+    await _db.transaction(() async {
+      await _debtRepository.updateDebt(updatedDebt);
+      await _paymentRepository.addPayment(charge);
+      await _syncStateStore.markDirtyMany(const ['debts', 'payments']);
+    });
+
+    await _planRecastService.recast(scenarioId: debt.scenarioId);
+    return charge;
+  }
+
   bool _isSupportedType(PaymentType type) {
     return type == PaymentType.minimum ||
         type == PaymentType.extra ||
-        type == PaymentType.lumpSum;
+        type == PaymentType.lumpSum ||
+        type == PaymentType.charge;
   }
 
   static DateTime _localDay(DateTime value) {

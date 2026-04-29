@@ -1702,6 +1702,10 @@
   "@commonCancel": {
     "description": "Generic cancel action."
   },
+  "commonConfirm": "Xác nhận",
+  "@commonConfirm": {
+    "description": "Generic confirm action."
+  },
   "commonTotalDebt": "Tổng dư nợ",
   "@commonTotalDebt": {
     "description": "Label for the total debt amount."
@@ -1798,6 +1802,176 @@
   "@debtOptionsEdit": {
     "description": "Option"
   },
+  "debtOptionsPause": "Tạm dừng payments",
+  "@debtOptionsPause": {
+    "description": "Option to pause debt payments"
+  },
+  "debtOptionsPauseSubtitle": "Tạm thời ngừng payments",
+  "@debtOptionsPauseSubtitle": {
+    "description": "Subtitle for pause option"
+  },
+  "debtOptionsResume": "Kích hoạt lại",
+  "@debtOptionsResume": {
+    "description": "Option to resume paused debt"
+  },
+  "debtOptionsResumeSubtitle": "Tự động kích hoạt vào {date}",
+  "@debtOptionsResumeSubtitle": {
+    "description": "Subtitle for resume option with date",
+    "parameters": "date"
+  },
+  "debtPauseSelectDuration": "Chọn thời gian tạm dừng",
+  "@debtPauseSelectDuration": {
+    "description": "Label for pause duration dropdown"
+  },
+  "debtPause1Month": "1 tháng",
+  "@debtPause1Month": {
+    "description": "Pause duration option"
+  },
+  "debtPause2Months": "2 tháng",
+  "@debtPause2Months": {
+    "description": "Pause duration option"
+  },
+  "debtPause3Months": "3 tháng",
+  "@debtPause3Months": {
+    "description": "Pause duration option"
+  },
+  "debtPause6Months": "6 tháng",
+  "@debtPause6Months": {
+    "description": "Pause duration option"
+  },
+  "debtPausedMsg": "Đã tạm dừng đến {date}",
+  "@debtPausedMsg": {
+    "description": "Snackbar message when debt is paused",
+    "parameters": "date"
+  },
+  "debtResumedMsg": "Đã kích hoạt lại payments",
+  "@debtResumedMsg": {
+    "description": "Snackbar message when debt is resumed"
+  },
+  "debtsListPausedSection": "Tạm dừng ({count})",
+  "@debtsListPausedSection": {
+    "description": "Section header for paused debts",
+    "parameters": "count"
+  },
+  "debtPausedUntil": "Tạm dừng đến {date}",
+  "@debtPausedUntil": {
+    "description": "Subtitle for paused debt card",
+    "parameters": "date"
+  },
+  "debtPausedIndefinitely": "Tạm dừng vô thời hạn",
+  "@debtPausedIndefinitely": {
+    "description": "Subtitle for paused debt without resume date"
+  },
+  "debtResumeNow": "Kích hoạt lại ngay",
+  "@debtResumeNow": {
+    "description": "Button to resume paused debt"
+  },
+  "debtDetailRateHistory": "Lãi suất",
+  "@debtDetailRateHistory": {
+    "description": "Button to view interest rate history"
+  },
+  "rateHistoryTitle": "Lịch sử lãi suất",
+  "@rateHistoryTitle": {
+    "description": "App bar title for rate history page"
+  },
+  "rateHistoryEmpty": "Chưa có lịch sử",
+  "@rateHistoryEmpty": {
+    "description": "Empty state when no rate history entries"
+  },
+  "rateHistoryEmptySubtitle": "Lãi suất sẽ xuất hiện ở đây khi thay đổi",
+  "@rateHistoryEmptySubtitle": {
+    "description": "Subtitle for empty rate history"
+  },
+  "rateHistoryCurrent": "Hiện tại",
+  "@rateHistoryCurrent": {
+    "description": "Badge for currently active rate"
+  },
+  "rateHistoryAddTitle": "Thêm thay đổi lãi suất",
+  "@rateHistoryAddTitle": {
+    "description": "Dialog title for adding rate"
+  },
+  "rateHistoryEditTitle": "Chỉnh sửa lãi suất",
+  "@rateHistoryEditTitle": {
+    "description": "Dialog title for editing rate"
+  },
+  "rateHistoryAprLabel": "APR (%)",
+  "@rateHistoryAprLabel": {
+    "description": "Label for APR input"
+  },
+  "rateHistoryAprInvalid": "Nhập APR hợp lệ (0-100%)",
+  "@rateHistoryAprInvalid": {
+    "description": "Validation error for APR"
+  },
+  "rateHistoryEffectiveFrom": "Hiệu lực từ",
+  "@rateHistoryEffectiveFrom": {
+    "description": "Label for effective from date"
+  },
+  "rateHistoryEffectiveTo": "Đến (tùy chọn)",
+  "@rateHistoryEffectiveTo": {
+    "description": "Label for effective to date"
+  },
+  "rateHistoryEffectiveFromOnly": "Từ {date}",
+  "@rateHistoryEffectiveFromOnly": {
+    "description": "Period display for rate with only from date",
+    "parameters": "date"
+  },
+  "rateHistoryEffectiveToPeriod": "{from} — {to}",
+  "@rateHistoryEffectiveToPeriod": {
+    "description": "Period display for rate with from and to dates",
+    "parameters": "date"
+  },
+  "rateHistoryReason": "Lý do",
+  "@rateHistoryReason": {
+    "description": "Label for reason field"
+  },
+  "rateHistoryReasonHint": "VD: Hết promo, tái cấp vốn",
+  "@rateHistoryReasonHint": {
+    "description": "Hint for reason field"
+  },
+  "rateHistoryDeleteTitle": "Xóa lãi suất?",
+  "@rateHistoryDeleteTitle": {
+    "description": "Dialog title for delete confirmation"
+  },
+  "rateHistoryDeleteMessage": "Mục này sẽ bị xóa vĩnh viễn.",
+  "@rateHistoryDeleteMessage": {
+    "description": "Dialog message for delete confirmation"
+  },
+  "rateHistoryDeletedMsg": "Đã xóa lịch sử lãi suất",
+  "@rateHistoryDeletedMsg": {
+    "description": "Snackbar message after deleting rate"
+  },
+  "rateHistoryOpenEnded": "Không có ngày kết thúc (lãi suất hiện tại)",
+  "@rateHistoryOpenEnded": {
+    "description": "Checkbox label for open-ended interest rate with no expiry"
+  },
+  "commonDelete": "Xóa",
+  "@commonDelete": {
+    "description": "Generic delete button"
+  },
+  "commonEdit": "Sửa",
+  "@commonEdit": {
+    "description": "Generic edit button"
+  },
+  "commonAdd": "Thêm",
+  "@commonAdd": {
+    "description": "Generic add button"
+  },
+  "commonSave": "Lưu",
+  "@commonSave": {
+    "description": "Generic save button"
+  },
+  "commonOk": "OK",
+  "@commonOk": {
+    "description": "Generic OK button"
+  },
+  "commonRequired": "Bắt buộc",
+  "@commonRequired": {
+    "description": "Validation error for required field"
+  },
+  "commonError": "Lỗi",
+  "@commonError": {
+    "description": "Generic error dialog title"
+  },
   "debtOptionsDelete": "Xóa khoản nợ",
   "@debtOptionsDelete": {
     "description": "Option"
@@ -1873,6 +2047,34 @@
   "debtDetailTrackingHelper": "Log payment thật để giảm current balance, tạo audit trail trước/sau, và recast timeline ngay lập tức.",
   "@debtDetailTrackingHelper": {
     "description": "Helper text."
+  },
+  "debtDetailAddCharge": "Thêm phát sinh",
+  "@debtDetailAddCharge": {
+    "description": "Button to log a new charge."
+  },
+  "newChargeDialogTitle": "Ghi nhận phát sinh",
+  "@newChargeDialogTitle": {
+    "description": "Title of the new charge dialog."
+  },
+  "newChargeAmountLabel": "Số tiền phát sinh",
+  "@newChargeAmountLabel": {
+    "description": "Label for the charge amount input."
+  },
+  "newChargeNoteLabel": "Ghi chú (tuỳ chọn)",
+  "@newChargeNoteLabel": {
+    "description": "Label for the charge note input."
+  },
+  "newChargeSave": "Lưu phát sinh",
+  "@newChargeSave": {
+    "description": "Button to save a new charge."
+  },
+  "newChargeSuccess": "Đã thêm khoản phát sinh mới.",
+  "@newChargeSuccess": {
+    "description": "Success message when charge is added."
+  },
+  "newChargeErrorInvalid": "Vui lòng nhập số tiền hợp lệ.",
+  "@newChargeErrorInvalid": {
+    "description": "Error message for invalid charge amount."
   },
   "debtDetailArchiveMessage": "Khoản nợ đã trả xong này sẽ được chuyển sang danh sách lưu trữ.",
   "@debtDetailArchiveMessage": {
@@ -2355,5 +2557,57 @@
   "scenariosCopyDebtsSuccess": "Đã sao chép khoản nợ thành công",
   "@scenariosCopyDebtsSuccess": {
     "description": "Snackbar after copying debts"
+  },
+
+  "scenariosCompareDeltaTitle": "{name} là lựa chọn tốt hơn",
+  "@scenariosCompareDeltaTitle": {
+    "description": "Delta banner headline naming the winning scenario",
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "scenariosCompareDeltaMonths": "Trả hết nợ sớm hơn {months} tháng",
+  "@scenariosCompareDeltaMonths": {
+    "description": "Months faster label in delta banner",
+    "placeholders": { "months": { "type": "int" } }
+  },
+  "scenariosCompareDeltaInterest": "Tiết kiệm {amount} lãi suất",
+  "@scenariosCompareDeltaInterest": {
+    "description": "Interest savings label in delta banner",
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "scenariosCompareTie": "Hai kịch bản tương đương nhau",
+  "@scenariosCompareTie": {
+    "description": "Banner text when no clear winner"
+  },
+
+  "monthlySummaryTitle": "Tổng kết tháng",
+  "@monthlySummaryTitle": { "description": "Title for the monthly summary page" },
+  "monthlySummaryTotalPaid": "Đã thanh toán",
+  "@monthlySummaryTotalPaid": { "description": "Label for total paid section" },
+  "monthlySummaryPrincipal": "Gốc",
+  "@monthlySummaryPrincipal": { "description": "Label for principal portion" },
+  "monthlySummaryInterest": "Lãi",
+  "@monthlySummaryInterest": { "description": "Label for interest portion" },
+  "monthlySummaryCharges": "Phát sinh mới",
+  "@monthlySummaryCharges": { "description": "Label for new charges section" },
+  "monthlySummaryPerDebt": "Theo khoản nợ",
+  "@monthlySummaryPerDebt": { "description": "Section header for per-debt breakdown" },
+  "monthlySummaryNoActivity": "Chưa ghi nhận thanh toán nào trong tháng này",
+  "@monthlySummaryNoActivity": { "description": "Empty state message" },
+  "monthlySummaryNoActivitySub": "Hãy ghi nhận thanh toán để theo dõi tiến độ.",
+  "@monthlySummaryNoActivitySub": { "description": "Empty state subtitle" },
+  "monthlySummaryPaidMore": "Trả nhiều hơn kế hoạch {amount}",
+  "@monthlySummaryPaidMore": {
+    "description": "Positive variance label",
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "monthlySummaryPaidLess": "Trả ít hơn kế hoạch {amount}",
+  "@monthlySummaryPaidLess": {
+    "description": "Negative variance label",
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "monthlySummaryBalanceReduced": "Dư nợ giảm {amount}",
+  "@monthlySummaryBalanceReduced": {
+    "description": "Balance reduction label for a debt",
+    "placeholders": { "amount": { "type": "String" } }
   }
 }

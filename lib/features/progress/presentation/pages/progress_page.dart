@@ -18,6 +18,8 @@ import '../../../../domain/enums/milestone_type.dart';
 import '../../../../domain/repositories/plan_repository.dart';
 import '../../../debts/cubit/debts_cubit.dart';
 import '../../../debts/cubit/debts_state.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/router/app_router.dart';
 import '../../cubit/progress_cubit.dart';
 import '../../cubit/progress_state.dart';
 
@@ -233,6 +235,8 @@ class _ProgressView extends StatelessWidget {
                         ),
                       ),
                     ),
+                    const SizedBox(height: AppDimensions.sectionGap),
+                    _MonthlySummaryEntryCard(),
                     const SizedBox(height: AppDimensions.sectionGap),
                     SectionHeader(
                       title: context.l10n.progressByDebt,
@@ -493,6 +497,48 @@ class _DebtProgressCard extends StatelessWidget {
             minHeight: 6,
             borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MonthlySummaryEntryCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AppCard(
+      onTap: () => context.push(AppRoutes.monthlySummary),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppColors.mdPrimaryContainer,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+            ),
+            child: Icon(
+              LucideIcons.calendarDays,
+              size: 22,
+              color: AppColors.mdOnPrimaryContainer,
+            ),
+          ),
+          const SizedBox(width: AppDimensions.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.l10n.monthlySummaryTitle,
+                  style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w600),
+                ),
+                Text(
+                  AppFormatters.formatMonthYear(DateTime.now()),
+                  style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdOnSurfaceVariant),
+                ),
+              ],
+            ),
+          ),
+          const Icon(LucideIcons.chevronRight, size: 18, color: AppColors.mdOutline),
         ],
       ),
     );

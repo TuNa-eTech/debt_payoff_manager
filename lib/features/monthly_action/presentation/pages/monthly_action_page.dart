@@ -766,60 +766,70 @@ class _CompletionCard extends StatelessWidget {
 
     return AppCard(
       color: AppColors.mdSurface,
-      padding: const EdgeInsets.all(AppDimensions.md),
+      onTap: onViewPlan,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.md,
+        vertical: AppDimensions.sm + AppDimensions.xs,
+      ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 40,
-            height: 40,
+            width: 32,
+            height: 32,
             decoration: BoxDecoration(
               color: AppColors.mdPrimaryContainer,
-              borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+              borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
             ),
             child: const Icon(
               LucideIcons.checkCircle2,
-              size: AppDimensions.iconMd,
+              size: AppDimensions.iconSm,
               color: AppColors.mdPrimary,
             ),
           ),
-          const SizedBox(width: AppDimensions.md),
+          const SizedBox(width: AppDimensions.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   context.l10n.monthlyActionNextActionTitle,
-                  style: AppTextStyles.titleMedium,
-                ),
-                const SizedBox(height: AppDimensions.xs),
-                Text(
-                  context.l10n.monthlyActionNextActionSubtitle,
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: AppColors.mdOnSurfaceVariant,
-                  ),
+                  style: AppTextStyles.bodyMedium,
                 ),
                 if (effectiveSummary != null) ...[
-                  const SizedBox(height: AppDimensions.sm),
-                  AppChip.status(
-                    label: context.l10n.monthlyActionCompletionChip(
-                      effectiveSummary.completedCount,
-                      effectiveSummary.totalCount,
-                    ),
-                    icon: LucideIcons.check,
-                  ),
-                ],
-                if (onViewPlan != null) ...[
-                  const SizedBox(height: AppDimensions.md),
-                  _IconButtonWithLabel(
-                    label: context.l10n.monthlyActionNextActionPrimary,
-                    icon: LucideIcons.map,
-                    onPressed: onViewPlan!,
+                  const SizedBox(height: AppDimensions.xs),
+                  Row(
+                    children: [
+                      const Icon(
+                        LucideIcons.check,
+                        size: 12,
+                        color: AppColors.mdPrimary,
+                      ),
+                      const SizedBox(width: AppDimensions.xs),
+                      Text(
+                        context.l10n.monthlyActionCompletionChip(
+                          effectiveSummary.completedCount,
+                          effectiveSummary.totalCount,
+                        ),
+                        style: AppTextStyles.labelSmall.copyWith(
+                          color: AppColors.mdPrimary,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ],
             ),
           ),
+          if (onViewPlan != null) ...[
+            const SizedBox(width: AppDimensions.xs),
+            Icon(
+              LucideIcons.chevronRight,
+              size: AppDimensions.iconSm,
+              color: AppColors.mdOnSurfaceVariant,
+            ),
+          ],
         ],
       ),
     );

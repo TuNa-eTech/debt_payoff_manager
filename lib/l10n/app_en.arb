@@ -1702,6 +1702,10 @@
   "@commonCancel": {
     "description": "Generic cancel action."
   },
+  "commonConfirm": "Confirm",
+  "@commonConfirm": {
+    "description": "Generic confirm action."
+  },
   "commonTotalDebt": "Total Debt",
   "@commonTotalDebt": {
     "description": "Label for the total debt amount."
@@ -1798,6 +1802,176 @@
   "@debtOptionsEdit": {
     "description": "Option"
   },
+  "debtOptionsPause": "Pause payments",
+  "@debtOptionsPause": {
+    "description": "Option to pause debt payments"
+  },
+  "debtOptionsPauseSubtitle": "Temporarily stop payments",
+  "@debtOptionsPauseSubtitle": {
+    "description": "Subtitle for pause option"
+  },
+  "debtOptionsResume": "Resume payments",
+  "@debtOptionsResume": {
+    "description": "Option to resume paused debt"
+  },
+  "debtOptionsResumeSubtitle": "Auto-resumes on {date}",
+  "@debtOptionsResumeSubtitle": {
+    "description": "Subtitle for resume option with date",
+    "parameters": "date"
+  },
+  "debtPauseSelectDuration": "Select pause duration",
+  "@debtPauseSelectDuration": {
+    "description": "Label for pause duration dropdown"
+  },
+  "debtPause1Month": "1 month",
+  "@debtPause1Month": {
+    "description": "Pause duration option"
+  },
+  "debtPause2Months": "2 months",
+  "@debtPause2Months": {
+    "description": "Pause duration option"
+  },
+  "debtPause3Months": "3 months",
+  "@debtPause3Months": {
+    "description": "Pause duration option"
+  },
+  "debtPause6Months": "6 months",
+  "@debtPause6Months": {
+    "description": "Pause duration option"
+  },
+  "debtPausedMsg": "Paused until {date}",
+  "@debtPausedMsg": {
+    "description": "Snackbar message when debt is paused",
+    "parameters": "date"
+  },
+  "debtResumedMsg": "Resumed payments",
+  "@debtResumedMsg": {
+    "description": "Snackbar message when debt is resumed"
+  },
+  "debtsListPausedSection": "Paused ({count})",
+  "@debtsListPausedSection": {
+    "description": "Section header for paused debts",
+    "parameters": "count"
+  },
+  "debtPausedUntil": "Paused until {date}",
+  "@debtPausedUntil": {
+    "description": "Subtitle for paused debt card",
+    "parameters": "date"
+  },
+  "debtPausedIndefinitely": "Paused indefinitely",
+  "@debtPausedIndefinitely": {
+    "description": "Subtitle for paused debt without resume date"
+  },
+  "debtResumeNow": "Resume now",
+  "@debtResumeNow": {
+    "description": "Button to resume paused debt"
+  },
+  "debtDetailRateHistory": "Interest rates",
+  "@debtDetailRateHistory": {
+    "description": "Button to view interest rate history"
+  },
+  "rateHistoryTitle": "Interest Rate History",
+  "@rateHistoryTitle": {
+    "description": "App bar title for rate history page"
+  },
+  "rateHistoryEmpty": "No rate history",
+  "@rateHistoryEmpty": {
+    "description": "Empty state when no rate history entries"
+  },
+  "rateHistoryEmptySubtitle": "Interest rate will appear here when changed",
+  "@rateHistoryEmptySubtitle": {
+    "description": "Subtitle for empty rate history"
+  },
+  "rateHistoryCurrent": "Current",
+  "@rateHistoryCurrent": {
+    "description": "Badge for currently active rate"
+  },
+  "rateHistoryAddTitle": "Add Rate Change",
+  "@rateHistoryAddTitle": {
+    "description": "Dialog title for adding rate"
+  },
+  "rateHistoryEditTitle": "Edit Rate Change",
+  "@rateHistoryEditTitle": {
+    "description": "Dialog title for editing rate"
+  },
+  "rateHistoryAprLabel": "APR (%)",
+  "@rateHistoryAprLabel": {
+    "description": "Label for APR input"
+  },
+  "rateHistoryAprInvalid": "Enter a valid APR (0-100%)",
+  "@rateHistoryAprInvalid": {
+    "description": "Validation error for APR"
+  },
+  "rateHistoryEffectiveFrom": "Effective from",
+  "@rateHistoryEffectiveFrom": {
+    "description": "Label for effective from date"
+  },
+  "rateHistoryEffectiveTo": "Effective to (optional)",
+  "@rateHistoryEffectiveTo": {
+    "description": "Label for effective to date"
+  },
+  "rateHistoryEffectiveFromOnly": "From {date}",
+  "@rateHistoryEffectiveFromOnly": {
+    "description": "Period display for rate with only from date",
+    "parameters": "date"
+  },
+  "rateHistoryEffectiveToPeriod": "{from} — {to}",
+  "@rateHistoryEffectiveToPeriod": {
+    "description": "Period display for rate with from and to dates",
+    "parameters": "date"
+  },
+  "rateHistoryReason": "Reason",
+  "@rateHistoryReason": {
+    "description": "Label for reason field"
+  },
+  "rateHistoryReasonHint": "e.g., Promo expired, Refinanced",
+  "@rateHistoryReasonHint": {
+    "description": "Hint for reason field"
+  },
+  "rateHistoryDeleteTitle": "Delete rate?",
+  "@rateHistoryDeleteTitle": {
+    "description": "Dialog title for delete confirmation"
+  },
+  "rateHistoryDeleteMessage": "This will permanently delete this rate history entry.",
+  "@rateHistoryDeleteMessage": {
+    "description": "Dialog message for delete confirmation"
+  },
+  "rateHistoryDeletedMsg": "Rate history deleted",
+  "@rateHistoryDeletedMsg": {
+    "description": "Snackbar message after deleting rate"
+  },
+  "rateHistoryOpenEnded": "No end date (current rate)",
+  "@rateHistoryOpenEnded": {
+    "description": "Checkbox label for open-ended interest rate with no expiry"
+  },
+  "commonDelete": "Delete",
+  "@commonDelete": {
+    "description": "Generic delete button"
+  },
+  "commonEdit": "Edit",
+  "@commonEdit": {
+    "description": "Generic edit button"
+  },
+  "commonAdd": "Add",
+  "@commonAdd": {
+    "description": "Generic add button"
+  },
+  "commonSave": "Save",
+  "@commonSave": {
+    "description": "Generic save button"
+  },
+  "commonOk": "OK",
+  "@commonOk": {
+    "description": "Generic OK button"
+  },
+  "commonRequired": "Required",
+  "@commonRequired": {
+    "description": "Validation error for required field"
+  },
+  "commonError": "Error",
+  "@commonError": {
+    "description": "Generic error dialog title"
+  },
   "debtOptionsDelete": "Delete debt",
   "@debtOptionsDelete": {
     "description": "Option"
@@ -1873,6 +2047,34 @@
   "debtDetailTrackingHelper": "Log real payments to reduce current balance, create an audit trail, and instantly recast your timeline.",
   "@debtDetailTrackingHelper": {
     "description": "Helper text."
+  },
+  "debtDetailAddCharge": "Add Charge",
+  "@debtDetailAddCharge": {
+    "description": "Button to log a new charge."
+  },
+  "newChargeDialogTitle": "Log New Charge",
+  "@newChargeDialogTitle": {
+    "description": "Title of the new charge dialog."
+  },
+  "newChargeAmountLabel": "Charge Amount",
+  "@newChargeAmountLabel": {
+    "description": "Label for the charge amount input."
+  },
+  "newChargeNoteLabel": "Note (optional)",
+  "@newChargeNoteLabel": {
+    "description": "Label for the charge note input."
+  },
+  "newChargeSave": "Save Charge",
+  "@newChargeSave": {
+    "description": "Button to save a new charge."
+  },
+  "newChargeSuccess": "New charge added.",
+  "@newChargeSuccess": {
+    "description": "Success message when charge is added."
+  },
+  "newChargeErrorInvalid": "Please enter a valid amount.",
+  "@newChargeErrorInvalid": {
+    "description": "Error message for invalid charge amount."
   },
   "debtDetailArchiveMessage": "This paid-off debt will be moved to the archive.",
   "@debtDetailArchiveMessage": {
@@ -2355,5 +2557,57 @@
   "scenariosCopyDebtsSuccess": "Debts copied successfully",
   "@scenariosCopyDebtsSuccess": {
     "description": "Snackbar after copying debts"
+  },
+
+  "scenariosCompareDeltaTitle": "{name} is the better choice",
+  "@scenariosCompareDeltaTitle": {
+    "description": "Delta banner headline naming the winning scenario",
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "scenariosCompareDeltaMonths": "Debt-free {months} months earlier",
+  "@scenariosCompareDeltaMonths": {
+    "description": "Months faster label in delta banner",
+    "placeholders": { "months": { "type": "int" } }
+  },
+  "scenariosCompareDeltaInterest": "Saves {amount} in interest",
+  "@scenariosCompareDeltaInterest": {
+    "description": "Interest savings label in delta banner",
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "scenariosCompareTie": "Both scenarios are equivalent",
+  "@scenariosCompareTie": {
+    "description": "Banner text when no clear winner"
+  },
+
+  "monthlySummaryTitle": "Monthly Summary",
+  "@monthlySummaryTitle": { "description": "Title for the monthly summary page" },
+  "monthlySummaryTotalPaid": "Total Paid",
+  "@monthlySummaryTotalPaid": { "description": "Label for total paid section" },
+  "monthlySummaryPrincipal": "Principal",
+  "@monthlySummaryPrincipal": { "description": "Label for principal portion" },
+  "monthlySummaryInterest": "Interest",
+  "@monthlySummaryInterest": { "description": "Label for interest portion" },
+  "monthlySummaryCharges": "New Charges",
+  "@monthlySummaryCharges": { "description": "Label for new charges section" },
+  "monthlySummaryPerDebt": "By Debt",
+  "@monthlySummaryPerDebt": { "description": "Section header for per-debt breakdown" },
+  "monthlySummaryNoActivity": "No payments recorded this month",
+  "@monthlySummaryNoActivity": { "description": "Empty state message" },
+  "monthlySummaryNoActivitySub": "Log a payment to see your progress here.",
+  "@monthlySummaryNoActivitySub": { "description": "Empty state subtitle" },
+  "monthlySummaryPaidMore": "Paid {amount} more than planned",
+  "@monthlySummaryPaidMore": {
+    "description": "Positive variance label",
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "monthlySummaryPaidLess": "Paid {amount} less than planned",
+  "@monthlySummaryPaidLess": {
+    "description": "Negative variance label",
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "monthlySummaryBalanceReduced": "Balance reduced by {amount}",
+  "@monthlySummaryBalanceReduced": {
+    "description": "Balance reduction label for a debt",
+    "placeholders": { "amount": { "type": "String" } }
   }
 }

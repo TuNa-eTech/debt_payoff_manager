@@ -1307,6 +1307,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonCancel => 'Cancel';
 
   @override
+  String get commonConfirm => 'Confirm';
+
+  @override
   String get commonTotalDebt => 'Total Debt';
 
   @override
@@ -1380,6 +1383,143 @@ class AppLocalizationsEn extends AppLocalizations {
   String get debtOptionsEdit => 'Edit debt';
 
   @override
+  String get debtOptionsPause => 'Pause payments';
+
+  @override
+  String get debtOptionsPauseSubtitle => 'Temporarily stop payments';
+
+  @override
+  String get debtOptionsResume => 'Resume payments';
+
+  @override
+  String debtOptionsResumeSubtitle(Object date) {
+    return 'Auto-resumes on $date';
+  }
+
+  @override
+  String get debtPauseSelectDuration => 'Select pause duration';
+
+  @override
+  String get debtPause1Month => '1 month';
+
+  @override
+  String get debtPause2Months => '2 months';
+
+  @override
+  String get debtPause3Months => '3 months';
+
+  @override
+  String get debtPause6Months => '6 months';
+
+  @override
+  String debtPausedMsg(Object date) {
+    return 'Paused until $date';
+  }
+
+  @override
+  String get debtResumedMsg => 'Resumed payments';
+
+  @override
+  String debtsListPausedSection(Object count) {
+    return 'Paused ($count)';
+  }
+
+  @override
+  String debtPausedUntil(Object date) {
+    return 'Paused until $date';
+  }
+
+  @override
+  String get debtPausedIndefinitely => 'Paused indefinitely';
+
+  @override
+  String get debtResumeNow => 'Resume now';
+
+  @override
+  String get debtDetailRateHistory => 'Interest rates';
+
+  @override
+  String get rateHistoryTitle => 'Interest Rate History';
+
+  @override
+  String get rateHistoryEmpty => 'No rate history';
+
+  @override
+  String get rateHistoryEmptySubtitle =>
+      'Interest rate will appear here when changed';
+
+  @override
+  String get rateHistoryCurrent => 'Current';
+
+  @override
+  String get rateHistoryAddTitle => 'Add Rate Change';
+
+  @override
+  String get rateHistoryEditTitle => 'Edit Rate Change';
+
+  @override
+  String get rateHistoryAprLabel => 'APR (%)';
+
+  @override
+  String get rateHistoryAprInvalid => 'Enter a valid APR (0-100%)';
+
+  @override
+  String get rateHistoryEffectiveFrom => 'Effective from';
+
+  @override
+  String get rateHistoryEffectiveTo => 'Effective to (optional)';
+
+  @override
+  String rateHistoryEffectiveFromOnly(Object date) {
+    return 'From $date';
+  }
+
+  @override
+  String rateHistoryEffectiveToPeriod(Object from, Object to) {
+    return '$from — $to';
+  }
+
+  @override
+  String get rateHistoryReason => 'Reason';
+
+  @override
+  String get rateHistoryReasonHint => 'e.g., Promo expired, Refinanced';
+
+  @override
+  String get rateHistoryDeleteTitle => 'Delete rate?';
+
+  @override
+  String get rateHistoryDeleteMessage =>
+      'This will permanently delete this rate history entry.';
+
+  @override
+  String get rateHistoryDeletedMsg => 'Rate history deleted';
+
+  @override
+  String get rateHistoryOpenEnded => 'No end date (current rate)';
+
+  @override
+  String get commonDelete => 'Delete';
+
+  @override
+  String get commonEdit => 'Edit';
+
+  @override
+  String get commonAdd => 'Add';
+
+  @override
+  String get commonSave => 'Save';
+
+  @override
+  String get commonOk => 'OK';
+
+  @override
+  String get commonRequired => 'Required';
+
+  @override
+  String get commonError => 'Error';
+
+  @override
   String get debtOptionsDelete => 'Delete debt';
 
   @override
@@ -1437,6 +1577,27 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get debtDetailTrackingHelper =>
       'Log real payments to reduce current balance, create an audit trail, and instantly recast your timeline.';
+
+  @override
+  String get debtDetailAddCharge => 'Add Charge';
+
+  @override
+  String get newChargeDialogTitle => 'Log New Charge';
+
+  @override
+  String get newChargeAmountLabel => 'Charge Amount';
+
+  @override
+  String get newChargeNoteLabel => 'Note (optional)';
+
+  @override
+  String get newChargeSave => 'Save Charge';
+
+  @override
+  String get newChargeSuccess => 'New charge added.';
+
+  @override
+  String get newChargeErrorInvalid => 'Please enter a valid amount.';
 
   @override
   String get debtDetailArchiveMessage =>
@@ -1792,4 +1953,62 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scenariosCopyDebtsSuccess => 'Debts copied successfully';
+
+  @override
+  String scenariosCompareDeltaTitle(String name) {
+    return '$name is the better choice';
+  }
+
+  @override
+  String scenariosCompareDeltaMonths(int months) {
+    return 'Debt-free $months months earlier';
+  }
+
+  @override
+  String scenariosCompareDeltaInterest(String amount) {
+    return 'Saves $amount in interest';
+  }
+
+  @override
+  String get scenariosCompareTie => 'Both scenarios are equivalent';
+
+  @override
+  String get monthlySummaryTitle => 'Monthly Summary';
+
+  @override
+  String get monthlySummaryTotalPaid => 'Total Paid';
+
+  @override
+  String get monthlySummaryPrincipal => 'Principal';
+
+  @override
+  String get monthlySummaryInterest => 'Interest';
+
+  @override
+  String get monthlySummaryCharges => 'New Charges';
+
+  @override
+  String get monthlySummaryPerDebt => 'By Debt';
+
+  @override
+  String get monthlySummaryNoActivity => 'No payments recorded this month';
+
+  @override
+  String get monthlySummaryNoActivitySub =>
+      'Log a payment to see your progress here.';
+
+  @override
+  String monthlySummaryPaidMore(String amount) {
+    return 'Paid $amount more than planned';
+  }
+
+  @override
+  String monthlySummaryPaidLess(String amount) {
+    return 'Paid $amount less than planned';
+  }
+
+  @override
+  String monthlySummaryBalanceReduced(String amount) {
+    return 'Balance reduced by $amount';
+  }
 }

@@ -167,16 +167,21 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                                   iconColor: _iconColorForPaymentType(
                                     payment.type,
                                   ),
-                                  iconBgColor: AppColors.mdPrimaryContainer,
+                                  iconBgColor: _iconBgColorForPaymentType(
+                                    payment.type,
+                                  ),
                                   title: _titleForPaymentType(
                                     context,
                                     payment.type,
                                   ),
+                                  note: payment.note,
                                   date: AppFormatters.formatDate(payment.date),
                                   amount: AppFormatters.formatCents(
                                     payment.amount,
                                   ),
-                                  amountColor: AppColors.mdOnSurface,
+                                  amountColor: _amountColorForPaymentType(
+                                    payment.type,
+                                  ),
                                   type: payment.source.label,
                                 ),
                               ),
@@ -219,7 +224,24 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
     if (type == PaymentType.extra || type == PaymentType.lumpSum) {
       return AppColors.mdPrimary;
     }
+    if (type == PaymentType.charge || type == PaymentType.fee) {
+      return AppColors.mdError;
+    }
     return AppColors.mdOnPrimaryContainer;
+  }
+
+  static Color _iconBgColorForPaymentType(PaymentType type) {
+    if (type == PaymentType.charge || type == PaymentType.fee) {
+      return AppColors.mdErrorContainer;
+    }
+    return AppColors.mdPrimaryContainer;
+  }
+
+  static Color _amountColorForPaymentType(PaymentType type) {
+    if (type == PaymentType.charge || type == PaymentType.fee) {
+      return AppColors.mdError;
+    }
+    return AppColors.mdOnSurface;
   }
 
   static String _titleForPaymentType(BuildContext context, PaymentType type) {

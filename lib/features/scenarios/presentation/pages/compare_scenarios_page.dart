@@ -347,6 +347,17 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
               b.savedVsMinimum != null &&
               b.savedVsMinimum! >= a.savedVsMinimum!,
         ),
+        const SizedBox(height: AppDimensions.lg),
+        _DeltaBanner(
+          snapA: a,
+          snapB: b,
+          fasterMonthsA: aFasterByMonths,
+          fasterMonthsB: bFasterByMonths,
+          cheaperByA: aCheaperBy,
+          cheaperByB: bCheaperBy,
+          currencyCode: currencyCode,
+          localeCode: localeCode,
+        ),
       ],
     );
   }
@@ -586,6 +597,120 @@ class _WinnerBadge extends StatelessWidget {
           fontWeight: FontWeight.w600,
         ),
       ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Delta summary banner — shown at bottom of comparison
+// ---------------------------------------------------------------------------
+
+class _DeltaBanner extends StatelessWidget {
+  const _DeltaBanner({
+    required this.snapA,
+    required this.snapB,
+    required this.fasterMonthsA,
+    required this.fasterMonthsB,
+    required this.cheaperByA,
+    required this.cheaperByB,
+    required this.currencyCode,
+    required this.localeCode,
+  });
+
+  final _ScenarioSnapshot snapA;
+  final _ScenarioSnapshot snapB;
+  final int? fasterMonthsA;
+  final int? fasterMonthsB;
+  final int? cheaperByA;
+  final int? cheaperByB;
+  final String currencyCode;
+  final String localeCode;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
+    final aWinsFaster = fasterMonthsA != null && fasterMonthsA! > 0;
+    final bWinsFaster = fasterMonthsB != null && fasterMonthsB! > 0;
+    final aWinsCheaper = cheaperByA != null && cheaperByA! > 0;
+    final bWinsCheaper = cheaperByB != null && cheaperByB! > 0;
+
+    final aScore = (aWinsFaster ? 1 : 0) + (aWinsCheaper ? 1 : 0);
+    final bScore = (bWinsFaster ? 1 : 0) + (bWinsCheaper ? 1 : 0);
+
+    final isTie = aScore == bScore;
+    final winnerSnap = aScore > bScore ? snapA : snapB;
+    final winnerMonths = aScore > bScore ? fasterMonthsA : fasterMonthsB;
+    final winnerSaves = aScore > bScore ? cheaperByA : cheaperByB;
+
+    return Container(
+      padding: const EdgeInsets.all(AppDimensions.md),
+      decoration: BoxDecoration(
+        color: isTie
+            ? AppColors.mdSurfaceContainerLow
+            : AppColors.mdPrimaryContainer.withValues(alpha: 0.35),
+        borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+        border: Border.all(
+          color: isTie ? AppColors.mdOutlineVariant : AppColors.mdPrimary.withValues(alpha: 0.4),
+        ),
+      ),
+      child: isTie
+          ? Row(
+              children: [
+                const Icon(LucideIcons.equal, size: 18),
+                const SizedBox(width: AppDimensions.sm),
+                Expanded(
+                  child: Text(l10n.scenariosCompareTie, style: AppTextStyles.bodyMedium),
+                ),
+              ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(LucideIcons.trophy, size: 18, color: AppColors.mdPrimary),
+                    const SizedBox(width: AppDimensions.sm),
+                    Expanded(
+                      child: Text(
+                        l10n.scenariosCompareDeltaTitle(winnerSnap.scenario.name),
+                        style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ],
+                ),
+                if (winnerMonths != null && winnerMonths > 0) ...[
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      const SizedBox(width: 26),
+                      Icon(LucideIcons.calendarClock, size: 14, color: AppColors.mdOnSurfaceVariant),
+                      const SizedBox(width: 4),
+                      Text(
+                        l10n.scenariosCompareDeltaMonths(winnerMonths),
+                        style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdOnSurfaceVariant),
+                      ),
+                    ],
+                  ),
+                ],
+                if (winnerSaves != null && winnerSaves > 0) ...[
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const SizedBox(width: 26),
+                      Icon(LucideIcons.piggyBank, size: 14, color: AppColors.mdOnSurfaceVariant),
+                      const SizedBox(width: 4),
+                      Text(
+                        l10n.scenariosCompareDeltaInterest(
+                          AppFormatters.formatCents(winnerSaves, currencyCode: currencyCode, localeCode: localeCode),
+                        ),
+                        style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdOnSurfaceVariant),
+                      ),
+                    ],
+                  ),
+                ],
+              ],
+            ),
     );
   }
 }

@@ -2332,6 +2332,12 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get commonCancel;
 
+  /// Generic confirm action.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get commonConfirm;
+
   /// Label for the total debt amount.
   ///
   /// In en, this message translates to:
@@ -2476,6 +2482,252 @@ abstract class AppLocalizations {
   /// **'Edit debt'**
   String get debtOptionsEdit;
 
+  /// Option to pause debt payments
+  ///
+  /// In en, this message translates to:
+  /// **'Pause payments'**
+  String get debtOptionsPause;
+
+  /// Subtitle for pause option
+  ///
+  /// In en, this message translates to:
+  /// **'Temporarily stop payments'**
+  String get debtOptionsPauseSubtitle;
+
+  /// Option to resume paused debt
+  ///
+  /// In en, this message translates to:
+  /// **'Resume payments'**
+  String get debtOptionsResume;
+
+  /// Subtitle for resume option with date
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-resumes on {date}'**
+  String debtOptionsResumeSubtitle(Object date);
+
+  /// Label for pause duration dropdown
+  ///
+  /// In en, this message translates to:
+  /// **'Select pause duration'**
+  String get debtPauseSelectDuration;
+
+  /// Pause duration option
+  ///
+  /// In en, this message translates to:
+  /// **'1 month'**
+  String get debtPause1Month;
+
+  /// Pause duration option
+  ///
+  /// In en, this message translates to:
+  /// **'2 months'**
+  String get debtPause2Months;
+
+  /// Pause duration option
+  ///
+  /// In en, this message translates to:
+  /// **'3 months'**
+  String get debtPause3Months;
+
+  /// Pause duration option
+  ///
+  /// In en, this message translates to:
+  /// **'6 months'**
+  String get debtPause6Months;
+
+  /// Snackbar message when debt is paused
+  ///
+  /// In en, this message translates to:
+  /// **'Paused until {date}'**
+  String debtPausedMsg(Object date);
+
+  /// Snackbar message when debt is resumed
+  ///
+  /// In en, this message translates to:
+  /// **'Resumed payments'**
+  String get debtResumedMsg;
+
+  /// Section header for paused debts
+  ///
+  /// In en, this message translates to:
+  /// **'Paused ({count})'**
+  String debtsListPausedSection(Object count);
+
+  /// Subtitle for paused debt card
+  ///
+  /// In en, this message translates to:
+  /// **'Paused until {date}'**
+  String debtPausedUntil(Object date);
+
+  /// Subtitle for paused debt without resume date
+  ///
+  /// In en, this message translates to:
+  /// **'Paused indefinitely'**
+  String get debtPausedIndefinitely;
+
+  /// Button to resume paused debt
+  ///
+  /// In en, this message translates to:
+  /// **'Resume now'**
+  String get debtResumeNow;
+
+  /// Button to view interest rate history
+  ///
+  /// In en, this message translates to:
+  /// **'Interest rates'**
+  String get debtDetailRateHistory;
+
+  /// App bar title for rate history page
+  ///
+  /// In en, this message translates to:
+  /// **'Interest Rate History'**
+  String get rateHistoryTitle;
+
+  /// Empty state when no rate history entries
+  ///
+  /// In en, this message translates to:
+  /// **'No rate history'**
+  String get rateHistoryEmpty;
+
+  /// Subtitle for empty rate history
+  ///
+  /// In en, this message translates to:
+  /// **'Interest rate will appear here when changed'**
+  String get rateHistoryEmptySubtitle;
+
+  /// Badge for currently active rate
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get rateHistoryCurrent;
+
+  /// Dialog title for adding rate
+  ///
+  /// In en, this message translates to:
+  /// **'Add Rate Change'**
+  String get rateHistoryAddTitle;
+
+  /// Dialog title for editing rate
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Rate Change'**
+  String get rateHistoryEditTitle;
+
+  /// Label for APR input
+  ///
+  /// In en, this message translates to:
+  /// **'APR (%)'**
+  String get rateHistoryAprLabel;
+
+  /// Validation error for APR
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid APR (0-100%)'**
+  String get rateHistoryAprInvalid;
+
+  /// Label for effective from date
+  ///
+  /// In en, this message translates to:
+  /// **'Effective from'**
+  String get rateHistoryEffectiveFrom;
+
+  /// Label for effective to date
+  ///
+  /// In en, this message translates to:
+  /// **'Effective to (optional)'**
+  String get rateHistoryEffectiveTo;
+
+  /// Period display for rate with only from date
+  ///
+  /// In en, this message translates to:
+  /// **'From {date}'**
+  String rateHistoryEffectiveFromOnly(Object date);
+
+  /// Period display for rate with from and to dates
+  ///
+  /// In en, this message translates to:
+  /// **'{from} — {to}'**
+  String rateHistoryEffectiveToPeriod(Object from, Object to);
+
+  /// Label for reason field
+  ///
+  /// In en, this message translates to:
+  /// **'Reason'**
+  String get rateHistoryReason;
+
+  /// Hint for reason field
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Promo expired, Refinanced'**
+  String get rateHistoryReasonHint;
+
+  /// Dialog title for delete confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Delete rate?'**
+  String get rateHistoryDeleteTitle;
+
+  /// Dialog message for delete confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'This will permanently delete this rate history entry.'**
+  String get rateHistoryDeleteMessage;
+
+  /// Snackbar message after deleting rate
+  ///
+  /// In en, this message translates to:
+  /// **'Rate history deleted'**
+  String get rateHistoryDeletedMsg;
+
+  /// Checkbox label for open-ended interest rate with no expiry
+  ///
+  /// In en, this message translates to:
+  /// **'No end date (current rate)'**
+  String get rateHistoryOpenEnded;
+
+  /// Generic delete button
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get commonDelete;
+
+  /// Generic edit button
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get commonEdit;
+
+  /// Generic add button
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get commonAdd;
+
+  /// Generic save button
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get commonSave;
+
+  /// Generic OK button
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get commonOk;
+
+  /// Validation error for required field
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get commonRequired;
+
+  /// Generic error dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get commonError;
+
   /// Option
   ///
   /// In en, this message translates to:
@@ -2589,6 +2841,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log real payments to reduce current balance, create an audit trail, and instantly recast your timeline.'**
   String get debtDetailTrackingHelper;
+
+  /// Button to log a new charge.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Charge'**
+  String get debtDetailAddCharge;
+
+  /// Title of the new charge dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Log New Charge'**
+  String get newChargeDialogTitle;
+
+  /// Label for the charge amount input.
+  ///
+  /// In en, this message translates to:
+  /// **'Charge Amount'**
+  String get newChargeAmountLabel;
+
+  /// Label for the charge note input.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get newChargeNoteLabel;
+
+  /// Button to save a new charge.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Charge'**
+  String get newChargeSave;
+
+  /// Success message when charge is added.
+  ///
+  /// In en, this message translates to:
+  /// **'New charge added.'**
+  String get newChargeSuccess;
+
+  /// Error message for invalid charge amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid amount.'**
+  String get newChargeErrorInvalid;
 
   /// Message in archive dialog.
   ///
@@ -3219,6 +3513,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Debts copied successfully'**
   String get scenariosCopyDebtsSuccess;
+
+  /// Delta banner headline naming the winning scenario
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is the better choice'**
+  String scenariosCompareDeltaTitle(String name);
+
+  /// Months faster label in delta banner
+  ///
+  /// In en, this message translates to:
+  /// **'Debt-free {months} months earlier'**
+  String scenariosCompareDeltaMonths(int months);
+
+  /// Interest savings label in delta banner
+  ///
+  /// In en, this message translates to:
+  /// **'Saves {amount} in interest'**
+  String scenariosCompareDeltaInterest(String amount);
+
+  /// Banner text when no clear winner
+  ///
+  /// In en, this message translates to:
+  /// **'Both scenarios are equivalent'**
+  String get scenariosCompareTie;
+
+  /// Title for the monthly summary page
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Summary'**
+  String get monthlySummaryTitle;
+
+  /// Label for total paid section
+  ///
+  /// In en, this message translates to:
+  /// **'Total Paid'**
+  String get monthlySummaryTotalPaid;
+
+  /// Label for principal portion
+  ///
+  /// In en, this message translates to:
+  /// **'Principal'**
+  String get monthlySummaryPrincipal;
+
+  /// Label for interest portion
+  ///
+  /// In en, this message translates to:
+  /// **'Interest'**
+  String get monthlySummaryInterest;
+
+  /// Label for new charges section
+  ///
+  /// In en, this message translates to:
+  /// **'New Charges'**
+  String get monthlySummaryCharges;
+
+  /// Section header for per-debt breakdown
+  ///
+  /// In en, this message translates to:
+  /// **'By Debt'**
+  String get monthlySummaryPerDebt;
+
+  /// Empty state message
+  ///
+  /// In en, this message translates to:
+  /// **'No payments recorded this month'**
+  String get monthlySummaryNoActivity;
+
+  /// Empty state subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Log a payment to see your progress here.'**
+  String get monthlySummaryNoActivitySub;
+
+  /// Positive variance label
+  ///
+  /// In en, this message translates to:
+  /// **'Paid {amount} more than planned'**
+  String monthlySummaryPaidMore(String amount);
+
+  /// Negative variance label
+  ///
+  /// In en, this message translates to:
+  /// **'Paid {amount} less than planned'**
+  String monthlySummaryPaidLess(String amount);
+
+  /// Balance reduction label for a debt
+  ///
+  /// In en, this message translates to:
+  /// **'Balance reduced by {amount}'**
+  String monthlySummaryBalanceReduced(String amount);
 }
 
 class _AppLocalizationsDelegate

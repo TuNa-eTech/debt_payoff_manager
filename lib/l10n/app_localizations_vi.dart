@@ -1314,6 +1314,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get commonCancel => 'Hủy';
 
   @override
+  String get commonConfirm => 'Xác nhận';
+
+  @override
   String get commonTotalDebt => 'Tổng dư nợ';
 
   @override
@@ -1388,6 +1391,143 @@ class AppLocalizationsVi extends AppLocalizations {
   String get debtOptionsEdit => 'Chỉnh sửa khoản nợ';
 
   @override
+  String get debtOptionsPause => 'Tạm dừng payments';
+
+  @override
+  String get debtOptionsPauseSubtitle => 'Tạm thời ngừng payments';
+
+  @override
+  String get debtOptionsResume => 'Kích hoạt lại';
+
+  @override
+  String debtOptionsResumeSubtitle(Object date) {
+    return 'Tự động kích hoạt vào $date';
+  }
+
+  @override
+  String get debtPauseSelectDuration => 'Chọn thời gian tạm dừng';
+
+  @override
+  String get debtPause1Month => '1 tháng';
+
+  @override
+  String get debtPause2Months => '2 tháng';
+
+  @override
+  String get debtPause3Months => '3 tháng';
+
+  @override
+  String get debtPause6Months => '6 tháng';
+
+  @override
+  String debtPausedMsg(Object date) {
+    return 'Đã tạm dừng đến $date';
+  }
+
+  @override
+  String get debtResumedMsg => 'Đã kích hoạt lại payments';
+
+  @override
+  String debtsListPausedSection(Object count) {
+    return 'Tạm dừng ($count)';
+  }
+
+  @override
+  String debtPausedUntil(Object date) {
+    return 'Tạm dừng đến $date';
+  }
+
+  @override
+  String get debtPausedIndefinitely => 'Tạm dừng vô thời hạn';
+
+  @override
+  String get debtResumeNow => 'Kích hoạt lại ngay';
+
+  @override
+  String get debtDetailRateHistory => 'Lãi suất';
+
+  @override
+  String get rateHistoryTitle => 'Lịch sử lãi suất';
+
+  @override
+  String get rateHistoryEmpty => 'Chưa có lịch sử';
+
+  @override
+  String get rateHistoryEmptySubtitle =>
+      'Lãi suất sẽ xuất hiện ở đây khi thay đổi';
+
+  @override
+  String get rateHistoryCurrent => 'Hiện tại';
+
+  @override
+  String get rateHistoryAddTitle => 'Thêm thay đổi lãi suất';
+
+  @override
+  String get rateHistoryEditTitle => 'Chỉnh sửa lãi suất';
+
+  @override
+  String get rateHistoryAprLabel => 'APR (%)';
+
+  @override
+  String get rateHistoryAprInvalid => 'Nhập APR hợp lệ (0-100%)';
+
+  @override
+  String get rateHistoryEffectiveFrom => 'Hiệu lực từ';
+
+  @override
+  String get rateHistoryEffectiveTo => 'Đến (tùy chọn)';
+
+  @override
+  String rateHistoryEffectiveFromOnly(Object date) {
+    return 'Từ $date';
+  }
+
+  @override
+  String rateHistoryEffectiveToPeriod(Object from, Object to) {
+    return '$from — $to';
+  }
+
+  @override
+  String get rateHistoryReason => 'Lý do';
+
+  @override
+  String get rateHistoryReasonHint => 'VD: Hết promo, tái cấp vốn';
+
+  @override
+  String get rateHistoryDeleteTitle => 'Xóa lãi suất?';
+
+  @override
+  String get rateHistoryDeleteMessage => 'Mục này sẽ bị xóa vĩnh viễn.';
+
+  @override
+  String get rateHistoryDeletedMsg => 'Đã xóa lịch sử lãi suất';
+
+  @override
+  String get rateHistoryOpenEnded =>
+      'Không có ngày kết thúc (lãi suất hiện tại)';
+
+  @override
+  String get commonDelete => 'Xóa';
+
+  @override
+  String get commonEdit => 'Sửa';
+
+  @override
+  String get commonAdd => 'Thêm';
+
+  @override
+  String get commonSave => 'Lưu';
+
+  @override
+  String get commonOk => 'OK';
+
+  @override
+  String get commonRequired => 'Bắt buộc';
+
+  @override
+  String get commonError => 'Lỗi';
+
+  @override
   String get debtOptionsDelete => 'Xóa khoản nợ';
 
   @override
@@ -1445,6 +1585,27 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get debtDetailTrackingHelper =>
       'Log payment thật để giảm current balance, tạo audit trail trước/sau, và recast timeline ngay lập tức.';
+
+  @override
+  String get debtDetailAddCharge => 'Thêm phát sinh';
+
+  @override
+  String get newChargeDialogTitle => 'Ghi nhận phát sinh';
+
+  @override
+  String get newChargeAmountLabel => 'Số tiền phát sinh';
+
+  @override
+  String get newChargeNoteLabel => 'Ghi chú (tuỳ chọn)';
+
+  @override
+  String get newChargeSave => 'Lưu phát sinh';
+
+  @override
+  String get newChargeSuccess => 'Đã thêm khoản phát sinh mới.';
+
+  @override
+  String get newChargeErrorInvalid => 'Vui lòng nhập số tiền hợp lệ.';
 
   @override
   String get debtDetailArchiveMessage =>
@@ -1803,4 +1964,63 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get scenariosCopyDebtsSuccess => 'Đã sao chép khoản nợ thành công';
+
+  @override
+  String scenariosCompareDeltaTitle(String name) {
+    return '$name là lựa chọn tốt hơn';
+  }
+
+  @override
+  String scenariosCompareDeltaMonths(int months) {
+    return 'Trả hết nợ sớm hơn $months tháng';
+  }
+
+  @override
+  String scenariosCompareDeltaInterest(String amount) {
+    return 'Tiết kiệm $amount lãi suất';
+  }
+
+  @override
+  String get scenariosCompareTie => 'Hai kịch bản tương đương nhau';
+
+  @override
+  String get monthlySummaryTitle => 'Tổng kết tháng';
+
+  @override
+  String get monthlySummaryTotalPaid => 'Đã thanh toán';
+
+  @override
+  String get monthlySummaryPrincipal => 'Gốc';
+
+  @override
+  String get monthlySummaryInterest => 'Lãi';
+
+  @override
+  String get monthlySummaryCharges => 'Phát sinh mới';
+
+  @override
+  String get monthlySummaryPerDebt => 'Theo khoản nợ';
+
+  @override
+  String get monthlySummaryNoActivity =>
+      'Chưa ghi nhận thanh toán nào trong tháng này';
+
+  @override
+  String get monthlySummaryNoActivitySub =>
+      'Hãy ghi nhận thanh toán để theo dõi tiến độ.';
+
+  @override
+  String monthlySummaryPaidMore(String amount) {
+    return 'Trả nhiều hơn kế hoạch $amount';
+  }
+
+  @override
+  String monthlySummaryPaidLess(String amount) {
+    return 'Trả ít hơn kế hoạch $amount';
+  }
+
+  @override
+  String monthlySummaryBalanceReduced(String amount) {
+    return 'Dư nợ giảm $amount';
+  }
 }

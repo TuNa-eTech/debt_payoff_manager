@@ -1,8 +1,11 @@
 import 'dart:math';
 
+import 'package:decimal/decimal.dart';
+
 import '../core/constants/app_constants.dart';
 import '../core/extensions/date_extensions.dart';
 import '../domain/entities/debt.dart';
+import '../domain/entities/interest_rate_history.dart';
 import '../domain/entities/plan.dart';
 import '../domain/entities/timeline_projection.dart';
 import '../domain/enums/debt_status.dart';
@@ -30,6 +33,7 @@ abstract final class TimelineSimulator {
     required Plan plan,
     required DateTime startDate,
     required DateTime generatedAt,
+    Map<String, List<InterestRateHistory>>? rateHistoryByDebt,
     int maxMonths = AppConstants.maxSimulationMonths,
   }) {
     // Working copies of balances (cents)
@@ -65,9 +69,16 @@ abstract final class TimelineSimulator {
           continue;
         }
 
+        // Get APR for this month (supports rate changes)
+        final currentApr = _getAprForMonth(
+          debt: debt,
+          monthDate: currentDate,
+          rateHistory: rateHistoryByDebt?[id] ?? [],
+        );
+
         final interest = InterestCalculator.computeMonthlyInterest(
           balanceCents: balance,
-          apr: debt.apr,
+          apr: currentApr,
           method: debt.interestMethod,
           daysInMonth: currentDate.daysInMonth,
         );
@@ -80,12 +91,6 @@ abstract final class TimelineSimulator {
       final scheduledMinimums = <String, int>{};
       for (final id in activeIds) {
         final debt = debtMap[id]!;
-        if (pausedIds.contains(id)) {
-          minPayments[id] = 0;
-          scheduledMinimums[id] = 0;
-          continue;
-        }
-
         final interest = interestMap[id] ?? 0;
         final minPay = MinPaymentCalculator.compute(
           balanceCents: balances[id]!,
@@ -96,6 +101,13 @@ abstract final class TimelineSimulator {
           floorCents: debt.minimumPaymentFloor,
         );
         scheduledMinimums[id] = minPay;
+
+        if (pausedIds.contains(id)) {
+          // Freed minimum flows to extra pool this month (forbearance behaviour).
+          minPayments[id] = 0;
+          continue;
+        }
+
         final actualMin = min(minPay, balances[id]!);
         minPayments[id] = actualMin;
         balances[id] = balances[id]! - actualMin;
@@ -114,7 +126,11 @@ abstract final class TimelineSimulator {
         plan.customOrder,
       );
 
-      var extraPool = plan.extraMonthlyAmount + recurringRolloverPool;
+      // Freed minimums from paused debts boost this month's extra pool.
+      final pausedFreed =
+          pausedIds.fold(0, (sum, id) => sum + (scheduledMinimums[id] ?? 0));
+      var extraPool =
+          plan.extraMonthlyAmount + recurringRolloverPool + pausedFreed;
       for (final debt in sorted) {
         if (extraPool <= 0) break;
         final balance = balances[debt.id]!;
@@ -225,5 +241,27 @@ abstract final class TimelineSimulator {
       generatedAt: generatedAt,
       maxMonths: maxMonths,
     );
+  }
+
+  /// Get the APR for a specific month, considering rate history.
+  ///
+  /// Returns the rate that was active during [monthDate], or falls back
+  /// to [debt.apr] if no rate history matches.
+  static Decimal _getAprForMonth({
+    required Debt debt,
+    required DateTime monthDate,
+    required List<InterestRateHistory> rateHistory,
+  }) {
+    if (rateHistory.isEmpty) return debt.apr;
+
+    // Find the rate that was active during this month
+    for (final rate in rateHistory) {
+      if (rate.isActiveAt(monthDate)) {
+        return rate.apr;
+      }
+    }
+
+    // Fallback to current APR if no historical rate matches
+    return debt.apr;
   }
 }

@@ -18,6 +18,7 @@ import '../../../../domain/repositories/debt_repository.dart';
 import '../../../../engine/interest_calculator.dart';
 import '../../../../engine/validators.dart';
 import '../../cubit/debts_cubit.dart';
+import '../widgets/add_charge_sheet.dart';
 import '../widgets/debt_detail_hero_card.dart';
 import '../widgets/debt_info_row.dart';
 import '../widgets/debt_options_sheet.dart';
@@ -243,6 +244,32 @@ class _DebtDetailPageState extends State<DebtDetailPage> {
                           ),
                         ],
                       ),
+                      const SizedBox(height: AppDimensions.sm),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: AppButton.text(
+                              label: context.l10n.debtDetailRateHistory,
+                              icon: LucideIcons.percent,
+                              onPressed: () => context.push(
+                                AppRoutes.rateHistoryPath(debt.id),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: AppDimensions.sm),
+                          Expanded(
+                            child: AppButton.text(
+                              key: AppTestKeys.debtDetailAddCharge,
+                              label: context.l10n.debtDetailAddCharge,
+                              icon: LucideIcons.creditCard,
+                              onPressed: () => AddChargeSheet.show(
+                                context,
+                                debt: debt,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -280,7 +307,80 @@ class _DebtDetailPageState extends State<DebtDetailPage> {
           : debt.status == DebtStatus.archived
           ? () => _unarchiveDebt(context, debt)
           : null,
+      onPause: debt.status == DebtStatus.active
+          ? () => _showPauseDialog(context, debt)
+          : null,
+      onResume: debt.status == DebtStatus.paused
+          ? () => _resumeDebt(context, debt)
+          : null,
       onDelete: () => _deleteDebt(context, debt),
+    );
+  }
+
+  Future<void> _showPauseDialog(BuildContext context, Debt debt) async {
+    int? selectedMonths;
+    await showDialog<int>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (dialogContext, setDialogState) {
+          return AlertDialog(
+            title: Text(context.l10n.debtOptionsPause),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(context.l10n.debtPauseSelectDuration),
+                const SizedBox(height: 16),
+                DropdownMenu<int>(
+                  initialSelection: 1,
+                  onSelected: (value) {
+                    setDialogState(() => selectedMonths = value);
+                  },
+                  dropdownMenuEntries: [
+                    DropdownMenuEntry(value: 1, label: context.l10n.debtPause1Month),
+                    DropdownMenuEntry(value: 2, label: context.l10n.debtPause2Months),
+                    DropdownMenuEntry(value: 3, label: context.l10n.debtPause3Months),
+                    DropdownMenuEntry(value: 6, label: context.l10n.debtPause6Months),
+                  ],
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: Text(context.l10n.commonCancel),
+              ),
+              FilledButton(
+                onPressed: () {
+                  if (selectedMonths != null) Navigator.pop(ctx, selectedMonths);
+                },
+                child: Text(context.l10n.commonConfirm),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+
+    if (selectedMonths == null || !context.mounted) return;
+
+    final pausedUntil = DateTime.now().add(Duration(days: 30 * selectedMonths!));
+    await context.read<DebtsCubit>().pauseDebt(debt, pausedUntil);
+    
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          context.l10n.debtPausedMsg(AppFormatters.formatDate(pausedUntil)),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _resumeDebt(BuildContext context, Debt debt) async {
+    await context.read<DebtsCubit>().resumeDebt(debt);
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(context.l10n.debtResumedMsg)),
     );
   }
 

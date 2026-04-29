@@ -136,8 +136,9 @@ void main() {
     );
 
     test(
-      'validates charge must use negative principal and higher balance',
+      'validates charge: appliedBalanceAfter must not be less than before',
       () async {
+        // A charge that decreases the balance is invalid.
         expect(
           () => repo.addPayment(
             makeRepoPayment(
@@ -146,23 +147,24 @@ void main() {
               principalPortion: 5000,
               interestPortion: 0,
               appliedBalanceBefore: 100000,
-              appliedBalanceAfter: 105000,
+              appliedBalanceAfter: 95000, // decreases — invalid
             ),
           ),
           throwsA(isA<ArgumentError>()),
         );
 
-        final charge = makeRepoPayment(
-          id: 'charge-ok',
+        // A charge with positive principalPortion (logNewCharge convention) is valid.
+        final chargePositivePrincipal = makeRepoPayment(
+          id: 'charge-positive',
           type: PaymentType.charge,
           amount: 5000,
-          principalPortion: -5000,
-          interestPortion: 10000,
+          principalPortion: 5000,
+          interestPortion: 0,
           appliedBalanceBefore: 100000,
           appliedBalanceAfter: 105000,
         );
-        await repo.addPayment(charge);
-        final persisted = await repo.getPaymentById('charge-ok');
+        await repo.addPayment(chargePositivePrincipal);
+        final persisted = await repo.getPaymentById('charge-positive');
         expect(persisted, isNotNull);
         expect(persisted!.type, PaymentType.charge);
       },

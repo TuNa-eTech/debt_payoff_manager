@@ -70,6 +70,9 @@ class DebtsState extends Equatable {
   int get archivedCount =>
       debts.where((debt) => debt.status == DebtStatus.archived).length;
 
+  int get pausedCount =>
+      debts.where((debt) => debt.status == DebtStatus.paused).length;
+
   DebtsState copyWith({
     bool? isLoading,
     List<Debt>? debts,

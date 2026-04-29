@@ -5,6 +5,7 @@ import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/utils/formatters.dart';
 import '../../../../domain/entities/debt.dart';
 import '../../../../domain/enums/debt_status.dart';
 
@@ -15,17 +16,23 @@ class DebtOptionsSheet extends StatelessWidget {
     required this.onEdit,
     this.onArchiveToggle,
     required this.onDelete,
+    this.onPause,
+    this.onResume,
   });
 
   final Debt debt;
   final VoidCallback onEdit;
   final VoidCallback? onArchiveToggle;
   final VoidCallback onDelete;
+  final VoidCallback? onPause;
+  final VoidCallback? onResume;
 
   @override
   Widget build(BuildContext context) {
     final canArchive =
         debt.status == DebtStatus.paidOff || debt.status == DebtStatus.archived;
+    final canPause = debt.status == DebtStatus.active;
+    final canResume = debt.status == DebtStatus.paused;
 
     return Container(
       decoration: const BoxDecoration(
@@ -58,6 +65,25 @@ class DebtOptionsSheet extends StatelessWidget {
             label: context.l10n.debtOptionsEdit,
             onTap: onEdit,
           ),
+          if (canPause)
+            _SheetAction(
+              key: AppTestKeys.debtOptionPause,
+              icon: LucideIcons.pauseCircle,
+              label: context.l10n.debtOptionsPause,
+              subtitle: context.l10n.debtOptionsPauseSubtitle,
+              onTap: onPause,
+            ),
+          if (canResume)
+            _SheetAction(
+              key: AppTestKeys.debtOptionResume,
+              icon: LucideIcons.playCircle,
+              label: context.l10n.debtOptionsResume,
+              subtitle: debt.pausedUntil != null
+                  ? context.l10n.debtOptionsResumeSubtitle(
+                      AppFormatters.formatDate(debt.pausedUntil!))
+                  : null,
+              onTap: onResume,
+            ),
           if (canArchive)
             _SheetAction(
               key: debt.status == DebtStatus.archived
@@ -94,6 +120,8 @@ class DebtOptionsSheet extends StatelessWidget {
     required VoidCallback onEdit,
     VoidCallback? onArchiveToggle,
     required VoidCallback onDelete,
+    VoidCallback? onPause,
+    VoidCallback? onResume,
   }) {
     return showModalBottomSheet(
       context: context,
@@ -110,6 +138,18 @@ class DebtOptionsSheet extends StatelessWidget {
             : () {
                 Navigator.pop(context);
                 onArchiveToggle();
+              },
+        onPause: onPause == null
+            ? null
+            : () {
+                Navigator.pop(context);
+                onPause();
+              },
+        onResume: onResume == null
+            ? null
+            : () {
+                Navigator.pop(context);
+                onResume();
               },
         onDelete: () {
           Navigator.pop(context);
