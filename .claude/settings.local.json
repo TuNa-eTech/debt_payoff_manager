@@ -13,7 +13,16 @@
       "Bash(rtk read *)",
       "Bash(rtk npx *)",
       "Bash(gitnexus analyze *)",
-      "Bash(fvm dart *)"
+      "Bash(fvm dart *)",
+      "mcp__dart__analyze_files",
+      "Bash(flutter gen-l10n *)",
+      "Bash(/Users/anhtu/fvm/default/bin/flutter gen-l10n *)",
+      "mcp__dart__run_tests",
+      "Bash(/Users/anhtu/fvm/default/bin/flutter test *)",
+      "Bash(grep -vE \"^\\\\[|^🧭|^NotificationService|^$|resolving|downloading|Changed|package\")",
+      "Bash(sort -t+ -k2 -n)",
+      "Bash(rtk dart *)",
+      "Bash(~/.fvm/default/bin/flutter gen-l10n *)"
     ]
   }
 }
