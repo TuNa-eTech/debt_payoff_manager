@@ -1886,6 +1886,10 @@
   "@rateHistoryCurrent": {
     "description": "Badge for currently active rate"
   },
+  "rateHistoryUpcoming": "Upcoming",
+  "@rateHistoryUpcoming": {
+    "description": "Badge for a future interest rate change"
+  },
   "rateHistoryAddTitle": "Add Rate Change",
   "@rateHistoryAddTitle": {
     "description": "Dialog title for adding rate"
@@ -2557,6 +2561,10 @@
   "scenariosCopyDebtsSuccess": "Debts copied successfully",
   "@scenariosCopyDebtsSuccess": {
     "description": "Snackbar after copying debts"
+  },
+  "scenariosNoOtherScenarios": "No other scenarios available.",
+  "@scenariosNoOtherScenarios": {
+    "description": "Snackbar shown when there is no target scenario for copying debts"
   },
 
   "scenariosCompareDeltaTitle": "{name} is the better choice",

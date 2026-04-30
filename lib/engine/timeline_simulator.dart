@@ -127,8 +127,10 @@ abstract final class TimelineSimulator {
       );
 
       // Freed minimums from paused debts boost this month's extra pool.
-      final pausedFreed =
-          pausedIds.fold(0, (sum, id) => sum + (scheduledMinimums[id] ?? 0));
+      final pausedFreed = pausedIds.fold(
+        0,
+        (sum, id) => sum + (scheduledMinimums[id] ?? 0),
+      );
       var extraPool =
           plan.extraMonthlyAmount + recurringRolloverPool + pausedFreed;
       for (final debt in sorted) {
@@ -216,6 +218,7 @@ abstract final class TimelineSimulator {
   static TimelineProjection simulateMinimumOnly({
     required List<Debt> debts,
     required Plan plan,
+    Map<String, List<InterestRateHistory>>? rateHistoryByDebt,
     required DateTime startDate,
     required DateTime generatedAt,
     int maxMonths = AppConstants.maxSimulationMonths,
@@ -237,6 +240,7 @@ abstract final class TimelineSimulator {
     return simulate(
       debts: debts,
       plan: minOnlyPlan,
+      rateHistoryByDebt: rateHistoryByDebt,
       startDate: startDate,
       generatedAt: generatedAt,
       maxMonths: maxMonths,
@@ -254,8 +258,11 @@ abstract final class TimelineSimulator {
   }) {
     if (rateHistory.isEmpty) return debt.apr;
 
-    // Find the rate that was active during this month
-    for (final rate in rateHistory) {
+    final sortedHistory = List<InterestRateHistory>.of(rateHistory)
+      ..sort((a, b) => b.effectiveFrom.compareTo(a.effectiveFrom));
+
+    // Find the most recent rate that was active during this month.
+    for (final rate in sortedHistory) {
       if (rate.isActiveAt(monthDate)) {
         return rate.apr;
       }

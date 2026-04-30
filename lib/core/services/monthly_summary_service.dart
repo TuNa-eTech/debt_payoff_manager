@@ -65,27 +65,31 @@ class MonthlySummaryService {
     required DebtRepository debtRepository,
     required PaymentRepository paymentRepository,
     required PlanRepository planRepository,
-  })  : _debtRepository = debtRepository,
-        _paymentRepository = paymentRepository,
-        _planRepository = planRepository;
+  }) : _debtRepository = debtRepository,
+       _paymentRepository = paymentRepository,
+       _planRepository = planRepository;
 
   final DebtRepository _debtRepository;
   final PaymentRepository _paymentRepository;
   final PlanRepository _planRepository;
 
-  Future<MonthlySummaryData> getSummary(DateTime month) async {
+  Future<MonthlySummaryData> getSummary(
+    DateTime month, {
+    String scenarioId = 'main',
+  }) async {
     final monthStart = DateTime.utc(month.year, month.month);
     final monthEnd = DateTime.utc(month.year, month.month + 1);
 
     final payments = await _paymentRepository.getAllPayments(
+      scenarioId: scenarioId,
       fromDate: monthStart,
       toDate: monthEnd,
     );
 
-    final debts = await _debtRepository.getAllDebts();
+    final debts = await _debtRepository.getAllDebts(scenarioId: scenarioId);
     final debtById = {for (final d in debts) d.id: d};
 
-    final plan = await _planRepository.getCurrentPlan();
+    final plan = await _planRepository.getCurrentPlan(scenarioId: scenarioId);
 
     int totalPaid = 0;
     int totalExtra = 0;
@@ -139,8 +143,7 @@ class MonthlySummaryService {
         balanceBefore: balanceBefore,
         balanceAfter: balanceAfter,
       );
-    }).toList()
-      ..sort((a, b) => b.paidCents.compareTo(a.paidCents));
+    }).toList()..sort((a, b) => b.paidCents.compareTo(a.paidCents));
 
     return MonthlySummaryData(
       month: month,

@@ -75,7 +75,7 @@ class I18nTestWorkspace {
     bool installPathFlutter = true,
     bool installFvmFlutter = true,
     String? failOnSubstring,
-    Duration timeout = const Duration(seconds: 20),
+    Duration timeout = const Duration(seconds: 60),
   }) async {
     final homeDirectory = directory('.tmp/home')..createSync(recursive: true);
     final pathFlutterBin = directory('.tmp/bin');

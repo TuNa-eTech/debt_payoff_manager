@@ -76,8 +76,8 @@ class ScenariosPage extends StatelessWidget {
       context: context,
       builder: (dialogContext) => _ScenarioNameDialog(
         title: context.l10n.scenariosAddTitle,
-        onConfirm: (name) =>
-            context.read<ScenariosCubit>().addScenario(name),
+        confirmLabel: context.l10n.commonAdd,
+        onConfirm: (name) => context.read<ScenariosCubit>().addScenario(name),
       ),
     );
   }
@@ -132,7 +132,7 @@ class _ScenarioCard extends StatelessWidget {
                 ),
               PopupMenuItem(
                 value: _ScenarioAction.duplicate,
-                child: const Text('Duplicate'),
+                child: Text(l10n.scenariosDuplicateTitle),
               ),
               PopupMenuItem(
                 value: _ScenarioAction.copyDebts,
@@ -167,8 +167,8 @@ class _ScenarioCard extends StatelessWidget {
           builder: (dialogContext) => _ScenarioNameDialog(
             title: l10n.scenariosDuplicateTitle,
             initialValue: '${scenario.name} (copy)',
-            onConfirm: (name) =>
-                cubit.duplicateScenario(scenario.id, name),
+            confirmLabel: l10n.commonSave,
+            onConfirm: (name) => cubit.duplicateScenario(scenario.id, name),
           ),
         );
       case _ScenarioAction.delete:
@@ -209,9 +209,9 @@ class _ScenarioCard extends StatelessWidget {
         .where((s) => s.id != scenario.id)
         .toList();
     if (allScenarios.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No other scenarios available.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.scenariosNoOtherScenarios)));
       return;
     }
     Scenario? target = allScenarios.first;
@@ -242,17 +242,13 @@ class _ScenarioCard extends StatelessWidget {
                         .toList(),
                     onChanged: (id) {
                       setDialogState(() {
-                        target = allScenarios
-                            .firstWhere((s) => s.id == id);
+                        target = allScenarios.firstWhere((s) => s.id == id);
                       });
                     },
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    l10n.scenariosCopyDebtsMessage(
-                      scenario.name,
-                      target!.name,
-                    ),
+                    l10n.scenariosCopyDebtsMessage(scenario.name, target!.name),
                     style: AppTextStyles.bodySmall,
                   ),
                 ],
@@ -260,7 +256,7 @@ class _ScenarioCard extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(dialogContext, false),
-                  child: const Text('Cancel'),
+                  child: Text(l10n.commonCancel),
                 ),
                 FilledButton(
                   onPressed: () => Navigator.pop(dialogContext, true),
@@ -275,9 +271,9 @@ class _ScenarioCard extends StatelessWidget {
     if (confirmed == true && context.mounted) {
       await cubit.copyDebtsToScenario(scenario.id, target!.id);
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.scenariosCopyDebtsSuccess)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.scenariosCopyDebtsSuccess)));
       }
     }
   }
@@ -288,11 +284,13 @@ enum _ScenarioAction { setActive, duplicate, copyDebts, delete }
 class _ScenarioNameDialog extends StatefulWidget {
   const _ScenarioNameDialog({
     required this.title,
+    required this.confirmLabel,
     required this.onConfirm,
     this.initialValue,
   });
 
   final String title;
+  final String confirmLabel;
   final String? initialValue;
   final void Function(String name) onConfirm;
 
@@ -301,8 +299,9 @@ class _ScenarioNameDialog extends StatefulWidget {
 }
 
 class _ScenarioNameDialogState extends State<_ScenarioNameDialog> {
-  late final TextEditingController _controller =
-      TextEditingController(text: widget.initialValue);
+  late final TextEditingController _controller = TextEditingController(
+    text: widget.initialValue,
+  );
 
   @override
   void dispose() {
@@ -317,21 +316,16 @@ class _ScenarioNameDialogState extends State<_ScenarioNameDialog> {
       content: TextField(
         controller: _controller,
         autofocus: true,
-        decoration: InputDecoration(
-          hintText: context.l10n.scenariosNameHint,
-        ),
+        decoration: InputDecoration(hintText: context.l10n.scenariosNameHint),
         textCapitalization: TextCapitalization.sentences,
         onSubmitted: (_) => _confirm(),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.commonCancel),
         ),
-        FilledButton(
-          onPressed: _confirm,
-          child: const Text('Create'),
-        ),
+        FilledButton(onPressed: _confirm, child: Text(widget.confirmLabel)),
       ],
     );
   }

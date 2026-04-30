@@ -37,21 +37,19 @@ class ReminderSchedulerService {
   StreamSubscription<Object?>? _debtSubscription;
   StreamSubscription<Object?>? _paymentSubscription;
   bool _initialized = false;
+  String? _watchedScenarioId;
 
   /// Listen to settings and debts to automatically reschedule.
   void init() {
     if (_initialized) return;
     _initialized = true;
 
-    _settingsSubscription = _settingsRepository.watchSettings().listen(
-      (_) => unawaited(rescheduleAllReminders()),
-    );
-    _debtSubscription = _debtRepository.watchAllDebts().listen(
-      (_) => unawaited(rescheduleAllReminders()),
-    );
-    _paymentSubscription = _paymentRepository.watchAllPayments().listen(
-      (_) => unawaited(rescheduleAllReminders()),
-    );
+    _settingsSubscription = _settingsRepository.watchSettings().listen((
+      settings,
+    ) {
+      unawaited(_watchScenarioData(settings.activeScenarioId));
+      unawaited(rescheduleAllReminders());
+    });
 
     unawaited(rescheduleAllReminders());
   }
@@ -64,13 +62,15 @@ class ReminderSchedulerService {
     _debtSubscription = null;
     _paymentSubscription = null;
     _initialized = false;
+    _watchedScenarioId = null;
   }
 
   /// Reschedules all due date reminders.
   /// Call this when debts change or when notification settings change.
   Future<void> rescheduleAllReminders() async {
     final settings = await _settingsRepository.getSettings();
-    final debts = await _debtRepository.getAllDebts(scenarioId: 'main');
+    final scenarioId = settings.activeScenarioId;
+    final debts = await _debtRepository.getAllDebts(scenarioId: scenarioId);
     await _cancelReminderNotifications(debts);
 
     if (!settings.notifPaymentReminder && !settings.notifMonthlyLog) {
@@ -142,6 +142,7 @@ class ReminderSchedulerService {
     if (settings.notifMonthlyLog) {
       await _scheduleMonthlyLogReminder(
         activeDebtIds: activeDebts.map((debt) => debt.id).toSet(),
+        scenarioId: scenarioId,
         now: now,
         l10n: l10n,
       );
@@ -183,6 +184,7 @@ class ReminderSchedulerService {
 
   Future<void> _scheduleMonthlyLogReminder({
     required Set<String> activeDebtIds,
+    required String scenarioId,
     required DateTime now,
     required AppLocalizations l10n,
   }) async {
@@ -191,7 +193,7 @@ class ReminderSchedulerService {
     final monthStart = DateTime(now.year, now.month, 1);
     final monthEnd = DateTime(now.year, now.month + 1, 0);
     final paymentsThisMonth = await _paymentRepository.getAllPayments(
-      scenarioId: 'main',
+      scenarioId: scenarioId,
       fromDate: monthStart,
       toDate: monthEnd,
     );
@@ -221,5 +223,18 @@ class ReminderSchedulerService {
           : scheduledDate,
       payload: 'monthly_log',
     );
+  }
+
+  Future<void> _watchScenarioData(String scenarioId) async {
+    if (_watchedScenarioId == scenarioId) return;
+    _watchedScenarioId = scenarioId;
+    await _debtSubscription?.cancel();
+    await _paymentSubscription?.cancel();
+    _debtSubscription = _debtRepository
+        .watchAllDebts(scenarioId: scenarioId)
+        .listen((_) => unawaited(rescheduleAllReminders()));
+    _paymentSubscription = _paymentRepository
+        .watchAllPayments(scenarioId: scenarioId)
+        .listen((_) => unawaited(rescheduleAllReminders()));
   }
 }

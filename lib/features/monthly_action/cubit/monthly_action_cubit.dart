@@ -10,6 +10,7 @@ import '../../../../domain/enums/payment_type.dart';
 import '../../../../domain/repositories/debt_repository.dart';
 import '../../../../domain/repositories/payment_repository.dart';
 import '../../../../domain/repositories/plan_repository.dart';
+import '../../../../domain/repositories/settings_repository.dart';
 import 'monthly_action_state.dart';
 
 /// Cubit managing the monthly action home view.
@@ -20,11 +21,13 @@ class MonthlyActionCubit extends Cubit<MonthlyActionState> {
     required DebtRepository debtRepository,
     required PaymentRepository paymentRepository,
     required PlanRepository planRepository,
+    SettingsRepository? settingsRepository,
   }) : _monthlyActionService = monthlyActionService,
        _paymentLoggingService = paymentLoggingService,
        _debtRepository = debtRepository,
        _paymentRepository = paymentRepository,
        _planRepository = planRepository,
+       _settingsRepository = settingsRepository,
        super(const MonthlyActionState());
 
   final MonthlyActionService _monthlyActionService;
@@ -32,19 +35,34 @@ class MonthlyActionCubit extends Cubit<MonthlyActionState> {
   final DebtRepository _debtRepository;
   final PaymentRepository _paymentRepository;
   final PlanRepository _planRepository;
-  StreamSubscription<List<Object?>>? _subscription;
+  final SettingsRepository? _settingsRepository;
+  StreamSubscription<Object?>? _subscription;
+  String _activeScenarioId = 'main';
 
   Future<void> start() async {
     await _subscription?.cancel();
     emit(state.copyWith(isLoading: true, clearErrorMessage: true));
-    _subscription =
-        CombineLatestStream.list<Object?>([
-          _debtRepository.watchAllDebts(),
-          _paymentRepository.watchAllPayments(),
-          _planRepository.watchCurrentPlan(),
-        ]).listen(
-          (_) {
-            unawaited(loadMonthlyActions());
+    final settingsRepository = _settingsRepository;
+    final initialScenarioId = settingsRepository == null
+        ? 'main'
+        : (await settingsRepository.getSettings()).activeScenarioId;
+    final scenarioStream = settingsRepository == null
+        ? Stream<String>.value('main')
+        : settingsRepository
+              .watchSettings()
+              .map((settings) => settings.activeScenarioId)
+              .distinct();
+    _subscription = scenarioStream
+        .switchMap(
+          (scenarioId) => CombineLatestStream.list<Object?>([
+            _debtRepository.watchAllDebts(scenarioId: scenarioId),
+            _paymentRepository.watchAllPayments(scenarioId: scenarioId),
+            _planRepository.watchCurrentPlan(scenarioId: scenarioId),
+          ]).map((_) => scenarioId),
+        )
+        .listen(
+          (scenarioId) {
+            unawaited(loadMonthlyActions(scenarioId: scenarioId));
           },
           onError: (Object error, StackTrace stackTrace) {
             emit(
@@ -52,13 +70,19 @@ class MonthlyActionCubit extends Cubit<MonthlyActionState> {
             );
           },
         );
-    await loadMonthlyActions();
+    await loadMonthlyActions(scenarioId: initialScenarioId);
   }
 
-  Future<void> loadMonthlyActions({Set<String>? submittingIds}) async {
+  Future<void> loadMonthlyActions({
+    Set<String>? submittingIds,
+    String? scenarioId,
+  }) async {
     try {
+      final activeScenarioId = scenarioId ?? _activeScenarioId;
+      _activeScenarioId = activeScenarioId;
       final snapshot = await _monthlyActionService.load(
         referenceDate: state.referenceDate,
+        scenarioId: activeScenarioId,
       );
       emit(
         state.copyWith(

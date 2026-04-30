@@ -53,6 +53,7 @@ import '../services/streak_service.dart';
 import '../../data/repositories/scenario_repository_impl.dart';
 import '../../domain/repositories/scenario_repository.dart';
 import '../../data/repositories/interest_rate_history_repository_impl.dart';
+import '../../data/repositories/tracked_interest_rate_history_repository.dart';
 import '../../domain/repositories/interest_rate_history_repository.dart';
 import '../../features/progress/cubit/progress_cubit.dart';
 import '../../features/scenarios/cubit/scenarios_cubit.dart';
@@ -96,6 +97,9 @@ void configureDependencies({
   getIt.registerLazySingleton<MilestoneRepositoryImpl>(
     () => MilestoneRepositoryImpl(db: getIt<AppDatabase>()),
   );
+  getIt.registerLazySingleton<InterestRateHistoryRepositoryImpl>(
+    () => InterestRateHistoryRepositoryImpl(db: getIt<AppDatabase>()),
+  );
 
   // Local stores
   getIt.registerLazySingleton<SyncStateStore>(
@@ -109,6 +113,7 @@ void configureDependencies({
   getIt.registerLazySingleton<PlanRecastService>(
     () => PlanRecastService(
       debtRepository: getIt<DebtRepositoryImpl>(),
+      interestRateHistoryRepository: getIt<InterestRateHistoryRepositoryImpl>(),
       planRepository: getIt<PlanRepositoryImpl>(),
       syncStateStore: getIt<SyncStateStore>(),
       timelineCacheStore: getIt<TimelineCacheStore>(),
@@ -316,7 +321,12 @@ void configureDependencies({
 
   // Interest Rate History
   getIt.registerLazySingleton<InterestRateHistoryRepository>(
-    () => InterestRateHistoryRepositoryImpl(db: getIt<AppDatabase>()),
+    () => TrackedInterestRateHistoryRepository(
+      base: getIt<InterestRateHistoryRepositoryImpl>(),
+      debtRepository: getIt<DebtRepositoryImpl>(),
+      syncStateStore: getIt<SyncStateStore>(),
+      planRecastService: getIt<PlanRecastService>(),
+    ),
   );
 
   // Progress
@@ -328,6 +338,7 @@ void configureDependencies({
       paymentRepository: getIt<PaymentRepository>(),
       milestoneRepository: getIt<MilestoneRepository>(),
       streakService: getIt<StreakService>(),
+      settingsRepository: getIt<SettingsRepository>(),
     ),
   );
 
@@ -338,7 +349,10 @@ void configureDependencies({
 
   // Feature state
   getIt.registerFactory<DebtsCubit>(
-    () => DebtsCubit(debtRepository: getIt<DebtRepository>()),
+    () => DebtsCubit(
+      debtRepository: getIt<DebtRepository>(),
+      settingsRepository: getIt<SettingsRepository>(),
+    ),
   );
   getIt.registerFactory<MonthlyActionCubit>(
     () => MonthlyActionCubit(
@@ -347,6 +361,7 @@ void configureDependencies({
       debtRepository: getIt<DebtRepository>(),
       paymentRepository: getIt<PaymentRepository>(),
       planRepository: getIt<PlanRepository>(),
+      settingsRepository: getIt<SettingsRepository>(),
     ),
   );
   getIt.registerFactory<PlanTimelineCubit>(
@@ -355,6 +370,7 @@ void configureDependencies({
       planRepository: getIt<PlanRepository>(),
       timelineCacheStore: getIt<TimelineCacheStore>(),
       planRecastService: getIt<PlanRecastService>(),
+      settingsRepository: getIt<SettingsRepository>(),
     ),
   );
 }

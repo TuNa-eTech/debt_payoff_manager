@@ -12,6 +12,7 @@ import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../domain/entities/debt.dart';
 import '../../../../domain/repositories/debt_repository.dart';
+import '../../../../domain/repositories/settings_repository.dart';
 import '../../cubit/debt_form_cubit.dart';
 import '../widgets/debt_form_fields.dart';
 
@@ -30,11 +31,17 @@ class AddDebtPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final debtRepository = getIt.get<DebtRepository>();
+    final settingsRepository = getIt.get<SettingsRepository>();
     return BlocProvider(
       create: (_) => _initialDebt == null
-          ? DebtFormCubit.create(debtRepository: debtRepository, mode: _mode)
+          ? DebtFormCubit.create(
+              debtRepository: debtRepository,
+              settingsRepository: settingsRepository,
+              mode: _mode,
+            )
           : DebtFormCubit.edit(
               debtRepository: debtRepository,
+              settingsRepository: settingsRepository,
               debt: _initialDebt,
             ),
       child: DebtFormScaffold(

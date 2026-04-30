@@ -1460,6 +1460,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get rateHistoryCurrent => 'Hiện tại';
 
   @override
+  String get rateHistoryUpcoming => 'Sắp tới';
+
+  @override
   String get rateHistoryAddTitle => 'Thêm thay đổi lãi suất';
 
   @override
@@ -1964,6 +1967,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get scenariosCopyDebtsSuccess => 'Đã sao chép khoản nợ thành công';
+
+  @override
+  String get scenariosNoOtherScenarios => 'Không có kịch bản khác.';
 
   @override
   String scenariosCompareDeltaTitle(String name) {

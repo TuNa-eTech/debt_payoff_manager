@@ -9,6 +9,7 @@ import '../../../domain/repositories/debt_repository.dart';
 import '../../../domain/repositories/milestone_repository.dart';
 import '../../../domain/repositories/payment_repository.dart';
 import '../../../domain/repositories/plan_repository.dart';
+import '../../../domain/repositories/settings_repository.dart';
 import 'progress_state.dart';
 
 class ProgressCubit extends Cubit<ProgressState> {
@@ -18,53 +19,75 @@ class ProgressCubit extends Cubit<ProgressState> {
     required PaymentRepository paymentRepository,
     required MilestoneRepository milestoneRepository,
     required StreakService streakService,
-  })  : _debtRepository = debtRepository,
-        _planRepository = planRepository,
-        _paymentRepository = paymentRepository,
-        _milestoneRepository = milestoneRepository,
-        _streakService = streakService,
-        super(const ProgressState());
+    SettingsRepository? settingsRepository,
+  }) : _debtRepository = debtRepository,
+       _planRepository = planRepository,
+       _paymentRepository = paymentRepository,
+       _milestoneRepository = milestoneRepository,
+       _streakService = streakService,
+       _settingsRepository = settingsRepository,
+       super(const ProgressState());
 
   final DebtRepository _debtRepository;
   final PlanRepository _planRepository;
   final PaymentRepository _paymentRepository;
   final MilestoneRepository _milestoneRepository;
   final StreakService _streakService;
+  final SettingsRepository? _settingsRepository;
 
   StreamSubscription<void>? _sub;
 
   void start() {
-    _sub = CombineLatestStream.combine3(
-      _debtRepository.watchAllDebts(),
-      _planRepository.watchCurrentPlan(),
-      _milestoneRepository.watchUnseenMilestones(),
-      (debts, plan, milestones) => (debts, plan, milestones),
-    ).listen((_) => _reload());
+    final scenarioStream = _settingsRepository == null
+        ? Stream<String>.value('main')
+        : _settingsRepository
+              .watchSettings()
+              .map((settings) => settings.activeScenarioId)
+              .distinct();
+    _sub = scenarioStream
+        .switchMap(
+          (scenarioId) => CombineLatestStream.combine3(
+            _debtRepository.watchAllDebts(scenarioId: scenarioId),
+            _planRepository.watchCurrentPlan(scenarioId: scenarioId),
+            _milestoneRepository.watchUnseenMilestones(scenarioId: scenarioId),
+            (debts, plan, milestones) => scenarioId,
+          ),
+        )
+        .listen((scenarioId) => _reload(scenarioId: scenarioId));
   }
 
-  Future<void> _reload() async {
-    final debts = (await _debtRepository.getAllDebts())
-        .where((d) => d.status != DebtStatus.archived)
-        .toList();
-    final plan = await _planRepository.getCurrentPlan();
-    final payments = await _paymentRepository.getAllPayments();
-    final milestones = await _milestoneRepository.getUnseenMilestones();
+  Future<void> _reload({String scenarioId = 'main'}) async {
+    final debts = (await _debtRepository.getAllDebts(
+      scenarioId: scenarioId,
+    )).where((d) => d.status != DebtStatus.archived).toList();
+    final plan = await _planRepository.getCurrentPlan(scenarioId: scenarioId);
+    final payments = await _paymentRepository.getAllPayments(
+      scenarioId: scenarioId,
+    );
+    final milestones = await _milestoneRepository.getUnseenMilestones(
+      scenarioId: scenarioId,
+    );
 
     final totalOriginal = debts.fold(0, (s, d) => s + d.originalPrincipal);
     final totalRemaining = debts.fold(0, (s, d) => s + d.currentBalance);
     final totalPaid = (totalOriginal - totalRemaining).clamp(0, totalOriginal);
     final interestSaved = plan?.totalInterestSaved ?? 0;
-    final streak = _streakService.computeCurrentStreak(payments, DateTime.now());
+    final streak = _streakService.computeCurrentStreak(
+      payments,
+      DateTime.now(),
+    );
 
-    emit(ProgressState(
-      isLoading: false,
-      totalPaidCents: totalPaid,
-      totalOriginalCents: totalOriginal,
-      totalRemainingCents: totalRemaining,
-      interestSavedCents: interestSaved,
-      streak: streak,
-      unseenMilestones: milestones,
-    ));
+    emit(
+      ProgressState(
+        isLoading: false,
+        totalPaidCents: totalPaid,
+        totalOriginalCents: totalOriginal,
+        totalRemainingCents: totalRemaining,
+        interestSavedCents: interestSaved,
+        streak: streak,
+        unseenMilestones: milestones,
+      ),
+    );
   }
 
   @override

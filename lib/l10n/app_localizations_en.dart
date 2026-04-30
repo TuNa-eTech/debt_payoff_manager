@@ -1452,6 +1452,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rateHistoryCurrent => 'Current';
 
   @override
+  String get rateHistoryUpcoming => 'Upcoming';
+
+  @override
   String get rateHistoryAddTitle => 'Add Rate Change';
 
   @override
@@ -1953,6 +1956,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scenariosCopyDebtsSuccess => 'Debts copied successfully';
+
+  @override
+  String get scenariosNoOtherScenarios => 'No other scenarios available.';
 
   @override
   String scenariosCompareDeltaTitle(String name) {

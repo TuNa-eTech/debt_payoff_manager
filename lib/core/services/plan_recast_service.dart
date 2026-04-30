@@ -6,8 +6,10 @@ import '../../core/models/strategy_preview.dart';
 import '../../data/local/stores/sync_state_store.dart';
 import '../../data/local/stores/timeline_cache_store.dart';
 import '../../data/repositories/debt_repository_impl.dart';
+import '../../data/repositories/interest_rate_history_repository_impl.dart';
 import '../../data/repositories/plan_repository_impl.dart';
 import '../../domain/entities/debt.dart';
+import '../../domain/entities/interest_rate_history.dart';
 import '../../domain/entities/plan.dart';
 import '../../domain/entities/timeline_projection.dart';
 import '../../domain/enums/debt_status.dart';
@@ -18,15 +20,18 @@ import '../../engine/timeline_simulator.dart';
 class PlanRecastService {
   PlanRecastService({
     required DebtRepositoryImpl debtRepository,
+    required InterestRateHistoryRepositoryImpl interestRateHistoryRepository,
     required PlanRepositoryImpl planRepository,
     required SyncStateStore syncStateStore,
     required TimelineCacheStore timelineCacheStore,
   }) : _debtRepository = debtRepository,
+       _interestRateHistoryRepository = interestRateHistoryRepository,
        _planRepository = planRepository,
        _syncStateStore = syncStateStore,
        _timelineCacheStore = timelineCacheStore;
 
   final DebtRepositoryImpl _debtRepository;
+  final InterestRateHistoryRepositoryImpl _interestRateHistoryRepository;
   final PlanRepositoryImpl _planRepository;
   final SyncStateStore _syncStateStore;
   final TimelineCacheStore _timelineCacheStore;
@@ -44,10 +49,12 @@ class PlanRecastService {
     if (plan == null) return null;
 
     final debts = await _debtRepository.getAllDebts(scenarioId: scenarioId);
+    final rateHistoryByDebt = await _loadRateHistoryByDebt(debts);
     final generatedAt = DateTime.now().toUtc();
     final computation = _compute(
       plan: plan,
       debts: debts,
+      rateHistoryByDebt: rateHistoryByDebt,
       referenceDate: (referenceDate ?? DateTime.now()).startOfMonth,
       generatedAt: generatedAt,
     );
@@ -89,9 +96,11 @@ class PlanRecastService {
     required List<Debt> debts,
     DateTime? referenceDate,
   }) async {
+    final rateHistoryByDebt = await _loadRateHistoryByDebt(debts);
     final computation = _compute(
       plan: plan,
       debts: debts,
+      rateHistoryByDebt: rateHistoryByDebt,
       referenceDate: (referenceDate ?? DateTime.now()).startOfMonth,
       generatedAt: DateTime.now().toUtc(),
     );
@@ -101,6 +110,7 @@ class PlanRecastService {
   _ProjectionComputation _compute({
     required Plan plan,
     required List<Debt> debts,
+    required Map<String, List<InterestRateHistory>> rateHistoryByDebt,
     required DateTime referenceDate,
     required DateTime generatedAt,
   }) {
@@ -137,12 +147,14 @@ class PlanRecastService {
     final projected = TimelineSimulator.simulate(
       debts: trackedDebts,
       plan: plan,
+      rateHistoryByDebt: rateHistoryByDebt,
       startDate: referenceDate,
       generatedAt: generatedAt,
     );
     final minimumOnly = TimelineSimulator.simulateMinimumOnly(
       debts: trackedDebts,
       plan: plan,
+      rateHistoryByDebt: rateHistoryByDebt,
       startDate: referenceDate,
       generatedAt: generatedAt,
     );
@@ -163,6 +175,19 @@ class PlanRecastService {
       totalInterestSaved: totalInterestMinimumOnly - totalInterestProjected,
       totalBalance: totalBalance,
     );
+  }
+
+  Future<Map<String, List<InterestRateHistory>>> _loadRateHistoryByDebt(
+    List<Debt> debts,
+  ) async {
+    final result = <String, List<InterestRateHistory>>{};
+    for (final debt in debts) {
+      final history = await _interestRateHistoryRepository.getByDebtId(debt.id);
+      if (history.isNotEmpty) {
+        result[debt.id] = history;
+      }
+    }
+    return result;
   }
 
   static DateTime _resolveDebtFreeDate(

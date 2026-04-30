@@ -1886,6 +1886,10 @@
   "@rateHistoryCurrent": {
     "description": "Badge for currently active rate"
   },
+  "rateHistoryUpcoming": "Sắp tới",
+  "@rateHistoryUpcoming": {
+    "description": "Badge for a future interest rate change"
+  },
   "rateHistoryAddTitle": "Thêm thay đổi lãi suất",
   "@rateHistoryAddTitle": {
     "description": "Dialog title for adding rate"
@@ -2557,6 +2561,10 @@
   "scenariosCopyDebtsSuccess": "Đã sao chép khoản nợ thành công",
   "@scenariosCopyDebtsSuccess": {
     "description": "Snackbar after copying debts"
+  },
+  "scenariosNoOtherScenarios": "Không có kịch bản khác.",
+  "@scenariosNoOtherScenarios": {
+    "description": "Snackbar shown when there is no target scenario for copying debts"
   },
 
   "scenariosCompareDeltaTitle": "{name} là lựa chọn tốt hơn",

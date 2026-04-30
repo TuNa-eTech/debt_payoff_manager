@@ -41,7 +41,6 @@ class _SettingsPageState extends State<SettingsPage> {
   late final DataManagementService _dataManagementService =
       getIt<DataManagementService>();
   late final ShareLauncher _shareLauncher = getIt<ShareLauncher>();
-  late final _planStream = _planRepository.watchCurrentPlan();
 
   _SettingsDataAction? _pendingAction;
 
@@ -52,241 +51,235 @@ class _SettingsPageState extends State<SettingsPage> {
     final l10n = context.l10n;
     final settings = context.userSettings;
     if (settings == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return StreamBuilder(
-      stream: _planStream,
+      stream: _planRepository.watchCurrentPlan(
+        scenarioId: settings.activeScenarioId,
+      ),
       builder: (context, planSnapshot) {
         final plan = planSnapshot.data;
 
-            return Scaffold(
-              backgroundColor: AppColors.mdSurfaceContainerLow,
-              appBar: AppBar(title: Text(l10n.settingsPageTitle)),
-              body: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(vertical: AppDimensions.md),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+        return Scaffold(
+          backgroundColor: AppColors.mdSurfaceContainerLow,
+          appBar: AppBar(title: Text(l10n.settingsPageTitle)),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(vertical: AppDimensions.md),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildSection(
+                  title: l10n.settingsSectionPlan,
                   children: [
-                    _buildSection(
-                      title: l10n.settingsSectionPlan,
-                      children: [
-                        _buildListTile(
-                          title: l10n.settingsCurrentStrategyTitle,
-                          subtitle: l10n.settingsCurrentStrategySubtitle,
-                          trailingText: _strategyLabel(
-                            plan?.strategy ?? Strategy.snowball,
-                          ),
-                          onTap: () => context.go(AppRoutes.plan),
-                        ),
-                        _buildDivider(),
-                        _buildListTile(
-                          title: l10n.settingsExtraMonthlyTitle,
-                          subtitle: l10n.settingsExtraMonthlySubtitle,
-                          trailingText: AppFormatters.formatCents(
-                            plan?.extraMonthlyAmount ?? 0,
-                            currencyCode: settings.currencyCode,
-                            localeCode: settings.localeCode,
-                          ),
-                          onTap: () => context.go(AppRoutes.plan),
-                        ),
-                        _buildDivider(),
-                        _buildListTile(
-                          title: l10n.scenariosTitle,
-                          subtitle: l10n.scenariosEmptySubtitle,
-                          trailingText: '',
-                          onTap: () => context.push(AppRoutes.scenarios),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.md),
-                    _buildSection(
-                      title: l10n.settingsSectionReminders,
-                      children: [
-                        _buildListTile(
-                          key: AppTestKeys.settingsPaymentReminders,
-                          title: l10n.settingsPaymentReminderTitle,
-                          subtitle: l10n.settingsPaymentReminderSubtitle,
-                          trailingWidget: Switch(
-                            value: settings.notifPaymentReminder,
-                            onChanged: (value) =>
-                                _togglePaymentReminder(settings, value),
-                          ),
-                          onTap: () => _togglePaymentReminder(
-                            settings,
-                            !settings.notifPaymentReminder,
-                          ),
-                        ),
-                        _buildDivider(),
-                        if (settings.notifPaymentReminder) ...[
-                          _buildReminderDayPicker(settings),
-                          _buildDivider(),
-                        ],
-                        _buildListTile(
-                          key: AppTestKeys.settingsMonthlyReminder,
-                          title: l10n.settingsMonthlyReminderTitle,
-                          subtitle: l10n.settingsMonthlyReminderSubtitle,
-                          trailingWidget: Switch(
-                            value: settings.notifMonthlyLog,
-                            onChanged: (value) =>
-                                _toggleMonthlyReminder(settings, value),
-                          ),
-                          onTap: () => _toggleMonthlyReminder(
-                            settings,
-                            !settings.notifMonthlyLog,
-                          ),
-                        ),
-                        _buildDivider(),
-                        _buildListTile(
-                          key: AppTestKeys.settingsMilestoneReminder,
-                          title: l10n.settingsMilestoneReminderTitle,
-                          subtitle: l10n.settingsMilestoneReminderSubtitle,
-                          trailingWidget: Switch(
-                            value: settings.notifMilestone,
-                            onChanged: (value) =>
-                                _toggleMilestoneReminder(settings, value),
-                          ),
-                          onTap: () => _toggleMilestoneReminder(
-                            settings,
-                            !settings.notifMilestone,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.md),
-                    _buildSection(
-                      title: l10n.settingsSectionReports,
-                      children: [
-                        _buildListTile(
-                          key: AppTestKeys.settingsReportsPreview,
-                          title: l10n.settingsReportsPreviewTitle,
-                          subtitle: l10n.settingsReportsPreviewSubtitle,
-                          onTap: () => context.push(AppRoutes.reportsPreview),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.md),
-                    _buildSection(
-                      title: l10n.settingsSectionOptions,
-                      children: [
-                        _buildListTile(
-                          title: l10n.settingsCurrencyTitle,
-                          subtitle: l10n.settingsCurrencySubtitle,
-                          trailingText: settings.currencyCode,
-                        ),
-                        _buildDivider(),
-                        _buildListTile(
-                          key: AppTestKeys.settingsLocale,
-                          title: l10n.settingsLocaleTitle,
-                          subtitle: l10n.settingsLocaleSubtitle,
-                          trailingText: AppLocale.displayNameForLocaleCode(
-                            settings.localeCode,
-                          ),
-                          onTap: () => _showLocalePicker(settings),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.md),
-                    _buildSection(
-                      title: l10n.settingsSectionData,
-                      children: [
-                        _buildDataStatusBanner(settings),
-                        _buildDivider(),
-                        _buildListTile(
-                          key: AppTestKeys.settingsCloudBackup,
-                          title: l10n.settingsCloudBackupTitle,
-                          subtitle: _trustLevelCopy(settings.trustLevel),
-                          trailingText: _trustLevelLabel(settings.trustLevel),
-                          enabled: !_isDataActionPending,
-                          onTap: _isDataActionPending
-                              ? null
-                              : () => context.push(AppRoutes.syncBackup),
-                        ),
-                        _buildDivider(),
-                        _buildListTile(
-                          key: AppTestKeys.settingsDataExportCsv,
-                          title: l10n.settingsExportCsvTitle,
-                          subtitle: l10n.settingsExportCsvSubtitle,
-                          trailingText: l10n.settingsZipLabel,
-                          enabled: !_isDataActionPending,
-                          isLoading:
-                              _pendingAction == _SettingsDataAction.csvExport,
-                          onTap: _isDataActionPending ? null : _exportCsv,
-                        ),
-                        _buildDivider(),
-                        _buildListTile(
-                          key: AppTestKeys.settingsDataLocalBackup,
-                          title: l10n.settingsLocalBackupTitle,
-                          subtitle: l10n.settingsLocalBackupSubtitle,
-                          trailingText: l10n.settingsZipLabel,
-                          enabled: !_isDataActionPending,
-                          isLoading:
-                              _pendingAction == _SettingsDataAction.localBackup,
-                          onTap: _isDataActionPending
-                              ? null
-                              : _createLocalBackup,
-                        ),
-                        _buildDivider(),
-                        _buildListTile(
-                          key: AppTestKeys.settingsDataRestoreBackup,
-                          title: l10n.settingsRestoreTitle,
-                          subtitle: l10n.settingsRestoreSubtitle,
-                          trailingText: l10n.settingsRestoreAction,
-                          enabled: !_isDataActionPending,
-                          isLoading:
-                              _pendingAction ==
-                              _SettingsDataAction.restoreBackup,
-                          onTap: _isDataActionPending
-                              ? null
-                              : _restoreFromBackup,
-                        ),
-                        _buildDivider(),
-                        _buildListTile(
-                          key: AppTestKeys.settingsDataClearAll,
-                          title: l10n.settingsClearAllTitle,
-                          subtitle: l10n.settingsClearAllSubtitle,
-                          trailingText: l10n.settingsResetAction,
-                          titleColor: AppColors.mdError,
-                          trailingColor: AppColors.mdError,
-                          enabled: !_isDataActionPending,
-                          isLoading:
-                              _pendingAction == _SettingsDataAction.clearAll,
-                          onTap: _isDataActionPending ? null : _confirmClearAll,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.xl),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppDimensions.pagePaddingH,
+                    _buildListTile(
+                      title: l10n.settingsCurrentStrategyTitle,
+                      subtitle: l10n.settingsCurrentStrategySubtitle,
+                      trailingText: _strategyLabel(
+                        plan?.strategy ?? Strategy.snowball,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            l10n.settingsVersionFooter,
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: AppColors.mdOnSurfaceVariant,
-                            ),
-                          ),
-                          Text(
-                            l10n.settingsCopyrightFooter,
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: AppColors.mdOnSurfaceVariant,
-                            ),
-                          ),
-                        ],
-                      ),
+                      onTap: () => context.go(AppRoutes.plan),
                     ),
-                    const SizedBox(height: 100),
+                    _buildDivider(),
+                    _buildListTile(
+                      title: l10n.settingsExtraMonthlyTitle,
+                      subtitle: l10n.settingsExtraMonthlySubtitle,
+                      trailingText: AppFormatters.formatCents(
+                        plan?.extraMonthlyAmount ?? 0,
+                        currencyCode: settings.currencyCode,
+                        localeCode: settings.localeCode,
+                      ),
+                      onTap: () => context.go(AppRoutes.plan),
+                    ),
+                    _buildDivider(),
+                    _buildListTile(
+                      title: l10n.scenariosTitle,
+                      subtitle: l10n.scenariosEmptySubtitle,
+                      trailingText: '',
+                      onTap: () => context.push(AppRoutes.scenarios),
+                    ),
                   ],
                 ),
-              ),
-            );
-          },
+                const SizedBox(height: AppDimensions.md),
+                _buildSection(
+                  title: l10n.settingsSectionReminders,
+                  children: [
+                    _buildListTile(
+                      key: AppTestKeys.settingsPaymentReminders,
+                      title: l10n.settingsPaymentReminderTitle,
+                      subtitle: l10n.settingsPaymentReminderSubtitle,
+                      trailingWidget: Switch(
+                        value: settings.notifPaymentReminder,
+                        onChanged: (value) =>
+                            _togglePaymentReminder(settings, value),
+                      ),
+                      onTap: () => _togglePaymentReminder(
+                        settings,
+                        !settings.notifPaymentReminder,
+                      ),
+                    ),
+                    _buildDivider(),
+                    if (settings.notifPaymentReminder) ...[
+                      _buildReminderDayPicker(settings),
+                      _buildDivider(),
+                    ],
+                    _buildListTile(
+                      key: AppTestKeys.settingsMonthlyReminder,
+                      title: l10n.settingsMonthlyReminderTitle,
+                      subtitle: l10n.settingsMonthlyReminderSubtitle,
+                      trailingWidget: Switch(
+                        value: settings.notifMonthlyLog,
+                        onChanged: (value) =>
+                            _toggleMonthlyReminder(settings, value),
+                      ),
+                      onTap: () => _toggleMonthlyReminder(
+                        settings,
+                        !settings.notifMonthlyLog,
+                      ),
+                    ),
+                    _buildDivider(),
+                    _buildListTile(
+                      key: AppTestKeys.settingsMilestoneReminder,
+                      title: l10n.settingsMilestoneReminderTitle,
+                      subtitle: l10n.settingsMilestoneReminderSubtitle,
+                      trailingWidget: Switch(
+                        value: settings.notifMilestone,
+                        onChanged: (value) =>
+                            _toggleMilestoneReminder(settings, value),
+                      ),
+                      onTap: () => _toggleMilestoneReminder(
+                        settings,
+                        !settings.notifMilestone,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppDimensions.md),
+                _buildSection(
+                  title: l10n.settingsSectionReports,
+                  children: [
+                    _buildListTile(
+                      key: AppTestKeys.settingsReportsPreview,
+                      title: l10n.settingsReportsPreviewTitle,
+                      subtitle: l10n.settingsReportsPreviewSubtitle,
+                      onTap: () => context.push(AppRoutes.reportsPreview),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppDimensions.md),
+                _buildSection(
+                  title: l10n.settingsSectionOptions,
+                  children: [
+                    _buildListTile(
+                      title: l10n.settingsCurrencyTitle,
+                      subtitle: l10n.settingsCurrencySubtitle,
+                      trailingText: settings.currencyCode,
+                    ),
+                    _buildDivider(),
+                    _buildListTile(
+                      key: AppTestKeys.settingsLocale,
+                      title: l10n.settingsLocaleTitle,
+                      subtitle: l10n.settingsLocaleSubtitle,
+                      trailingText: AppLocale.displayNameForLocaleCode(
+                        settings.localeCode,
+                      ),
+                      onTap: () => _showLocalePicker(settings),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppDimensions.md),
+                _buildSection(
+                  title: l10n.settingsSectionData,
+                  children: [
+                    _buildDataStatusBanner(settings),
+                    _buildDivider(),
+                    _buildListTile(
+                      key: AppTestKeys.settingsCloudBackup,
+                      title: l10n.settingsCloudBackupTitle,
+                      subtitle: _trustLevelCopy(settings.trustLevel),
+                      trailingText: _trustLevelLabel(settings.trustLevel),
+                      enabled: !_isDataActionPending,
+                      onTap: _isDataActionPending
+                          ? null
+                          : () => context.push(AppRoutes.syncBackup),
+                    ),
+                    _buildDivider(),
+                    _buildListTile(
+                      key: AppTestKeys.settingsDataExportCsv,
+                      title: l10n.settingsExportCsvTitle,
+                      subtitle: l10n.settingsExportCsvSubtitle,
+                      trailingText: l10n.settingsZipLabel,
+                      enabled: !_isDataActionPending,
+                      isLoading:
+                          _pendingAction == _SettingsDataAction.csvExport,
+                      onTap: _isDataActionPending ? null : _exportCsv,
+                    ),
+                    _buildDivider(),
+                    _buildListTile(
+                      key: AppTestKeys.settingsDataLocalBackup,
+                      title: l10n.settingsLocalBackupTitle,
+                      subtitle: l10n.settingsLocalBackupSubtitle,
+                      trailingText: l10n.settingsZipLabel,
+                      enabled: !_isDataActionPending,
+                      isLoading:
+                          _pendingAction == _SettingsDataAction.localBackup,
+                      onTap: _isDataActionPending ? null : _createLocalBackup,
+                    ),
+                    _buildDivider(),
+                    _buildListTile(
+                      key: AppTestKeys.settingsDataRestoreBackup,
+                      title: l10n.settingsRestoreTitle,
+                      subtitle: l10n.settingsRestoreSubtitle,
+                      trailingText: l10n.settingsRestoreAction,
+                      enabled: !_isDataActionPending,
+                      isLoading:
+                          _pendingAction == _SettingsDataAction.restoreBackup,
+                      onTap: _isDataActionPending ? null : _restoreFromBackup,
+                    ),
+                    _buildDivider(),
+                    _buildListTile(
+                      key: AppTestKeys.settingsDataClearAll,
+                      title: l10n.settingsClearAllTitle,
+                      subtitle: l10n.settingsClearAllSubtitle,
+                      trailingText: l10n.settingsResetAction,
+                      titleColor: AppColors.mdError,
+                      trailingColor: AppColors.mdError,
+                      enabled: !_isDataActionPending,
+                      isLoading: _pendingAction == _SettingsDataAction.clearAll,
+                      onTap: _isDataActionPending ? null : _confirmClearAll,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppDimensions.xl),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.pagePaddingH,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        l10n.settingsVersionFooter,
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.mdOnSurfaceVariant,
+                        ),
+                      ),
+                      Text(
+                        l10n.settingsCopyrightFooter,
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.mdOnSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 100),
+              ],
+            ),
+          ),
         );
+      },
+    );
   }
 
   Future<void> _updateSettings(UserSettings settings) {
@@ -540,7 +533,6 @@ class _SettingsPageState extends State<SettingsPage> {
     }
     return granted;
   }
-
 
   String _strategyLabel(Strategy strategy) {
     final l10n = context.l10n;

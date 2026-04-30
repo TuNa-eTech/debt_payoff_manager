@@ -2602,6 +2602,12 @@ abstract class AppLocalizations {
   /// **'Current'**
   String get rateHistoryCurrent;
 
+  /// Badge for a future interest rate change
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get rateHistoryUpcoming;
+
   /// Dialog title for adding rate
   ///
   /// In en, this message translates to:
@@ -3513,6 +3519,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Debts copied successfully'**
   String get scenariosCopyDebtsSuccess;
+
+  /// Snackbar shown when there is no target scenario for copying debts
+  ///
+  /// In en, this message translates to:
+  /// **'No other scenarios available.'**
+  String get scenariosNoOtherScenarios;
 
   /// Delta banner headline naming the winning scenario
   ///

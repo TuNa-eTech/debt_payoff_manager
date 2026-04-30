@@ -8,6 +8,7 @@ import 'package:debt_payoff_manager/data/local/database.dart';
 import 'package:debt_payoff_manager/data/local/stores/sync_state_store.dart';
 import 'package:debt_payoff_manager/data/local/stores/timeline_cache_store.dart';
 import 'package:debt_payoff_manager/data/repositories/debt_repository_impl.dart';
+import 'package:debt_payoff_manager/data/repositories/interest_rate_history_repository_impl.dart';
 import 'package:debt_payoff_manager/data/repositories/payment_repository_impl.dart';
 import 'package:debt_payoff_manager/data/repositories/plan_repository_impl.dart';
 import 'package:debt_payoff_manager/domain/enums/payment_type.dart';
@@ -18,6 +19,7 @@ import '../../data/repositories/repository_test_helpers.dart';
 void main() {
   late AppDatabase db;
   late DebtRepositoryImpl debtRepository;
+  late InterestRateHistoryRepositoryImpl interestRateHistoryRepository;
   late PaymentRepositoryImpl paymentRepository;
   late PlanRepositoryImpl planRepository;
   late SyncStateStore syncStateStore;
@@ -28,12 +30,14 @@ void main() {
   setUp(() {
     db = AppDatabase(NativeDatabase.memory());
     debtRepository = DebtRepositoryImpl(db: db);
+    interestRateHistoryRepository = InterestRateHistoryRepositoryImpl(db: db);
     paymentRepository = PaymentRepositoryImpl(db: db);
     planRepository = PlanRepositoryImpl(db: db);
     syncStateStore = SyncStateStore(db: db);
     timelineCacheStore = TimelineCacheStore(db: db);
     planRecastService = PlanRecastService(
       debtRepository: debtRepository,
+      interestRateHistoryRepository: interestRateHistoryRepository,
       planRepository: planRepository,
       syncStateStore: syncStateStore,
       timelineCacheStore: timelineCacheStore,

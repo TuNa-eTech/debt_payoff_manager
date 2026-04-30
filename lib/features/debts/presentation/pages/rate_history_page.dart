@@ -96,14 +96,18 @@ class _RateHistoryPageState extends State<RateHistoryPage> {
               vertical: AppDimensions.pagePaddingV,
             ),
             itemCount: sortedRates.length,
-            separatorBuilder: (_, _) => const SizedBox(height: AppDimensions.md),
+            separatorBuilder: (_, _) =>
+                const SizedBox(height: AppDimensions.md),
             itemBuilder: (context, index) {
               final rate = sortedRates[index];
-              final isCurrent = rate.effectiveTo == null;
+              final today = DateTime.now();
+              final isCurrent = rate.isActiveAt(today);
+              final isUpcoming = rate.effectiveFrom.isAfter(today);
 
               return _RateHistoryCard(
                 rate: rate,
                 isCurrent: isCurrent,
+                isUpcoming: isUpcoming,
                 onEdit: () => _showEditRateDialog(context, rate),
                 onDelete: () => _deleteRate(context, rate),
               );
@@ -117,14 +121,15 @@ class _RateHistoryPageState extends State<RateHistoryPage> {
   Future<void> _showAddRateDialog(BuildContext context) async {
     await showDialog<void>(
       context: context,
-      builder: (ctx) => _RateHistoryDialog(
-        debtId: widget.debtId,
-        repository: _repository,
-      ),
+      builder: (ctx) =>
+          _RateHistoryDialog(debtId: widget.debtId, repository: _repository),
     );
   }
 
-  Future<void> _showEditRateDialog(BuildContext context, InterestRateHistory rate) async {
+  Future<void> _showEditRateDialog(
+    BuildContext context,
+    InterestRateHistory rate,
+  ) async {
     await showDialog<void>(
       context: context,
       builder: (ctx) => _RateHistoryDialog(
@@ -135,7 +140,10 @@ class _RateHistoryPageState extends State<RateHistoryPage> {
     );
   }
 
-  Future<void> _deleteRate(BuildContext context, InterestRateHistory rate) async {
+  Future<void> _deleteRate(
+    BuildContext context,
+    InterestRateHistory rate,
+  ) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -170,12 +178,14 @@ class _RateHistoryCard extends StatelessWidget {
   const _RateHistoryCard({
     required this.rate,
     required this.isCurrent,
+    required this.isUpcoming,
     required this.onEdit,
     required this.onDelete,
   });
 
   final InterestRateHistory rate;
   final bool isCurrent;
+  final bool isUpcoming;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
@@ -200,28 +210,36 @@ class _RateHistoryCard extends StatelessWidget {
                         fontFamily: 'Roboto Mono',
                       ),
                     ),
-                    if (isCurrent) ...[
-                      const SizedBox(width: 8),
+                    if (isCurrent || isUpcoming) ...[
+                      const SizedBox(width: AppDimensions.sm),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 2,
+                          horizontal: AppDimensions.sm,
+                          vertical: AppDimensions.xs / 2,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.mdPrimary,
-                          borderRadius: BorderRadius.circular(12),
+                          color: isCurrent
+                              ? AppColors.mdPrimary
+                              : AppColors.mdSurfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusFull,
+                          ),
                         ),
                         child: Text(
-                          context.l10n.rateHistoryCurrent,
+                          isCurrent
+                              ? context.l10n.rateHistoryCurrent
+                              : context.l10n.rateHistoryUpcoming,
                           style: AppTextStyles.labelSmall.copyWith(
-                            color: AppColors.mdOnPrimary,
+                            color: isCurrent
+                                ? AppColors.mdOnPrimary
+                                : AppColors.mdOnSurfaceVariant,
                           ),
                         ),
                       ),
                     ],
                   ],
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: AppDimensions.xs),
                 Text(
                   rate.effectiveTo != null
                       ? context.l10n.rateHistoryEffectiveToPeriod(
@@ -236,7 +254,7 @@ class _RateHistoryCard extends StatelessWidget {
                   ),
                 ),
                 if (rate.reason != null && rate.reason!.isNotEmpty) ...[
-                  const SizedBox(height: 4),
+                  const SizedBox(height: AppDimensions.xs),
                   Text(
                     rate.reason!,
                     style: AppTextStyles.bodySmall.copyWith(
@@ -256,15 +274,20 @@ class _RateHistoryCard extends StatelessWidget {
               }
             },
             itemBuilder: (context) => [
-              PopupMenuItem(value: 'edit', child: Text(context.l10n.commonEdit)),
-              PopupMenuItem(value: 'delete', child: Text(context.l10n.commonDelete)),
+              PopupMenuItem(
+                value: 'edit',
+                child: Text(context.l10n.commonEdit),
+              ),
+              PopupMenuItem(
+                value: 'delete',
+                child: Text(context.l10n.commonDelete),
+              ),
             ],
           ),
         ],
       ),
     );
   }
-
 }
 
 class _RateHistoryDialog extends StatefulWidget {
@@ -313,7 +336,6 @@ class _RateHistoryDialogState extends State<_RateHistoryDialog> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -337,7 +359,9 @@ class _RateHistoryDialogState extends State<_RateHistoryDialog> {
                   suffixText: '%',
                   border: const OutlineInputBorder(),
                 ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return context.l10n.commonRequired;
@@ -370,12 +394,15 @@ class _RateHistoryDialogState extends State<_RateHistoryDialog> {
               if (!_openEnded) ...[
                 const SizedBox(height: 8),
                 InputDatePickerFormField(
-                  initialDate: _effectiveTo ?? _effectiveFrom.add(const Duration(days: 30)),
+                  initialDate:
+                      _effectiveTo ??
+                      _effectiveFrom.add(const Duration(days: 30)),
                   firstDate: _effectiveFrom.add(const Duration(days: 1)),
                   lastDate: DateTime(2100),
                   onDateSaved: (date) => _effectiveTo = date,
                   fieldLabelText: context.l10n.rateHistoryEffectiveTo,
-                  selectableDayPredicate: (date) => date.isAfter(_effectiveFrom),
+                  selectableDayPredicate: (date) =>
+                      date.isAfter(_effectiveFrom),
                 ),
               ],
               const SizedBox(height: 16),

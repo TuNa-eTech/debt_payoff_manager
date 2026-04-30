@@ -8,6 +8,7 @@ import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../domain/repositories/debt_repository.dart';
+import '../../../../domain/repositories/settings_repository.dart';
 import '../../../debts/cubit/debts_cubit.dart';
 import '../../../debts/cubit/debt_form_cubit.dart';
 import '../../../debts/presentation/pages/add_debt_page.dart';
@@ -42,6 +43,7 @@ class DebtEntryPage extends StatelessWidget {
     return BlocProvider(
       create: (_) => DebtFormCubit.create(
         debtRepository: getIt.get<DebtRepository>(),
+        settingsRepository: getIt.get<SettingsRepository>(),
         mode: DebtFormMode.onboarding,
       ),
       child: Builder(

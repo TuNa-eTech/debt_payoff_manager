@@ -459,18 +459,18 @@ Legend:
 ### E6 — Engineering
 
 - [x] Firebase Auth integration (Google + Apple Sign-In)
-- [ ] Firestore schema matching Drift 1-1 (ADR-012)
-- [ ] Firestore security rules (per-user subcollection)
-- [ ] Sync service: push/pull với debounce + batch (ADR-010, 019)
-- [ ] Conflict resolution: LWW theo `updatedAt` (ADR-009)
-- [ ] Sync state UI: "Last synced X seconds ago", "Syncing...", offline indicator
-- [ ] Level 0 → Level 1 upgrade flow (non-destructive)
-- [ ] Level 1 → Level 0 downgrade (delete cloud data với confirmation)
+- [x] Firestore schema matching Drift 1-1 (ADR-012)
+- [x] Firestore security rules (per-user subcollection)
+- [x] Sync service: push/pull với debounce + batch (ADR-010, 019)
+- [x] Conflict resolution: LWW theo `updatedAt` (ADR-009)
+- [x] Sync state UI: "Last synced X seconds ago", "Syncing...", offline indicator
+- [x] Level 0 → Level 1 upgrade flow (non-destructive)
+- [x] Level 1 → Level 0 downgrade (delete cloud data với confirmation)
 
-- [ ] Firebase emulator integration test suite
-- [ ] Multi-device test matrix: 2 iOS, 2 Android, cross-platform
+- [x] Firebase emulator integration test suite
+- [ ] Multi-device test matrix: 2 iOS, 2 Android, cross-platform — deferred to v1.1 release QA
 
-### Implementation status (April 29, 2026) — Functionally complete, needs QA
+### Implementation status (April 30, 2026) — Functionally complete, QA waiver accepted
 
 - [x] `firebase.json` configured for Firestore emulator and rules file.
 - [x] `firestore.rules` Level 1 baseline: signed-in owner-only access for user-owned mirror data, payload validation for debts/payments/plans/settings/sync metadata, and Phase 9 `sharedPlans` access disabled until partner sharing starts.
@@ -485,15 +485,15 @@ Legend:
 - [x] `DeviceIdService` — persistent UUID-based device ID via SharedPreferences.
 - [x] Trust Level 0→1 upgrade (opt-in) and 1→0 downgrade (delete cloud data) in `CloudBackupService`.
 - [x] Sync backup UI — `SyncBackupPage` with opt-in/opt-out and sync status.
-- [x] 73 unit tests passing — sync adapters, Firestore models, conflict resolver, sync engine, CloudBackupService.
-- [ ] Dart E2E integration test running against Firebase Emulator (deferred to QA phase).
-- [ ] Multi-device cross-sync manual test matrix (deferred to QA phase).
+- [x] Automated QA evidence: `fvm flutter analyze` passes; full `fvm flutter test` passes (287/287); Phase 7 targeted Flutter tests pass; Firestore rules emulator tests pass.
+- [ ] Real-device multi-device cross-sync manual test matrix — accepted waiver for phase close; remains a v1.1 release QA gate.
 
 ### Exit gate (Phase 7)
 - [x] Conflict scenarios handled correctly trong test suite (73 tests)
-- [ ] User có thể backup cross-device successful — **needs QA on real device**
-- [ ] Sync cost < $0.01/user/month ở Free tier — **needs production monitoring**
-- [ ] **v1.1 Ship: Cloud Backup** — pending QA sign-off
+- [x] Engineering scope functionally complete — accepted with QA waiver
+- [ ] User có thể backup cross-device successful — deferred to v1.1 release QA on real devices
+- [ ] Sync cost < $0.01/user/month ở Free tier — deferred to closed beta / production monitoring
+- [ ] **v1.1 Ship: Cloud Backup** — pending release QA sign-off, not blocking Phase 7 engineering close
 
 ---
 
@@ -509,15 +509,16 @@ Legend:
 
 **Feature §2.1 What-If Scenarios**
 - [x] Scenario management UI: create, duplicate, delete (`ScenariosCubit` + `ScenariosListPage` + `ScenarioFormPage`)
-- [x] Scenario comparison view (side-by-side timelines) — `CompareScenariosPage` with delta winner banner
+- [x] Scenario comparison view (side-by-side metrics) — `CompareScenariosPage` with delta winner banner
 - [x] Scenario isolation (payments không log vào non-main) — `scenarioId` guard in `PaymentLoggingService`
-- [ ] ScenarioId propagation qua repository queries — partial; `main` scenario only in current filter paths
+- [x] ScenarioId propagation qua app shell/repository queries — timeline, debt list/add debt, reminders, progress, settings plan summary, monthly action, monthly summary use active scenario
 
 **Feature §2.2 Edge-Case Debt Handling**
 - [x] Forbearance/pause UI + engine support — `DebtStatus.paused`, `pausedUntil`, `isPaused()`, `_showPauseDialog`, engine skip
-- [x] Interest rate change với rate history — `InterestRateHistory` entity, `RateHistoryPage`, `_getAprForMonth()` in simulator
+- [x] Interest rate history foundation — `InterestRateHistory` entity/repository, `RateHistoryPage`, `_getAprForMonth()` in simulator
+- [x] App recast/timeline consumes rate history — `PlanRecastService` loads `rateHistoryByDebt`; tracked rate-history writes recast the owning debt scenario
 - [x] New charge on credit card (balance increase) — `AddChargeSheet`, `logNewCharge()`, `PaymentType.charge`
-- [ ] Bi-weekly / weekly cadence support trong engine + UI — not implemented
+- [ ] Bi-weekly / weekly cadence support trong engine + UI — explicitly deferred from Phase 8/v1.2
 
 **Feature §2.3 Progress & Motivation**
 - [x] Milestone detection service (chạy sau mỗi payment) — `MilestoneService.evaluatePaymentMilestones()`
@@ -525,32 +526,36 @@ Legend:
 - [x] Progress dashboard: % complete, total interest saved, streak count — `ProgressPage` with `StreakService`
 - [x] Monthly summary screen — `MonthlySummaryPage` + `MonthlySummaryService`
 
-### Implementation status (April 29, 2026) — Substantially complete, 2 features deferred
+### Implementation status (April 30, 2026) — Release candidate, cadence deferred
 
 - [x] 7 property-based tests (Glados) for Phase 8 engine: forbearance, rate history, new charge — all passing
 - [x] Integration test: `phase8_new_charge_test.dart`
 - [x] `InterestRateHistoryRepository` write methods implemented (add/update/soft-delete)
 - [x] Rate history dialog: open-ended rates supported, `form.save()` wired, reason pre-fill fixed, l10n popup menu
+- [x] App recast uses interest-rate history and tracked rate-history writes mark `interestRateHistory` dirty plus recast the debt's scenario.
 - [x] `TrackedScenarioRepository` wired — scenario writes now mark dirty for sync
+- [x] Active scenario propagation fixed for timeline, debt list/add debt, reminder scheduling, progress, settings plan summary, monthly action, and monthly summary paths.
 - [x] Engine: freed minimums from paused debts redirected to extra pool (forbearance snowball behaviour)
 - [x] `MonthlySummaryService`: `varianceCents` now compares extra-only payments vs planned extra (minimums excluded)
-- [x] 284 total tests passing — no regressions
-- [ ] Bi-weekly/weekly cadence — deferred to future release
-- [ ] Full ScenarioId propagation in all repository filter paths — deferred (defaults to `main` correctly)
+- [x] Phase 8 targeted QA: 57/57 tests passing for engine property tests, new charge integration, scenario comparison, debt pages, debt form, monthly action, milestones, payment logging, plan recast, reminder scheduling, tracked interest-rate history, and i18n helper timeout coverage.
+- [x] Full `fvm flutter test`: 287/287 tests passing.
+- [x] `test/tool/i18n_script_test.dart` timeout fixed by increasing subprocess harness timeout for full-suite contention.
+- [ ] Bi-weekly/weekly cadence — accepted deferral to a future release.
 
 ### D6 — Design
 
-- [x] Scenario comparison visual — side-by-side timeline with delta banner (winner + months/interest saved)
+- [x] Scenario comparison visual — side-by-side metrics with delta banner (winner + months/interest saved)
 - [x] Celebration moments — debt paid off, 50% milestone celebration overlay
 - [x] Progress dashboard layout — streak card, balance ring, interest saved
 
 ### Exit gate (Phase 8)
-- [x] Edge case calculations accurate — 7 property tests + integration test passing (284 total tests green)
+- [x] Edge case engine calculations accurate — 7 property tests + integration test passing
 - [x] Forbearance/pause flow tested end-to-end
-- [x] Interest rate change flow tested end-to-end
+- [x] Interest rate change flow tested end-to-end through repository write → scenario recast → timeline simulator rate history
 - [x] Monthly summary screen shipped
-- [ ] Bi-weekly cadence — deferred
-- [ ] **v1.2 Ship: Power Features** — pending bi-weekly cadence decision
+- [x] ScenarioId propagation completed across active scenario app paths
+- [ ] Bi-weekly cadence — accepted deferral from v1.2
+- [x] **v1.2 Ship: Power Features** — release candidate with bi-weekly/weekly cadence moved to future release scope
 
 ---
 

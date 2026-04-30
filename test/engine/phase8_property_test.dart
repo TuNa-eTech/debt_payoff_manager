@@ -29,9 +29,13 @@ void main() {
     return Decimal.parse((bp / 10000).toStringAsFixed(4));
   });
 
-  final balanceGen = any.int.map((i) => (i.abs() % 90000) + 10000); // $100–$1000
+  final balanceGen = any.int.map(
+    (i) => (i.abs() % 90000) + 10000,
+  ); // $100–$1000
 
-  final chargeDeltaGen = any.int.map((i) => (i.abs() % 50000) + 1000); // $10–$510
+  final chargeDeltaGen = any.int.map(
+    (i) => (i.abs() % 50000) + 1000,
+  ); // $10–$510
 
   // ── Helper ──────────────────────────────────────────────────────────────
 
@@ -47,44 +51,47 @@ void main() {
   // ── Group 1: Forbearance/Pause ───────────────────────────────────────────
 
   group('Phase 8 — Forbearance properties', () {
-    Glados2(balanceGen, aprGen).test(
-      'paused debt receives no principal payment during pause window',
-      (balance, apr) {
-        final pauseUntil = DateTime(2026, 4, 1);
-        final debt = makeDebt(
-          id: 'paused-debt',
-          currentBalance: balance,
-          apr: apr.toString(),
-          minimumPayment: safeMinimum(balance, apr),
-          status: DebtStatus.paused,
-          pausedUntil: pauseUntil,
-        );
-        final plan = makePlan(extraMonthlyAmount: 5000);
+    Glados2(
+      balanceGen,
+      aprGen,
+    ).test('paused debt receives no principal payment during pause window', (
+      balance,
+      apr,
+    ) {
+      final pauseUntil = DateTime(2026, 4, 1);
+      final debt = makeDebt(
+        id: 'paused-debt',
+        currentBalance: balance,
+        apr: apr.toString(),
+        minimumPayment: safeMinimum(balance, apr),
+        status: DebtStatus.paused,
+        pausedUntil: pauseUntil,
+      );
+      final plan = makePlan(extraMonthlyAmount: 5000);
 
-        final projection = TimelineSimulator.simulate(
-          debts: [debt],
-          plan: plan,
-          startDate: startDate,
-          generatedAt: generatedAt,
-        );
+      final projection = TimelineSimulator.simulate(
+        debts: [debt],
+        plan: plan,
+        startDate: startDate,
+        generatedAt: generatedAt,
+      );
 
-        for (final month in projection.months) {
-          if (month.yearMonth.compareTo(pauseWindowEnd) < 0) {
-            final entry = month.entries
-                .where((e) => e.debtId == 'paused-debt')
-                .firstOrNull;
-            if (entry != null) {
-              expect(
-                entry.principalPortion,
-                equals(0),
-                reason:
-                    'Paused debt must not receive principal on ${month.yearMonth}',
-              );
-            }
+      for (final month in projection.months) {
+        if (month.yearMonth.compareTo(pauseWindowEnd) < 0) {
+          final entry = month.entries
+              .where((e) => e.debtId == 'paused-debt')
+              .firstOrNull;
+          if (entry != null) {
+            expect(
+              entry.principalPortion,
+              equals(0),
+              reason:
+                  'Paused debt must not receive principal on ${month.yearMonth}',
+            );
           }
         }
-      },
-    );
+      }
+    });
 
     Glados2(balanceGen, aprGen).test(
       'paused then resumed debt eventually pays off',
@@ -195,48 +202,86 @@ void main() {
       },
     );
 
-    test('promotional low rate shortens or equals timeline vs original high rate', () {
-      final highApr = Decimal.parse('0.2499');
-      final lowApr = Decimal.parse('0.0599');
-      const balance = 500000;
+    test(
+      'promotional low rate shortens or equals timeline vs original high rate',
+      () {
+        final highApr = Decimal.parse('0.2499');
+        final lowApr = Decimal.parse('0.0599');
+        const balance = 500000;
 
+        final debt = makeDebt(
+          id: 'debt-promo',
+          currentBalance: balance,
+          apr: highApr.toString(),
+          minimumPayment: 15000,
+        );
+        final plan = makePlan(extraMonthlyAmount: 10000);
+
+        final projHigh = TimelineSimulator.simulate(
+          debts: [debt],
+          plan: plan,
+          startDate: startDate,
+          generatedAt: generatedAt,
+        );
+
+        final promoHistory = InterestRateHistory(
+          id: 'promo-rate',
+          debtId: 'debt-promo',
+          apr: lowApr,
+          effectiveFrom: startDate,
+        );
+
+        final projPromo = TimelineSimulator.simulate(
+          debts: [debt],
+          plan: plan,
+          startDate: startDate,
+          generatedAt: generatedAt,
+          rateHistoryByDebt: {
+            'debt-promo': [promoHistory],
+          },
+        );
+
+        expect(
+          projPromo.months.length,
+          lessThanOrEqualTo(projHigh.months.length),
+          reason: 'Promotional low rate must not extend the payoff timeline',
+        );
+      },
+    );
+
+    test('overlapping histories use the most recent effective rate', () {
       final debt = makeDebt(
-        id: 'debt-promo',
-        currentBalance: balance,
-        apr: highApr.toString(),
-        minimumPayment: 15000,
+        id: 'debt-overlap',
+        currentBalance: 120000,
+        apr: '0',
+        minimumPayment: 12000,
       );
-      final plan = makePlan(extraMonthlyAmount: 10000);
+      final plan = makePlan(extraMonthlyAmount: 0);
 
-      final projHigh = TimelineSimulator.simulate(
+      final projection = TimelineSimulator.simulate(
         debts: [debt],
         plan: plan,
-        startDate: startDate,
-        generatedAt: generatedAt,
-      );
-
-      final promoHistory = InterestRateHistory(
-        id: 'promo-rate',
-        debtId: 'debt-promo',
-        apr: lowApr,
-        effectiveFrom: startDate,
-      );
-
-      final projPromo = TimelineSimulator.simulate(
-        debts: [debt],
-        plan: plan,
-        startDate: startDate,
+        startDate: DateTime.utc(2026, 4, 1),
         generatedAt: generatedAt,
         rateHistoryByDebt: {
-          'debt-promo': [promoHistory],
+          'debt-overlap': [
+            InterestRateHistory(
+              id: 'old-rate',
+              debtId: 'debt-overlap',
+              apr: Decimal.parse('0.12'),
+              effectiveFrom: DateTime.utc(2026, 1, 1),
+            ),
+            InterestRateHistory(
+              id: 'new-rate',
+              debtId: 'debt-overlap',
+              apr: Decimal.parse('0.24'),
+              effectiveFrom: DateTime.utc(2026, 3, 1),
+            ),
+          ],
         },
       );
 
-      expect(
-        projPromo.months.length,
-        lessThanOrEqualTo(projHigh.months.length),
-        reason: 'Promotional low rate must not extend the payoff timeline',
-      );
+      expect(projection.months.first.totalInterestThisMonth, 2400);
     });
   });
 

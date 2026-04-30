@@ -2,12 +2,12 @@
 
 ## Current status snapshot
 
-As of **April 24, 2026**, the repository reflects this project status:
+As of **April 30, 2026**, the repository reflects this project status:
 
 - `Phase 0-6` MVP scope is complete in the codebase.
 - `Phase 10` Reports & Reminders is closed with accepted scope adjustments.
-- `Phase 7` Cloud Sync has started in the foundation layer: Firestore rules, emulator rules tests, and sync architecture skeleton exist, but Firebase Auth, push/pull runtime, and upgrade UI are not connected yet.
-- `Phase 8` has partial foundations only: milestones, reminder hooks, and basic progress surfaces exist, but scenarios and premium flows are not complete.
+- `Phase 7` Cloud Sync engineering is functionally complete and accepted with a QA waiver. Real-device cross-sync QA and cost monitoring remain v1.1 release gates.
+- `Phase 8` Power Features is a release candidate with bi-weekly/weekly cadence explicitly deferred from v1.2 scope.
 - `Phase 9` Partner Sharing is still planned.
 
 ## Recommended reading order

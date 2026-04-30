@@ -3,6 +3,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/di/injection.dart';
 import '../../../../core/extensions/context_extensions.dart';
+import '../../../../core/services/plan_recast_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -52,6 +53,10 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
   late final ScenarioRepository _scenarioRepo = getIt<ScenarioRepository>();
   late final DebtRepository _debtRepo = getIt<DebtRepository>();
   late final PlanRepository _planRepo = getIt<PlanRepository>();
+  late final PlanRecastService? _planRecastService =
+      getIt.isRegistered<PlanRecastService>()
+      ? getIt<PlanRecastService>()
+      : null;
 
   List<Scenario> _scenarios = [];
   Scenario? _selectedA;
@@ -68,6 +73,7 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
 
   Future<void> _loadScenarios() async {
     final list = await _scenarioRepo.getAllScenarios();
+    if (!mounted) return;
     setState(() => _scenarios = list);
     // Pre-select first two if available
     if (list.isNotEmpty) {
@@ -84,7 +90,13 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
     setState(() => _loading = true);
     try {
       final debts = await _debtRepo.getAllDebts(scenarioId: scenario.id);
-      final plan = await _planRepo.getCurrentPlan(scenarioId: scenario.id);
+      var plan = await _planRepo.getCurrentPlan(scenarioId: scenario.id);
+      if (_isStale(plan)) {
+        final recast = await _planRecastService?.recast(
+          scenarioId: scenario.id,
+        );
+        plan = recast?.plan ?? plan;
+      }
       final totalBalance = debts.fold(0, (sum, d) => sum + d.currentBalance);
       final snap = _ScenarioSnapshot(
         scenario: scenario,
@@ -92,13 +104,21 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
         totalBalance: totalBalance,
         plan: plan,
       );
+      if (!mounted) return;
       setState(() {
         if (slot == 'a') _snapA = snap;
         if (slot == 'b') _snapB = snap;
       });
     } finally {
-      setState(() => _loading = false);
+      if (mounted) setState(() => _loading = false);
     }
+  }
+
+  bool _isStale(Plan? plan) {
+    return plan != null &&
+        (plan.projectedDebtFreeDate == null ||
+            plan.totalInterestProjected == null ||
+            plan.totalInterestSaved == null);
   }
 
   @override
@@ -106,9 +126,7 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
     final l10n = context.l10n;
     final settings = context.userSettings;
     if (settings == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -120,54 +138,54 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
       ),
       body: SafeArea(
         child: ListView(
-              padding: const EdgeInsets.fromLTRB(
-                AppDimensions.pagePaddingH,
-                AppDimensions.md,
-                AppDimensions.pagePaddingH,
-                AppDimensions.xxl,
-              ),
+          padding: const EdgeInsets.fromLTRB(
+            AppDimensions.pagePaddingH,
+            AppDimensions.md,
+            AppDimensions.pagePaddingH,
+            AppDimensions.xxl,
+          ),
+          children: [
+            // Scenario selectors
+            Row(
               children: [
-                // Scenario selectors
-                Row(
-                  children: [
-                    Expanded(
-                      child: _ScenarioSelector(
-                        label: l10n.scenariosCompareSelectA,
-                        scenarios: _scenarios,
-                        selected: _selectedA,
-                        exclude: _selectedB,
-                        onChanged: (s) {
-                          setState(() => _selectedA = s);
-                          if (s != null) _loadSnapshot('a', s);
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: AppDimensions.md),
-                    Expanded(
-                      child: _ScenarioSelector(
-                        label: l10n.scenariosCompareSelectB,
-                        scenarios: _scenarios,
-                        selected: _selectedB,
-                        exclude: _selectedA,
-                        onChanged: (s) {
-                          setState(() => _selectedB = s);
-                          if (s != null) _loadSnapshot('b', s);
-                        },
-                      ),
-                    ),
-                  ],
+                Expanded(
+                  child: _ScenarioSelector(
+                    label: l10n.scenariosCompareSelectA,
+                    scenarios: _scenarios,
+                    selected: _selectedA,
+                    exclude: _selectedB,
+                    onChanged: (s) {
+                      setState(() => _selectedA = s);
+                      if (s != null) _loadSnapshot('a', s);
+                    },
+                  ),
                 ),
-                const SizedBox(height: AppDimensions.xl),
-                if (_loading)
-                  const Center(child: CircularProgressIndicator())
-                else if (_snapA == null || _snapB == null)
-                  _buildPickPrompt(context)
-                else
-                  _buildComparison(context, _snapA!, _snapB!, settings),
+                const SizedBox(width: AppDimensions.md),
+                Expanded(
+                  child: _ScenarioSelector(
+                    label: l10n.scenariosCompareSelectB,
+                    scenarios: _scenarios,
+                    selected: _selectedB,
+                    exclude: _selectedA,
+                    onChanged: (s) {
+                      setState(() => _selectedB = s);
+                      if (s != null) _loadSnapshot('b', s);
+                    },
+                  ),
+                ),
               ],
             ),
-          ),
-        );
+            const SizedBox(height: AppDimensions.xl),
+            if (_loading)
+              const Center(child: CircularProgressIndicator())
+            else if (_snapA == null || _snapB == null)
+              _buildPickPrompt(context)
+            else
+              _buildComparison(context, _snapA!, _snapB!, settings),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildPickPrompt(BuildContext context) {
@@ -209,12 +227,12 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
     final bFasterByMonths = _monthsBetween(b.debtFreeDate, a.debtFreeDate);
     final aCheaperBy =
         (a.projectedInterest != null && b.projectedInterest != null)
-            ? b.projectedInterest! - a.projectedInterest!
-            : null;
+        ? b.projectedInterest! - a.projectedInterest!
+        : null;
     final bCheaperBy =
         (a.projectedInterest != null && b.projectedInterest != null)
-            ? a.projectedInterest! - b.projectedInterest!
-            : null;
+        ? a.projectedInterest! - b.projectedInterest!
+        : null;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -263,12 +281,18 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
           rowLabel: l10n.scenariosCompareDebtFreeDate,
           icon: LucideIcons.calendarCheck2,
           valueA: a.debtFreeDate != null
-              ? AppFormatters.formatDate(a.debtFreeDate!, localeCode: localeCode)
+              ? AppFormatters.formatDate(
+                  a.debtFreeDate!,
+                  localeCode: localeCode,
+                )
               : (a.plan == null
                     ? l10n.scenariosCompareNoPlan
                     : l10n.scenariosCompareNotAvailable),
           valueB: b.debtFreeDate != null
-              ? AppFormatters.formatDate(b.debtFreeDate!, localeCode: localeCode)
+              ? AppFormatters.formatDate(
+                  b.debtFreeDate!,
+                  localeCode: localeCode,
+                )
               : (b.plan == null
                     ? l10n.scenariosCompareNoPlan
                     : l10n.scenariosCompareNotAvailable),
@@ -405,14 +429,13 @@ class _ScenarioSelector extends StatelessWidget {
         ),
         const SizedBox(height: AppDimensions.xs),
         DropdownButtonFormField<String>(
-          initialValue: (selected != null &&
-                  available.any((s) => s.id == selected!.id))
+          initialValue:
+              (selected != null && available.any((s) => s.id == selected!.id))
               ? selected!.id
               : null,
           decoration: const InputDecoration(
             isDense: true,
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             border: OutlineInputBorder(),
           ),
           items: available
@@ -651,7 +674,9 @@ class _DeltaBanner extends StatelessWidget {
             : AppColors.mdPrimaryContainer.withValues(alpha: 0.35),
         borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
         border: Border.all(
-          color: isTie ? AppColors.mdOutlineVariant : AppColors.mdPrimary.withValues(alpha: 0.4),
+          color: isTie
+              ? AppColors.mdOutlineVariant
+              : AppColors.mdPrimary.withValues(alpha: 0.4),
         ),
       ),
       child: isTie
@@ -660,7 +685,10 @@ class _DeltaBanner extends StatelessWidget {
                 const Icon(LucideIcons.equal, size: 18),
                 const SizedBox(width: AppDimensions.sm),
                 Expanded(
-                  child: Text(l10n.scenariosCompareTie, style: AppTextStyles.bodyMedium),
+                  child: Text(
+                    l10n.scenariosCompareTie,
+                    style: AppTextStyles.bodyMedium,
+                  ),
                 ),
               ],
             )
@@ -669,12 +697,20 @@ class _DeltaBanner extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(LucideIcons.trophy, size: 18, color: AppColors.mdPrimary),
+                    Icon(
+                      LucideIcons.trophy,
+                      size: 18,
+                      color: AppColors.mdPrimary,
+                    ),
                     const SizedBox(width: AppDimensions.sm),
                     Expanded(
                       child: Text(
-                        l10n.scenariosCompareDeltaTitle(winnerSnap.scenario.name),
-                        style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w600),
+                        l10n.scenariosCompareDeltaTitle(
+                          winnerSnap.scenario.name,
+                        ),
+                        style: AppTextStyles.bodyLarge.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
@@ -684,11 +720,17 @@ class _DeltaBanner extends StatelessWidget {
                   Row(
                     children: [
                       const SizedBox(width: 26),
-                      Icon(LucideIcons.calendarClock, size: 14, color: AppColors.mdOnSurfaceVariant),
+                      Icon(
+                        LucideIcons.calendarClock,
+                        size: 14,
+                        color: AppColors.mdOnSurfaceVariant,
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         l10n.scenariosCompareDeltaMonths(winnerMonths),
-                        style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdOnSurfaceVariant),
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.mdOnSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),
@@ -698,13 +740,23 @@ class _DeltaBanner extends StatelessWidget {
                   Row(
                     children: [
                       const SizedBox(width: 26),
-                      Icon(LucideIcons.piggyBank, size: 14, color: AppColors.mdOnSurfaceVariant),
+                      Icon(
+                        LucideIcons.piggyBank,
+                        size: 14,
+                        color: AppColors.mdOnSurfaceVariant,
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         l10n.scenariosCompareDeltaInterest(
-                          AppFormatters.formatCents(winnerSaves, currencyCode: currencyCode, localeCode: localeCode),
+                          AppFormatters.formatCents(
+                            winnerSaves,
+                            currencyCode: currencyCode,
+                            localeCode: localeCode,
+                          ),
                         ),
-                        style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdOnSurfaceVariant),
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.mdOnSurfaceVariant,
+                        ),
                       ),
                     ],
                   ),

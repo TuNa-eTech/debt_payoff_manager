@@ -12,6 +12,9 @@ abstract interface class InterestRateHistoryRepository {
   /// Get all rate history entries for a debt.
   Future<List<InterestRateHistory>> getByDebtId(String debtId);
 
+  /// Get a single rate history entry by ID.
+  Future<InterestRateHistory?> getById(String id);
+
   /// Add a new rate history entry.
   Future<void> addRateHistory(InterestRateHistory rate);
 

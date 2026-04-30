@@ -9,6 +9,7 @@ import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../domain/repositories/settings_repository.dart';
 
 class MonthlySummaryPage extends StatefulWidget {
   const MonthlySummaryPage({super.key});
@@ -20,6 +21,7 @@ class MonthlySummaryPage extends StatefulWidget {
 class _MonthlySummaryPageState extends State<MonthlySummaryPage> {
   late DateTime _month;
   late final MonthlySummaryService _service;
+  late final SettingsRepository _settingsRepository;
   MonthlySummaryData? _data;
   bool _loading = true;
 
@@ -29,13 +31,23 @@ class _MonthlySummaryPageState extends State<MonthlySummaryPage> {
     final now = DateTime.now();
     _month = DateTime(now.year, now.month);
     _service = getIt<MonthlySummaryService>();
+    _settingsRepository = getIt<SettingsRepository>();
     _load();
   }
 
   Future<void> _load() async {
     setState(() => _loading = true);
-    final data = await _service.getSummary(_month);
-    if (mounted) setState(() { _data = data; _loading = false; });
+    final settings = await _settingsRepository.getSettings();
+    final data = await _service.getSummary(
+      _month,
+      scenarioId: settings.activeScenarioId,
+    );
+    if (mounted) {
+      setState(() {
+        _data = data;
+        _loading = false;
+      });
+    }
   }
 
   void _prevMonth() {
@@ -96,13 +108,17 @@ class _MonthlySummaryPageState extends State<MonthlySummaryPage> {
         if (data.perDebt.isNotEmpty) ...[
           Text(
             context.l10n.monthlySummaryPerDebt,
-            style: AppTextStyles.titleMedium.copyWith(fontWeight: FontWeight.w600),
+            style: AppTextStyles.titleMedium.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
           ),
           const SizedBox(height: AppDimensions.sm),
-          ...data.perDebt.map((s) => Padding(
-            padding: const EdgeInsets.only(bottom: AppDimensions.sm),
-            child: _DebtSummaryCard(summary: s),
-          )),
+          ...data.perDebt.map(
+            (s) => Padding(
+              padding: const EdgeInsets.only(bottom: AppDimensions.sm),
+              child: _DebtSummaryCard(summary: s),
+            ),
+          ),
         ],
       ],
     );
@@ -141,7 +157,9 @@ class _MonthNavigator extends StatelessWidget {
             child: Text(
               AppFormatters.formatMonthYear(month),
               textAlign: TextAlign.center,
-              style: AppTextStyles.titleLarge.copyWith(fontWeight: FontWeight.w600),
+              style: AppTextStyles.titleLarge.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
           IconButton(
@@ -173,11 +191,18 @@ class _TotalPaidCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.monthlySummaryTotalPaid, style: AppTextStyles.labelMedium.copyWith(color: AppColors.mdOnSurfaceVariant)),
+          Text(
+            l10n.monthlySummaryTotalPaid,
+            style: AppTextStyles.labelMedium.copyWith(
+              color: AppColors.mdOnSurfaceVariant,
+            ),
+          ),
           const SizedBox(height: 4),
           Text(
             AppFormatters.formatCents(data.totalPaidCents),
-            style: AppTextStyles.headlineMedium.copyWith(fontWeight: FontWeight.w700),
+            style: AppTextStyles.headlineMedium.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
           ),
           if (hasVariance) ...[
             const SizedBox(height: 4),
@@ -243,7 +268,12 @@ class _BreakdownItem extends StatelessWidget {
               decoration: BoxDecoration(color: color, shape: BoxShape.circle),
             ),
             const SizedBox(width: 4),
-            Text(label, style: AppTextStyles.labelSmall.copyWith(color: AppColors.mdOnSurfaceVariant)),
+            Text(
+              label,
+              style: AppTextStyles.labelSmall.copyWith(
+                color: AppColors.mdOnSurfaceVariant,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 2),
@@ -311,19 +341,30 @@ class _DebtSummaryCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(summary.debt.name, style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w600)),
+                Text(
+                  summary.debt.name,
+                  style: AppTextStyles.bodyLarge.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 if (reduction > 0) ...[
                   const SizedBox(height: 2),
                   Text(
-                    l10n.monthlySummaryBalanceReduced(AppFormatters.formatCents(reduction)),
-                    style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdPrimary),
+                    l10n.monthlySummaryBalanceReduced(
+                      AppFormatters.formatCents(reduction),
+                    ),
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.mdPrimary,
+                    ),
                   ),
                 ],
                 if (summary.chargeCents > 0) ...[
                   const SizedBox(height: 2),
                   Text(
                     '+${AppFormatters.formatCents(summary.chargeCents)} ${l10n.monthlySummaryCharges.toLowerCase()}',
-                    style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdError),
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.mdError,
+                    ),
                   ),
                 ],
               ],
@@ -334,11 +375,15 @@ class _DebtSummaryCard extends StatelessWidget {
             children: [
               Text(
                 AppFormatters.formatCents(summary.paidCents),
-                style: AppTextStyles.titleMedium.copyWith(fontWeight: FontWeight.w700),
+                style: AppTextStyles.titleMedium.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               Text(
                 'P: ${AppFormatters.formatCents(summary.principalCents)} · I: ${AppFormatters.formatCents(summary.interestCents)}',
-                style: AppTextStyles.labelSmall.copyWith(color: AppColors.mdOnSurfaceVariant),
+                style: AppTextStyles.labelSmall.copyWith(
+                  color: AppColors.mdOnSurfaceVariant,
+                ),
               ),
             ],
           ),
@@ -364,9 +409,19 @@ class _EmptyState extends StatelessWidget {
           children: [
             Icon(LucideIcons.calendarX2, size: 64, color: AppColors.mdOutline),
             const SizedBox(height: AppDimensions.md),
-            Text(l10n.monthlySummaryNoActivity, style: AppTextStyles.bodyLarge, textAlign: TextAlign.center),
+            Text(
+              l10n.monthlySummaryNoActivity,
+              style: AppTextStyles.bodyLarge,
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: AppDimensions.sm),
-            Text(l10n.monthlySummaryNoActivitySub, style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdOnSurfaceVariant), textAlign: TextAlign.center),
+            Text(
+              l10n.monthlySummaryNoActivitySub,
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.mdOnSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
       ),

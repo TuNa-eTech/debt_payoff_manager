@@ -1,21 +1,27 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../domain/entities/debt.dart';
 import '../../../domain/enums/debt_status.dart';
 import '../../../domain/repositories/debt_repository.dart';
+import '../../../domain/repositories/settings_repository.dart';
 import 'debts_state.dart';
 
 /// Cubit managing the list of debts.
 ///
 /// Feature 1.1: Nhập & quản lý khoản nợ
 class DebtsCubit extends Cubit<DebtsState> {
-  DebtsCubit({required DebtRepository debtRepository})
-    : _debtRepository = debtRepository,
-      super(const DebtsState());
+  DebtsCubit({
+    required DebtRepository debtRepository,
+    SettingsRepository? settingsRepository,
+  }) : _debtRepository = debtRepository,
+       _settingsRepository = settingsRepository,
+       super(const DebtsState());
 
   final DebtRepository _debtRepository;
+  final SettingsRepository? _settingsRepository;
   StreamSubscription<List<Debt>>? _debtsSubscription;
   int _feedbackSequence = 0;
 
@@ -23,7 +29,17 @@ class DebtsCubit extends Cubit<DebtsState> {
   Future<void> start() async {
     await _debtsSubscription?.cancel();
     emit(state.copyWith(isLoading: true, clearInlineError: true));
-    _debtsSubscription = _debtRepository.watchAllDebts().listen(
+    final debtStream = _settingsRepository == null
+        ? _debtRepository.watchAllDebts()
+        : _settingsRepository
+              .watchSettings()
+              .map((settings) => settings.activeScenarioId)
+              .distinct()
+              .switchMap(
+                (scenarioId) =>
+                    _debtRepository.watchAllDebts(scenarioId: scenarioId),
+              );
+    _debtsSubscription = debtStream.listen(
       (debts) {
         emit(
           state.copyWith(

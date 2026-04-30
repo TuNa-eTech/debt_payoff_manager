@@ -12,6 +12,7 @@ import '../../../domain/enums/interest_method.dart';
 import '../../../domain/enums/min_payment_type.dart';
 import '../../../domain/enums/payment_cadence.dart';
 import '../../../domain/repositories/debt_repository.dart';
+import '../../../domain/repositories/settings_repository.dart';
 import '../../../engine/interest_calculator.dart';
 import '../../../engine/validators.dart';
 
@@ -257,7 +258,9 @@ class DebtFormCubit extends Cubit<DebtFormState> {
   DebtFormCubit.create({
     required DebtRepository debtRepository,
     required DebtFormMode mode,
+    SettingsRepository? settingsRepository,
   }) : _debtRepository = debtRepository,
+       _settingsRepository = settingsRepository,
        _existingDebt = null,
        super(
          DebtFormState(
@@ -273,7 +276,9 @@ class DebtFormCubit extends Cubit<DebtFormState> {
   DebtFormCubit.edit({
     required DebtRepository debtRepository,
     required Debt debt,
+    SettingsRepository? settingsRepository,
   }) : _debtRepository = debtRepository,
+       _settingsRepository = settingsRepository,
        _existingDebt = debt,
        super(
          DebtFormState(
@@ -291,6 +296,7 @@ class DebtFormCubit extends Cubit<DebtFormState> {
        );
 
   final DebtRepository _debtRepository;
+  final SettingsRepository? _settingsRepository;
   final Debt? _existingDebt;
   final Uuid _uuid = const Uuid();
 
@@ -438,7 +444,9 @@ class DebtFormCubit extends Cubit<DebtFormState> {
       ),
     );
 
+    final scenarioId = await _activeScenarioId();
     final validation = _validateAndBuildDebt(
+      scenarioId: scenarioId,
       nameInput: nameInput,
       originalPrincipalInput: originalPrincipalInput,
       currentBalanceInput: currentBalanceInput,
@@ -491,6 +499,7 @@ class DebtFormCubit extends Cubit<DebtFormState> {
   }
 
   _ValidationResult _validateAndBuildDebt({
+    required String scenarioId,
     required String nameInput,
     required String originalPrincipalInput,
     required String currentBalanceInput,
@@ -539,7 +548,7 @@ class DebtFormCubit extends Cubit<DebtFormState> {
     return _ValidationResult(
       debt: Debt(
         id: existingDebt?.id ?? _uuid.v4(),
-        scenarioId: existingDebt?.scenarioId ?? 'main',
+        scenarioId: existingDebt?.scenarioId ?? scenarioId,
         name: name,
         type: state.selectedType,
         originalPrincipal: originalPrincipal!,
@@ -565,6 +574,15 @@ class DebtFormCubit extends Cubit<DebtFormState> {
         deletedAt: existingDebt?.deletedAt,
       ),
     );
+  }
+
+  Future<String> _activeScenarioId() async {
+    final settingsRepository = _settingsRepository;
+    if (settingsRepository == null || _existingDebt != null) {
+      return _existingDebt?.scenarioId ?? 'main';
+    }
+    final settings = await settingsRepository.getSettings();
+    return settings.activeScenarioId;
   }
 
   _ValidationErrors _buildValidationErrors({

@@ -28,9 +28,10 @@ class TrackedDebtRepository implements DebtRepository {
 
   @override
   Future<void> deleteDebt(String id) async {
+    final current = await _base.getDebtById(id);
     await _base.deleteDebt(id);
     await _syncStateStore.markDirty('debts');
-    await _planRecastService.recast();
+    await _planRecastService.recast(scenarioId: current?.scenarioId ?? 'main');
   }
 
   @override
@@ -58,7 +59,8 @@ class TrackedDebtRepository implements DebtRepository {
   Future<void> restoreDebt(String id) async {
     await _base.restoreDebt(id);
     await _syncStateStore.markDirty('debts');
-    await _planRecastService.recast();
+    final restored = await _base.getDebtById(id);
+    await _planRecastService.recast(scenarioId: restored?.scenarioId ?? 'main');
   }
 
   @override

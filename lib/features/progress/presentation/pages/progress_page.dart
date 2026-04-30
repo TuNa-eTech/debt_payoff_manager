@@ -270,8 +270,9 @@ class _PlanSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scenarioId = context.userSettings?.activeScenarioId ?? 'main';
     return StreamBuilder(
-      stream: planRepository.watchCurrentPlan(),
+      stream: planRepository.watchCurrentPlan(scenarioId: scenarioId),
       builder: (context, snapshot) {
         final plan = snapshot.data;
         if (plan == null) return const SizedBox.shrink();
@@ -529,16 +530,24 @@ class _MonthlySummaryEntryCard extends StatelessWidget {
               children: [
                 Text(
                   context.l10n.monthlySummaryTitle,
-                  style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w600),
+                  style: AppTextStyles.bodyLarge.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 Text(
                   AppFormatters.formatMonthYear(DateTime.now()),
-                  style: AppTextStyles.bodySmall.copyWith(color: AppColors.mdOnSurfaceVariant),
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.mdOnSurfaceVariant,
+                  ),
                 ),
               ],
             ),
           ),
-          const Icon(LucideIcons.chevronRight, size: 18, color: AppColors.mdOutline),
+          const Icon(
+            LucideIcons.chevronRight,
+            size: 18,
+            color: AppColors.mdOutline,
+          ),
         ],
       ),
     );

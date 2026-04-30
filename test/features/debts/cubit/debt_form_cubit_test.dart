@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:debt_payoff_manager/data/local/database.dart';
 import 'package:debt_payoff_manager/data/repositories/debt_repository_impl.dart';
+import 'package:debt_payoff_manager/data/repositories/settings_repository_impl.dart';
 import 'package:debt_payoff_manager/domain/enums/debt_status.dart';
 import 'package:debt_payoff_manager/domain/enums/debt_type.dart';
 import 'package:debt_payoff_manager/domain/enums/interest_method.dart';
@@ -214,6 +215,37 @@ void main() {
       );
 
       cubit.close();
+    });
+
+    test('create mode saves new debts into the active scenario', () async {
+      final settingsRepository = SettingsRepositoryImpl(db: db);
+      final settings = await settingsRepository.getSettings();
+      await settingsRepository.updateSettings(
+        settings.copyWith(activeScenarioId: 'what-if'),
+      );
+      final cubit = DebtFormCubit.create(
+        debtRepository: repo,
+        settingsRepository: settingsRepository,
+        mode: DebtFormMode.create,
+      );
+
+      final saved = await cubit.save(
+        nameInput: 'Scenario card',
+        originalPrincipalInput: '1000',
+        currentBalanceInput: '900',
+        aprInput: '12',
+        minimumPaymentInput: '40',
+        dueDayInput: '15',
+        minimumPaymentPercentInput: '',
+        minimumPaymentFloorInput: '',
+      );
+
+      expect(saved, isNotNull);
+      expect(saved!.scenarioId, 'what-if');
+      expect(await repo.getAllDebts(scenarioId: 'main'), isEmpty);
+      expect(await repo.getAllDebts(scenarioId: 'what-if'), hasLength(1));
+
+      await cubit.close();
     });
 
     test('edit mode preserves existing id and paidOffAt when saved', () async {

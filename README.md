@@ -2,7 +2,7 @@
 
 > **A living plan for debt freedom.** Track, strategize, and conquer your debt with mathematically precise payoff plans that adapt to your real life.
 
-> **Current repo status (April 25, 2026):** MVP core is complete in the repository, `v1.4` reports and reminders are implemented, landing page & marketing assets are finalized, while cloud sync, partner sharing, and monetization are still planned.
+> **Current repo status (April 30, 2026):** MVP core is complete in the repository, `v1.4` reports and reminders are implemented, landing page & marketing assets are finalized, and Phase 7 Cloud Sync engineering is functionally complete with real-device QA and cost monitoring deferred to the v1.1 release gate.
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.38-02569B?logo=flutter)](https://flutter.dev)
 [![Dart](https://img.shields.io/badge/Dart-3.9-0175C2?logo=dart)](https://dart.dev)
@@ -42,9 +42,10 @@ We analyzed 6 top debt payoff apps on the US App Store. Every single one fails u
 
 - **Reports & PDF Export** — Implemented in the accepted `v1.4` scope with preview, PDF generation, and system share flow
 - **Reminders & Notifications** — Implemented in the accepted `v1.4` scope for due dates, monthly logging, and milestones
-- **Progress Milestones** — Detection and notification foundations are implemented; broader celebration/streak UX is still partial
-- **What-If Scenarios** — Planned
-- **Cloud Sync & Partner Sharing** — Planned
+- **Progress Milestones** — Implemented with milestone detection, notifications, celebration UI, and progress dashboard foundations
+- **What-If Scenarios** — Implemented for active-scenario app paths; bi-weekly/weekly cadence is deferred from v1.2
+- **Cloud Sync** — Engineering complete with QA waiver; real-device cross-sync and production cost monitoring remain release gates
+- **Partner Sharing** — Planned
 - **Premium / IAP** — Pricing narrative exists, but monetization flow is still a placeholder
 
 See the full [Feature Spec →](docs/feature-spec.md)
@@ -205,8 +206,8 @@ Phase 3     ✅  Debt Management MVP
 Phase 4     ✅  Living Plan (strategy, timeline, payments)
 Phase 5     ✅  Onboarding & Trust Layer
 Phase 6     ✅  MVP Polish & Ship (v1.0)
-Phase 7     ⏳  Cloud Sync — Trust Level 1 (not started in app layer)
-Phase 8     🟡  Power Features — partial foundations only
+Phase 7     ✅  Cloud Sync — engineering complete, real-device QA deferred
+Phase 8     🟡  Power Features — release candidate, cadence deferred
 Phase 9     ⏳  Partner Sharing (planned)
 Phase 10    ✅  Reports & Reminders (v1.4 accepted scope)
 ```
