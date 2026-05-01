@@ -40,7 +40,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="https"
-                    android:host="debtpayoff.app"
+                    android:host="debt-payoff-manager-e6283.web.app"
                     android:pathPrefix="/invite" />
             </intent-filter>
         </activity>

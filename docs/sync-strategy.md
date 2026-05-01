@@ -579,7 +579,7 @@ Owner (Level 1+, email auth):
        createdAt: serverTimestamp,
      }
   4. Send invite: owned HTTPS App Link với token
-     https://debtpayoff.app/invite?token=XXX
+     https://debt-payoff-manager-e6283.web.app/invite?token=XXX
   5. Share via system sheet/QR/copy link; email delivery can be added later if needed
 
 Partner receives email → taps link:

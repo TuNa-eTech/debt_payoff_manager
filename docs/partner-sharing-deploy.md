@@ -9,13 +9,13 @@ waived by product decision.
 - Active project: `debt-payoff-manager-e6283`
 - Functions source: `functions/`
 - Firestore rules file: `firestore.rules`
-- Invite base URL: `https://debtpayoff.app/invite`
+- Invite base URL: `https://debt-payoff-manager-e6283.web.app/invite`
 
 Before deploying Functions, create `functions/.env` from
 `functions/.env.example`:
 
 ```sh
-INVITE_BASE_URL=https://debtpayoff.app/invite
+INVITE_BASE_URL=https://debt-payoff-manager-e6283.web.app/invite
 ```
 
 ## Deploy commands

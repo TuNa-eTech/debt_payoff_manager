@@ -33,7 +33,7 @@ interface SharedPlanDoc {
 }
 
 const inviteTtlMs = 7 * 24 * 60 * 60 * 1000;
-const defaultInviteBaseUrl = "https://debtpayoff.app/invite";
+const defaultInviteBaseUrl = "https://debt-payoff-manager-e6283.web.app/invite";
 
 function requireUid(uid: string | undefined): string {
   if (!uid) {
