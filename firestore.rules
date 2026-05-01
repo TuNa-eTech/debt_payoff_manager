@@ -10,6 +10,36 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == uid;
     }
 
+    function sharedPlanId(uid, scenarioId) {
+      return uid + '_' + scenarioId;
+    }
+
+    function sharedPlanPath(uid, scenarioId) {
+      return /databases/$(database)/documents/sharedPlans/$(sharedPlanId(uid, scenarioId));
+    }
+
+    function isActiveSharedPlan(data) {
+      return data.revokedAt == null;
+    }
+
+    function isSharedPlanParticipant(data) {
+      return isSignedIn()
+        && isActiveSharedPlan(data)
+        && (data.ownerUid == request.auth.uid
+          || request.auth.uid in data.partnerUids);
+    }
+
+    function canReadSharedMirror(uid) {
+      return isSignedIn()
+        && resource.data.scenarioId is string
+        && exists(sharedPlanPath(uid, resource.data.scenarioId))
+        && isSharedPlanParticipant(get(sharedPlanPath(uid, resource.data.scenarioId)).data);
+    }
+
+    function canReadOwnerOrShared(uid) {
+      return isOwner(uid) || canReadSharedMirror(uid);
+    }
+
     function hasRequiredFields(data, fields) {
       return data.keys().hasAll(fields);
     }
@@ -198,7 +228,7 @@ service cloud.firestore {
         && data.scenarioId == 'main'
         && data.trustLevel is int
         && data.trustLevel >= 0
-        && data.trustLevel <= 1
+        && data.trustLevel <= 2
         && isNullableString(data.firebaseUid)
         && data.currencyCode is string
         && data.localeCode is string
@@ -274,22 +304,76 @@ service cloud.firestore {
         && data.updatedAt is timestamp;
     }
 
+    function isValidScenario(data) {
+      return hasRequiredFields(data, [
+          'id',
+          'scenarioId',
+          'name',
+          'isMain',
+          'createdAt',
+          'updatedAt',
+          'deletedAt',
+          '_deviceId',
+          '_schemaVersion'
+        ])
+        && hasValidSyncFields(data)
+        && data.id == data.scenarioId
+        && data.name is string
+        && data.name.size() > 0
+        && data.name.size() <= 80
+        && data.isMain is bool;
+    }
+
+    function isValidSharedPlan(data) {
+      return hasRequiredFields(data, [
+          'ownerUid',
+          'scenarioId',
+          'mode',
+          'partnerUids',
+          'pendingInvites',
+          'pendingTokenHashes',
+          'createdAt',
+          'updatedAt',
+          'revokedAt'
+        ])
+        && data.ownerUid is string
+        && data.scenarioId is string
+        && data.mode in ['readonly', 'collaborative']
+        && data.partnerUids is list
+        && data.pendingInvites is list
+        && data.pendingTokenHashes is list
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp
+        && isNullableTimestamp(data.revokedAt);
+    }
+
+    match /users/{uid}/scenarios/{docId} {
+      allow read: if canReadOwnerOrShared(uid);
+      allow delete: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+        && request.resource.data.id == docId
+        && isValidScenario(request.resource.data);
+    }
+
     match /users/{uid}/debts/{docId} {
-      allow read, delete: if isOwner(uid);
+      allow read: if canReadOwnerOrShared(uid);
+      allow delete: if isOwner(uid);
       allow create, update: if isOwner(uid)
         && request.resource.data.id == docId
         && isValidDebt(request.resource.data);
     }
 
     match /users/{uid}/payments/{docId} {
-      allow read, delete: if isOwner(uid);
+      allow read: if canReadOwnerOrShared(uid);
+      allow delete: if isOwner(uid);
       allow create, update: if isOwner(uid)
         && request.resource.data.id == docId
         && isValidPayment(request.resource.data);
     }
 
     match /users/{uid}/plans/{docId} {
-      allow read, delete: if isOwner(uid);
+      allow read: if canReadOwnerOrShared(uid);
+      allow delete: if isOwner(uid);
       allow create, update: if isOwner(uid)
         && request.resource.data.id == docId
         && isValidPlan(request.resource.data);
@@ -304,14 +388,16 @@ service cloud.firestore {
     }
 
     match /users/{uid}/milestones/{docId} {
-      allow read, delete: if isOwner(uid);
+      allow read: if canReadOwnerOrShared(uid);
+      allow delete: if isOwner(uid);
       allow create, update: if isOwner(uid)
         && request.resource.data.id == docId
         && isValidMilestone(request.resource.data);
     }
 
     match /users/{uid}/interestRateHistory/{docId} {
-      allow read, delete: if isOwner(uid);
+      allow read: if canReadOwnerOrShared(uid);
+      allow delete: if isOwner(uid);
       allow create, update: if isOwner(uid)
         && request.resource.data.id == docId
         && isValidInterestRateHistory(request.resource.data);
@@ -324,7 +410,9 @@ service cloud.firestore {
     }
 
     match /sharedPlans/{planId} {
-      allow read, write: if false;
+      allow read: if isValidSharedPlan(resource.data)
+        && isSharedPlanParticipant(resource.data);
+      allow write: if false;
     }
 
     match /{document=**} {

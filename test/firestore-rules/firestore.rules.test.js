@@ -168,6 +168,36 @@ function validInterestRateHistory(overrides = {}) {
   };
 }
 
+function validScenario(overrides = {}) {
+  return {
+    id: 'main',
+    scenarioId: 'main',
+    name: 'Main plan',
+    isMain: true,
+    createdAt: now(),
+    updatedAt: now(),
+    deletedAt: null,
+    _deviceId: 'ios-simulator',
+    _schemaVersion: 1,
+    ...overrides,
+  };
+}
+
+function validSharedPlan(overrides = {}) {
+  return {
+    ownerUid: 'alice',
+    scenarioId: 'main',
+    mode: 'readonly',
+    partnerUids: ['bob'],
+    pendingInvites: [],
+    pendingTokenHashes: [],
+    createdAt: now(),
+    updatedAt: now(),
+    revokedAt: null,
+    ...overrides,
+  };
+}
+
 function authedDb(uid) {
   return testEnv.authenticatedContext(uid).firestore();
 }
@@ -212,6 +242,7 @@ describe('firestore.rules Phase 7 Level 1 sync', () => {
       ['users/alice/debts/debt-1', validDebt, { currentBalanceCents: 400000 }],
       ['users/alice/payments/payment-1', validPayment, { note: 'manual log' }],
       ['users/alice/plans/plan-1', validPlan, { extraMonthlyAmountCents: 40000 }],
+      ['users/alice/scenarios/main', validScenario, { name: 'Main household plan' }],
       ['users/alice/settings/singleton', validSettings, { localeCode: 'vi-VN' }],
       ['users/alice/milestones/milestone-1', validMilestone, { seen: true }],
       [
@@ -327,18 +358,90 @@ describe('firestore.rules Phase 7 Level 1 sync', () => {
     );
   });
 
-  it('keeps Phase 9 shared plan access disabled for now', async () => {
+  it('keeps shared plan writes server-owned', async () => {
     const alice = authedDb('alice');
 
     await assertFails(
-      setDoc(doc(alice, 'sharedPlans/main'), {
-        ownerUid: 'alice',
-        partnerUids: ['bob'],
-        mode: 'readonly',
-        createdAt: now(),
-        updatedAt: now(),
-      }),
+      setDoc(doc(alice, 'sharedPlans/alice_main'), validSharedPlan()),
     );
+  });
+
+  it('allows a partner to read only the shared owner scenario', async () => {
+    const alice = authedDb('alice');
+    const bob = authedDb('bob');
+    const charlie = authedDb('charlie');
+
+    await assertSucceeds(setDoc(doc(alice, 'users/alice/debts/debt-1'), validDebt()));
+    await testEnv.withSecurityRulesDisabled(async (context) => {
+      await setDoc(
+        doc(context.firestore(), 'sharedPlans/alice_main'),
+        validSharedPlan(),
+      );
+    });
+
+    await assertSucceeds(getDoc(doc(bob, 'sharedPlans/alice_main')));
+    await assertSucceeds(getDoc(doc(bob, 'users/alice/debts/debt-1')));
+    await assertFails(getDoc(doc(charlie, 'sharedPlans/alice_main')));
+    await assertFails(getDoc(doc(charlie, 'users/alice/debts/debt-1')));
+  });
+
+  it('blocks partner access to non-shared scenario data', async () => {
+    const alice = authedDb('alice');
+    const bob = authedDb('bob');
+
+    await assertSucceeds(
+      setDoc(
+        doc(alice, 'users/alice/debts/private-debt'),
+        validDebt({
+          id: 'private-debt',
+          scenarioId: 'private-scenario',
+        }),
+      ),
+    );
+    await testEnv.withSecurityRulesDisabled(async (context) => {
+      await setDoc(
+        doc(context.firestore(), 'sharedPlans/alice_main'),
+        validSharedPlan(),
+      );
+    });
+
+    await assertFails(getDoc(doc(bob, 'users/alice/debts/private-debt')));
+  });
+
+  it('blocks read-only and collaborative partners from direct mirror writes', async () => {
+    const bob = authedDb('bob');
+
+    await testEnv.withSecurityRulesDisabled(async (context) => {
+      await setDoc(
+        doc(context.firestore(), 'sharedPlans/alice_main'),
+        validSharedPlan({ mode: 'collaborative' }),
+      );
+    });
+
+    await assertFails(
+      setDoc(doc(bob, 'users/alice/payments/payment-by-bob'), validPayment({
+        id: 'payment-by-bob',
+      })),
+    );
+    await assertFails(
+      setDoc(doc(bob, 'users/alice/debts/debt-1'), validDebt()),
+    );
+  });
+
+  it('blocks revoked partners immediately', async () => {
+    const alice = authedDb('alice');
+    const bob = authedDb('bob');
+
+    await assertSucceeds(setDoc(doc(alice, 'users/alice/debts/debt-1'), validDebt()));
+    await testEnv.withSecurityRulesDisabled(async (context) => {
+      await setDoc(
+        doc(context.firestore(), 'sharedPlans/alice_main'),
+        validSharedPlan({ revokedAt: now() }),
+      );
+    });
+
+    await assertFails(getDoc(doc(bob, 'sharedPlans/alice_main')));
+    await assertFails(getDoc(doc(bob, 'users/alice/debts/debt-1')));
   });
 
   it('allows an owner to delete their cloud mirror during downgrade teardown', async () => {

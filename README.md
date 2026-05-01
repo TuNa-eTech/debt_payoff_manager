@@ -45,7 +45,7 @@ We analyzed 6 top debt payoff apps on the US App Store. Every single one fails u
 - **Progress Milestones** — Implemented with milestone detection, notifications, celebration UI, and progress dashboard foundations
 - **What-If Scenarios** — Implemented for active-scenario app paths; bi-weekly/weekly cadence is deferred from v1.2
 - **Cloud Sync** — Engineering complete with QA waiver; real-device cross-sync and production cost monitoring remain release gates
-- **Partner Sharing** — Planned
+- **Partner Sharing** — Engineering complete; production app-link deploy verification pending
 - **Premium / IAP** — Pricing narrative exists, but monetization flow is still a placeholder
 
 See the full [Feature Spec →](docs/feature-spec.md)
@@ -208,7 +208,7 @@ Phase 5     ✅  Onboarding & Trust Layer
 Phase 6     ✅  MVP Polish & Ship (v1.0)
 Phase 7     ✅  Cloud Sync — engineering complete, real-device QA deferred
 Phase 8     🟡  Power Features — release candidate, cadence deferred
-Phase 9     ⏳  Partner Sharing (planned)
+Phase 9     🟡  Partner Sharing — engineering complete, app-link deploy pending
 Phase 10    ✅  Reports & Reminders (v1.4 accepted scope)
 ```
 
@@ -292,7 +292,7 @@ Contributions are welcome! Here's how you can help:
 | Reports & Reminders (`v1.4`) | ✅ Implemented in accepted scope |
 | Progress / Milestone Foundation | 🟡 Partial |
 | Cloud Sync | 📋 Not started in app layer |
-| Partner Sharing | 📋 Planned |
+| Partner Sharing | 🟡 Engineering complete; app-link deploy pending |
 | Premium / IAP | 📋 Placeholder UI only |
 
 ---

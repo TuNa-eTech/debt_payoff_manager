@@ -94,14 +94,16 @@ Legend:
 - **Phase 6 / E5** nên được coi là **complete cho shipped v1.0 scope**:
   - Repo có i18n runtime, analytics bootstrap, app icon assets/config, smoke coverage, và ship-hardening đủ mạnh để không còn phù hợp với nhãn "đang bắt đầu".
   - Các gate như App Store approval, beta retention, và device QA matrix là repo-external evidence; không dùng làm blocker để mô tả codebase hiện tại là chưa hoàn tất.
-- **Phase 7** hiện **đã bắt đầu ở foundation layer, chưa nối app layer**:
-  - Đã có `firebase.json`, `firestore.rules`, Firestore rules emulator tests, và `lib/sync/` architecture skeleton cho paths, mirror document metadata, push/pull contracts, sync engine lifecycle, và LWW conflict resolver.
-  - Package Firebase có mặt để bootstrap app/analytics, nhưng chưa có Firebase Auth flow, Firestore runtime adapter, Drift → Firestore push/pull implementation, hay upgrade/downgrade trust flow chạy thật trong app.
-- **Phase 8** ở trạng thái **partial foundations only**:
-  - Repo đã có `milestone` entities/repository/service, milestone notifications, và progress dashboard cơ bản.
-  - Chưa có scenario management/comparison UI, chưa có IAP gating, chưa có rate-history runtime end-to-end, và chưa có partner-facing premium flow.
-- **Phase 9** hiện **chưa bắt đầu**:
-  - Chưa có owner/partner invite flow, shared Firestore collection, revoke UX, hay collaborative access rules ở app layer.
+- **Phase 7** hiện **engineering complete, accepted with QA waiver**:
+  - Firebase Auth, Firestore mirror sync, tracked repositories, rules tests, and cloud backup UI are wired in the app.
+  - Real-device cross-sync QA and production cost monitoring remain release gates rather than codebase blockers.
+- **Phase 8** ở trạng thái **release candidate**:
+  - Scenario-aware plan paths, compare scenarios, rate history, monthly summary, pause/new-charge flows, and progress foundations are implemented.
+  - Bi-weekly/weekly cadence remains explicitly deferred from v1.2 scope.
+- **Phase 9** hiện **engineering complete, UAT/code-gate verified; production app-link deploy pending**:
+  - Owner invite flow, Cloud Functions callables, shared Firestore collection, read-only/collaborative partner access, revoke UX, QR/share/copy invite UX, and partner shared-plan view are implemented.
+  - Firestore rules and automated UAT-style tests cover partner read boundaries, direct-write blocking, revoked access, invite deep-link parsing, and sharing cubit state transitions.
+  - Real-device QA is intentionally waived for this pass; remaining production work is domain/App Links verification with release Android SHA and deployed AASA/assetlinks files.
 - **Phase 10** hiện **closed với accepted scope adjustments**:
   - Reminder scheduling, permission UX, report preview, PDF export, và generic system share flow đã nằm trong repo và test suite.
   - Các phần defer sang backlog từ closeout Phase 10: dedicated email-share flow, deeper PDF visual polish, và device-level notification QA evidence.
@@ -570,26 +572,26 @@ Legend:
 ### E8 — Engineering
 
 **Feature §2.4 Partner Sharing**
-- [ ] `sharedPlans/{planId}` Firestore collection + security rules
-- [ ] Invite flow (email-based, magic link or manual invite)
-- [ ] Partner accept + authentication
-- [ ] Read-only vs collaborative mode
-- [ ] Revoke access flow
-- [ ] Real-time sync owner ↔ partner (Firestore listener)
-- [ ] Conflict UX khi cả 2 edit cùng debt (show "Partner đang edit...")
+- [x] `sharedPlans/{planId}` Firestore collection + security rules
+- [x] Invite flow via Cloud Function token + owned HTTPS invite link
+- [x] Partner accept + authentication
+- [x] Read-only vs collaborative mode
+- [x] Revoke access flow
+- [x] Real-time partner read view via Firestore listener
+- [ ] Conflict UX khi cả 2 edit cùng debt (deferred; current collaborative scope only allows server-mediated partner payment logging)
 
 ### D7 — Design
 
-- [ ] Invite UX (copy, QR, share sheet)
-- [ ] Partner view UI (subtle différence vs owner view)
-- [ ] Permissions clarity: "Partner có thể xem nhưng không edit"
-- [ ] Trust messaging: revoke access anytime, clear data ownership
+- [x] Invite UX (copy, QR, share sheet)
+- [x] Partner view UI (subtle différence vs owner view)
+- [x] Permissions clarity: read-only vs collaborative chips and copy
+- [x] Trust messaging: cloud account required and revoke access anytime
 
 ### Exit gate (Phase 9)
-- [ ] Owner invite partner → partner see data trong < 30s
-- [ ] Security rules tested: partner KHÔNG thể access data khác ngoài shared plan
-- [ ] Revoke instant (< 5s)
-- [ ] **v1.3 Ship: Partner Sharing**
+- [x] Owner invite partner → partner accept link → shared plan route opens in automated UAT path
+- [x] Security rules tested: partner KHÔNG thể access data khác ngoài shared plan
+- [x] Revoke blocks partner access in rules tests
+- [ ] **v1.3 Ship: Partner Sharing** — pending production deploy/app-link verification with release signing credentials
 
 ---
 

@@ -578,9 +578,9 @@ Owner (Level 1+, email auth):
        sharedDebtIds: ["debt1", "debt2"] | "all",
        createdAt: serverTimestamp,
      }
-  4. Send invite: Firebase Dynamic Link với token
+  4. Send invite: owned HTTPS App Link với token
      https://debtpayoff.app/invite?token=XXX
-  5. Email sent via Firebase Extension "Trigger Email"
+  5. Share via system sheet/QR/copy link; email delivery can be added later if needed
 
 Partner receives email → taps link:
   1. Open app (install if needed)

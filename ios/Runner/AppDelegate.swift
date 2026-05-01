@@ -1,3 +1,4 @@
+import app_links
 import FirebaseCore
 import Flutter
 import UIKit
@@ -10,6 +11,10 @@ import UIKit
   ) -> Bool {
     FirebaseApp.configure()
     GeneratedPluginRegistrant.register(with: self)
+    if let url = AppLinks.shared.getLink(launchOptions: launchOptions) {
+      AppLinks.shared.handleLink(url: url)
+      return true
+    }
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

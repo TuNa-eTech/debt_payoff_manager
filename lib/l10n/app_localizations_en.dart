@@ -2017,4 +2017,207 @@ class AppLocalizationsEn extends AppLocalizations {
   String monthlySummaryBalanceReduced(String amount) {
     return 'Balance reduced by $amount';
   }
+
+  @override
+  String get settingsPartnerSharingTitle => 'Partner Sharing';
+
+  @override
+  String get settingsPartnerSharingSubtitleEnabled =>
+      'Invite a partner to view or help log payments.';
+
+  @override
+  String get settingsPartnerSharingSubtitleDisabled =>
+      'Turn on cloud backup before sharing.';
+
+  @override
+  String get settingsPartnerSharingOn => 'On';
+
+  @override
+  String get settingsPartnerSharingOff => 'Off';
+
+  @override
+  String get partnerSharingPageTitle => 'Partner Sharing';
+
+  @override
+  String get partnerSharingHeaderTitle => 'Share your payoff plan';
+
+  @override
+  String get partnerSharingHeaderBody =>
+      'Invite a partner to view progress, stay accountable, or log payments when collaborative mode is enabled.';
+
+  @override
+  String get partnerSharingCloudRequiredTitle => 'Cloud backup required';
+
+  @override
+  String get partnerSharingCloudRequiredBody =>
+      'Partner sharing uses your cloud account so access can be revoked at any time.';
+
+  @override
+  String get partnerSharingYourSharedPlan => 'Your shared plan';
+
+  @override
+  String get partnerSharingStatusActive => 'Active';
+
+  @override
+  String get partnerSharingStatusInvitePending => 'Invite pending';
+
+  @override
+  String get partnerSharingStatusOff => 'Off';
+
+  @override
+  String get partnerSharingOwnerHasPartner =>
+      'Your partner can access this payoff plan.';
+
+  @override
+  String get partnerSharingOwnerHasPending =>
+      'An invite is waiting for your partner to accept.';
+
+  @override
+  String get partnerSharingOwnerNoAccess => 'No one else can access your plan.';
+
+  @override
+  String get partnerSharingPermission => 'Permission';
+
+  @override
+  String get partnerSharingPending => 'Pending';
+
+  @override
+  String get partnerSharingCreateAnotherInvite => 'Create another invite';
+
+  @override
+  String get partnerSharingInvitePartner => 'Invite partner';
+
+  @override
+  String get partnerSharingPlansSharedWithYou => 'Plans shared with you';
+
+  @override
+  String get partnerSharingPlansEmpty =>
+      'Accepted partner plans will appear here.';
+
+  @override
+  String get partnerSharingOpenSharedPlan => 'Open';
+
+  @override
+  String partnerSharingSharedBy(String ownerUid) {
+    return 'Shared by $ownerUid';
+  }
+
+  @override
+  String get partnerSharingEmailLabel => 'Partner email';
+
+  @override
+  String get partnerSharingModeReadOnly => 'Read-only';
+
+  @override
+  String get partnerSharingModeCollaborative => 'Collaborative';
+
+  @override
+  String get partnerSharingCreateInviteLink => 'Create invite link';
+
+  @override
+  String get partnerSharingEnterPartnerEmail => 'Enter a partner email.';
+
+  @override
+  String get partnerSharingInviteReady => 'Invite link ready';
+
+  @override
+  String partnerSharingInviteText(String url) {
+    return 'Join my debt payoff plan: $url';
+  }
+
+  @override
+  String get partnerSharingShareInvite => 'Share invite';
+
+  @override
+  String get partnerSharingCopyLink => 'Copy link';
+
+  @override
+  String get partnerSharingInviteCopied => 'Invite link copied.';
+
+  @override
+  String get partnerSharingRevoke => 'Revoke';
+
+  @override
+  String get inviteAcceptTitle => 'Accept Invite';
+
+  @override
+  String get inviteAcceptJoinTitle => 'Join shared payoff plan';
+
+  @override
+  String get inviteAcceptMissingTitle => 'Invite link missing';
+
+  @override
+  String get inviteAcceptJoinBody =>
+      'Sign in and accept to view the plan your partner shared.';
+
+  @override
+  String get inviteAcceptMissingBody =>
+      'Ask your partner to send a new invite link.';
+
+  @override
+  String get inviteAcceptButton => 'Accept invite';
+
+  @override
+  String get inviteAcceptSignInRequired =>
+      'Sign in before accepting this invite.';
+
+  @override
+  String get sharedPlanTitle => 'Shared Plan';
+
+  @override
+  String get sharedPlanSignInRequiredTitle => 'Sign in required';
+
+  @override
+  String get sharedPlanSignInRequiredBody =>
+      'Use the invite link again after signing in.';
+
+  @override
+  String get sharedPlanAccessUnavailableTitle => 'Access unavailable';
+
+  @override
+  String get sharedPlanAccessUnavailableBody =>
+      'This shared plan was revoked or is no longer available.';
+
+  @override
+  String get sharedPlanCollaborativeBody =>
+      'You can view progress and log payments.';
+
+  @override
+  String get sharedPlanReadOnlyBody =>
+      'You can view progress, but editing is off.';
+
+  @override
+  String get sharedPlanBalanceTitle => 'Shared balance';
+
+  @override
+  String sharedPlanDebtCount(int count) {
+    return '$count debts visible in this shared plan';
+  }
+
+  @override
+  String sharedPlanApr(String apr) {
+    return 'APR $apr';
+  }
+
+  @override
+  String get sharedPlanLogPayment => 'Log payment';
+
+  @override
+  String get sharedPlanLogPaymentTitle => 'Log shared payment';
+
+  @override
+  String get sharedPlanPaymentAmount => 'Payment amount';
+
+  @override
+  String get sharedPlanNote => 'Note';
+
+  @override
+  String get sharedPlanSavePayment => 'Save payment';
+
+  @override
+  String get sharedPlanPositiveAmountRequired =>
+      'Enter a positive payment amount.';
+
+  @override
+  String get sharedPlanPaymentLogged => 'Payment logged.';
 }

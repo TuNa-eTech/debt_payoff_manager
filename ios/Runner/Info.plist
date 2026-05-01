@@ -41,6 +41,8 @@
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Debt Payoff Manager only accesses your photo library if you choose a media file from the iOS picker while sharing or importing content.</string>
+	<key>FlutterDeepLinkingEnabled</key>
+	<false/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

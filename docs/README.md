@@ -2,13 +2,13 @@
 
 ## Current status snapshot
 
-As of **April 30, 2026**, the repository reflects this project status:
+As of **May 1, 2026**, the repository reflects this project status:
 
 - `Phase 0-6` MVP scope is complete in the codebase.
 - `Phase 10` Reports & Reminders is closed with accepted scope adjustments.
 - `Phase 7` Cloud Sync engineering is functionally complete and accepted with a QA waiver. Real-device cross-sync QA and cost monitoring remain v1.1 release gates.
 - `Phase 8` Power Features is a release candidate with bi-weekly/weekly cadence explicitly deferred from v1.2 scope.
-- `Phase 9` Partner Sharing is still planned.
+- `Phase 9` Partner Sharing is engineering complete with automated UAT/rules validation; production app-link deploy verification remains before ship.
 
 ## Recommended reading order
 
@@ -19,7 +19,8 @@ As of **April 30, 2026**, the repository reflects this project status:
 - [Architecture Decisions](architecture-decisions.md): ADRs and implementation rationale
 - [Financial Engine Spec](financial-engine-spec.md): calculation rules and acceptance vectors
 - [Data Schema](data-schema.md): Drift schema, invariants, and migration notes
-- [Sync Strategy](sync-strategy.md): planned cloud sync and partner-sharing design
+- [Sync Strategy](sync-strategy.md): cloud sync and partner-sharing design/implementation notes
+- [Partner Sharing Deploy](partner-sharing-deploy.md): Phase 9 deploy, app-link, and automated UAT checklist
 - [Test Strategy](test-strategy.md): automated coverage expectations
 
 ## Note on historical docs

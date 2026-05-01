@@ -2029,4 +2029,209 @@ class AppLocalizationsVi extends AppLocalizations {
   String monthlySummaryBalanceReduced(String amount) {
     return 'Dư nợ giảm $amount';
   }
+
+  @override
+  String get settingsPartnerSharingTitle => 'Chia sẻ với người đồng hành';
+
+  @override
+  String get settingsPartnerSharingSubtitleEnabled =>
+      'Mời người đồng hành xem kế hoạch hoặc ghi nhận thanh toán.';
+
+  @override
+  String get settingsPartnerSharingSubtitleDisabled =>
+      'Bật sao lưu đám mây trước khi chia sẻ.';
+
+  @override
+  String get settingsPartnerSharingOn => 'Bật';
+
+  @override
+  String get settingsPartnerSharingOff => 'Tắt';
+
+  @override
+  String get partnerSharingPageTitle => 'Chia sẻ với người đồng hành';
+
+  @override
+  String get partnerSharingHeaderTitle => 'Chia sẻ kế hoạch trả nợ';
+
+  @override
+  String get partnerSharingHeaderBody =>
+      'Mời người đồng hành xem tiến độ, cùng theo dõi trách nhiệm, hoặc ghi nhận thanh toán khi bật chế độ cộng tác.';
+
+  @override
+  String get partnerSharingCloudRequiredTitle => 'Cần sao lưu đám mây';
+
+  @override
+  String get partnerSharingCloudRequiredBody =>
+      'Tính năng chia sẻ dùng tài khoản đám mây của bạn để có thể thu hồi quyền bất cứ lúc nào.';
+
+  @override
+  String get partnerSharingYourSharedPlan => 'Kế hoạch đang chia sẻ';
+
+  @override
+  String get partnerSharingStatusActive => 'Đang bật';
+
+  @override
+  String get partnerSharingStatusInvitePending => 'Đang chờ nhận lời mời';
+
+  @override
+  String get partnerSharingStatusOff => 'Tắt';
+
+  @override
+  String get partnerSharingOwnerHasPartner =>
+      'Người đồng hành có thể truy cập kế hoạch trả nợ này.';
+
+  @override
+  String get partnerSharingOwnerHasPending =>
+      'Lời mời đang chờ người đồng hành chấp nhận.';
+
+  @override
+  String get partnerSharingOwnerNoAccess =>
+      'Chưa có ai khác truy cập kế hoạch của bạn.';
+
+  @override
+  String get partnerSharingPermission => 'Quyền';
+
+  @override
+  String get partnerSharingPending => 'Đang chờ';
+
+  @override
+  String get partnerSharingCreateAnotherInvite => 'Tạo lời mời khác';
+
+  @override
+  String get partnerSharingInvitePartner => 'Mời người đồng hành';
+
+  @override
+  String get partnerSharingPlansSharedWithYou =>
+      'Kế hoạch được chia sẻ với bạn';
+
+  @override
+  String get partnerSharingPlansEmpty =>
+      'Các kế hoạch bạn đã chấp nhận sẽ xuất hiện ở đây.';
+
+  @override
+  String get partnerSharingOpenSharedPlan => 'Mở';
+
+  @override
+  String partnerSharingSharedBy(String ownerUid) {
+    return 'Chia sẻ bởi $ownerUid';
+  }
+
+  @override
+  String get partnerSharingEmailLabel => 'Email người đồng hành';
+
+  @override
+  String get partnerSharingModeReadOnly => 'Chỉ xem';
+
+  @override
+  String get partnerSharingModeCollaborative => 'Cộng tác';
+
+  @override
+  String get partnerSharingCreateInviteLink => 'Tạo link mời';
+
+  @override
+  String get partnerSharingEnterPartnerEmail => 'Nhập email người đồng hành.';
+
+  @override
+  String get partnerSharingInviteReady => 'Link mời đã sẵn sàng';
+
+  @override
+  String partnerSharingInviteText(String url) {
+    return 'Tham gia kế hoạch trả nợ của tôi: $url';
+  }
+
+  @override
+  String get partnerSharingShareInvite => 'Chia sẻ lời mời';
+
+  @override
+  String get partnerSharingCopyLink => 'Copy link';
+
+  @override
+  String get partnerSharingInviteCopied => 'Đã copy link mời.';
+
+  @override
+  String get partnerSharingRevoke => 'Thu hồi';
+
+  @override
+  String get inviteAcceptTitle => 'Chấp nhận lời mời';
+
+  @override
+  String get inviteAcceptJoinTitle => 'Tham gia kế hoạch được chia sẻ';
+
+  @override
+  String get inviteAcceptMissingTitle => 'Thiếu link mời';
+
+  @override
+  String get inviteAcceptJoinBody =>
+      'Đăng nhập và chấp nhận để xem kế hoạch người đồng hành đã chia sẻ.';
+
+  @override
+  String get inviteAcceptMissingBody =>
+      'Hãy yêu cầu người đồng hành gửi lại link mời mới.';
+
+  @override
+  String get inviteAcceptButton => 'Chấp nhận lời mời';
+
+  @override
+  String get inviteAcceptSignInRequired =>
+      'Hãy đăng nhập trước khi chấp nhận lời mời này.';
+
+  @override
+  String get sharedPlanTitle => 'Kế hoạch được chia sẻ';
+
+  @override
+  String get sharedPlanSignInRequiredTitle => 'Cần đăng nhập';
+
+  @override
+  String get sharedPlanSignInRequiredBody =>
+      'Mở lại link mời sau khi đăng nhập.';
+
+  @override
+  String get sharedPlanAccessUnavailableTitle => 'Không còn quyền truy cập';
+
+  @override
+  String get sharedPlanAccessUnavailableBody =>
+      'Kế hoạch này đã bị thu hồi hoặc không còn khả dụng.';
+
+  @override
+  String get sharedPlanCollaborativeBody =>
+      'Bạn có thể xem tiến độ và ghi nhận thanh toán.';
+
+  @override
+  String get sharedPlanReadOnlyBody =>
+      'Bạn có thể xem tiến độ, nhưng không thể chỉnh sửa.';
+
+  @override
+  String get sharedPlanBalanceTitle => 'Dư nợ được chia sẻ';
+
+  @override
+  String sharedPlanDebtCount(int count) {
+    return '$count khoản nợ đang hiển thị trong kế hoạch này';
+  }
+
+  @override
+  String sharedPlanApr(String apr) {
+    return 'APR $apr';
+  }
+
+  @override
+  String get sharedPlanLogPayment => 'Ghi nhận thanh toán';
+
+  @override
+  String get sharedPlanLogPaymentTitle => 'Ghi nhận thanh toán chung';
+
+  @override
+  String get sharedPlanPaymentAmount => 'Số tiền thanh toán';
+
+  @override
+  String get sharedPlanNote => 'Ghi chú';
+
+  @override
+  String get sharedPlanSavePayment => 'Lưu thanh toán';
+
+  @override
+  String get sharedPlanPositiveAmountRequired =>
+      'Nhập số tiền thanh toán lớn hơn 0.';
+
+  @override
+  String get sharedPlanPaymentLogged => 'Đã ghi nhận thanh toán.';
 }

@@ -19,6 +19,7 @@ import 'features/settings/cubit/settings_cubit.dart';
 import 'features/settings/cubit/settings_state.dart';
 import 'features/progress/presentation/widgets/milestone_celebration_overlay.dart';
 import 'features/scenarios/cubit/scenarios_cubit.dart';
+import 'features/sharing/data/invite_link_service.dart';
 import 'l10n/app_localizations.dart';
 
 /// Root application widget.
@@ -45,6 +46,7 @@ class _DebtPayoffAppState extends State<DebtPayoffApp> {
   )..start();
   late final SettingsCubit _settingsCubit = getIt<SettingsCubit>();
   late final ScenariosCubit _scenariosCubit = getIt<ScenariosCubit>()..start();
+  late final InviteLinkService _inviteLinkService = getIt<InviteLinkService>();
   late final router = createRouter(
     settingsRepository: _settingsRepository,
     debtRepository: _debtRepository,
@@ -57,6 +59,7 @@ class _DebtPayoffAppState extends State<DebtPayoffApp> {
   @override
   void initState() {
     super.initState();
+    _inviteLinkService.start(router);
     _milestoneSub = _milestoneRepository.watchUnseenMilestones().listen(
       _onUnseenMilestones,
     );
@@ -73,8 +76,8 @@ class _DebtPayoffAppState extends State<DebtPayoffApp> {
   }
 
   void _showCelebration(Milestone milestone) {
-    final overlayState = router.routerDelegate.navigatorKey.currentState
-        ?.overlay;
+    final overlayState =
+        router.routerDelegate.navigatorKey.currentState?.overlay;
     if (overlayState == null) return;
     _celebrationEntry = OverlayEntry(
       builder: (_) => MilestoneCelebrationOverlay(
@@ -98,6 +101,7 @@ class _DebtPayoffAppState extends State<DebtPayoffApp> {
     _debtsCubit.close();
     _onboardingCubit.close();
     _scenariosCubit.close();
+    unawaited(_inviteLinkService.dispose());
     router.dispose();
     super.dispose();
   }
@@ -111,10 +115,12 @@ class _DebtPayoffAppState extends State<DebtPayoffApp> {
           final locale = AppLocale.flutterLocaleForCode(
             settingsState.settings?.localeCode,
           );
-          
+
           if (settingsState.settings != null) {
-            AppFormatters.defaultCurrencyCode = settingsState.settings!.currencyCode;
-            AppFormatters.defaultLocaleCode = settingsState.settings!.localeCode;
+            AppFormatters.defaultCurrencyCode =
+                settingsState.settings!.currencyCode;
+            AppFormatters.defaultLocaleCode =
+                settingsState.settings!.localeCode;
           }
 
           return MultiBlocProvider(

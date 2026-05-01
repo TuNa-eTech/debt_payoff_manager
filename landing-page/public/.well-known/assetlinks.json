@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.anhtu.debtpayoffmanager",
+      "sha256_cert_fingerprints": [
+        "4D:3B:15:F9:E1:67:62:76:47:C6:52:32:3A:4C:76:75:76:F0:CB:8C:0F:D3:3A:92:94:02:AA:E9:7C:C7:FA:D8"
+      ]
+    }
+  }
+]

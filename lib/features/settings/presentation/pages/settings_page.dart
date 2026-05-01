@@ -205,6 +205,21 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     _buildDivider(),
                     _buildListTile(
+                      key: AppTestKeys.settingsPartnerSharing,
+                      title: l10n.settingsPartnerSharingTitle,
+                      subtitle: settings.trustLevel >= 1
+                          ? l10n.settingsPartnerSharingSubtitleEnabled
+                          : l10n.settingsPartnerSharingSubtitleDisabled,
+                      trailingText: settings.trustLevel >= 2
+                          ? l10n.settingsPartnerSharingOn
+                          : l10n.settingsPartnerSharingOff,
+                      enabled: !_isDataActionPending,
+                      onTap: _isDataActionPending
+                          ? null
+                          : () => context.push(AppRoutes.partnerSharing),
+                    ),
+                    _buildDivider(),
+                    _buildListTile(
                       key: AppTestKeys.settingsDataExportCsv,
                       title: l10n.settingsExportCsvTitle,
                       subtitle: l10n.settingsExportCsvSubtitle,

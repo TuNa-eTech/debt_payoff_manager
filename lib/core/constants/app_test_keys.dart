@@ -108,6 +108,23 @@ class AppTestKeys {
   static const syncBackupDisableConfirm = ValueKey<String>(
     'settings:sync-backup-disable-confirm',
   );
+  static const settingsPartnerSharing = ValueKey<String>(
+    'settings:partner-sharing',
+  );
+  static const partnerSharingGoogle = ValueKey<String>(
+    'partner-sharing:google',
+  );
+  static const partnerSharingApple = ValueKey<String>('partner-sharing:apple');
+  static const partnerSharingInvite = ValueKey<String>(
+    'partner-sharing:invite',
+  );
+  static const partnerSharingEmail = ValueKey<String>('partner-sharing:email');
+  static const partnerSharingModeReadonly = ValueKey<String>(
+    'partner-sharing:mode-readonly',
+  );
+  static const partnerSharingModeCollaborative = ValueKey<String>(
+    'partner-sharing:mode-collaborative',
+  );
   static const pricingContinueFree = ValueKey<String>('pricing:continue-free');
   static const settingsDataExportCsv = ValueKey<String>(
     'settings:data-export-csv',
@@ -137,9 +154,7 @@ class AppTestKeys {
   static const debtDetailLogPayment = ValueKey<String>(
     'debt-detail:log-payment',
   );
-  static const debtDetailAddCharge = ValueKey<String>(
-    'debt-detail:add-charge',
-  );
+  static const debtDetailAddCharge = ValueKey<String>('debt-detail:add-charge');
   static const debtDetailPaymentHistory = ValueKey<String>(
     'debt-detail:payment-history',
   );

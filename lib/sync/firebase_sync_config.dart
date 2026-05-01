@@ -9,6 +9,8 @@ class FirebaseSyncConfig {
     this.firestorePort = 8080,
     this.authHost = 'localhost',
     this.authPort = 9099,
+    this.functionsHost = 'localhost',
+    this.functionsPort = 5001,
   });
 
   factory FirebaseSyncConfig.fromEnvironment() {
@@ -30,6 +32,14 @@ class FirebaseSyncConfig {
         'FIREBASE_AUTH_EMULATOR_PORT',
         defaultValue: 9099,
       ),
+      functionsHost: String.fromEnvironment(
+        'FIREBASE_FUNCTIONS_EMULATOR_HOST',
+        defaultValue: 'localhost',
+      ),
+      functionsPort: int.fromEnvironment(
+        'FIREBASE_FUNCTIONS_EMULATOR_PORT',
+        defaultValue: 5001,
+      ),
     );
   }
 
@@ -38,4 +48,6 @@ class FirebaseSyncConfig {
   final int firestorePort;
   final String authHost;
   final int authPort;
+  final String functionsHost;
+  final int functionsPort;
 }

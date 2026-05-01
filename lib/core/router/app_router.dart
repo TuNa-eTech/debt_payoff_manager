@@ -29,6 +29,10 @@ import '../../features/scenarios/presentation/pages/compare_scenarios_page.dart'
 import '../../features/scenarios/presentation/pages/scenarios_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/sync_backup_page.dart';
+import '../../features/sharing/cubit/sharing_cubit.dart';
+import '../../features/sharing/presentation/pages/invite_accept_page.dart';
+import '../../features/sharing/presentation/pages/partner_sharing_page.dart';
+import '../../features/sharing/presentation/pages/shared_plan_page.dart';
 import '../../features/plan/cubit/plan_timeline_cubit.dart';
 import '../../features/plan/presentation/pages/timeline_page.dart';
 import '../widgets/scaffold_with_nav.dart';
@@ -64,6 +68,9 @@ class AppRoutes {
   static const String pricing = '/settings/pricing';
   static const String scenarios = '/settings/scenarios';
   static const String compareScenarios = '/settings/scenarios/compare';
+  static const String partnerSharing = '/settings/sharing';
+  static const String inviteAccept = '/invite';
+  static const String sharedPlan = '/shared/:shareId';
   static const String monthlySummary = '/progress/summary';
 
   static String debtDetailPath(String id) => '/debts/$id';
@@ -71,6 +78,7 @@ class AppRoutes {
   static String logPaymentPath(String id) => '/debts/$id/log_payment';
   static String paymentHistoryPath(String id) => '/debts/$id/history';
   static String rateHistoryPath(String id) => '/debts/$id/rate_history';
+  static String sharedPlanPath(String shareId) => '/shared/$shareId';
 }
 
 /// GoRouter configuration.
@@ -261,6 +269,23 @@ GoRouter createRouter({
       GoRoute(
         path: AppRoutes.syncBackup,
         builder: (context, state) => const SyncBackupPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.partnerSharing,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<SharingCubit>(),
+          child: const PartnerSharingPage(),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.inviteAccept,
+        builder: (context, state) =>
+            InviteAcceptPage(token: state.uri.queryParameters['token']),
+      ),
+      GoRoute(
+        path: AppRoutes.sharedPlan,
+        builder: (context, state) =>
+            SharedPlanPage(shareId: state.pathParameters['shareId']!),
       ),
       GoRoute(
         path: AppRoutes.pricing,

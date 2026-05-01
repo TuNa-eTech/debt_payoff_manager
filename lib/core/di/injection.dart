@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 
@@ -58,6 +59,9 @@ import '../../domain/repositories/interest_rate_history_repository.dart';
 import '../../features/progress/cubit/progress_cubit.dart';
 import '../../features/scenarios/cubit/scenarios_cubit.dart';
 import '../../features/settings/cubit/settings_cubit.dart';
+import '../../features/sharing/cubit/sharing_cubit.dart';
+import '../../features/sharing/data/invite_link_service.dart';
+import '../../features/sharing/data/sharing_service.dart';
 
 /// Global service locator instance.
 final getIt = GetIt.instance;
@@ -174,6 +178,9 @@ void configureDependencies({
   getIt.registerLazySingleton<FirebaseFirestore>(
     () => FirebaseFirestore.instance,
   );
+  getIt.registerLazySingleton<FirebaseFunctions>(
+    () => FirebaseFunctions.instance,
+  );
   getIt.registerLazySingleton<FirebaseSyncInitializer>(
     () => DefaultFirebaseSyncInitializer(
       config: getIt<FirebaseSyncConfig>(),
@@ -232,6 +239,17 @@ void configureDependencies({
           syncEngine: getIt<SyncEngine>(),
           remoteStore: getIt<CloudBackupRemoteStore>(),
         ),
+  );
+  getIt.registerLazySingleton<SharingService>(
+    () => FirebaseSharingService(
+      firestore: getIt<FirebaseFirestore>(),
+      functions: getIt<FirebaseFunctions>(),
+      initializer: getIt<FirebaseSyncInitializer>(),
+      config: getIt<FirebaseSyncConfig>(),
+    ),
+  );
+  getIt.registerLazySingleton<InviteLinkService>(
+    () => AppLinksInviteLinkService(),
   );
 
   // Public repository contracts
@@ -345,6 +363,13 @@ void configureDependencies({
   // Settings state
   getIt.registerLazySingleton<SettingsCubit>(
     () => SettingsCubit(settingsRepository: getIt<SettingsRepository>()),
+  );
+  getIt.registerFactory<SharingCubit>(
+    () => SharingCubit(
+      sharingService: getIt<SharingService>(),
+      settingsRepository: getIt<SettingsRepository>(),
+      authService: getIt<SyncAuthService>(),
+    ),
   );
 
   // Feature state

@@ -3615,6 +3615,366 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Balance reduced by {amount}'**
   String monthlySummaryBalanceReduced(String amount);
+
+  /// Settings row title for partner sharing
+  ///
+  /// In en, this message translates to:
+  /// **'Partner Sharing'**
+  String get settingsPartnerSharingTitle;
+
+  /// Settings row subtitle when cloud sync is enabled
+  ///
+  /// In en, this message translates to:
+  /// **'Invite a partner to view or help log payments.'**
+  String get settingsPartnerSharingSubtitleEnabled;
+
+  /// Settings row subtitle when cloud sync is disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on cloud backup before sharing.'**
+  String get settingsPartnerSharingSubtitleDisabled;
+
+  /// Settings row status when partner sharing is enabled
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get settingsPartnerSharingOn;
+
+  /// Settings row status when partner sharing is disabled
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get settingsPartnerSharingOff;
+
+  /// Partner sharing page app bar title
+  ///
+  /// In en, this message translates to:
+  /// **'Partner Sharing'**
+  String get partnerSharingPageTitle;
+
+  /// Partner sharing page header title
+  ///
+  /// In en, this message translates to:
+  /// **'Share your payoff plan'**
+  String get partnerSharingHeaderTitle;
+
+  /// Partner sharing page header body
+  ///
+  /// In en, this message translates to:
+  /// **'Invite a partner to view progress, stay accountable, or log payments when collaborative mode is enabled.'**
+  String get partnerSharingHeaderBody;
+
+  /// Partner sharing sign-in card title
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud backup required'**
+  String get partnerSharingCloudRequiredTitle;
+
+  /// Partner sharing sign-in card body
+  ///
+  /// In en, this message translates to:
+  /// **'Partner sharing uses your cloud account so access can be revoked at any time.'**
+  String get partnerSharingCloudRequiredBody;
+
+  /// Owner shared plan card title
+  ///
+  /// In en, this message translates to:
+  /// **'Your shared plan'**
+  String get partnerSharingYourSharedPlan;
+
+  /// Shared plan active status label
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get partnerSharingStatusActive;
+
+  /// Shared plan pending invite status label
+  ///
+  /// In en, this message translates to:
+  /// **'Invite pending'**
+  String get partnerSharingStatusInvitePending;
+
+  /// Shared plan off status label
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get partnerSharingStatusOff;
+
+  /// Owner shared plan body when a partner exists
+  ///
+  /// In en, this message translates to:
+  /// **'Your partner can access this payoff plan.'**
+  String get partnerSharingOwnerHasPartner;
+
+  /// Owner shared plan body when an invite is pending
+  ///
+  /// In en, this message translates to:
+  /// **'An invite is waiting for your partner to accept.'**
+  String get partnerSharingOwnerHasPending;
+
+  /// Owner shared plan body when sharing is off
+  ///
+  /// In en, this message translates to:
+  /// **'No one else can access your plan.'**
+  String get partnerSharingOwnerNoAccess;
+
+  /// Shared plan permission row label
+  ///
+  /// In en, this message translates to:
+  /// **'Permission'**
+  String get partnerSharingPermission;
+
+  /// Pending invite row label
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get partnerSharingPending;
+
+  /// Button label for creating another invite
+  ///
+  /// In en, this message translates to:
+  /// **'Create another invite'**
+  String get partnerSharingCreateAnotherInvite;
+
+  /// Button and sheet title for inviting a partner
+  ///
+  /// In en, this message translates to:
+  /// **'Invite partner'**
+  String get partnerSharingInvitePartner;
+
+  /// Partner plans section title
+  ///
+  /// In en, this message translates to:
+  /// **'Plans shared with you'**
+  String get partnerSharingPlansSharedWithYou;
+
+  /// Empty state for plans shared with the user
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted partner plans will appear here.'**
+  String get partnerSharingPlansEmpty;
+
+  /// Button label for opening a shared plan
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get partnerSharingOpenSharedPlan;
+
+  /// Label showing the owner of a shared plan
+  ///
+  /// In en, this message translates to:
+  /// **'Shared by {ownerUid}'**
+  String partnerSharingSharedBy(String ownerUid);
+
+  /// Invite partner email field label
+  ///
+  /// In en, this message translates to:
+  /// **'Partner email'**
+  String get partnerSharingEmailLabel;
+
+  /// Read-only sharing permission label
+  ///
+  /// In en, this message translates to:
+  /// **'Read-only'**
+  String get partnerSharingModeReadOnly;
+
+  /// Collaborative sharing permission label
+  ///
+  /// In en, this message translates to:
+  /// **'Collaborative'**
+  String get partnerSharingModeCollaborative;
+
+  /// Create invite link button label
+  ///
+  /// In en, this message translates to:
+  /// **'Create invite link'**
+  String get partnerSharingCreateInviteLink;
+
+  /// Validation message for empty partner email
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a partner email.'**
+  String get partnerSharingEnterPartnerEmail;
+
+  /// Invite created sheet title
+  ///
+  /// In en, this message translates to:
+  /// **'Invite link ready'**
+  String get partnerSharingInviteReady;
+
+  /// Text shared through the platform share sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Join my debt payoff plan: {url}'**
+  String partnerSharingInviteText(String url);
+
+  /// Share invite button label
+  ///
+  /// In en, this message translates to:
+  /// **'Share invite'**
+  String get partnerSharingShareInvite;
+
+  /// Copy invite link button label
+  ///
+  /// In en, this message translates to:
+  /// **'Copy link'**
+  String get partnerSharingCopyLink;
+
+  /// Snackbar after copying invite link
+  ///
+  /// In en, this message translates to:
+  /// **'Invite link copied.'**
+  String get partnerSharingInviteCopied;
+
+  /// Button label for revoking partner access
+  ///
+  /// In en, this message translates to:
+  /// **'Revoke'**
+  String get partnerSharingRevoke;
+
+  /// Accept invite page app bar title
+  ///
+  /// In en, this message translates to:
+  /// **'Accept Invite'**
+  String get inviteAcceptTitle;
+
+  /// Accept invite title when token exists
+  ///
+  /// In en, this message translates to:
+  /// **'Join shared payoff plan'**
+  String get inviteAcceptJoinTitle;
+
+  /// Accept invite title when token is missing
+  ///
+  /// In en, this message translates to:
+  /// **'Invite link missing'**
+  String get inviteAcceptMissingTitle;
+
+  /// Accept invite body when token exists
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in and accept to view the plan your partner shared.'**
+  String get inviteAcceptJoinBody;
+
+  /// Accept invite body when token is missing
+  ///
+  /// In en, this message translates to:
+  /// **'Ask your partner to send a new invite link.'**
+  String get inviteAcceptMissingBody;
+
+  /// Accept invite button label
+  ///
+  /// In en, this message translates to:
+  /// **'Accept invite'**
+  String get inviteAcceptButton;
+
+  /// Error when accepting invite without sign-in
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in before accepting this invite.'**
+  String get inviteAcceptSignInRequired;
+
+  /// Shared plan page app bar title
+  ///
+  /// In en, this message translates to:
+  /// **'Shared Plan'**
+  String get sharedPlanTitle;
+
+  /// Shared plan missing auth title
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in required'**
+  String get sharedPlanSignInRequiredTitle;
+
+  /// Shared plan missing auth body
+  ///
+  /// In en, this message translates to:
+  /// **'Use the invite link again after signing in.'**
+  String get sharedPlanSignInRequiredBody;
+
+  /// Shared plan revoked access title
+  ///
+  /// In en, this message translates to:
+  /// **'Access unavailable'**
+  String get sharedPlanAccessUnavailableTitle;
+
+  /// Shared plan revoked access body
+  ///
+  /// In en, this message translates to:
+  /// **'This shared plan was revoked or is no longer available.'**
+  String get sharedPlanAccessUnavailableBody;
+
+  /// Shared plan banner body for collaborative mode
+  ///
+  /// In en, this message translates to:
+  /// **'You can view progress and log payments.'**
+  String get sharedPlanCollaborativeBody;
+
+  /// Shared plan banner body for read-only mode
+  ///
+  /// In en, this message translates to:
+  /// **'You can view progress, but editing is off.'**
+  String get sharedPlanReadOnlyBody;
+
+  /// Shared plan balance card title
+  ///
+  /// In en, this message translates to:
+  /// **'Shared balance'**
+  String get sharedPlanBalanceTitle;
+
+  /// Shared plan visible debt count
+  ///
+  /// In en, this message translates to:
+  /// **'{count} debts visible in this shared plan'**
+  String sharedPlanDebtCount(int count);
+
+  /// Shared debt APR label
+  ///
+  /// In en, this message translates to:
+  /// **'APR {apr}'**
+  String sharedPlanApr(String apr);
+
+  /// Shared debt log payment button label
+  ///
+  /// In en, this message translates to:
+  /// **'Log payment'**
+  String get sharedPlanLogPayment;
+
+  /// Shared payment sheet title
+  ///
+  /// In en, this message translates to:
+  /// **'Log shared payment'**
+  String get sharedPlanLogPaymentTitle;
+
+  /// Shared payment amount field label
+  ///
+  /// In en, this message translates to:
+  /// **'Payment amount'**
+  String get sharedPlanPaymentAmount;
+
+  /// Shared payment note field label
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get sharedPlanNote;
+
+  /// Shared payment save button label
+  ///
+  /// In en, this message translates to:
+  /// **'Save payment'**
+  String get sharedPlanSavePayment;
+
+  /// Validation message for invalid shared payment amount
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a positive payment amount.'**
+  String get sharedPlanPositiveAmountRequired;
+
+  /// Snackbar after logging a shared payment
+  ///
+  /// In en, this message translates to:
+  /// **'Payment logged.'**
+  String get sharedPlanPaymentLogged;
 }
 
 class _AppLocalizationsDelegate

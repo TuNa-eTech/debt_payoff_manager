@@ -36,6 +36,7 @@ migrate_working_dir/
 # JavaScript tooling for Firebase rules tests
 node_modules/
 **/node_modules/
+functions/lib/
 
 # Symbolication related
 app.*.symbols
