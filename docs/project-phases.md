@@ -100,10 +100,11 @@ Legend:
 - **Phase 8** ở trạng thái **release candidate**:
   - Scenario-aware plan paths, compare scenarios, rate history, monthly summary, pause/new-charge flows, and progress foundations are implemented.
   - Bi-weekly/weekly cadence remains explicitly deferred from v1.2 scope.
-- **Phase 9** hiện **engineering complete, UAT/code-gate verified; production app-link deploy pending**:
+- **Phase 9** hiện **engineering complete, UAT/code-gate verified; iOS-first release target**:
   - Owner invite flow, Cloud Functions callables, shared Firestore collection, read-only/collaborative partner access, revoke UX, QR/share/copy invite UX, and partner shared-plan view are implemented.
   - Firestore rules and automated UAT-style tests cover partner read boundaries, direct-write blocking, revoked access, invite deep-link parsing, and sharing cubit state transitions.
-  - Real-device QA is intentionally waived for this pass; remaining production work is domain/App Links verification with release Android SHA and deployed AASA/assetlinks files.
+  - Firebase Hosting invite fallback, AASA, and assetlinks are deployed and smoke-checked on `https://debt-payoff-manager-e6283.web.app`.
+  - Real-device QA is intentionally waived for this pass. Android release is deferred because the Gradle/Kotlin daemon build currently stalls and production release SHA-256 still needs to be added to `assetlinks.json`.
 - **Phase 10** hiện **closed với accepted scope adjustments**:
   - Reminder scheduling, permission UX, report preview, PDF export, và generic system share flow đã nằm trong repo và test suite.
   - Các phần defer sang backlog từ closeout Phase 10: dedicated email-share flow, deeper PDF visual polish, và device-level notification QA evidence.
@@ -591,7 +592,9 @@ Legend:
 - [x] Owner invite partner → partner accept link → shared plan route opens in automated UAT path
 - [x] Security rules tested: partner KHÔNG thể access data khác ngoài shared plan
 - [x] Revoke blocks partner access in rules tests
-- [ ] **v1.3 Ship: Partner Sharing** — pending production deploy/app-link verification with release signing credentials
+- [x] Production Firebase deploy verified for Functions, Firestore rules, Hosting invite fallback, AASA, and assetlinks on the Firebase Hosting domain.
+- [x] iOS simulator build passes for the iOS-first release target.
+- [ ] Android release gate deferred — `fvm flutter build apk --debug` stalls after a Kotlin daemon startup issue; production Android SHA-256 is still required before public Android App Links verification.
 
 ---
 

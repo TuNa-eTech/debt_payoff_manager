@@ -8,7 +8,7 @@ As of **May 1, 2026**, the repository reflects this project status:
 - `Phase 10` Reports & Reminders is closed with accepted scope adjustments.
 - `Phase 7` Cloud Sync engineering is functionally complete and accepted with a QA waiver. Real-device cross-sync QA and cost monitoring remain v1.1 release gates.
 - `Phase 8` Power Features is a release candidate with bi-weekly/weekly cadence explicitly deferred from v1.2 scope.
-- `Phase 9` Partner Sharing is engineering complete with automated UAT/rules validation; production app-link deploy verification remains before ship.
+- `Phase 9` Partner Sharing is engineering complete with automated UAT/rules validation and production Firebase Hosting/App Links assets verified for the iOS-first release target. Android release is deferred because the Gradle/Kotlin build currently stalls and production release SHA-256 is still needed for Android App Links.
 
 ## Recommended reading order
 

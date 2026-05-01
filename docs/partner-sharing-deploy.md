@@ -2,7 +2,7 @@
 
 Status as of 2026-05-01: implementation is complete in the repo and automated
 UAT/rules checks are the accepted QA gate for this pass. Real-device QA is
-waived by product decision.
+waived by product decision. The current release target is iOS first.
 
 ## Firebase project
 
@@ -47,14 +47,19 @@ Android:
 - Flutter default deeplinking is disabled so `app_links` owns routing.
 - Current `assetlinks.json` includes the local debug SHA-256 fingerprint:
   `4D:3B:15:F9:E1:67:62:76:47:C6:52:32:3A:4C:76:75:76:F0:CB:8C:0F:D3:3A:92:94:02:AA:E9:7C:C7:FA:D8`.
-- Add the production release signing SHA-256 before public release.
+- Android is deferred for the current iOS-first release target.
+- Open Android blockers:
+  - `fvm flutter build apk --debug` stalled in Gradle for 320.6s after the Kotlin daemon message `The daemon has terminated unexpectedly on startup attempt #1`; the process was stopped with exit code 143.
+  - Add the production release signing SHA-256 before public Android release.
 
 iOS:
 
+- iOS is the current release target.
 - Associated domain is configured in `ios/Runner/Runner.entitlements`.
 - AASA file is hosted from
   `landing-page/public/.well-known/apple-app-site-association`.
 - App ID used by AASA: `WG7WMAD5MS.com.anhtu.debtPayoffManager`.
+- `fvm flutter build ios --simulator --debug` passed and produced `build/ios/iphonesimulator/Runner.app`.
 
 ## Automated UAT gate
 
