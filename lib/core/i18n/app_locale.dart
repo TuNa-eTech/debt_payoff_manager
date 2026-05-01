@@ -63,7 +63,7 @@ abstract final class AppLocale {
   static String displayNameForLocaleCode(String? localeCode) {
     switch (resolveSupportedLocaleCode(localeCode)) {
       case vietnameseLocaleCode:
-        return 'Tiếng Việt';
+        return 'Vietnamese';
       case englishLocaleCode:
       default:
         return 'English';

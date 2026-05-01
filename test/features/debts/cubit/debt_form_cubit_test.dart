@@ -129,7 +129,7 @@ void main() {
       );
 
       expect(debt, isNull);
-      expect(cubit.state.pausedUntilError, 'Chọn ngày kết thúc tạm dừng.');
+      expect(cubit.state.pausedUntilError, 'Choose when the pause ends.');
 
       await cubit.close();
     });
@@ -210,7 +210,7 @@ void main() {
 
       expect(cubit.state.warnings, isNotEmpty);
       expect(
-        cubit.state.warnings.any((warning) => warning.contains('APR cao')),
+        cubit.state.warnings.any((warning) => warning.contains('APR looks')),
         isTrue,
       );
 

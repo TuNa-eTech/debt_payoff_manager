@@ -373,7 +373,7 @@ void main() {
         isA<StateError>().having(
           (error) => error.message,
           'message',
-          'File ${artifact.fileName} không phải local backup bundle hợp lệ.',
+          'File ${artifact.fileName} is not a valid local backup bundle.',
         ),
       ),
     );
@@ -459,7 +459,7 @@ void main() {
           isA<StateError>().having(
             (error) => error.message,
             'message',
-            'Hãy tắt Sao lưu đám mây trước khi xóa toàn bộ dữ liệu.',
+            'Turn off cloud backup before clearing all data.',
           ),
         ),
       );

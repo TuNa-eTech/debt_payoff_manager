@@ -140,7 +140,7 @@ void main() {
       await tester.tap(find.text('Lưu khoản nợ'));
       await tester.pump();
 
-      expect(find.text('Nhập tên khoản nợ.'), findsOneWidget);
+      expect(find.text('Enter a debt name.'), findsOneWidget);
     });
 
     testWidgets(
@@ -169,7 +169,7 @@ void main() {
 
         await tester.tap(find.text('Lưu khoản nợ'));
         await tester.pump();
-        expect(find.text('Nhập tên khoản nợ.'), findsOneWidget);
+        expect(find.text('Enter a debt name.'), findsOneWidget);
 
         await tester.enterText(
           _textFormFieldFor(AppTestKeys.debtFormName),
@@ -177,7 +177,7 @@ void main() {
         );
         await tester.pump();
 
-        expect(find.text('Nhập tên khoản nợ.'), findsNothing);
+        expect(find.text('Enter a debt name.'), findsNothing);
       },
     );
 
@@ -189,13 +189,15 @@ void main() {
       try {
         await tester.pumpWidget(
           MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: shared_debt_card.DebtCard(
                 name: 'Past Due Card',
                 balance: '\$1,200',
                 apr: '19.99%',
-                minPayment: '\$45/tháng',
-                dueDate: 'Ngày 15',
+                minPayment: '\$45/month',
+                dueDate: 'Day 15',
                 state: shared_debt_card.DebtCardState.overdue,
                 onTap: () {},
               ),
@@ -203,8 +205,8 @@ void main() {
           ),
         );
 
-        expect(find.text('QUÁ HẠN'), findsOneWidget);
-        expect(find.text('Ngày 15'), findsOneWidget);
+        expect(find.text('OVERDUE'), findsOneWidget);
+        expect(find.text('Day 15'), findsOneWidget);
       } finally {
         semantics.dispose();
       }
@@ -242,7 +244,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('Overdue debt'), findsOneWidget);
-      expect(find.textContaining('Quá hạn 8 ngày'), findsOneWidget);
+      expect(find.textContaining('Overdue 8 days'), findsOneWidget);
     });
 
     testWidgets('debts list exposes tappable debt card semantics', (
@@ -305,8 +307,8 @@ void main() {
                 ),
                 child: DebtFormScaffold(
                   mode: DebtFormMode.create,
-                  title: 'Thêm khoản nợ',
-                  primaryActionLabel: 'Lưu khoản nợ',
+                  title: 'Add debt',
+                  primaryActionLabel: 'Save debt',
                   onSaved: (context, debt) {},
                   onCancel: () {},
                 ),
@@ -319,7 +321,7 @@ void main() {
               .getSemantics(_textFormFieldFor(AppTestKeys.debtFormName))
               .getSemanticsData();
           expect(nameFieldData.flagsCollection.isTextField, isTrue);
-          expect(nameFieldData.label, contains('Tên khoản nợ'));
+          expect(nameFieldData.label, contains('Debt name'));
 
           final balanceFieldData = tester
               .getSemantics(
@@ -327,13 +329,13 @@ void main() {
               )
               .getSemanticsData();
           expect(balanceFieldData.flagsCollection.isTextField, isTrue);
-          expect(balanceFieldData.label, contains('Số dư'));
+          expect(balanceFieldData.label, contains('Remaining balance'));
 
           final saveButtonData = tester
               .getSemantics(find.byKey(AppTestKeys.debtFormSave))
               .getSemanticsData();
           expect(saveButtonData.hasAction(SemanticsAction.tap), isTrue);
-          expect(saveButtonData.label, contains('Lưu khoản nợ'));
+          expect(saveButtonData.label, contains('Save debt'));
         } finally {
           semantics.dispose();
         }

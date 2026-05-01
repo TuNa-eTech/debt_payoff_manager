@@ -4,6 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/di/injection.dart';
+import '../../../../core/i18n/strategy_l10n.dart';
 import '../../../../core/models/recast_delta.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
@@ -204,7 +205,7 @@ class _PlanHero extends StatelessWidget {
             const SizedBox(height: AppDimensions.md),
             Text(
               AppLocalizations.of(context)!.planTimelineStrategySummary(
-                plan.strategy.label,
+                plan.strategy.localizedLabel(AppLocalizations.of(context)!),
                 AppFormatters.formatCents(plan.extraMonthlyAmount),
                 projection?.months.length ?? 0,
               ),

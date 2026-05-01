@@ -147,7 +147,10 @@ class AddAnotherDebtPage extends StatelessWidget {
                                               ),
                                               const SizedBox(height: 4),
                                               Text(
-                                                debtSubtitle(debt),
+                                                debtSubtitle(
+                                                  debt,
+                                                  context.l10n,
+                                                ),
                                                 style: AppTextStyles.bodySmall,
                                               ),
                                             ],

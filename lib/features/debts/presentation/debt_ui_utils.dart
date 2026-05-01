@@ -6,6 +6,7 @@ import '../../../core/utils/formatters.dart';
 import '../../../domain/entities/debt.dart';
 import '../../../domain/enums/debt_status.dart';
 import '../../../domain/enums/debt_type.dart';
+import '../../../l10n/app_localizations.dart';
 
 IconData debtTypeIcon(DebtType type) {
   switch (type) {
@@ -45,60 +46,69 @@ Color debtTypeColor(DebtType type) {
   }
 }
 
-String debtTypeDisplayName(DebtType type) {
+String debtTypeDisplayName(DebtType type, AppLocalizations l10n) {
   switch (type) {
     case DebtType.creditCard:
-      return 'Thẻ tín dụng';
+      return l10n.debtTypeCreditCard;
     case DebtType.studentLoan:
-      return 'Vay học tập';
+      return l10n.debtTypeStudentLoan;
     case DebtType.carLoan:
-      return 'Vay mua xe';
+      return l10n.debtTypeCarLoan;
     case DebtType.mortgage:
-      return 'Thế chấp';
+      return l10n.debtTypeMortgage;
     case DebtType.personal:
-      return 'Vay cá nhân';
+      return l10n.debtTypePersonal;
     case DebtType.medical:
-      return 'Nợ y tế';
+      return l10n.debtTypeMedical;
     case DebtType.other:
-      return 'Khoản nợ khác';
+      return l10n.debtTypeOther;
   }
 }
 
-String debtStatusLabel(DebtStatus status, {Debt? debt, DateTime? now}) {
+String debtStatusLabel(
+  DebtStatus status,
+  AppLocalizations l10n, {
+  Debt? debt,
+  DateTime? now,
+}) {
   if (debt != null && isDebtOverdue(debt, now: now)) {
-    return 'Quá hạn';
+    return l10n.debtStatusOverdue;
   }
 
   switch (status) {
     case DebtStatus.active:
-      return 'Đang theo dõi';
+      return l10n.debtStatusTracking;
     case DebtStatus.paidOff:
-      return 'Đã trả xong';
+      return l10n.debtStatusPaidOff;
     case DebtStatus.archived:
-      return 'Đã lưu trữ';
+      return l10n.debtStatusArchived;
     case DebtStatus.paused:
-      return 'Tạm dừng';
+      return l10n.debtStatusPaused;
   }
 }
 
-String debtSubtitle(Debt debt, {DateTime? now}) {
+String debtSubtitle(Debt debt, AppLocalizations l10n, {DateTime? now}) {
   final aprText = AppFormatters.formatApr(double.parse(debt.apr.toString()));
   final overdueDays = debtOverdueDays(debt, now: now);
   switch (debt.status) {
     case DebtStatus.active:
       if (overdueDays > 0) {
         final overdueLabel = overdueDays == 1
-            ? 'Quá hạn 1 ngày'
-            : 'Quá hạn $overdueDays ngày';
-        return '$overdueLabel · APR $aprText · Hạn ngày ${debt.dueDayOfMonth}';
+            ? l10n.debtSubtitleOverdueOneDay
+            : l10n.debtSubtitleOverdueDays(overdueDays);
+        return l10n.debtSubtitleWithDueDay(
+          overdueLabel,
+          aprText,
+          debt.dueDayOfMonth,
+        );
       }
-      return 'APR $aprText · Hạn ngày ${debt.dueDayOfMonth}';
+      return l10n.debtSubtitleAprDue(aprText, debt.dueDayOfMonth);
     case DebtStatus.paused:
-      return 'Tạm dừng đến ${_formatLocalDate(debt.pausedUntil)}';
+      return l10n.debtSubtitlePausedUntil(_formatLocalDate(debt.pausedUntil));
     case DebtStatus.paidOff:
-      return 'Đã trả xong';
+      return l10n.debtStatusPaidOff;
     case DebtStatus.archived:
-      return 'Đã lưu trữ';
+      return l10n.debtStatusArchived;
   }
 }
 
@@ -144,7 +154,7 @@ int debtOverdueDays(Debt debt, {DateTime? now}) {
 }
 
 String _formatLocalDate(DateTime? value) {
-  if (value == null) return 'chưa đặt';
+  if (value == null) return '--';
   return AppFormatters.formatDate(value);
 }
 

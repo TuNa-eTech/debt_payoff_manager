@@ -51,7 +51,7 @@ void main() {
       );
       expect(
         AppLocale.displayNameForLocaleCode(AppLocale.vietnameseLocaleCode),
-        'Tiếng Việt',
+        'Vietnamese',
       );
       expect(AppLocale.displayNameForLocaleCode('unknown'), 'English');
     });

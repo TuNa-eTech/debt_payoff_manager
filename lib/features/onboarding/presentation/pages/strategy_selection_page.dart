@@ -9,6 +9,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/di/injection.dart';
+import '../../../../core/i18n/strategy_l10n.dart';
 import '../../../../core/models/strategy_preview.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/services/plan_recast_service.dart';
@@ -185,7 +186,7 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                             else ...[
                               _StrategyCard(
                                 key: AppTestKeys.onboardingStrategySnowball,
-                                title: 'Snowball',
+                                title: context.l10n.settingsStrategySnowball,
                                 subtitle: _topPriorityText(
                                   context,
                                   strategy: Strategy.snowball,
@@ -216,7 +217,7 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                               const SizedBox(height: AppDimensions.md),
                               _StrategyCard(
                                 key: AppTestKeys.onboardingStrategyAvalanche,
-                                title: 'Avalanche',
+                                title: context.l10n.settingsStrategyAvalanche,
                                 subtitle: _topPriorityText(
                                   context,
                                   strategy: Strategy.avalanche,
@@ -501,7 +502,10 @@ class _SelectedStrategyPreviewCard extends StatelessWidget {
                 style: AppTextStyles.titleSmall,
               ),
               const Spacer(),
-              AppChip.status(label: strategy.label, icon: LucideIcons.sparkles),
+              AppChip.status(
+                label: strategy.localizedLabel(context.l10n),
+                icon: LucideIcons.sparkles,
+              ),
             ],
           ),
           const SizedBox(height: AppDimensions.md),
@@ -509,7 +513,7 @@ class _SelectedStrategyPreviewCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _PreviewStat(
-                  label: 'Debt-free date',
+                  label: context.l10n.onboardingAhaDebtFreeDate,
                   value: preview?.projectedDebtFreeDate == null
                       ? context.l10n.onboardingStrategyPreviewRecasting
                       : AppFormatters.formatShortMonthYear(
@@ -520,7 +524,7 @@ class _SelectedStrategyPreviewCard extends StatelessWidget {
               const SizedBox(width: AppDimensions.md),
               Expanded(
                 child: _PreviewStat(
-                  label: 'Projected length',
+                  label: context.l10n.onboardingStrategyPreviewProjectedLength,
                   value: preview == null
                       ? '--'
                       : AppFormatters.formatMonthsDuration(
@@ -535,7 +539,7 @@ class _SelectedStrategyPreviewCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _PreviewStat(
-                  label: 'Projected interest',
+                  label: context.l10n.onboardingAhaProjectedInterest,
                   value: preview == null
                       ? '--'
                       : AppFormatters.formatCents(
@@ -546,7 +550,7 @@ class _SelectedStrategyPreviewCard extends StatelessWidget {
               const SizedBox(width: AppDimensions.md),
               Expanded(
                 child: _PreviewStat(
-                  label: 'Extra / tháng',
+                  label: context.l10n.homeExtraMonthlyLabel,
                   value: AppFormatters.formatCents(extraMonthlyAmount),
                   valueColor: AppColors.mdPrimary,
                 ),

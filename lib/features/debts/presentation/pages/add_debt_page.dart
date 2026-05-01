@@ -191,8 +191,9 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
                           const SizedBox(height: 8),
                           Semantics(
                             label: widget.progressLabel!,
-                            value:
-                                '${(widget.progressValue! * 100).round()}% hoàn thành',
+                            value: context.l10n.debtFormProgressComplete(
+                              (widget.progressValue! * 100).round(),
+                            ),
                             child: LinearProgressIndicator(
                               value: widget.progressValue,
                               backgroundColor:

@@ -79,6 +79,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get debtStatusPaused => 'Paused';
 
   @override
+  String get statusBadgeOverdue => 'OVERDUE';
+
+  @override
+  String get statusBadgePaid => 'PAID';
+
+  @override
+  String get statusBadgeActive => 'ACTIVE';
+
+  @override
+  String get statusBadgeUpcoming => 'UPCOMING';
+
+  @override
+  String get debtCardMinimumLabel => 'Minimum';
+
+  @override
+  String get debtCardDueLabel => 'Due';
+
+  @override
   String get homeCurrentBalanceTitle => 'Current total balance';
 
   @override
@@ -1184,6 +1202,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingStrategyPreviewTitle => 'Current Preview';
 
   @override
+  String get onboardingStrategyPreviewProjectedLength => 'Projected length';
+
+  @override
   String get onboardingExtraTitle => 'Extra Budget';
 
   @override
@@ -1462,6 +1483,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rateHistoryAprLabel => 'APR (%)';
+
+  @override
+  String get rateHistoryAprHint => 'e.g., 18.99';
 
   @override
   String get rateHistoryAprInvalid => 'Enter a valid APR (0-100%)';
@@ -2019,6 +2043,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String monthlySummaryPrincipalInterestBreakdown(
+    String principal,
+    String interest,
+  ) {
+    return 'P: $principal · I: $interest';
+  }
+
+  @override
   String get settingsPartnerSharingTitle => 'Partner Sharing';
 
   @override
@@ -2220,4 +2252,668 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sharedPlanPaymentLogged => 'Payment logged.';
+
+  @override
+  String get debtTypeCreditCard => 'Credit card';
+
+  @override
+  String get debtTypeStudentLoan => 'Student loan';
+
+  @override
+  String get debtTypeCarLoan => 'Car loan';
+
+  @override
+  String get debtTypeMortgage => 'Mortgage';
+
+  @override
+  String get debtTypePersonal => 'Personal loan';
+
+  @override
+  String get debtTypeMedical => 'Medical debt';
+
+  @override
+  String get debtTypeOther => 'Other debt';
+
+  @override
+  String get debtStatusTracking => 'Tracking';
+
+  @override
+  String get debtStatusOverdue => 'Overdue';
+
+  @override
+  String get debtSubtitleOverdueOneDay => 'Overdue 1 day';
+
+  @override
+  String debtSubtitleOverdueDays(int days) {
+    return 'Overdue $days days';
+  }
+
+  @override
+  String debtSubtitleWithDueDay(String overdueLabel, String apr, int day) {
+    return '$overdueLabel · APR $apr · Due day $day';
+  }
+
+  @override
+  String debtSubtitleAprDue(String apr, int day) {
+    return 'APR $apr · Due day $day';
+  }
+
+  @override
+  String debtSubtitlePausedUntil(String date) {
+    return 'Paused until $date';
+  }
+
+  @override
+  String get debtDetailCurrentBalance => 'Current balance';
+
+  @override
+  String debtDetailOriginalPrincipalValue(String amount) {
+    return 'Original principal $amount';
+  }
+
+  @override
+  String debtDetailProgressComplete(int percent) {
+    return '$percent% complete';
+  }
+
+  @override
+  String debtFormProgressComplete(int percent) {
+    return '$percent% complete';
+  }
+
+  @override
+  String debtFeedbackAdded(String name) {
+    return 'Added debt \"$name\".';
+  }
+
+  @override
+  String debtFeedbackUpdated(String name) {
+    return 'Updated debt \"$name\".';
+  }
+
+  @override
+  String debtFeedbackArchived(String name) {
+    return 'Archived debt \"$name\".';
+  }
+
+  @override
+  String debtFeedbackUnarchived(String name) {
+    return 'Unarchived debt \"$name\".';
+  }
+
+  @override
+  String debtFeedbackPaused(String name) {
+    return 'Paused debt \"$name\".';
+  }
+
+  @override
+  String debtFeedbackResumed(String name) {
+    return 'Resumed debt \"$name\".';
+  }
+
+  @override
+  String debtFeedbackDeleted(String name) {
+    return 'Deleted debt \"$name\".';
+  }
+
+  @override
+  String debtFeedbackRestored(String name) {
+    return 'Restored debt \"$name\".';
+  }
+
+  @override
+  String get interestMethodSimpleMonthly => 'Simple monthly interest';
+
+  @override
+  String get interestMethodCompoundDaily => 'Daily compound interest';
+
+  @override
+  String get interestMethodCompoundMonthly => 'Monthly compound interest';
+
+  @override
+  String get minimumPaymentTypeFixed => 'Fixed amount';
+
+  @override
+  String get minimumPaymentTypePercentOfBalance => '% of balance';
+
+  @override
+  String get minimumPaymentTypeInterestPlusPercent => 'Interest + % principal';
+
+  @override
+  String get paymentCadenceMonthly => 'Monthly';
+
+  @override
+  String get paymentCadenceBiweekly => 'Bi-weekly';
+
+  @override
+  String get paymentCadenceWeekly => 'Weekly';
+
+  @override
+  String get paymentCadenceSemimonthly => 'Semi-monthly';
+
+  @override
+  String get debtFormDebtTypeLabel => 'Debt type';
+
+  @override
+  String debtFormDebtTypeSemantic(String type) {
+    return 'Debt type $type';
+  }
+
+  @override
+  String get debtFormSelectedHint => 'Selected';
+
+  @override
+  String debtFormSwitchTypeHint(String type) {
+    return 'Switch form to $type';
+  }
+
+  @override
+  String get debtFormNameLabel => 'Debt name';
+
+  @override
+  String debtFormInlineErrorSemantic(String message) {
+    return 'Form error. $message';
+  }
+
+  @override
+  String get debtFormAdvancedSettings => 'Advanced settings';
+
+  @override
+  String get debtFormCollapseAdvanced => 'Collapse advanced options';
+
+  @override
+  String get debtFormOpenAdvanced => 'Open advanced options';
+
+  @override
+  String get debtFormInterestMethodSection => 'Interest calculation';
+
+  @override
+  String get debtFormMinimumPaymentMethodSection =>
+      'Minimum payment calculation';
+
+  @override
+  String get debtFormMinimumPercentLabel => 'Minimum percentage';
+
+  @override
+  String get debtFormMinimumFloorLabel => 'Minimum floor';
+
+  @override
+  String get debtFormPaymentCadenceSection => 'Payment cadence';
+
+  @override
+  String get debtFormStatusSection => 'Status';
+
+  @override
+  String get debtFormPausedNoDateSemantic =>
+      'Debt is paused and no end date is selected';
+
+  @override
+  String debtFormPausedUntilSemantic(String date) {
+    return 'Debt is paused until $date';
+  }
+
+  @override
+  String get debtFormPausedUntilLabel => 'Paused until';
+
+  @override
+  String get debtFormNoDateSelected => 'No date selected';
+
+  @override
+  String get debtFormChooseDate => 'Choose date';
+
+  @override
+  String get debtFormExcludeFromStrategyTitle => 'Exclude from payoff strategy';
+
+  @override
+  String get debtFormExcludeFromStrategySubtitle =>
+      'This debt is saved but will not be prioritized in the plan.';
+
+  @override
+  String get debtFormCurrentBalanceLabel => 'Remaining balance';
+
+  @override
+  String get debtFormAprLabel => 'Interest rate (APR)';
+
+  @override
+  String debtFormSuggestionTitle(String type) {
+    return 'Suggested defaults for $type';
+  }
+
+  @override
+  String debtFormDefaultInterest(String method) {
+    return 'Default interest: $method';
+  }
+
+  @override
+  String debtFormWarningSemantic(String message) {
+    return 'Warning. $message';
+  }
+
+  @override
+  String get debtFormMinimumPaymentLabel => 'Minimum payment';
+
+  @override
+  String get debtFormMonthlyPaymentLabel => 'Monthly payment';
+
+  @override
+  String get debtFormDueDayLabel => 'Due day';
+
+  @override
+  String get debtFormRemainingBalanceLabel => 'Remaining balance';
+
+  @override
+  String get debtFormRemainingPrincipalLabel => 'Remaining principal';
+
+  @override
+  String get debtFormOriginalLoanAmountLabel => 'Original loan amount';
+
+  @override
+  String get debtFormOriginalLoanValueLabel => 'Original loan value';
+
+  @override
+  String get debtFormOriginalPrincipalLabel => 'Original principal';
+
+  @override
+  String get debtFormMinimumObligationHelper =>
+      'Enter the minimum obligation for each period.';
+
+  @override
+  String get debtFormStatementPriorityChip => 'Statement priority';
+
+  @override
+  String get debtFormFixedPaymentChip => 'Fixed payment';
+
+  @override
+  String get debtFormMonthlyCadenceChip => 'Usually monthly';
+
+  @override
+  String get debtFormFlexibleCadenceChip => 'Can be bi-weekly or monthly';
+
+  @override
+  String get debtFormVariableCadenceChip => 'Cadence can vary';
+
+  @override
+  String get debtFormAgreementPaymentChip => 'Usually per agreement';
+
+  @override
+  String get debtFormFlexiblePaymentChip => 'Flexible by real terms';
+
+  @override
+  String get debtFormTipLatestStatement => 'Latest statement';
+
+  @override
+  String get debtFormTipAccurateApr => 'Accurate APR';
+
+  @override
+  String get debtFormTipDueDate => 'Due date';
+
+  @override
+  String get debtFormTipRemainingPrincipal => 'Remaining principal';
+
+  @override
+  String get debtFormTipAutoDebit => 'Auto-debit';
+
+  @override
+  String get debtFormTipDefermentPause => 'Can pause for deferment';
+
+  @override
+  String get debtFormTipFixedApr => 'Fixed APR';
+
+  @override
+  String get debtFormTipPrincipalOnly => 'Principal only';
+
+  @override
+  String get debtFormTipFirstDayCommon => '1st day is common';
+
+  @override
+  String get debtFormTipExtraLater => 'Enter extra payments later';
+
+  @override
+  String get debtFormTipFixedPayment => 'Fixed payment';
+
+  @override
+  String get debtFormTipLenderApr => 'Lender APR';
+
+  @override
+  String get debtFormTipAprCanBeZero => 'APR can be 0';
+
+  @override
+  String get debtFormTipPaymentPlan => 'Payment plan';
+
+  @override
+  String get debtFormTipNoFixedDate => 'May have no fixed date';
+
+  @override
+  String get debtFormTipFlexible => 'Flexible';
+
+  @override
+  String get debtFormTipStartAtZero => 'Can start at 0%';
+
+  @override
+  String get debtFormTipAdjustLater => 'Adjust later';
+
+  @override
+  String get debtFormCreditCardHeadline => 'Follow the latest statement';
+
+  @override
+  String get debtFormCreditCardSummary =>
+      'Prioritize the current statement balance, statement APR, and latest minimum payment.';
+
+  @override
+  String get debtFormCreditCardNameHint =>
+      'e.g., Chase Sapphire, Citi Double Cash';
+
+  @override
+  String get debtFormCreditCardNameHelper =>
+      'Use the issuer or card name so it is easy to recognize.';
+
+  @override
+  String get debtFormCreditCardBalanceLabel => 'Statement balance';
+
+  @override
+  String get debtFormCreditCardBalanceHelper =>
+      'Enter the balance you need to pay off right now.';
+
+  @override
+  String get debtFormCreditCardOriginalPrincipalLabel =>
+      'Balance when tracking started';
+
+  @override
+  String get debtFormCreditCardOriginalPrincipalHelper =>
+      'Optional. Useful if you want the app to show progress from today.';
+
+  @override
+  String get debtFormCreditCardDeferredPrincipalHint =>
+      'If you know the balance when tracking started, open Advanced to track progress more accurately.';
+
+  @override
+  String get debtFormCreditCardAprHelper =>
+      'Use the APR shown on the statement or banking app.';
+
+  @override
+  String get debtFormCreditCardMinimumPaymentHelper =>
+      'Take this directly from the latest statement.';
+
+  @override
+  String get debtFormCreditCardDueDayLabel => 'Statement due day';
+
+  @override
+  String get debtFormCreditCardDueDayHint => 'e.g., 15';
+
+  @override
+  String get debtFormCreditCardDueDayHelper =>
+      'The day you need to pay the minimum to avoid fees and overdue status.';
+
+  @override
+  String get debtFormCreditCardAdvancedGuidance =>
+      'Credit cards usually use daily compound interest. The app suggests that as the default.';
+
+  @override
+  String get debtFormStudentLoanHeadline => 'Long-term installment loan';
+
+  @override
+  String get debtFormStudentLoanSummary =>
+      'Focus on remaining balance, fixed minimum payment, and monthly auto-debit day.';
+
+  @override
+  String get debtFormStudentLoanNameHint => 'e.g., Federal Loan, Sallie Mae';
+
+  @override
+  String get debtFormStudentLoanNameHelper =>
+      'Use the servicer or loan name so you do not mix up loans.';
+
+  @override
+  String get debtFormStudentLoanBalanceHelper =>
+      'Use the remaining principal from the loan portal.';
+
+  @override
+  String get debtFormStudentLoanOriginalPrincipalHelper =>
+      'Helps the app show payoff progress from disbursement.';
+
+  @override
+  String get debtFormStudentLoanAprHelper =>
+      'Many student loans use a fixed monthly APR.';
+
+  @override
+  String get debtFormStudentLoanMinimumPaymentHelper =>
+      'Use the current monthly repayment schedule.';
+
+  @override
+  String get debtFormAutoDebitDayLabel => 'Auto-debit day';
+
+  @override
+  String get debtFormStudentLoanDueDayHint => 'e.g., 5';
+
+  @override
+  String get debtFormStudentLoanDueDayHelper =>
+      'The day the system usually drafts payment or marks it due.';
+
+  @override
+  String get debtFormStudentLoanAdvancedGuidance =>
+      'Student loans often have stable terms; simple monthly is usually the right default.';
+
+  @override
+  String get debtFormCarLoanHeadline => 'Asset installment loan';
+
+  @override
+  String get debtFormCarLoanSummary =>
+      'Prioritize remaining principal, fixed payment, and due day to avoid late periods.';
+
+  @override
+  String get debtFormCarLoanNameHint =>
+      'e.g., Toyota Financial, Wells Fargo Auto';
+
+  @override
+  String get debtFormCarLoanNameHelper =>
+      'Tie it to the lender or car for easy matching.';
+
+  @override
+  String get debtFormCarLoanBalanceHelper =>
+      'Use the remaining principal from the lender if available.';
+
+  @override
+  String get debtFormCarLoanOriginalPrincipalHelper =>
+      'Helps you see how much of the loan has been paid down.';
+
+  @override
+  String get debtFormCarLoanAprHelper =>
+      'Car loans usually use fixed APR and monthly compounding.';
+
+  @override
+  String get debtFormCarLoanDueDayHint => 'e.g., 12';
+
+  @override
+  String get debtFormCarLoanDueDayHelper =>
+      'The day the lender marks the current period paid or late.';
+
+  @override
+  String get debtFormCarLoanAdvancedGuidance =>
+      'Car loans usually match monthly compounding and a fixed minimum payment.';
+
+  @override
+  String get debtFormMortgageHeadline => 'Track principal, not home value';
+
+  @override
+  String get debtFormMortgageSummary =>
+      'Enter the principal still owed, minimum monthly payment, and mortgage due day.';
+
+  @override
+  String get debtFormMortgageNameHint => 'e.g., Primary Home Mortgage';
+
+  @override
+  String get debtFormMortgageNameHelper =>
+      'Use the loan name or a shortened address.';
+
+  @override
+  String get debtFormMortgageBalanceHelper =>
+      'Enter only the principal balance, not the home value.';
+
+  @override
+  String get debtFormMortgageOriginalPrincipalHelper =>
+      'Use the original mortgage amount so the app can calculate paid-down progress.';
+
+  @override
+  String get debtFormMortgageAprHelper =>
+      'Standard mortgages usually use simple monthly interest.';
+
+  @override
+  String get debtFormMortgageMinimumPaymentHelper =>
+      'Enter only the minimum monthly obligation, excluding extra principal.';
+
+  @override
+  String get debtFormMortgageDueDayLabel => 'Mortgage due day';
+
+  @override
+  String get debtFormMortgageDueDayHint => 'e.g., 1';
+
+  @override
+  String get debtFormMortgageDueDayHelper =>
+      'Many mortgages are due at the start of the month.';
+
+  @override
+  String get debtFormMortgageAdvancedGuidance =>
+      'For mortgages, simple monthly interest and a fixed minimum are usually closest to reality.';
+
+  @override
+  String get debtFormPersonalLoanHeadline => 'Unsecured installment loan';
+
+  @override
+  String get debtFormPersonalLoanSummary =>
+      'Focus on remaining principal, current minimum payment, and the day the lender collects payment.';
+
+  @override
+  String get debtFormPersonalLoanNameHint =>
+      'e.g., SoFi Personal Loan, LendingClub';
+
+  @override
+  String get debtFormPersonalLoanNameHelper =>
+      'Use the lender name or loan purpose.';
+
+  @override
+  String get debtFormPersonalLoanBalanceHelper =>
+      'Use the lender app or latest statement.';
+
+  @override
+  String get debtFormPersonalLoanOriginalPrincipalHelper =>
+      'Helps the app show progress for the personal loan.';
+
+  @override
+  String get debtFormPersonalLoanAprHelper =>
+      'Personal loans usually use monthly compounding.';
+
+  @override
+  String get debtFormPersonalLoanMinimumPaymentHelper =>
+      'Enter the current payment obligation for each period.';
+
+  @override
+  String get debtFormPersonalLoanDueDayHint => 'e.g., 18';
+
+  @override
+  String get debtFormPersonalLoanDueDayHelper =>
+      'The day the lender marks you late if unpaid.';
+
+  @override
+  String get debtFormPersonalLoanAdvancedGuidance =>
+      'Personal loans usually follow standard amortization: monthly compounding and fixed payments.';
+
+  @override
+  String get debtFormMedicalHeadline => 'Often a softer payment plan';
+
+  @override
+  String get debtFormMedicalSummary =>
+      'If the debt has no interest, enter APR as 0 and use the agreed payment amount.';
+
+  @override
+  String get debtFormMedicalNameHint => 'e.g., City Hospital Billing';
+
+  @override
+  String get debtFormMedicalNameHelper =>
+      'Use the hospital, clinic, or collection agency name.';
+
+  @override
+  String get debtFormMedicalBalanceLabel => 'Amount still owed';
+
+  @override
+  String get debtFormMedicalBalanceHelper =>
+      'Enter the remaining balance on the current payment plan.';
+
+  @override
+  String get debtFormMedicalOriginalPrincipalLabel => 'Original bill total';
+
+  @override
+  String get debtFormMedicalOriginalPrincipalHelper =>
+      'Optional. Use this if you want to see how much of the bill has been paid.';
+
+  @override
+  String get debtFormMedicalDeferredPrincipalHint =>
+      'If you want to track the original bill total, open Advanced and enter the original amount.';
+
+  @override
+  String get debtFormMedicalAprHelper =>
+      'Many medical debt plans are 0%, so enter 0 if that matches reality.';
+
+  @override
+  String get debtFormMedicalMinimumPaymentLabel => 'Current period payment';
+
+  @override
+  String get debtFormMedicalMinimumPaymentHelper =>
+      'Enter the amount requested by the hospital or agency.';
+
+  @override
+  String get debtFormMedicalDueDayLabel => 'Payment appointment day';
+
+  @override
+  String get debtFormMedicalDueDayHint => 'e.g., 20';
+
+  @override
+  String get debtFormMedicalDueDayHelper =>
+      'You can leave it blank and default to 15 if the schedule is unclear.';
+
+  @override
+  String get debtFormMedicalAdvancedGuidance =>
+      'Medical debt is often simpler: fixed minimum, APR may be 0, and fewer settings are needed.';
+
+  @override
+  String get debtFormOtherHeadline => 'Flexible setup for real life';
+
+  @override
+  String get debtFormOtherSummary =>
+      'Use this for debts that do not match a standard type. Enter balance, APR, minimum, then tune Advanced.';
+
+  @override
+  String get debtFormOtherNameHint => 'e.g., Store Financing, Family Loan';
+
+  @override
+  String get debtFormOtherNameHelper =>
+      'Use a clear name so you remember what this debt is later.';
+
+  @override
+  String get debtFormOtherBalanceHelper => 'Enter what you currently owe.';
+
+  @override
+  String get debtFormOtherOriginalPrincipalHelper =>
+      'Optional. Useful if you want the app to show better progress.';
+
+  @override
+  String get debtFormOtherDeferredPrincipalHint =>
+      'You can add the original principal in Advanced if you want to track progress.';
+
+  @override
+  String get debtFormOtherAprHelper =>
+      'Not sure about APR? Start with 0 and update later.';
+
+  @override
+  String get debtFormOtherMinimumPaymentHelper =>
+      'Enter the minimum amount you must pay each period.';
+
+  @override
+  String get debtFormOtherDueDayHint => 'e.g., 15';
+
+  @override
+  String get debtFormOtherDueDayHelper =>
+      'If unsure, keep the default and adjust later.';
+
+  @override
+  String get debtFormOtherAdvancedGuidance =>
+      'This type is the most flexible. Keep the defaults first and tune them when details are clear.';
 }

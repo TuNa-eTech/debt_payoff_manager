@@ -355,7 +355,7 @@ class _RateHistoryDialogState extends State<_RateHistoryDialog> {
                 controller: _aprController,
                 decoration: InputDecoration(
                   labelText: context.l10n.rateHistoryAprLabel,
-                  hintText: 'e.g., 18.99',
+                  hintText: context.l10n.rateHistoryAprHint,
                   suffixText: '%',
                   border: const OutlineInputBorder(),
                 ),

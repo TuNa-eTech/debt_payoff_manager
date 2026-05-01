@@ -31,9 +31,9 @@ class DebtsListPage extends StatelessWidget {
       listener: (context, state) {
         final feedback = state.lastActionFeedback;
         if (feedback == null) return;
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(feedback.message)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(_feedbackMessage(context, feedback.message))),
+        );
         context.read<DebtsCubit>().clearActionFeedback();
       },
       child: Scaffold(
@@ -97,9 +97,7 @@ class DebtsListPage extends StatelessWidget {
                   const SizedBox(height: AppDimensions.sectionGap),
                   if (state.pausedCount > 0) ...[
                     Text(
-                      context.l10n.debtsListPausedSection(
-                        state.pausedCount,
-                      ),
+                      context.l10n.debtsListPausedSection(state.pausedCount),
                       style: AppTextStyles.labelMedium.copyWith(
                         color: AppColors.mdOnSurfaceVariant,
                         letterSpacing: 0.4,
@@ -139,7 +137,11 @@ class DebtsListPage extends StatelessWidget {
                           key: AppTestKeys.debtCard(debt.id),
                           child: DebtCard(
                             name: debt.name,
-                            subtitle: debtSubtitle(debt, now: referenceDate),
+                            subtitle: debtSubtitle(
+                              debt,
+                              context.l10n,
+                              now: referenceDate,
+                            ),
                             balanceText: debtBalanceText(debt),
                             progress: debtProgress(debt),
                             icon: debtTypeIcon(debt.type),
@@ -186,6 +188,55 @@ class DebtsListPage extends StatelessWidget {
         return context.l10n.debtsListSectionArchived;
     }
   }
+}
+
+String _feedbackMessage(BuildContext context, String message) {
+  final l10n = context.l10n;
+  const addedPrefix = 'Added debt "';
+  const updatedPrefix = 'Updated debt "';
+  const archivedPrefix = 'Archived debt "';
+  const unarchivedPrefix = 'Unarchived debt "';
+  const pausedPrefix = 'Paused debt "';
+  const resumedPrefix = 'Resumed debt "';
+  const deletedPrefix = 'Deleted debt "';
+  const restoredPrefix = 'Restored debt "';
+
+  if (message.startsWith(addedPrefix)) {
+    return l10n.debtFeedbackAdded(_extractQuotedName(message, addedPrefix));
+  }
+  if (message.startsWith(updatedPrefix)) {
+    return l10n.debtFeedbackUpdated(_extractQuotedName(message, updatedPrefix));
+  }
+  if (message.startsWith(archivedPrefix)) {
+    return l10n.debtFeedbackArchived(
+      _extractQuotedName(message, archivedPrefix),
+    );
+  }
+  if (message.startsWith(unarchivedPrefix)) {
+    return l10n.debtFeedbackUnarchived(
+      _extractQuotedName(message, unarchivedPrefix),
+    );
+  }
+  if (message.startsWith(pausedPrefix)) {
+    return l10n.debtFeedbackPaused(_extractQuotedName(message, pausedPrefix));
+  }
+  if (message.startsWith(resumedPrefix)) {
+    return l10n.debtFeedbackResumed(_extractQuotedName(message, resumedPrefix));
+  }
+  if (message.startsWith(deletedPrefix)) {
+    return l10n.debtFeedbackDeleted(_extractQuotedName(message, deletedPrefix));
+  }
+  if (message.startsWith(restoredPrefix)) {
+    return l10n.debtFeedbackRestored(
+      _extractQuotedName(message, restoredPrefix),
+    );
+  }
+  return message;
+}
+
+String _extractQuotedName(String message, String prefix) {
+  final withoutPrefix = message.substring(prefix.length);
+  return withoutPrefix.replaceFirst(RegExp(r'"\.$'), '');
 }
 
 class _SummaryCard extends StatelessWidget {
@@ -338,25 +389,19 @@ class _PausedDebtCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(
-            LucideIcons.pauseCircle,
-            color: AppColors.mdOutline,
-            size: 32,
-          ),
+          Icon(LucideIcons.pauseCircle, color: AppColors.mdOutline, size: 32),
           const SizedBox(width: AppDimensions.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  debt.name,
-                  style: AppTextStyles.titleMedium,
-                ),
+                Text(debt.name, style: AppTextStyles.titleMedium),
                 const SizedBox(height: 4),
                 Text(
                   debt.pausedUntil != null
                       ? context.l10n.debtPausedUntil(
-                          AppFormatters.formatDate(debt.pausedUntil!))
+                          AppFormatters.formatDate(debt.pausedUntil!),
+                        )
                       : context.l10n.debtPausedIndefinitely,
                   style: AppTextStyles.bodySmall.copyWith(
                     color: isSoon

@@ -38,7 +38,7 @@ class FilePickerBackupFilePicker implements BackupFilePicker {
 
     final bytes = picked.bytes;
     if (bytes == null) {
-      throw StateError('Không thể đọc file backup đã chọn.');
+      throw StateError('Unable to read the selected backup file.');
     }
 
     final directory = await _temporaryDirectoryProvider();

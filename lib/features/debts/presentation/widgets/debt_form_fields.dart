@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
+import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -13,6 +14,7 @@ import '../../../../domain/enums/debt_type.dart';
 import '../../../../domain/enums/interest_method.dart';
 import '../../../../domain/enums/min_payment_type.dart';
 import '../../../../domain/enums/payment_cadence.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../cubit/debt_form_cubit.dart';
 import '../debt_ui_utils.dart';
 
@@ -110,7 +112,8 @@ class DebtFormFields extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final content = _contentFor(selectedDebtType);
+    final l10n = context.l10n;
+    final content = _contentFor(selectedDebtType, l10n);
     final recommendedInterest = DebtFormCubit.recommendedInterestMethodFor(
       selectedDebtType,
     );
@@ -119,7 +122,7 @@ class DebtFormFields extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          'Loại khoản nợ',
+          l10n.debtFormDebtTypeLabel,
           style: AppTextStyles.labelMedium.copyWith(
             color: AppColors.mdOnSurfaceVariant,
           ),
@@ -133,12 +136,16 @@ class DebtFormFields extends StatelessWidget {
                 (type) => Semantics(
                   button: true,
                   selected: selectedDebtType == type,
-                  label: 'Loại khoản nợ ${debtTypeDisplayName(type)}',
+                  label: l10n.debtFormDebtTypeSemantic(
+                    debtTypeDisplayName(type, l10n),
+                  ),
                   hint: selectedDebtType == type
-                      ? 'Đang được chọn'
-                      : 'Chạm để chuyển biểu mẫu sang ${debtTypeDisplayName(type)}',
+                      ? l10n.debtFormSelectedHint
+                      : l10n.debtFormSwitchTypeHint(
+                          debtTypeDisplayName(type, l10n),
+                        ),
                   child: AppChip.filter(
-                    label: type.label,
+                    label: debtTypeDisplayName(type, l10n),
                     selected: selectedDebtType == type,
                     onTap: () => onDebtTypeChanged(type),
                     icon: debtTypeIcon(type),
@@ -152,7 +159,7 @@ class DebtFormFields extends StatelessWidget {
         const SizedBox(height: 28),
         AppTextField(
           key: AppTestKeys.debtFormName,
-          label: 'Tên khoản nợ',
+          label: l10n.debtFormNameLabel,
           controller: nameController,
           hint: content.nameHint,
           helperText: content.nameHelper,
@@ -162,23 +169,23 @@ class DebtFormFields extends StatelessWidget {
           onChanged: (_) => onCoreFieldChanged(),
         ),
         const SizedBox(height: 20),
-        ..._buildBalanceFields(content),
+        ..._buildBalanceFields(content, l10n),
         const SizedBox(height: 20),
-        ..._buildPricingFields(content),
+        ..._buildPricingFields(content, l10n),
         if (showDueDayByDefault) ...[
           const SizedBox(height: 20),
           _buildDueDayField(content),
         ],
         if (warnings.isNotEmpty) ...[
           const SizedBox(height: 20),
-          ...warnings.map(_buildWarningCard),
+          ...warnings.map((warning) => _buildWarningCard(warning, l10n)),
         ],
         if (inlineError != null) ...[
           const SizedBox(height: 16),
           Semantics(
             container: true,
             liveRegion: true,
-            label: 'Lỗi biểu mẫu. $inlineError',
+            label: l10n.debtFormInlineErrorSemantic(inlineError!),
             child: Container(
               padding: const EdgeInsets.all(AppDimensions.md),
               decoration: BoxDecoration(
@@ -198,10 +205,10 @@ class DebtFormFields extends StatelessWidget {
         Semantics(
           button: true,
           toggled: showAdvanced,
-          label: 'Thiết lập nâng cao',
+          label: l10n.debtFormAdvancedSettings,
           hint: showAdvanced
-              ? 'Thu gọn các tuỳ chọn nâng cao'
-              : 'Mở các tuỳ chọn nâng cao',
+              ? l10n.debtFormCollapseAdvanced
+              : l10n.debtFormOpenAdvanced,
           child: InkWell(
             key: AppTestKeys.debtFormAdvancedToggle,
             onTap: onToggleAdvanced,
@@ -225,7 +232,7 @@ class DebtFormFields extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        'Thiết lập nâng cao',
+                        l10n.debtFormAdvancedSettings,
                         style: AppTextStyles.titleSmall,
                       ),
                     ],
@@ -247,6 +254,7 @@ class DebtFormFields extends StatelessWidget {
           _buildDefaultsCard(
             content: content,
             recommendedInterest: recommendedInterest,
+            l10n: l10n,
           ),
           if (!showOriginalPrincipalByDefault) ...[
             const SizedBox(height: 16),
@@ -265,18 +273,18 @@ class DebtFormFields extends StatelessWidget {
           ],
           const SizedBox(height: 20),
           _buildEnumSection<InterestMethod>(
-            title: 'Cách tính lãi',
+            title: l10n.debtFormInterestMethodSection,
             values: InterestMethod.values,
             selected: interestMethod,
-            labelBuilder: (method) => method.label,
+            labelBuilder: (method) => _interestMethodLabel(method, l10n),
             onSelected: onInterestMethodChanged,
           ),
           const SizedBox(height: 20),
           _buildEnumSection<MinPaymentType>(
-            title: 'Cách tính minimum payment',
+            title: l10n.debtFormMinimumPaymentMethodSection,
             values: MinPaymentType.values,
             selected: minimumPaymentType,
-            labelBuilder: (type) => type.label,
+            labelBuilder: (type) => _minimumPaymentTypeLabel(type, l10n),
             onSelected: onMinimumPaymentTypeChanged,
           ),
           if (minimumPaymentType != MinPaymentType.fixed) ...[
@@ -285,7 +293,7 @@ class DebtFormFields extends StatelessWidget {
               children: [
                 Expanded(
                   child: AppTextField.percentage(
-                    label: 'Phần trăm tối thiểu',
+                    label: l10n.debtFormMinimumPercentLabel,
                     controller: minimumPaymentPercentController,
                     errorText: minimumPaymentPercentError,
                     onChanged: (_) => onCoreFieldChanged(),
@@ -294,7 +302,7 @@ class DebtFormFields extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: AppTextField.currency(
-                    label: 'Mức sàn tối thiểu',
+                    label: l10n.debtFormMinimumFloorLabel,
                     controller: minimumPaymentFloorController,
                     errorText: minimumPaymentFloorError,
                     onChanged: (_) => onCoreFieldChanged(),
@@ -305,18 +313,18 @@ class DebtFormFields extends StatelessWidget {
           ],
           const SizedBox(height: 20),
           _buildEnumSection<PaymentCadence>(
-            title: 'Chu kỳ thanh toán',
+            title: l10n.debtFormPaymentCadenceSection,
             values: PaymentCadence.values,
             selected: paymentCadence,
-            labelBuilder: (cadence) => cadence.label,
+            labelBuilder: (cadence) => _paymentCadenceLabel(cadence, l10n),
             onSelected: onPaymentCadenceChanged,
           ),
           const SizedBox(height: 20),
           _buildEnumSection<DebtStatus>(
-            title: 'Trạng thái',
+            title: l10n.debtFormStatusSection,
             values: _statusValues,
             selected: status,
-            labelBuilder: _statusLabel,
+            labelBuilder: (status) => _statusLabel(status, l10n),
             onSelected: onStatusChanged,
           ),
           if (status == DebtStatus.paused) ...[
@@ -324,8 +332,10 @@ class DebtFormFields extends StatelessWidget {
             Semantics(
               container: true,
               label: pausedUntil == null
-                  ? 'Khoản nợ đang tạm dừng, chưa chọn ngày kết thúc'
-                  : 'Khoản nợ đang tạm dừng đến ${AppFormatters.formatDate(pausedUntil!)}',
+                  ? l10n.debtFormPausedNoDateSemantic
+                  : l10n.debtFormPausedUntilSemantic(
+                      AppFormatters.formatDate(pausedUntil!),
+                    ),
               child: Container(
                 padding: const EdgeInsets.all(AppDimensions.md),
                 decoration: BoxDecoration(
@@ -337,7 +347,7 @@ class DebtFormFields extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'Tạm dừng đến',
+                      l10n.debtFormPausedUntilLabel,
                       style: AppTextStyles.labelMedium.copyWith(
                         color: AppColors.mdOnSurfaceVariant,
                       ),
@@ -348,20 +358,20 @@ class DebtFormFields extends StatelessWidget {
                         Expanded(
                           child: Text(
                             pausedUntil == null
-                                ? 'Chưa chọn ngày'
+                                ? l10n.debtFormNoDateSelected
                                 : AppFormatters.formatDate(pausedUntil!),
                             style: AppTextStyles.titleSmall,
                           ),
                         ),
                         AppChip.assist(
-                          label: 'Chọn ngày',
+                          label: l10n.debtFormChooseDate,
                           icon: LucideIcons.calendar,
                           onTap: onSelectPausedUntil,
                         ),
                         if (pausedUntil != null) ...[
                           const SizedBox(width: 8),
                           AppChip.assist(
-                            label: 'Xóa',
+                            label: l10n.commonDelete,
                             icon: LucideIcons.x,
                             onTap: onClearPausedUntil,
                           ),
@@ -387,11 +397,11 @@ class DebtFormFields extends StatelessWidget {
             value: excludeFromStrategy,
             contentPadding: EdgeInsets.zero,
             title: Text(
-              'Loại khỏi chiến lược payoff',
+              l10n.debtFormExcludeFromStrategyTitle,
               style: AppTextStyles.bodyLarge,
             ),
             subtitle: Text(
-              'Khoản nợ này vẫn được lưu nhưng không được ưu tiên trong plan.',
+              l10n.debtFormExcludeFromStrategySubtitle,
               style: AppTextStyles.bodySmall,
             ),
             onChanged: onExcludeFromStrategyChanged,
@@ -403,10 +413,13 @@ class DebtFormFields extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildBalanceFields(_DebtTypeFormContent content) {
+  List<Widget> _buildBalanceFields(
+    _DebtTypeFormContent content,
+    AppLocalizations l10n,
+  ) {
     final currentBalanceField = AppTextField.currency(
       key: AppTestKeys.debtFormCurrentBalance,
-      label: 'Số dư còn lại',
+      label: l10n.debtFormCurrentBalanceLabel,
       controller: currentBalanceController,
       helperText: '${content.balanceLabel}: ${content.balanceHelper}',
       errorText: currentBalanceError,
@@ -458,14 +471,17 @@ class DebtFormFields extends StatelessWidget {
     ];
   }
 
-  List<Widget> _buildPricingFields(_DebtTypeFormContent content) {
+  List<Widget> _buildPricingFields(
+    _DebtTypeFormContent content,
+    AppLocalizations l10n,
+  ) {
     return [
       Row(
         children: [
           Expanded(
             child: AppTextField.percentage(
               key: AppTestKeys.debtFormApr,
-              label: 'Lãi suất (APR)',
+              label: l10n.debtFormAprLabel,
               controller: aprController,
               helperText: content.aprHelper,
               errorText: aprError,
@@ -575,6 +591,7 @@ class DebtFormFields extends StatelessWidget {
   Widget _buildDefaultsCard({
     required _DebtTypeFormContent content,
     required InterestMethod recommendedInterest,
+    required AppLocalizations l10n,
   }) {
     return Container(
       padding: const EdgeInsets.all(AppDimensions.md),
@@ -587,7 +604,7 @@ class DebtFormFields extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Gợi ý cho ${content.displayName}',
+            l10n.debtFormSuggestionTitle(content.displayName),
             style: AppTextStyles.titleSmall,
           ),
           const SizedBox(height: 6),
@@ -603,8 +620,9 @@ class DebtFormFields extends StatelessWidget {
             runSpacing: AppDimensions.sm,
             children: [
               AppChip.status(
-                label:
-                    'Lãi mặc định: ${_interestMethodLabel(recommendedInterest)}',
+                label: l10n.debtFormDefaultInterest(
+                  _interestMethodLabel(recommendedInterest, l10n),
+                ),
                 icon: LucideIcons.percent,
               ),
               AppChip.status(
@@ -622,13 +640,13 @@ class DebtFormFields extends StatelessWidget {
     );
   }
 
-  Widget _buildWarningCard(String warning) {
+  Widget _buildWarningCard(String warning, AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppDimensions.sm),
       child: Semantics(
         container: true,
         liveRegion: true,
-        label: 'Cảnh báo. $warning',
+        label: l10n.debtFormWarningSemantic(warning),
         child: Container(
           padding: const EdgeInsets.all(AppDimensions.md),
           decoration: BoxDecoration(
@@ -698,234 +716,247 @@ class DebtFormFields extends StatelessWidget {
     );
   }
 
-  String _statusLabel(DebtStatus value) {
+  String _statusLabel(DebtStatus value, AppLocalizations l10n) {
     switch (value) {
       case DebtStatus.active:
-        return 'Đang hoạt động';
+        return l10n.debtStatusActive;
       case DebtStatus.paidOff:
-        return 'Đã trả xong';
+        return l10n.debtStatusPaidOff;
       case DebtStatus.paused:
-        return 'Tạm dừng';
+        return l10n.debtStatusPaused;
       case DebtStatus.archived:
-        return 'Đã lưu trữ';
+        return l10n.debtStatusArchived;
     }
   }
 
-  String _interestMethodLabel(InterestMethod value) {
+  String _interestMethodLabel(InterestMethod value, AppLocalizations l10n) {
     switch (value) {
       case InterestMethod.simpleMonthly:
-        return 'Lãi đơn theo tháng';
+        return l10n.interestMethodSimpleMonthly;
       case InterestMethod.compoundDaily:
-        return 'Lãi kép theo ngày';
+        return l10n.interestMethodCompoundDaily;
       case InterestMethod.compoundMonthly:
-        return 'Lãi kép theo tháng';
+        return l10n.interestMethodCompoundMonthly;
     }
   }
 
-  _DebtTypeFormContent _contentFor(DebtType type) {
+  String _minimumPaymentTypeLabel(MinPaymentType value, AppLocalizations l10n) {
+    switch (value) {
+      case MinPaymentType.fixed:
+        return l10n.minimumPaymentTypeFixed;
+      case MinPaymentType.percentOfBalance:
+        return l10n.minimumPaymentTypePercentOfBalance;
+      case MinPaymentType.interestPlusPercent:
+        return l10n.minimumPaymentTypeInterestPlusPercent;
+    }
+  }
+
+  String _paymentCadenceLabel(PaymentCadence value, AppLocalizations l10n) {
+    switch (value) {
+      case PaymentCadence.monthly:
+        return l10n.paymentCadenceMonthly;
+      case PaymentCadence.biweekly:
+        return l10n.paymentCadenceBiweekly;
+      case PaymentCadence.weekly:
+        return l10n.paymentCadenceWeekly;
+      case PaymentCadence.semimonthly:
+        return l10n.paymentCadenceSemimonthly;
+    }
+  }
+
+  _DebtTypeFormContent _contentFor(DebtType type, AppLocalizations l10n) {
     switch (type) {
       case DebtType.creditCard:
-        return const _DebtTypeFormContent(
-          displayName: 'Thẻ tín dụng',
-          headline: 'Bám theo sao kê gần nhất',
-          summary:
-              'Ưu tiên số dư statement hiện tại, APR trên sao kê, và minimum payment của kỳ gần nhất.',
-          nameHint: 'VD: Chase Sapphire, Citi Double Cash',
-          nameHelper: 'Dùng tên nhà phát hành hoặc tên thẻ để dễ nhận diện.',
-          balanceLabel: 'Số dư statement',
-          balanceHelper: 'Nhập số dư bạn cần payoff lúc này.',
-          originalPrincipalLabel: 'Số dư khi bắt đầu theo dõi',
+        return _DebtTypeFormContent(
+          displayName: l10n.debtTypeCreditCard,
+          headline: l10n.debtFormCreditCardHeadline,
+          summary: l10n.debtFormCreditCardSummary,
+          nameHint: l10n.debtFormCreditCardNameHint,
+          nameHelper: l10n.debtFormCreditCardNameHelper,
+          balanceLabel: l10n.debtFormCreditCardBalanceLabel,
+          balanceHelper: l10n.debtFormCreditCardBalanceHelper,
+          originalPrincipalLabel: l10n.debtFormCreditCardOriginalPrincipalLabel,
           originalPrincipalHelper:
-              'Tùy chọn. Hữu ích nếu bạn muốn app hiển thị tiến độ kể từ hôm nay.',
-          deferredPrincipalHint:
-              'Nếu bạn biết số dư khi bắt đầu theo dõi, mở Nâng cao để theo dõi tiến độ chính xác hơn.',
-          aprHelper: 'Dùng APR hiện trên sao kê hoặc ứng dụng ngân hàng.',
-          minimumPaymentLabel: 'Minimum payment',
-          minimumPaymentHelper: 'Lấy trực tiếp từ sao kê gần nhất.',
-          dueDayLabel: 'Ngày đến hạn sao kê',
-          dueDayHint: 'VD: 15',
-          dueDayHelper: 'Ngày bạn cần trả minimum để tránh fee và báo quá hạn.',
-          advancedGuidance:
-              'Thẻ tín dụng thường dùng lãi kép theo ngày. App đang gợi ý cấu hình đó làm mặc định.',
-          minimumPaymentChip: 'Ưu tiên theo sao kê',
-          cadenceChip: 'Thường trả hàng tháng',
-          quickTips: ['Sao kê mới nhất', 'APR chính xác', 'Ngày đến hạn'],
+              l10n.debtFormCreditCardOriginalPrincipalHelper,
+          deferredPrincipalHint: l10n.debtFormCreditCardDeferredPrincipalHint,
+          aprHelper: l10n.debtFormCreditCardAprHelper,
+          minimumPaymentLabel: l10n.debtFormMinimumPaymentLabel,
+          minimumPaymentHelper: l10n.debtFormCreditCardMinimumPaymentHelper,
+          dueDayLabel: l10n.debtFormCreditCardDueDayLabel,
+          dueDayHint: l10n.debtFormCreditCardDueDayHint,
+          dueDayHelper: l10n.debtFormCreditCardDueDayHelper,
+          advancedGuidance: l10n.debtFormCreditCardAdvancedGuidance,
+          minimumPaymentChip: l10n.debtFormStatementPriorityChip,
+          cadenceChip: l10n.debtFormMonthlyCadenceChip,
+          quickTips: [
+            l10n.debtFormTipLatestStatement,
+            l10n.debtFormTipAccurateApr,
+            l10n.debtFormTipDueDate,
+          ],
         );
       case DebtType.studentLoan:
-        return const _DebtTypeFormContent(
-          displayName: 'Vay học tập',
-          headline: 'Khoản vay trả góp dài hạn',
-          summary:
-              'Tập trung vào dư nợ còn lại, khoản trả tối thiểu cố định, và ngày auto-debit hàng tháng.',
-          nameHint: 'VD: Federal Loan, Sallie Mae',
-          nameHelper:
-              'Dùng tên servicer hoặc khoản vay để không nhầm giữa các loan.',
-          balanceLabel: 'Dư nợ còn lại',
-          balanceHelper: 'Lấy số principal còn nợ từ portal của khoản vay.',
-          originalPrincipalLabel: 'Số tiền vay ban đầu',
+        return _DebtTypeFormContent(
+          displayName: l10n.debtTypeStudentLoan,
+          headline: l10n.debtFormStudentLoanHeadline,
+          summary: l10n.debtFormStudentLoanSummary,
+          nameHint: l10n.debtFormStudentLoanNameHint,
+          nameHelper: l10n.debtFormStudentLoanNameHelper,
+          balanceLabel: l10n.debtFormRemainingBalanceLabel,
+          balanceHelper: l10n.debtFormStudentLoanBalanceHelper,
+          originalPrincipalLabel: l10n.debtFormOriginalLoanAmountLabel,
           originalPrincipalHelper:
-              'Giúp app hiển thị tiến độ payoff từ lúc giải ngân.',
+              l10n.debtFormStudentLoanOriginalPrincipalHelper,
           deferredPrincipalHint: null,
-          aprHelper: 'Nhiều khoản vay học tập dùng APR cố định theo tháng.',
-          minimumPaymentLabel: 'Khoản trả tối thiểu',
-          minimumPaymentHelper: 'Lấy từ lịch trả hàng tháng hiện tại.',
-          dueDayLabel: 'Ngày auto-debit',
-          dueDayHint: 'VD: 5',
-          dueDayHelper: 'Ngày hệ thống thường rút tiền hoặc đến hạn trả.',
-          advancedGuidance:
-              'Vay học tập thường có kỳ hạn ổn định; simple monthly là cấu hình mặc định phù hợp.',
-          minimumPaymentChip: 'Khoản trả cố định',
-          cadenceChip: 'Thường trả hàng tháng',
+          aprHelper: l10n.debtFormStudentLoanAprHelper,
+          minimumPaymentLabel: l10n.debtFormMinimumPaymentLabel,
+          minimumPaymentHelper: l10n.debtFormStudentLoanMinimumPaymentHelper,
+          dueDayLabel: l10n.debtFormAutoDebitDayLabel,
+          dueDayHint: l10n.debtFormStudentLoanDueDayHint,
+          dueDayHelper: l10n.debtFormStudentLoanDueDayHelper,
+          advancedGuidance: l10n.debtFormStudentLoanAdvancedGuidance,
+          minimumPaymentChip: l10n.debtFormFixedPaymentChip,
+          cadenceChip: l10n.debtFormMonthlyCadenceChip,
           quickTips: [
-            'Principal còn lại',
-            'Auto-debit',
-            'Có thể tạm dừng nếu deferment',
+            l10n.debtFormTipRemainingPrincipal,
+            l10n.debtFormTipAutoDebit,
+            l10n.debtFormTipDefermentPause,
           ],
         );
       case DebtType.carLoan:
-        return const _DebtTypeFormContent(
-          displayName: 'Vay mua xe',
-          headline: 'Khoản vay trả góp tài sản',
-          summary:
-              'Ưu tiên principal còn lại, khoản trả cố định, và ngày đến hạn chuẩn để tránh trễ kỳ.',
-          nameHint: 'VD: Toyota Financial, Wells Fargo Auto',
-          nameHelper: 'Gắn với lender hoặc chiếc xe để dễ đối chiếu.',
-          balanceLabel: 'Principal còn lại',
-          balanceHelper: 'Lấy dư nợ gốc còn lại từ lender nếu có.',
-          originalPrincipalLabel: 'Giá trị khoản vay ban đầu',
-          originalPrincipalHelper:
-              'Giúp bạn nhìn rõ tiến độ đã trả được bao nhiêu phần khoản vay.',
+        return _DebtTypeFormContent(
+          displayName: l10n.debtTypeCarLoan,
+          headline: l10n.debtFormCarLoanHeadline,
+          summary: l10n.debtFormCarLoanSummary,
+          nameHint: l10n.debtFormCarLoanNameHint,
+          nameHelper: l10n.debtFormCarLoanNameHelper,
+          balanceLabel: l10n.debtFormRemainingPrincipalLabel,
+          balanceHelper: l10n.debtFormCarLoanBalanceHelper,
+          originalPrincipalLabel: l10n.debtFormOriginalLoanValueLabel,
+          originalPrincipalHelper: l10n.debtFormCarLoanOriginalPrincipalHelper,
           deferredPrincipalHint: null,
-          aprHelper:
-              'Vay mua xe thường dùng APR cố định và lãi kép theo tháng.',
-          minimumPaymentLabel: 'Khoản trả hàng tháng',
-          minimumPaymentHelper: 'Nhập đúng nghĩa vụ tối thiểu mỗi kỳ.',
-          dueDayLabel: 'Ngày đến hạn',
-          dueDayHint: 'VD: 12',
-          dueDayHelper: 'Ngày lender chốt bạn đã trả kỳ hiện tại hay chưa.',
-          advancedGuidance:
-              'Khoản vay mua xe thường khớp với compound monthly và minimum payment cố định.',
-          minimumPaymentChip: 'Khoản trả cố định',
-          cadenceChip: 'Thường trả hàng tháng',
-          quickTips: ['APR cố định', 'Principal còn lại', 'Ngày đến hạn'],
+          aprHelper: l10n.debtFormCarLoanAprHelper,
+          minimumPaymentLabel: l10n.debtFormMonthlyPaymentLabel,
+          minimumPaymentHelper: l10n.debtFormMinimumObligationHelper,
+          dueDayLabel: l10n.debtFormDueDayLabel,
+          dueDayHint: l10n.debtFormCarLoanDueDayHint,
+          dueDayHelper: l10n.debtFormCarLoanDueDayHelper,
+          advancedGuidance: l10n.debtFormCarLoanAdvancedGuidance,
+          minimumPaymentChip: l10n.debtFormFixedPaymentChip,
+          cadenceChip: l10n.debtFormMonthlyCadenceChip,
+          quickTips: [
+            l10n.debtFormTipFixedApr,
+            l10n.debtFormTipRemainingPrincipal,
+            l10n.debtFormTipDueDate,
+          ],
         );
       case DebtType.mortgage:
-        return const _DebtTypeFormContent(
-          displayName: 'Thế chấp',
-          headline: 'Theo dõi principal, không phải giá nhà',
-          summary:
-              'Hãy nhập phần gốc còn nợ, khoản trả tối thiểu hàng tháng, và ngày đến hạn mortgage.',
-          nameHint: 'VD: Primary Home Mortgage',
-          nameHelper: 'Dùng tên khoản vay hoặc địa chỉ rút gọn.',
-          balanceLabel: 'Principal còn lại',
-          balanceHelper: 'Chỉ nhập phần dư nợ gốc, không nhập giá trị căn nhà.',
-          originalPrincipalLabel: 'Số tiền vay ban đầu',
-          originalPrincipalHelper:
-              'Dùng số tiền mortgage ban đầu để app tính phần trăm đã trả.',
+        return _DebtTypeFormContent(
+          displayName: l10n.debtTypeMortgage,
+          headline: l10n.debtFormMortgageHeadline,
+          summary: l10n.debtFormMortgageSummary,
+          nameHint: l10n.debtFormMortgageNameHint,
+          nameHelper: l10n.debtFormMortgageNameHelper,
+          balanceLabel: l10n.debtFormRemainingPrincipalLabel,
+          balanceHelper: l10n.debtFormMortgageBalanceHelper,
+          originalPrincipalLabel: l10n.debtFormOriginalLoanAmountLabel,
+          originalPrincipalHelper: l10n.debtFormMortgageOriginalPrincipalHelper,
           deferredPrincipalHint: null,
-          aprHelper: 'Mortgage tiêu chuẩn thường đi theo lãi đơn theo tháng.',
-          minimumPaymentLabel: 'Khoản trả tối thiểu',
-          minimumPaymentHelper:
-              'Chỉ nhập nghĩa vụ tối thiểu mỗi tháng, chưa gồm extra principal.',
-          dueDayLabel: 'Ngày đến hạn mortgage',
-          dueDayHint: 'VD: 1',
-          dueDayHelper: 'Nhiều mortgage đến hạn vào đầu tháng.',
-          advancedGuidance:
-              'Với mortgage, simple monthly và minimum cố định thường là cấu hình gần thực tế nhất.',
-          minimumPaymentChip: 'Khoản trả cố định',
-          cadenceChip: 'Thường trả hàng tháng',
+          aprHelper: l10n.debtFormMortgageAprHelper,
+          minimumPaymentLabel: l10n.debtFormMinimumPaymentLabel,
+          minimumPaymentHelper: l10n.debtFormMortgageMinimumPaymentHelper,
+          dueDayLabel: l10n.debtFormMortgageDueDayLabel,
+          dueDayHint: l10n.debtFormMortgageDueDayHint,
+          dueDayHelper: l10n.debtFormMortgageDueDayHelper,
+          advancedGuidance: l10n.debtFormMortgageAdvancedGuidance,
+          minimumPaymentChip: l10n.debtFormFixedPaymentChip,
+          cadenceChip: l10n.debtFormMonthlyCadenceChip,
           quickTips: [
-            'Chỉ principal',
-            'Ngày mùng 1 phổ biến',
-            'Extra trả thêm nhập sau',
+            l10n.debtFormTipPrincipalOnly,
+            l10n.debtFormTipFirstDayCommon,
+            l10n.debtFormTipExtraLater,
           ],
         );
       case DebtType.personal:
-        return const _DebtTypeFormContent(
-          displayName: 'Vay cá nhân',
-          headline: 'Khoản vay trả góp không tài sản',
-          summary:
-              'Tập trung vào dư nợ gốc, khoản trả tối thiểu hiện tại, và ngày lender thu tiền mỗi kỳ.',
-          nameHint: 'VD: SoFi Personal Loan, LendingClub',
-          nameHelper: 'Dùng tên lender hoặc mục đích khoản vay.',
-          balanceLabel: 'Dư nợ còn lại',
-          balanceHelper: 'Lấy từ ứng dụng lender hoặc statement gần nhất.',
-          originalPrincipalLabel: 'Số tiền vay ban đầu',
+        return _DebtTypeFormContent(
+          displayName: l10n.debtTypePersonal,
+          headline: l10n.debtFormPersonalLoanHeadline,
+          summary: l10n.debtFormPersonalLoanSummary,
+          nameHint: l10n.debtFormPersonalLoanNameHint,
+          nameHelper: l10n.debtFormPersonalLoanNameHelper,
+          balanceLabel: l10n.debtFormRemainingBalanceLabel,
+          balanceHelper: l10n.debtFormPersonalLoanBalanceHelper,
+          originalPrincipalLabel: l10n.debtFormOriginalLoanAmountLabel,
           originalPrincipalHelper:
-              'Giúp app thể hiện tiến độ trả nợ của khoản vay cá nhân.',
+              l10n.debtFormPersonalLoanOriginalPrincipalHelper,
           deferredPrincipalHint: null,
-          aprHelper: 'Vay cá nhân thường là lãi kép theo tháng.',
-          minimumPaymentLabel: 'Khoản trả tối thiểu',
-          minimumPaymentHelper: 'Nhập nghĩa vụ thanh toán hiện tại mỗi kỳ.',
-          dueDayLabel: 'Ngày đến hạn',
-          dueDayHint: 'VD: 18',
-          dueDayHelper: 'Ngày lender đánh dấu bạn bị trễ hạn nếu chưa trả.',
-          advancedGuidance:
-              'Vay cá nhân thường mang cấu hình amortization chuẩn: compound monthly và khoản trả cố định.',
-          minimumPaymentChip: 'Khoản trả cố định',
-          cadenceChip: 'Có thể bi-weekly hoặc monthly',
-          quickTips: ['Khoản trả cố định', 'Ngày đến hạn', 'APR của lender'],
+          aprHelper: l10n.debtFormPersonalLoanAprHelper,
+          minimumPaymentLabel: l10n.debtFormMinimumPaymentLabel,
+          minimumPaymentHelper: l10n.debtFormPersonalLoanMinimumPaymentHelper,
+          dueDayLabel: l10n.debtFormDueDayLabel,
+          dueDayHint: l10n.debtFormPersonalLoanDueDayHint,
+          dueDayHelper: l10n.debtFormPersonalLoanDueDayHelper,
+          advancedGuidance: l10n.debtFormPersonalLoanAdvancedGuidance,
+          minimumPaymentChip: l10n.debtFormFixedPaymentChip,
+          cadenceChip: l10n.debtFormFlexibleCadenceChip,
+          quickTips: [
+            l10n.debtFormTipFixedPayment,
+            l10n.debtFormTipDueDate,
+            l10n.debtFormTipLenderApr,
+          ],
         );
       case DebtType.medical:
-        return const _DebtTypeFormContent(
-          displayName: 'Nợ y tế',
-          headline: 'Thường là kế hoạch trả mềm',
-          summary:
-              'Nếu khoản nợ không bị tính lãi, hãy nhập APR là 0 và dùng khoản thanh toán đã thoả thuận.',
-          nameHint: 'VD: City Hospital Billing',
-          nameHelper: 'Dùng tên bệnh viện, phòng khám, hoặc đơn vị thu hộ.',
-          balanceLabel: 'Số tiền còn phải thanh toán',
-          balanceHelper: 'Nhập số dư còn lại trên kế hoạch trả góp hiện tại.',
-          originalPrincipalLabel: 'Tổng bill ban đầu',
-          originalPrincipalHelper:
-              'Tùy chọn. Dùng khi bạn muốn xem mình đã trả được bao nhiêu phần hoá đơn.',
-          deferredPrincipalHint:
-              'Nếu bạn muốn tracking tổng bill ban đầu, mở Nâng cao để nhập số tiền gốc.',
-          aprHelper:
-              'Nhiều kế hoạch trả nợ y tế là 0%, nên nhập 0 nếu đúng thực tế.',
-          minimumPaymentLabel: 'Khoản thanh toán kỳ này',
-          minimumPaymentHelper:
-              'Nhập đúng số đã được bệnh viện hoặc agency yêu cầu.',
-          dueDayLabel: 'Ngày hẹn thanh toán',
-          dueDayHint: 'VD: 20',
-          dueDayHelper:
-              'Có thể để trống và mặc định 15 nếu chưa có lịch rõ ràng.',
-          advancedGuidance:
-              'Nợ y tế thường đơn giản hơn: minimum cố định, APR có thể bằng 0, và không cần quá nhiều cấu hình.',
-          minimumPaymentChip: 'Thường theo thoả thuận',
-          cadenceChip: 'Thường trả hàng tháng',
+        return _DebtTypeFormContent(
+          displayName: l10n.debtTypeMedical,
+          headline: l10n.debtFormMedicalHeadline,
+          summary: l10n.debtFormMedicalSummary,
+          nameHint: l10n.debtFormMedicalNameHint,
+          nameHelper: l10n.debtFormMedicalNameHelper,
+          balanceLabel: l10n.debtFormMedicalBalanceLabel,
+          balanceHelper: l10n.debtFormMedicalBalanceHelper,
+          originalPrincipalLabel: l10n.debtFormMedicalOriginalPrincipalLabel,
+          originalPrincipalHelper: l10n.debtFormMedicalOriginalPrincipalHelper,
+          deferredPrincipalHint: l10n.debtFormMedicalDeferredPrincipalHint,
+          aprHelper: l10n.debtFormMedicalAprHelper,
+          minimumPaymentLabel: l10n.debtFormMedicalMinimumPaymentLabel,
+          minimumPaymentHelper: l10n.debtFormMedicalMinimumPaymentHelper,
+          dueDayLabel: l10n.debtFormMedicalDueDayLabel,
+          dueDayHint: l10n.debtFormMedicalDueDayHint,
+          dueDayHelper: l10n.debtFormMedicalDueDayHelper,
+          advancedGuidance: l10n.debtFormMedicalAdvancedGuidance,
+          minimumPaymentChip: l10n.debtFormAgreementPaymentChip,
+          cadenceChip: l10n.debtFormMonthlyCadenceChip,
           quickTips: [
-            'APR có thể bằng 0',
-            'Theo kế hoạch trả góp',
-            'Có thể không có ngày cố định',
+            l10n.debtFormTipAprCanBeZero,
+            l10n.debtFormTipPaymentPlan,
+            l10n.debtFormTipNoFixedDate,
           ],
         );
       case DebtType.other:
-        return const _DebtTypeFormContent(
-          displayName: 'Khoản nợ khác',
-          headline: 'Thiết lập linh hoạt theo thực tế',
-          summary:
-              'Dùng mục này cho các khoản không khớp loại chuẩn. Hãy nhập số dư, APR, minimum, rồi tinh chỉnh ở Nâng cao.',
-          nameHint: 'VD: Store Financing, Family Loan',
-          nameHelper: 'Đặt tên đủ rõ để sau này bạn còn nhớ đây là khoản nào.',
-          balanceLabel: 'Số dư còn lại',
-          balanceHelper: 'Nhập số bạn đang còn nợ ở thời điểm hiện tại.',
-          originalPrincipalLabel: 'Số tiền gốc ban đầu',
-          originalPrincipalHelper:
-              'Tùy chọn. Hữu ích nếu bạn muốn app hiển thị tiến độ tốt hơn.',
-          deferredPrincipalHint:
-              'Bạn có thể thêm số tiền gốc ban đầu trong Nâng cao nếu muốn theo dõi tiến độ.',
-          aprHelper: 'Không chắc APR? Hãy bắt đầu với 0 và cập nhật sau.',
-          minimumPaymentLabel: 'Khoản thanh toán tối thiểu',
-          minimumPaymentHelper: 'Nhập mức tối thiểu bạn phải trả mỗi kỳ.',
-          dueDayLabel: 'Ngày đến hạn',
-          dueDayHint: 'VD: 15',
-          dueDayHelper: 'Nếu chưa rõ, cứ để mặc định rồi chỉnh lại sau.',
-          advancedGuidance:
-              'Mục này linh hoạt nhất. Bạn có thể giữ cấu hình mặc định trước rồi tinh chỉnh khi đã rõ thông tin.',
-          minimumPaymentChip: 'Linh hoạt theo thực tế',
-          cadenceChip: 'Cadence có thể thay đổi',
-          quickTips: ['Linh hoạt', 'Có thể bắt đầu với 0%', 'Tinh chỉnh sau'],
+        return _DebtTypeFormContent(
+          displayName: l10n.debtTypeOther,
+          headline: l10n.debtFormOtherHeadline,
+          summary: l10n.debtFormOtherSummary,
+          nameHint: l10n.debtFormOtherNameHint,
+          nameHelper: l10n.debtFormOtherNameHelper,
+          balanceLabel: l10n.debtFormRemainingBalanceLabel,
+          balanceHelper: l10n.debtFormOtherBalanceHelper,
+          originalPrincipalLabel: l10n.debtFormOriginalPrincipalLabel,
+          originalPrincipalHelper: l10n.debtFormOtherOriginalPrincipalHelper,
+          deferredPrincipalHint: l10n.debtFormOtherDeferredPrincipalHint,
+          aprHelper: l10n.debtFormOtherAprHelper,
+          minimumPaymentLabel: l10n.debtFormMinimumPaymentLabel,
+          minimumPaymentHelper: l10n.debtFormOtherMinimumPaymentHelper,
+          dueDayLabel: l10n.debtFormDueDayLabel,
+          dueDayHint: l10n.debtFormOtherDueDayHint,
+          dueDayHelper: l10n.debtFormOtherDueDayHelper,
+          advancedGuidance: l10n.debtFormOtherAdvancedGuidance,
+          minimumPaymentChip: l10n.debtFormFlexiblePaymentChip,
+          cadenceChip: l10n.debtFormVariableCadenceChip,
+          quickTips: [
+            l10n.debtFormTipFlexible,
+            l10n.debtFormTipStartAtZero,
+            l10n.debtFormTipAdjustLater,
+          ],
         );
     }
   }

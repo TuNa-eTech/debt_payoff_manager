@@ -132,8 +132,8 @@ class _DebtPayoffAppState extends State<DebtPayoffApp> {
             child: MaterialApp.router(
               locale: locale,
               onGenerateTitle: (context) =>
-                  AppLocalizations.of(context)?.appName ?? 'Debt Payoff X',
-              title: 'Debt Payoff X',
+                  AppLocalizations.of(context)?.appName ??
+                  lookupAppLocalizations(const Locale('en')).appName,
               debugShowCheckedModeBanner: false,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,

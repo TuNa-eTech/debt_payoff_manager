@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import '../extensions/context_extensions.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_dimensions.dart';
 import '../theme/app_text_styles.dart';
@@ -121,7 +122,7 @@ class DebtCard extends StatelessWidget {
                       Expanded(
                         child: _DetailItem(
                           icon: LucideIcons.arrowDownCircle,
-                          label: 'Tối thiểu',
+                          label: context.l10n.debtCardMinimumLabel,
                           value: minPayment!,
                           color: AppColors.mdOnSurfaceVariant,
                         ),
@@ -130,7 +131,7 @@ class DebtCard extends StatelessWidget {
                       Expanded(
                         child: _DetailItem(
                           icon: LucideIcons.calendar,
-                          label: 'Đến hạn',
+                          label: context.l10n.debtCardDueLabel,
                           value: dueDate!,
                           color: state == DebtCardState.overdue
                               ? AppColors.debtRed

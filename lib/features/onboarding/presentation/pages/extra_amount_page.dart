@@ -9,6 +9,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/di/injection.dart';
+import '../../../../core/i18n/strategy_l10n.dart';
 import '../../../../core/models/strategy_preview.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/services/plan_recast_service.dart';
@@ -113,7 +114,8 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                 _maybeSchedulePreview(trackedDebts);
                 final trackedCount = trackedDebts.length;
                 final strategyLabel =
-                    _plan?.strategy.label ?? Strategy.snowball.label;
+                    _plan?.strategy.localizedLabel(context.l10n) ??
+                    Strategy.snowball.localizedLabel(context.l10n);
                 final amountCents = _extraAmount.round() * 100;
 
                 return Column(

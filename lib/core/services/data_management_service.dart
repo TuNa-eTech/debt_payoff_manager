@@ -263,7 +263,7 @@ class DataManagementService {
 
     if ((settings?.trustLevel ?? 0) > 0) {
       throw StateError(
-        'Hãy tắt Sao lưu đám mây trước khi khôi phục bản sao lưu cục bộ.',
+        'Turn off cloud backup before restoring a local backup.',
       );
     }
 
@@ -300,9 +300,7 @@ class DataManagementService {
     )..where((row) => row.id.equals('singleton'))).getSingleOrNull();
 
     if ((settings?.trustLevel ?? 0) > 0) {
-      throw StateError(
-        'Hãy tắt Sao lưu đám mây trước khi xóa toàn bộ dữ liệu.',
-      );
+      throw StateError('Turn off cloud backup before clearing all data.');
     }
 
     await _db.resetToFactoryState();
@@ -331,7 +329,7 @@ class DataManagementService {
     );
     if (bundleType != 'local_backup') {
       throw StateError(
-        'File $resolvedFileName không phải local backup bundle hợp lệ.',
+        'File $resolvedFileName is not a valid local backup bundle.',
       );
     }
 
@@ -342,8 +340,8 @@ class DataManagementService {
     );
     if (bundleVersion != _bundleVersion) {
       throw StateError(
-        'Backup $resolvedFileName có bundle_version=$bundleVersion, '
-        'nhưng app hiện chỉ hỗ trợ bundle_version=$_bundleVersion.',
+        'Backup $resolvedFileName has bundle_version=$bundleVersion, '
+        'but this app only supports bundle_version=$_bundleVersion.',
       );
     }
 
@@ -354,8 +352,8 @@ class DataManagementService {
     );
     if (schemaVersion != _db.schemaVersion) {
       throw StateError(
-        'Backup $resolvedFileName có schema_version=$schemaVersion, '
-        'không tương thích với app hiện tại (schema_version=${_db.schemaVersion}).',
+        'Backup $resolvedFileName has schema_version=$schemaVersion, '
+        'which is not compatible with this app (schema_version=${_db.schemaVersion}).',
       );
     }
 
@@ -393,8 +391,8 @@ class DataManagementService {
       );
       if (rows.length != expectedCount) {
         throw StateError(
-          'Backup $resolvedFileName bị lỗi: ${descriptor.fileStem}.json có '
-          '${rows.length} dòng nhưng manifest khai báo $expectedCount.',
+          'Backup $resolvedFileName is invalid: ${descriptor.fileStem}.json has '
+          '${rows.length} rows but the manifest declares $expectedCount.',
         );
       }
 
@@ -558,9 +556,9 @@ class DataManagementService {
       final bytes = await File(filePath).readAsBytes();
       return ZipDecoder().decodeBytes(bytes);
     } on FileSystemException {
-      throw StateError('Không thể đọc file backup $fileName.');
+      throw StateError('Unable to read backup file $fileName.');
     } catch (_) {
-      throw StateError('File $fileName không phải ZIP hợp lệ.');
+      throw StateError('File $fileName is not a valid ZIP archive.');
     }
   }
 
@@ -575,7 +573,7 @@ class DataManagementService {
     );
     if (decoded is! Map) {
       throw StateError(
-        'Backup $fileName không hợp lệ: manifest.json phải là object JSON.',
+        'Backup $fileName is invalid: manifest.json must be a JSON object.',
       );
     }
 
@@ -594,7 +592,7 @@ class DataManagementService {
     );
     if (decoded is! List) {
       throw StateError(
-        'Backup $bundleName không hợp lệ: $fileName phải là JSON array.',
+        'Backup $bundleName is invalid: $fileName must be a JSON array.',
       );
     }
 
@@ -605,8 +603,8 @@ class DataManagementService {
           final row = entry.value;
           if (row is! Map) {
             throw StateError(
-              'Backup $bundleName không hợp lệ: $fileName dòng ${entry.key + 1} '
-              'phải là JSON object.',
+              'Backup $bundleName is invalid: $fileName row ${entry.key + 1} '
+              'must be a JSON object.',
             );
           }
           return Map<String, dynamic>.from(row);
@@ -628,7 +626,7 @@ class DataManagementService {
       return jsonDecode(text);
     } on FormatException {
       throw StateError(
-        'Backup $bundleName không hợp lệ: $entryName không phải JSON hợp lệ.',
+        'Backup $bundleName is invalid: $entryName is not valid JSON.',
       );
     }
   }
@@ -641,7 +639,7 @@ class DataManagementService {
     final entry = archive.findFile(entryName);
     if (entry == null) {
       throw StateError(
-        'Backup $bundleName không hợp lệ: thiếu file $entryName.',
+        'Backup $bundleName is invalid: missing file $entryName.',
       );
     }
 
@@ -664,8 +662,8 @@ class DataManagementService {
           .toList(growable: false);
       if (missingColumns.isNotEmpty) {
         throw StateError(
-          'Backup $bundleName không hợp lệ: ${descriptor.fileStem}.json '
-          'dòng ${entry.key + 1} thiếu cột ${missingColumns.join(', ')}.',
+          'Backup $bundleName is invalid: ${descriptor.fileStem}.json '
+          'row ${entry.key + 1} is missing columns ${missingColumns.join(', ')}.',
         );
       }
     }
@@ -678,7 +676,7 @@ class DataManagementService {
     final settingsRows = rowsByFileStem['user_settings'];
     if (settingsRows == null || settingsRows.length != 1) {
       throw StateError(
-        'Backup $fileName không hợp lệ: user_settings phải chứa đúng 1 bản ghi.',
+        'Backup $fileName is invalid: user_settings must contain exactly 1 row.',
       );
     }
 
@@ -691,7 +689,7 @@ class DataManagementService {
     );
     if (settingsId != 'singleton') {
       throw StateError(
-        'Backup $fileName không hợp lệ: user_settings.id phải là singleton.',
+        'Backup $fileName is invalid: user_settings.id must be singleton.',
       );
     }
 
@@ -709,13 +707,13 @@ class DataManagementService {
     );
     if (trustLevel > 0 || (firebaseUid?.isNotEmpty ?? false)) {
       throw StateError(
-        'Backup $fileName không thể khôi phục vì được tạo khi Sao lưu đám mây đang bật.',
+        'Backup $fileName cannot be restored because it was created while cloud backup was on.',
       );
     }
 
     final planRows = rowsByFileStem['plans'] ?? const <Map<String, dynamic>>[];
     if (planRows.isEmpty) {
-      throw StateError('Backup $fileName không hợp lệ: thiếu dữ liệu plans.');
+      throw StateError('Backup $fileName is invalid: plans data is missing.');
     }
 
     final seenScenarioIds = <String>{};
@@ -729,7 +727,7 @@ class DataManagementService {
       );
       if (!seenScenarioIds.add(scenarioId)) {
         throw StateError(
-          'Backup $fileName không hợp lệ: plans chứa nhiều hơn 1 plan cho scenario_id=$scenarioId.',
+          'Backup $fileName is invalid: plans contains more than 1 plan for scenario_id=$scenarioId.',
         );
       }
       if (scenarioId == 'main') {
@@ -738,7 +736,7 @@ class DataManagementService {
     }
 
     if (!hasMainPlan) {
-      throw StateError('Backup $fileName không hợp lệ: thiếu main plan.');
+      throw StateError('Backup $fileName is invalid: main plan is missing.');
     }
   }
 
@@ -752,7 +750,7 @@ class DataManagementService {
       return rawValue;
     }
     throw StateError(
-      'Backup $fileName không hợp lệ: manifest.$key phải là chuỗi hợp lệ.',
+      'Backup $fileName is invalid: manifest.$key must be a valid string.',
     );
   }
 
@@ -765,7 +763,7 @@ class DataManagementService {
       return _coerceInt(manifest[key]);
     } catch (_) {
       throw StateError(
-        'Backup $fileName không hợp lệ: manifest.$key phải là số nguyên hợp lệ.',
+        'Backup $fileName is invalid: manifest.$key must be a valid integer.',
       );
     }
   }
@@ -778,7 +776,7 @@ class DataManagementService {
     final rawValue = manifest[key];
     if (rawValue is! Map) {
       throw StateError(
-        'Backup $fileName không hợp lệ: manifest.$key phải là object JSON.',
+        'Backup $fileName is invalid: manifest.$key must be a JSON object.',
       );
     }
     return Map<String, dynamic>.from(rawValue);
@@ -794,7 +792,7 @@ class DataManagementService {
       return _coerceInt(rawValue);
     } catch (_) {
       throw StateError(
-        'Backup $fileName không hợp lệ: table_row_counts.$fileStem phải là số nguyên.',
+        'Backup $fileName is invalid: table_row_counts.$fileStem must be an integer.',
       );
     }
   }
@@ -1593,7 +1591,7 @@ class DataManagementService {
       return value;
     }
     throw StateError(
-      'Backup $fileName không hợp lệ: $tableName.$key phải là chuỗi hợp lệ.',
+      'Backup $fileName is invalid: $tableName.$key must be a valid string.',
     );
   }
 
@@ -1611,7 +1609,7 @@ class DataManagementService {
       return value;
     }
     throw StateError(
-      'Backup $fileName không hợp lệ: $tableName.$key phải là chuỗi hoặc null.',
+      'Backup $fileName is invalid: $tableName.$key must be a string or null.',
     );
   }
 
@@ -1625,7 +1623,7 @@ class DataManagementService {
       return _coerceInt(row[key]);
     } catch (_) {
       throw StateError(
-        'Backup $fileName không hợp lệ: $tableName.$key phải là số nguyên.',
+        'Backup $fileName is invalid: $tableName.$key must be an integer.',
       );
     }
   }
@@ -1644,7 +1642,7 @@ class DataManagementService {
       return _coerceInt(value);
     } catch (_) {
       throw StateError(
-        'Backup $fileName không hợp lệ: $tableName.$key phải là số nguyên hoặc null.',
+        'Backup $fileName is invalid: $tableName.$key must be an integer or null.',
       );
     }
   }
@@ -1671,7 +1669,7 @@ class DataManagementService {
       }
     }
     throw StateError(
-      'Backup $fileName không hợp lệ: $tableName.$key phải là boolean.',
+      'Backup $fileName is invalid: $tableName.$key must be a boolean.',
     );
   }
 
@@ -1684,14 +1682,14 @@ class DataManagementService {
     final value = row[key];
     if (value is! String || value.isEmpty) {
       throw StateError(
-        'Backup $fileName không hợp lệ: $tableName.$key phải là chuỗi decimal.',
+        'Backup $fileName is invalid: $tableName.$key must be a decimal string.',
       );
     }
     try {
       return Decimal.parse(value);
     } on FormatException {
       throw StateError(
-        'Backup $fileName không hợp lệ: $tableName.$key không phải decimal hợp lệ.',
+        'Backup $fileName is invalid: $tableName.$key is not a valid decimal.',
       );
     }
   }
@@ -1708,14 +1706,14 @@ class DataManagementService {
     }
     if (value is! String || value.isEmpty) {
       throw StateError(
-        'Backup $fileName không hợp lệ: $tableName.$key phải là chuỗi decimal hoặc null.',
+        'Backup $fileName is invalid: $tableName.$key must be a decimal string or null.',
       );
     }
     try {
       return Decimal.parse(value);
     } on FormatException {
       throw StateError(
-        'Backup $fileName không hợp lệ: $tableName.$key không phải decimal hợp lệ.',
+        'Backup $fileName is invalid: $tableName.$key is not a valid decimal.',
       );
     }
   }
@@ -1736,7 +1734,7 @@ class DataManagementService {
       return DateTime.parse(value).toUtc();
     } on FormatException {
       throw StateError(
-        'Backup $fileName không hợp lệ: $tableName.$key không phải UTC datetime hợp lệ.',
+        'Backup $fileName is invalid: $tableName.$key is not a valid UTC datetime.',
       );
     }
   }
@@ -1760,7 +1758,7 @@ class DataManagementService {
       return DateTime.parse(value).toUtc();
     } on FormatException {
       throw StateError(
-        'Backup $fileName không hợp lệ: $tableName.$key không phải UTC datetime hợp lệ.',
+        'Backup $fileName is invalid: $tableName.$key is not a valid UTC datetime.',
       );
     }
   }
@@ -1781,7 +1779,7 @@ class DataManagementService {
       return DateTime.parse(value);
     } on FormatException {
       throw StateError(
-        'Backup $fileName không hợp lệ: $tableName.$key không phải local date hợp lệ.',
+        'Backup $fileName is invalid: $tableName.$key is not a valid local date.',
       );
     }
   }
@@ -1805,7 +1803,7 @@ class DataManagementService {
       return DateTime.parse(value);
     } on FormatException {
       throw StateError(
-        'Backup $fileName không hợp lệ: $tableName.$key không phải local date hợp lệ.',
+        'Backup $fileName is invalid: $tableName.$key is not a valid local date.',
       );
     }
   }
@@ -1827,7 +1825,7 @@ class DataManagementService {
       return values.byName(rawValue);
     } catch (_) {
       throw StateError(
-        'Backup $fileName không hợp lệ: $tableName.$key có giá trị không hỗ trợ: $rawValue.',
+        'Backup $fileName is invalid: $tableName.$key has an unsupported value: $rawValue.',
       );
     }
   }

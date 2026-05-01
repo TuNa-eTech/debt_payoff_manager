@@ -61,7 +61,7 @@ class DebtsCubit extends Cubit<DebtsState> {
   Future<void> addDebt(Debt debt) async {
     try {
       await _debtRepository.addDebt(debt);
-      _emitFeedback('Đã thêm khoản nợ "${debt.name}".');
+      _emitFeedback('Added debt "${debt.name}".');
     } catch (error) {
       _emitInlineError(error);
     }
@@ -73,7 +73,7 @@ class DebtsCubit extends Cubit<DebtsState> {
   Future<void> updateDebt(Debt debt) async {
     try {
       await _debtRepository.updateDebt(debt);
-      _emitFeedback('Đã cập nhật khoản nợ "${debt.name}".');
+      _emitFeedback('Updated debt "${debt.name}".');
     } catch (error) {
       _emitInlineError(error);
     }
@@ -87,7 +87,7 @@ class DebtsCubit extends Cubit<DebtsState> {
           updatedAt: DateTime.now().toUtc(),
         ),
       );
-      _emitFeedback('Đã lưu trữ khoản nợ "${debt.name}".');
+      _emitFeedback('Archived debt "${debt.name}".');
     } catch (error) {
       _emitInlineError(error);
     }
@@ -101,7 +101,7 @@ class DebtsCubit extends Cubit<DebtsState> {
           updatedAt: DateTime.now().toUtc(),
         ),
       );
-      _emitFeedback('Đã bỏ lưu trữ khoản nợ "${debt.name}".');
+      _emitFeedback('Unarchived debt "${debt.name}".');
     } catch (error) {
       _emitInlineError(error);
     }
@@ -117,7 +117,7 @@ class DebtsCubit extends Cubit<DebtsState> {
           updatedAt: DateTime.now().toUtc(),
         ),
       );
-      _emitFeedback('Đã tạm dừng khoản nợ "${debt.name}".');
+      _emitFeedback('Paused debt "${debt.name}".');
     } catch (error) {
       _emitInlineError(error);
     }
@@ -133,7 +133,7 @@ class DebtsCubit extends Cubit<DebtsState> {
           updatedAt: DateTime.now().toUtc(),
         ),
       );
-      _emitFeedback('Đã kích hoạt lại khoản nợ "${debt.name}".');
+      _emitFeedback('Resumed debt "${debt.name}".');
     } catch (error) {
       _emitInlineError(error);
     }
@@ -143,7 +143,7 @@ class DebtsCubit extends Cubit<DebtsState> {
   Future<void> deleteDebt(Debt debt) async {
     try {
       await _debtRepository.deleteDebt(debt.id);
-      _emitFeedback('Đã xóa khoản nợ "${debt.name}".');
+      _emitFeedback('Deleted debt "${debt.name}".');
     } catch (error) {
       _emitInlineError(error);
     }
@@ -152,7 +152,7 @@ class DebtsCubit extends Cubit<DebtsState> {
   Future<void> restoreDebt(Debt debt) async {
     try {
       await _debtRepository.restoreDebt(debt.id);
-      _emitFeedback('Đã khôi phục khoản nợ "${debt.name}".');
+      _emitFeedback('Restored debt "${debt.name}".');
     } catch (error) {
       _emitInlineError(error);
     }

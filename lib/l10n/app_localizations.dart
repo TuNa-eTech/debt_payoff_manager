@@ -230,6 +230,42 @@ abstract class AppLocalizations {
   /// **'Paused'**
   String get debtStatusPaused;
 
+  /// Default label for an overdue status badge.
+  ///
+  /// In en, this message translates to:
+  /// **'OVERDUE'**
+  String get statusBadgeOverdue;
+
+  /// Default label for a paid status badge.
+  ///
+  /// In en, this message translates to:
+  /// **'PAID'**
+  String get statusBadgePaid;
+
+  /// Default label for an active status badge.
+  ///
+  /// In en, this message translates to:
+  /// **'ACTIVE'**
+  String get statusBadgeActive;
+
+  /// Default label for an upcoming status badge.
+  ///
+  /// In en, this message translates to:
+  /// **'UPCOMING'**
+  String get statusBadgeUpcoming;
+
+  /// Label for the minimum payment detail on a shared debt card.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum'**
+  String get debtCardMinimumLabel;
+
+  /// Label for the due date detail on a shared debt card.
+  ///
+  /// In en, this message translates to:
+  /// **'Due'**
+  String get debtCardDueLabel;
+
   /// Title on the home hero card for the current outstanding balance.
   ///
   /// In en, this message translates to:
@@ -2116,6 +2152,12 @@ abstract class AppLocalizations {
   /// **'Current Preview'**
   String get onboardingStrategyPreviewTitle;
 
+  /// Label for the projected payoff length in the selected strategy preview card.
+  ///
+  /// In en, this message translates to:
+  /// **'Projected length'**
+  String get onboardingStrategyPreviewProjectedLength;
+
   /// Title for extra amount page
   ///
   /// In en, this message translates to:
@@ -2625,6 +2667,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'APR (%)'**
   String get rateHistoryAprLabel;
+
+  /// Hint for APR input
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., 18.99'**
+  String get rateHistoryAprHint;
 
   /// Validation error for APR
   ///
@@ -3616,6 +3664,15 @@ abstract class AppLocalizations {
   /// **'Balance reduced by {amount}'**
   String monthlySummaryBalanceReduced(String amount);
 
+  /// Compact principal and interest breakdown for a monthly summary debt row
+  ///
+  /// In en, this message translates to:
+  /// **'P: {principal} · I: {interest}'**
+  String monthlySummaryPrincipalInterestBreakdown(
+    String principal,
+    String interest,
+  );
+
   /// Settings row title for partner sharing
   ///
   /// In en, this message translates to:
@@ -3975,6 +4032,1116 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Payment logged.'**
   String get sharedPlanPaymentLogged;
+
+  /// No description provided for @debtTypeCreditCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit card'**
+  String get debtTypeCreditCard;
+
+  /// No description provided for @debtTypeStudentLoan.
+  ///
+  /// In en, this message translates to:
+  /// **'Student loan'**
+  String get debtTypeStudentLoan;
+
+  /// No description provided for @debtTypeCarLoan.
+  ///
+  /// In en, this message translates to:
+  /// **'Car loan'**
+  String get debtTypeCarLoan;
+
+  /// No description provided for @debtTypeMortgage.
+  ///
+  /// In en, this message translates to:
+  /// **'Mortgage'**
+  String get debtTypeMortgage;
+
+  /// No description provided for @debtTypePersonal.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal loan'**
+  String get debtTypePersonal;
+
+  /// No description provided for @debtTypeMedical.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical debt'**
+  String get debtTypeMedical;
+
+  /// No description provided for @debtTypeOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other debt'**
+  String get debtTypeOther;
+
+  /// No description provided for @debtStatusTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracking'**
+  String get debtStatusTracking;
+
+  /// No description provided for @debtStatusOverdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get debtStatusOverdue;
+
+  /// No description provided for @debtSubtitleOverdueOneDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue 1 day'**
+  String get debtSubtitleOverdueOneDay;
+
+  /// No description provided for @debtSubtitleOverdueDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue {days} days'**
+  String debtSubtitleOverdueDays(int days);
+
+  /// No description provided for @debtSubtitleWithDueDay.
+  ///
+  /// In en, this message translates to:
+  /// **'{overdueLabel} · APR {apr} · Due day {day}'**
+  String debtSubtitleWithDueDay(String overdueLabel, String apr, int day);
+
+  /// No description provided for @debtSubtitleAprDue.
+  ///
+  /// In en, this message translates to:
+  /// **'APR {apr} · Due day {day}'**
+  String debtSubtitleAprDue(String apr, int day);
+
+  /// No description provided for @debtSubtitlePausedUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused until {date}'**
+  String debtSubtitlePausedUntil(String date);
+
+  /// No description provided for @debtDetailCurrentBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Current balance'**
+  String get debtDetailCurrentBalance;
+
+  /// No description provided for @debtDetailOriginalPrincipalValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Original principal {amount}'**
+  String debtDetailOriginalPrincipalValue(String amount);
+
+  /// No description provided for @debtDetailProgressComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% complete'**
+  String debtDetailProgressComplete(int percent);
+
+  /// No description provided for @debtFormProgressComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% complete'**
+  String debtFormProgressComplete(int percent);
+
+  /// No description provided for @debtFeedbackAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Added debt \"{name}\".'**
+  String debtFeedbackAdded(String name);
+
+  /// No description provided for @debtFeedbackUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated debt \"{name}\".'**
+  String debtFeedbackUpdated(String name);
+
+  /// No description provided for @debtFeedbackArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived debt \"{name}\".'**
+  String debtFeedbackArchived(String name);
+
+  /// No description provided for @debtFeedbackUnarchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Unarchived debt \"{name}\".'**
+  String debtFeedbackUnarchived(String name);
+
+  /// No description provided for @debtFeedbackPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused debt \"{name}\".'**
+  String debtFeedbackPaused(String name);
+
+  /// No description provided for @debtFeedbackResumed.
+  ///
+  /// In en, this message translates to:
+  /// **'Resumed debt \"{name}\".'**
+  String debtFeedbackResumed(String name);
+
+  /// No description provided for @debtFeedbackDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted debt \"{name}\".'**
+  String debtFeedbackDeleted(String name);
+
+  /// No description provided for @debtFeedbackRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'Restored debt \"{name}\".'**
+  String debtFeedbackRestored(String name);
+
+  /// No description provided for @interestMethodSimpleMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Simple monthly interest'**
+  String get interestMethodSimpleMonthly;
+
+  /// No description provided for @interestMethodCompoundDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily compound interest'**
+  String get interestMethodCompoundDaily;
+
+  /// No description provided for @interestMethodCompoundMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly compound interest'**
+  String get interestMethodCompoundMonthly;
+
+  /// No description provided for @minimumPaymentTypeFixed.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed amount'**
+  String get minimumPaymentTypeFixed;
+
+  /// No description provided for @minimumPaymentTypePercentOfBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'% of balance'**
+  String get minimumPaymentTypePercentOfBalance;
+
+  /// No description provided for @minimumPaymentTypeInterestPlusPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest + % principal'**
+  String get minimumPaymentTypeInterestPlusPercent;
+
+  /// No description provided for @paymentCadenceMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get paymentCadenceMonthly;
+
+  /// No description provided for @paymentCadenceBiweekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Bi-weekly'**
+  String get paymentCadenceBiweekly;
+
+  /// No description provided for @paymentCadenceWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get paymentCadenceWeekly;
+
+  /// No description provided for @paymentCadenceSemimonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Semi-monthly'**
+  String get paymentCadenceSemimonthly;
+
+  /// No description provided for @debtFormDebtTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt type'**
+  String get debtFormDebtTypeLabel;
+
+  /// No description provided for @debtFormDebtTypeSemantic.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt type {type}'**
+  String debtFormDebtTypeSemantic(String type);
+
+  /// No description provided for @debtFormSelectedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected'**
+  String get debtFormSelectedHint;
+
+  /// No description provided for @debtFormSwitchTypeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch form to {type}'**
+  String debtFormSwitchTypeHint(String type);
+
+  /// No description provided for @debtFormNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt name'**
+  String get debtFormNameLabel;
+
+  /// No description provided for @debtFormInlineErrorSemantic.
+  ///
+  /// In en, this message translates to:
+  /// **'Form error. {message}'**
+  String debtFormInlineErrorSemantic(String message);
+
+  /// No description provided for @debtFormAdvancedSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced settings'**
+  String get debtFormAdvancedSettings;
+
+  /// No description provided for @debtFormCollapseAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse advanced options'**
+  String get debtFormCollapseAdvanced;
+
+  /// No description provided for @debtFormOpenAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Open advanced options'**
+  String get debtFormOpenAdvanced;
+
+  /// No description provided for @debtFormInterestMethodSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest calculation'**
+  String get debtFormInterestMethodSection;
+
+  /// No description provided for @debtFormMinimumPaymentMethodSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum payment calculation'**
+  String get debtFormMinimumPaymentMethodSection;
+
+  /// No description provided for @debtFormMinimumPercentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum percentage'**
+  String get debtFormMinimumPercentLabel;
+
+  /// No description provided for @debtFormMinimumFloorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum floor'**
+  String get debtFormMinimumFloorLabel;
+
+  /// No description provided for @debtFormPaymentCadenceSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment cadence'**
+  String get debtFormPaymentCadenceSection;
+
+  /// No description provided for @debtFormStatusSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get debtFormStatusSection;
+
+  /// No description provided for @debtFormPausedNoDateSemantic.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt is paused and no end date is selected'**
+  String get debtFormPausedNoDateSemantic;
+
+  /// No description provided for @debtFormPausedUntilSemantic.
+  ///
+  /// In en, this message translates to:
+  /// **'Debt is paused until {date}'**
+  String debtFormPausedUntilSemantic(String date);
+
+  /// No description provided for @debtFormPausedUntilLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused until'**
+  String get debtFormPausedUntilLabel;
+
+  /// No description provided for @debtFormNoDateSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No date selected'**
+  String get debtFormNoDateSelected;
+
+  /// No description provided for @debtFormChooseDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose date'**
+  String get debtFormChooseDate;
+
+  /// No description provided for @debtFormExcludeFromStrategyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exclude from payoff strategy'**
+  String get debtFormExcludeFromStrategyTitle;
+
+  /// No description provided for @debtFormExcludeFromStrategySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This debt is saved but will not be prioritized in the plan.'**
+  String get debtFormExcludeFromStrategySubtitle;
+
+  /// No description provided for @debtFormCurrentBalanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining balance'**
+  String get debtFormCurrentBalanceLabel;
+
+  /// No description provided for @debtFormAprLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest rate (APR)'**
+  String get debtFormAprLabel;
+
+  /// No description provided for @debtFormSuggestionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested defaults for {type}'**
+  String debtFormSuggestionTitle(String type);
+
+  /// No description provided for @debtFormDefaultInterest.
+  ///
+  /// In en, this message translates to:
+  /// **'Default interest: {method}'**
+  String debtFormDefaultInterest(String method);
+
+  /// No description provided for @debtFormWarningSemantic.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning. {message}'**
+  String debtFormWarningSemantic(String message);
+
+  /// No description provided for @debtFormMinimumPaymentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum payment'**
+  String get debtFormMinimumPaymentLabel;
+
+  /// No description provided for @debtFormMonthlyPaymentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly payment'**
+  String get debtFormMonthlyPaymentLabel;
+
+  /// No description provided for @debtFormDueDayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Due day'**
+  String get debtFormDueDayLabel;
+
+  /// No description provided for @debtFormRemainingBalanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining balance'**
+  String get debtFormRemainingBalanceLabel;
+
+  /// No description provided for @debtFormRemainingPrincipalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining principal'**
+  String get debtFormRemainingPrincipalLabel;
+
+  /// No description provided for @debtFormOriginalLoanAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Original loan amount'**
+  String get debtFormOriginalLoanAmountLabel;
+
+  /// No description provided for @debtFormOriginalLoanValueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Original loan value'**
+  String get debtFormOriginalLoanValueLabel;
+
+  /// No description provided for @debtFormOriginalPrincipalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Original principal'**
+  String get debtFormOriginalPrincipalLabel;
+
+  /// No description provided for @debtFormMinimumObligationHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the minimum obligation for each period.'**
+  String get debtFormMinimumObligationHelper;
+
+  /// No description provided for @debtFormStatementPriorityChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Statement priority'**
+  String get debtFormStatementPriorityChip;
+
+  /// No description provided for @debtFormFixedPaymentChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed payment'**
+  String get debtFormFixedPaymentChip;
+
+  /// No description provided for @debtFormMonthlyCadenceChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Usually monthly'**
+  String get debtFormMonthlyCadenceChip;
+
+  /// No description provided for @debtFormFlexibleCadenceChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Can be bi-weekly or monthly'**
+  String get debtFormFlexibleCadenceChip;
+
+  /// No description provided for @debtFormVariableCadenceChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Cadence can vary'**
+  String get debtFormVariableCadenceChip;
+
+  /// No description provided for @debtFormAgreementPaymentChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Usually per agreement'**
+  String get debtFormAgreementPaymentChip;
+
+  /// No description provided for @debtFormFlexiblePaymentChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Flexible by real terms'**
+  String get debtFormFlexiblePaymentChip;
+
+  /// No description provided for @debtFormTipLatestStatement.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest statement'**
+  String get debtFormTipLatestStatement;
+
+  /// No description provided for @debtFormTipAccurateApr.
+  ///
+  /// In en, this message translates to:
+  /// **'Accurate APR'**
+  String get debtFormTipAccurateApr;
+
+  /// No description provided for @debtFormTipDueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Due date'**
+  String get debtFormTipDueDate;
+
+  /// No description provided for @debtFormTipRemainingPrincipal.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining principal'**
+  String get debtFormTipRemainingPrincipal;
+
+  /// No description provided for @debtFormTipAutoDebit.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-debit'**
+  String get debtFormTipAutoDebit;
+
+  /// No description provided for @debtFormTipDefermentPause.
+  ///
+  /// In en, this message translates to:
+  /// **'Can pause for deferment'**
+  String get debtFormTipDefermentPause;
+
+  /// No description provided for @debtFormTipFixedApr.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed APR'**
+  String get debtFormTipFixedApr;
+
+  /// No description provided for @debtFormTipPrincipalOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Principal only'**
+  String get debtFormTipPrincipalOnly;
+
+  /// No description provided for @debtFormTipFirstDayCommon.
+  ///
+  /// In en, this message translates to:
+  /// **'1st day is common'**
+  String get debtFormTipFirstDayCommon;
+
+  /// No description provided for @debtFormTipExtraLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter extra payments later'**
+  String get debtFormTipExtraLater;
+
+  /// No description provided for @debtFormTipFixedPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed payment'**
+  String get debtFormTipFixedPayment;
+
+  /// No description provided for @debtFormTipLenderApr.
+  ///
+  /// In en, this message translates to:
+  /// **'Lender APR'**
+  String get debtFormTipLenderApr;
+
+  /// No description provided for @debtFormTipAprCanBeZero.
+  ///
+  /// In en, this message translates to:
+  /// **'APR can be 0'**
+  String get debtFormTipAprCanBeZero;
+
+  /// No description provided for @debtFormTipPaymentPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment plan'**
+  String get debtFormTipPaymentPlan;
+
+  /// No description provided for @debtFormTipNoFixedDate.
+  ///
+  /// In en, this message translates to:
+  /// **'May have no fixed date'**
+  String get debtFormTipNoFixedDate;
+
+  /// No description provided for @debtFormTipFlexible.
+  ///
+  /// In en, this message translates to:
+  /// **'Flexible'**
+  String get debtFormTipFlexible;
+
+  /// No description provided for @debtFormTipStartAtZero.
+  ///
+  /// In en, this message translates to:
+  /// **'Can start at 0%'**
+  String get debtFormTipStartAtZero;
+
+  /// No description provided for @debtFormTipAdjustLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust later'**
+  String get debtFormTipAdjustLater;
+
+  /// No description provided for @debtFormCreditCardHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow the latest statement'**
+  String get debtFormCreditCardHeadline;
+
+  /// No description provided for @debtFormCreditCardSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Prioritize the current statement balance, statement APR, and latest minimum payment.'**
+  String get debtFormCreditCardSummary;
+
+  /// No description provided for @debtFormCreditCardNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Chase Sapphire, Citi Double Cash'**
+  String get debtFormCreditCardNameHint;
+
+  /// No description provided for @debtFormCreditCardNameHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the issuer or card name so it is easy to recognize.'**
+  String get debtFormCreditCardNameHelper;
+
+  /// No description provided for @debtFormCreditCardBalanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Statement balance'**
+  String get debtFormCreditCardBalanceLabel;
+
+  /// No description provided for @debtFormCreditCardBalanceHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the balance you need to pay off right now.'**
+  String get debtFormCreditCardBalanceHelper;
+
+  /// No description provided for @debtFormCreditCardOriginalPrincipalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance when tracking started'**
+  String get debtFormCreditCardOriginalPrincipalLabel;
+
+  /// No description provided for @debtFormCreditCardOriginalPrincipalHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. Useful if you want the app to show progress from today.'**
+  String get debtFormCreditCardOriginalPrincipalHelper;
+
+  /// No description provided for @debtFormCreditCardDeferredPrincipalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'If you know the balance when tracking started, open Advanced to track progress more accurately.'**
+  String get debtFormCreditCardDeferredPrincipalHint;
+
+  /// No description provided for @debtFormCreditCardAprHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the APR shown on the statement or banking app.'**
+  String get debtFormCreditCardAprHelper;
+
+  /// No description provided for @debtFormCreditCardMinimumPaymentHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Take this directly from the latest statement.'**
+  String get debtFormCreditCardMinimumPaymentHelper;
+
+  /// No description provided for @debtFormCreditCardDueDayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Statement due day'**
+  String get debtFormCreditCardDueDayLabel;
+
+  /// No description provided for @debtFormCreditCardDueDayHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., 15'**
+  String get debtFormCreditCardDueDayHint;
+
+  /// No description provided for @debtFormCreditCardDueDayHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'The day you need to pay the minimum to avoid fees and overdue status.'**
+  String get debtFormCreditCardDueDayHelper;
+
+  /// No description provided for @debtFormCreditCardAdvancedGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit cards usually use daily compound interest. The app suggests that as the default.'**
+  String get debtFormCreditCardAdvancedGuidance;
+
+  /// No description provided for @debtFormStudentLoanHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Long-term installment loan'**
+  String get debtFormStudentLoanHeadline;
+
+  /// No description provided for @debtFormStudentLoanSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus on remaining balance, fixed minimum payment, and monthly auto-debit day.'**
+  String get debtFormStudentLoanSummary;
+
+  /// No description provided for @debtFormStudentLoanNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Federal Loan, Sallie Mae'**
+  String get debtFormStudentLoanNameHint;
+
+  /// No description provided for @debtFormStudentLoanNameHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the servicer or loan name so you do not mix up loans.'**
+  String get debtFormStudentLoanNameHelper;
+
+  /// No description provided for @debtFormStudentLoanBalanceHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the remaining principal from the loan portal.'**
+  String get debtFormStudentLoanBalanceHelper;
+
+  /// No description provided for @debtFormStudentLoanOriginalPrincipalHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Helps the app show payoff progress from disbursement.'**
+  String get debtFormStudentLoanOriginalPrincipalHelper;
+
+  /// No description provided for @debtFormStudentLoanAprHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Many student loans use a fixed monthly APR.'**
+  String get debtFormStudentLoanAprHelper;
+
+  /// No description provided for @debtFormStudentLoanMinimumPaymentHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the current monthly repayment schedule.'**
+  String get debtFormStudentLoanMinimumPaymentHelper;
+
+  /// No description provided for @debtFormAutoDebitDayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-debit day'**
+  String get debtFormAutoDebitDayLabel;
+
+  /// No description provided for @debtFormStudentLoanDueDayHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., 5'**
+  String get debtFormStudentLoanDueDayHint;
+
+  /// No description provided for @debtFormStudentLoanDueDayHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'The day the system usually drafts payment or marks it due.'**
+  String get debtFormStudentLoanDueDayHelper;
+
+  /// No description provided for @debtFormStudentLoanAdvancedGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Student loans often have stable terms; simple monthly is usually the right default.'**
+  String get debtFormStudentLoanAdvancedGuidance;
+
+  /// No description provided for @debtFormCarLoanHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Asset installment loan'**
+  String get debtFormCarLoanHeadline;
+
+  /// No description provided for @debtFormCarLoanSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Prioritize remaining principal, fixed payment, and due day to avoid late periods.'**
+  String get debtFormCarLoanSummary;
+
+  /// No description provided for @debtFormCarLoanNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Toyota Financial, Wells Fargo Auto'**
+  String get debtFormCarLoanNameHint;
+
+  /// No description provided for @debtFormCarLoanNameHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Tie it to the lender or car for easy matching.'**
+  String get debtFormCarLoanNameHelper;
+
+  /// No description provided for @debtFormCarLoanBalanceHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the remaining principal from the lender if available.'**
+  String get debtFormCarLoanBalanceHelper;
+
+  /// No description provided for @debtFormCarLoanOriginalPrincipalHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Helps you see how much of the loan has been paid down.'**
+  String get debtFormCarLoanOriginalPrincipalHelper;
+
+  /// No description provided for @debtFormCarLoanAprHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Car loans usually use fixed APR and monthly compounding.'**
+  String get debtFormCarLoanAprHelper;
+
+  /// No description provided for @debtFormCarLoanDueDayHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., 12'**
+  String get debtFormCarLoanDueDayHint;
+
+  /// No description provided for @debtFormCarLoanDueDayHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'The day the lender marks the current period paid or late.'**
+  String get debtFormCarLoanDueDayHelper;
+
+  /// No description provided for @debtFormCarLoanAdvancedGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Car loans usually match monthly compounding and a fixed minimum payment.'**
+  String get debtFormCarLoanAdvancedGuidance;
+
+  /// No description provided for @debtFormMortgageHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Track principal, not home value'**
+  String get debtFormMortgageHeadline;
+
+  /// No description provided for @debtFormMortgageSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the principal still owed, minimum monthly payment, and mortgage due day.'**
+  String get debtFormMortgageSummary;
+
+  /// No description provided for @debtFormMortgageNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Primary Home Mortgage'**
+  String get debtFormMortgageNameHint;
+
+  /// No description provided for @debtFormMortgageNameHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the loan name or a shortened address.'**
+  String get debtFormMortgageNameHelper;
+
+  /// No description provided for @debtFormMortgageBalanceHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter only the principal balance, not the home value.'**
+  String get debtFormMortgageBalanceHelper;
+
+  /// No description provided for @debtFormMortgageOriginalPrincipalHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the original mortgage amount so the app can calculate paid-down progress.'**
+  String get debtFormMortgageOriginalPrincipalHelper;
+
+  /// No description provided for @debtFormMortgageAprHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard mortgages usually use simple monthly interest.'**
+  String get debtFormMortgageAprHelper;
+
+  /// No description provided for @debtFormMortgageMinimumPaymentHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter only the minimum monthly obligation, excluding extra principal.'**
+  String get debtFormMortgageMinimumPaymentHelper;
+
+  /// No description provided for @debtFormMortgageDueDayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mortgage due day'**
+  String get debtFormMortgageDueDayLabel;
+
+  /// No description provided for @debtFormMortgageDueDayHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., 1'**
+  String get debtFormMortgageDueDayHint;
+
+  /// No description provided for @debtFormMortgageDueDayHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Many mortgages are due at the start of the month.'**
+  String get debtFormMortgageDueDayHelper;
+
+  /// No description provided for @debtFormMortgageAdvancedGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'For mortgages, simple monthly interest and a fixed minimum are usually closest to reality.'**
+  String get debtFormMortgageAdvancedGuidance;
+
+  /// No description provided for @debtFormPersonalLoanHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsecured installment loan'**
+  String get debtFormPersonalLoanHeadline;
+
+  /// No description provided for @debtFormPersonalLoanSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus on remaining principal, current minimum payment, and the day the lender collects payment.'**
+  String get debtFormPersonalLoanSummary;
+
+  /// No description provided for @debtFormPersonalLoanNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., SoFi Personal Loan, LendingClub'**
+  String get debtFormPersonalLoanNameHint;
+
+  /// No description provided for @debtFormPersonalLoanNameHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the lender name or loan purpose.'**
+  String get debtFormPersonalLoanNameHelper;
+
+  /// No description provided for @debtFormPersonalLoanBalanceHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the lender app or latest statement.'**
+  String get debtFormPersonalLoanBalanceHelper;
+
+  /// No description provided for @debtFormPersonalLoanOriginalPrincipalHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Helps the app show progress for the personal loan.'**
+  String get debtFormPersonalLoanOriginalPrincipalHelper;
+
+  /// No description provided for @debtFormPersonalLoanAprHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal loans usually use monthly compounding.'**
+  String get debtFormPersonalLoanAprHelper;
+
+  /// No description provided for @debtFormPersonalLoanMinimumPaymentHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the current payment obligation for each period.'**
+  String get debtFormPersonalLoanMinimumPaymentHelper;
+
+  /// No description provided for @debtFormPersonalLoanDueDayHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., 18'**
+  String get debtFormPersonalLoanDueDayHint;
+
+  /// No description provided for @debtFormPersonalLoanDueDayHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'The day the lender marks you late if unpaid.'**
+  String get debtFormPersonalLoanDueDayHelper;
+
+  /// No description provided for @debtFormPersonalLoanAdvancedGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal loans usually follow standard amortization: monthly compounding and fixed payments.'**
+  String get debtFormPersonalLoanAdvancedGuidance;
+
+  /// No description provided for @debtFormMedicalHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Often a softer payment plan'**
+  String get debtFormMedicalHeadline;
+
+  /// No description provided for @debtFormMedicalSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'If the debt has no interest, enter APR as 0 and use the agreed payment amount.'**
+  String get debtFormMedicalSummary;
+
+  /// No description provided for @debtFormMedicalNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., City Hospital Billing'**
+  String get debtFormMedicalNameHint;
+
+  /// No description provided for @debtFormMedicalNameHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the hospital, clinic, or collection agency name.'**
+  String get debtFormMedicalNameHelper;
+
+  /// No description provided for @debtFormMedicalBalanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount still owed'**
+  String get debtFormMedicalBalanceLabel;
+
+  /// No description provided for @debtFormMedicalBalanceHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the remaining balance on the current payment plan.'**
+  String get debtFormMedicalBalanceHelper;
+
+  /// No description provided for @debtFormMedicalOriginalPrincipalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Original bill total'**
+  String get debtFormMedicalOriginalPrincipalLabel;
+
+  /// No description provided for @debtFormMedicalOriginalPrincipalHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. Use this if you want to see how much of the bill has been paid.'**
+  String get debtFormMedicalOriginalPrincipalHelper;
+
+  /// No description provided for @debtFormMedicalDeferredPrincipalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'If you want to track the original bill total, open Advanced and enter the original amount.'**
+  String get debtFormMedicalDeferredPrincipalHint;
+
+  /// No description provided for @debtFormMedicalAprHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Many medical debt plans are 0%, so enter 0 if that matches reality.'**
+  String get debtFormMedicalAprHelper;
+
+  /// No description provided for @debtFormMedicalMinimumPaymentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current period payment'**
+  String get debtFormMedicalMinimumPaymentLabel;
+
+  /// No description provided for @debtFormMedicalMinimumPaymentHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the amount requested by the hospital or agency.'**
+  String get debtFormMedicalMinimumPaymentHelper;
+
+  /// No description provided for @debtFormMedicalDueDayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment appointment day'**
+  String get debtFormMedicalDueDayLabel;
+
+  /// No description provided for @debtFormMedicalDueDayHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., 20'**
+  String get debtFormMedicalDueDayHint;
+
+  /// No description provided for @debtFormMedicalDueDayHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'You can leave it blank and default to 15 if the schedule is unclear.'**
+  String get debtFormMedicalDueDayHelper;
+
+  /// No description provided for @debtFormMedicalAdvancedGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical debt is often simpler: fixed minimum, APR may be 0, and fewer settings are needed.'**
+  String get debtFormMedicalAdvancedGuidance;
+
+  /// No description provided for @debtFormOtherHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Flexible setup for real life'**
+  String get debtFormOtherHeadline;
+
+  /// No description provided for @debtFormOtherSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this for debts that do not match a standard type. Enter balance, APR, minimum, then tune Advanced.'**
+  String get debtFormOtherSummary;
+
+  /// No description provided for @debtFormOtherNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Store Financing, Family Loan'**
+  String get debtFormOtherNameHint;
+
+  /// No description provided for @debtFormOtherNameHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a clear name so you remember what this debt is later.'**
+  String get debtFormOtherNameHelper;
+
+  /// No description provided for @debtFormOtherBalanceHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter what you currently owe.'**
+  String get debtFormOtherBalanceHelper;
+
+  /// No description provided for @debtFormOtherOriginalPrincipalHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. Useful if you want the app to show better progress.'**
+  String get debtFormOtherOriginalPrincipalHelper;
+
+  /// No description provided for @debtFormOtherDeferredPrincipalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You can add the original principal in Advanced if you want to track progress.'**
+  String get debtFormOtherDeferredPrincipalHint;
+
+  /// No description provided for @debtFormOtherAprHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sure about APR? Start with 0 and update later.'**
+  String get debtFormOtherAprHelper;
+
+  /// No description provided for @debtFormOtherMinimumPaymentHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the minimum amount you must pay each period.'**
+  String get debtFormOtherMinimumPaymentHelper;
+
+  /// No description provided for @debtFormOtherDueDayHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., 15'**
+  String get debtFormOtherDueDayHint;
+
+  /// No description provided for @debtFormOtherDueDayHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'If unsure, keep the default and adjust later.'**
+  String get debtFormOtherDueDayHelper;
+
+  /// No description provided for @debtFormOtherAdvancedGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'This type is the most flexible. Keep the defaults first and tune them when details are clear.'**
+  String get debtFormOtherAdvancedGuidance;
 }
 
 class _AppLocalizationsDelegate

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/router/app_router.dart';
+import '../../../../core/i18n/strategy_l10n.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
@@ -77,7 +78,9 @@ class HomePopulatedView extends StatelessWidget {
                     Expanded(
                       child: _HeroStat(
                         label: l10n.homeStrategyLabel,
-                        value: plan?.strategy.label ?? 'Snowball',
+                        value:
+                            plan?.strategy.localizedLabel(l10n) ??
+                            l10n.settingsStrategySnowball,
                       ),
                     ),
                     const SizedBox(width: AppDimensions.md),
@@ -97,7 +100,9 @@ class HomePopulatedView extends StatelessWidget {
                   children: [
                     Flexible(
                       child: Text(
-                        l10n.homePaidProgress(AppFormatters.formatCents(totalPaid)),
+                        l10n.homePaidProgress(
+                          AppFormatters.formatCents(totalPaid),
+                        ),
                         style: AppTextStyles.bodySmall.copyWith(
                           color: AppColors.mdOnPrimary.withValues(alpha: 0.82),
                         ),

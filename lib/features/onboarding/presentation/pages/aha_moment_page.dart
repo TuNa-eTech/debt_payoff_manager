@@ -6,6 +6,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/di/injection.dart';
+import '../../../../core/i18n/strategy_l10n.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
@@ -215,7 +216,8 @@ class AhaMomentPage extends StatelessWidget {
                                           const Spacer(),
                                           if (plan != null)
                                             AppChip.status(
-                                              label: plan.strategy.label,
+                                              label: plan.strategy
+                                                  .localizedLabel(context.l10n),
                                               icon: LucideIcons.sparkles,
                                             ),
                                         ],

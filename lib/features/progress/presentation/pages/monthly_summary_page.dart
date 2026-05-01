@@ -380,7 +380,10 @@ class _DebtSummaryCard extends StatelessWidget {
                 ),
               ),
               Text(
-                'P: ${AppFormatters.formatCents(summary.principalCents)} · I: ${AppFormatters.formatCents(summary.interestCents)}',
+                context.l10n.monthlySummaryPrincipalInterestBreakdown(
+                  AppFormatters.formatCents(summary.principalCents),
+                  AppFormatters.formatCents(summary.interestCents),
+                ),
                 style: AppTextStyles.labelSmall.copyWith(
                   color: AppColors.mdOnSurfaceVariant,
                 ),

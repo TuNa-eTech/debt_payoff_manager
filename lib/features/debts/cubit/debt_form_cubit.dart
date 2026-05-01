@@ -615,55 +615,55 @@ class DebtFormCubit extends Cubit<DebtFormState> {
     );
 
     final errors = _ValidationErrors(
-      nameError: name.isEmpty ? 'Nhập tên khoản nợ.' : null,
+      nameError: name.isEmpty ? 'Enter a debt name.' : null,
       originalPrincipalError: originalPrincipal == null
-          ? 'Nhập số gốc hợp lệ.'
+          ? 'Enter a valid original principal.'
           : originalPrincipal <= 0
-          ? 'Số gốc phải lớn hơn 0.'
+          ? 'Original principal must be greater than 0.'
           : null,
       currentBalanceError: currentBalance == null
-          ? 'Nhập số dư hợp lệ.'
+          ? 'Enter a valid balance.'
           : currentBalance < 0
-          ? 'Số dư không được âm.'
+          ? 'Balance cannot be negative.'
           : null,
       aprError: apr == null
-          ? 'Nhập APR hợp lệ.'
+          ? 'Enter a valid APR.'
           : apr < Decimal.zero || apr > Decimal.one
-          ? 'APR phải nằm trong khoảng 0% đến 100%.'
+          ? 'APR must be between 0% and 100%.'
           : null,
       minimumPaymentError: minimumPayment == null
-          ? 'Nhập minimum payment hợp lệ.'
+          ? 'Enter a valid minimum payment.'
           : minimumPayment < 0
-          ? 'Minimum payment không được âm.'
+          ? 'Minimum payment cannot be negative.'
           : null,
       dueDayError: dueDay == null
-          ? 'Nhập ngày đến hạn hợp lệ.'
+          ? 'Enter a valid due day.'
           : dueDay < 1 || dueDay > 31
-          ? 'Ngày đến hạn phải từ 1 đến 31.'
+          ? 'Due day must be between 1 and 31.'
           : null,
       minimumPaymentPercentError:
           state.requiresMinimumPaymentPercent && minimumPaymentPercent == null
-          ? 'Nhập phần trăm tối thiểu.'
+          ? 'Enter the minimum percentage.'
           : null,
       minimumPaymentFloorError:
           state.requiresMinimumPaymentFloor && minimumPaymentFloor == null
-          ? 'Nhập mức sàn tối thiểu.'
+          ? 'Enter the minimum floor.'
           : null,
       pausedUntilError:
           state.status == DebtStatus.paused && state.pausedUntil == null
-          ? 'Chọn ngày kết thúc tạm dừng.'
+          ? 'Choose when the pause ends.'
           : null,
     );
 
     if (state.status == DebtStatus.active && currentBalance == 0) {
       return errors.copyWith(
-        currentBalanceError: 'Khoản nợ đang hoạt động phải có số dư lớn hơn 0.',
+        currentBalanceError: 'Active debts must have a balance greater than 0.',
       );
     }
 
     if (state.status == DebtStatus.paidOff && currentBalance != 0) {
       return errors.copyWith(
-        currentBalanceError: 'Khoản nợ đã trả xong phải có số dư bằng 0.',
+        currentBalanceError: 'Paid-off debts must have a zero balance.',
       );
     }
 
@@ -694,7 +694,7 @@ class DebtFormCubit extends Cubit<DebtFormState> {
 
     final warnings = <String>[];
     if (FinancialValidators.isUsuryWarning(apr)) {
-      warnings.add('APR cao bất thường. Hãy kiểm tra lại lãi suất của bạn.');
+      warnings.add('APR looks unusually high. Double-check the interest rate.');
     }
 
     if (FinancialValidators.isBalanceOverGrown(
@@ -702,7 +702,7 @@ class DebtFormCubit extends Cubit<DebtFormState> {
       originalPrincipalCents: originalPrincipal,
     )) {
       warnings.add(
-        'Số dư hiện tại vượt xa số gốc ban đầu. Kiểm tra lại để tránh sai dữ liệu.',
+        'Current balance is much higher than the original principal. Check the data before saving.',
       );
     }
 
@@ -716,7 +716,7 @@ class DebtFormCubit extends Cubit<DebtFormState> {
       monthlyInterestCents: monthlyInterest,
     )) {
       warnings.add(
-        'Minimum payment hiện tại chưa đủ bù lãi. Khoản nợ có thể tiếp tục tăng.',
+        'Current minimum payment does not cover interest. This debt may keep growing.',
       );
     }
 

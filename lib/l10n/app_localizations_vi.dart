@@ -79,6 +79,24 @@ class AppLocalizationsVi extends AppLocalizations {
   String get debtStatusPaused => 'Tạm dừng';
 
   @override
+  String get statusBadgeOverdue => 'QUÁ HẠN';
+
+  @override
+  String get statusBadgePaid => 'ĐÃ TRẢ';
+
+  @override
+  String get statusBadgeActive => 'ĐANG TRẢ';
+
+  @override
+  String get statusBadgeUpcoming => 'SẮP TỚI';
+
+  @override
+  String get debtCardMinimumLabel => 'Tối thiểu';
+
+  @override
+  String get debtCardDueLabel => 'Hạn';
+
+  @override
   String get homeCurrentBalanceTitle => 'Tổng dư nợ hiện tại';
 
   @override
@@ -1191,6 +1209,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get onboardingStrategyPreviewTitle => 'Preview hiện tại';
 
   @override
+  String get onboardingStrategyPreviewProjectedLength => 'Thời gian dự kiến';
+
+  @override
   String get onboardingExtraTitle => 'Ngân sách thêm';
 
   @override
@@ -1470,6 +1491,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get rateHistoryAprLabel => 'APR (%)';
+
+  @override
+  String get rateHistoryAprHint => 'VD: 18.99';
 
   @override
   String get rateHistoryAprInvalid => 'Nhập APR hợp lệ (0-100%)';
@@ -2031,6 +2055,14 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String monthlySummaryPrincipalInterestBreakdown(
+    String principal,
+    String interest,
+  ) {
+    return 'Gốc: $principal · Lãi: $interest';
+  }
+
+  @override
   String get settingsPartnerSharingTitle => 'Chia sẻ với người đồng hành';
 
   @override
@@ -2234,4 +2266,669 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get sharedPlanPaymentLogged => 'Đã ghi nhận thanh toán.';
+
+  @override
+  String get debtTypeCreditCard => 'Thẻ tín dụng';
+
+  @override
+  String get debtTypeStudentLoan => 'Vay học tập';
+
+  @override
+  String get debtTypeCarLoan => 'Vay mua xe';
+
+  @override
+  String get debtTypeMortgage => 'Thế chấp';
+
+  @override
+  String get debtTypePersonal => 'Vay cá nhân';
+
+  @override
+  String get debtTypeMedical => 'Nợ y tế';
+
+  @override
+  String get debtTypeOther => 'Khoản nợ khác';
+
+  @override
+  String get debtStatusTracking => 'Đang theo dõi';
+
+  @override
+  String get debtStatusOverdue => 'Quá hạn';
+
+  @override
+  String get debtSubtitleOverdueOneDay => 'Quá hạn 1 ngày';
+
+  @override
+  String debtSubtitleOverdueDays(int days) {
+    return 'Quá hạn $days ngày';
+  }
+
+  @override
+  String debtSubtitleWithDueDay(String overdueLabel, String apr, int day) {
+    return '$overdueLabel · APR $apr · Hạn ngày $day';
+  }
+
+  @override
+  String debtSubtitleAprDue(String apr, int day) {
+    return 'APR $apr · Hạn ngày $day';
+  }
+
+  @override
+  String debtSubtitlePausedUntil(String date) {
+    return 'Tạm dừng đến $date';
+  }
+
+  @override
+  String get debtDetailCurrentBalance => 'Số dư hiện tại';
+
+  @override
+  String debtDetailOriginalPrincipalValue(String amount) {
+    return 'Gốc ban đầu $amount';
+  }
+
+  @override
+  String debtDetailProgressComplete(int percent) {
+    return 'Đã hoàn thành $percent%';
+  }
+
+  @override
+  String debtFormProgressComplete(int percent) {
+    return '$percent% hoàn thành';
+  }
+
+  @override
+  String debtFeedbackAdded(String name) {
+    return 'Đã thêm khoản nợ \"$name\".';
+  }
+
+  @override
+  String debtFeedbackUpdated(String name) {
+    return 'Đã cập nhật khoản nợ \"$name\".';
+  }
+
+  @override
+  String debtFeedbackArchived(String name) {
+    return 'Đã lưu trữ khoản nợ \"$name\".';
+  }
+
+  @override
+  String debtFeedbackUnarchived(String name) {
+    return 'Đã bỏ lưu trữ khoản nợ \"$name\".';
+  }
+
+  @override
+  String debtFeedbackPaused(String name) {
+    return 'Đã tạm dừng khoản nợ \"$name\".';
+  }
+
+  @override
+  String debtFeedbackResumed(String name) {
+    return 'Đã kích hoạt lại khoản nợ \"$name\".';
+  }
+
+  @override
+  String debtFeedbackDeleted(String name) {
+    return 'Đã xóa khoản nợ \"$name\".';
+  }
+
+  @override
+  String debtFeedbackRestored(String name) {
+    return 'Đã khôi phục khoản nợ \"$name\".';
+  }
+
+  @override
+  String get interestMethodSimpleMonthly => 'Lãi đơn theo tháng';
+
+  @override
+  String get interestMethodCompoundDaily => 'Lãi kép theo ngày';
+
+  @override
+  String get interestMethodCompoundMonthly => 'Lãi kép theo tháng';
+
+  @override
+  String get minimumPaymentTypeFixed => 'Số tiền cố định';
+
+  @override
+  String get minimumPaymentTypePercentOfBalance => '% của số dư';
+
+  @override
+  String get minimumPaymentTypeInterestPlusPercent => 'Lãi + % gốc';
+
+  @override
+  String get paymentCadenceMonthly => 'Hàng tháng';
+
+  @override
+  String get paymentCadenceBiweekly => 'Hai tuần một lần';
+
+  @override
+  String get paymentCadenceWeekly => 'Hàng tuần';
+
+  @override
+  String get paymentCadenceSemimonthly => 'Hai lần mỗi tháng';
+
+  @override
+  String get debtFormDebtTypeLabel => 'Loại khoản nợ';
+
+  @override
+  String debtFormDebtTypeSemantic(String type) {
+    return 'Loại khoản nợ $type';
+  }
+
+  @override
+  String get debtFormSelectedHint => 'Đang được chọn';
+
+  @override
+  String debtFormSwitchTypeHint(String type) {
+    return 'Chạm để chuyển biểu mẫu sang $type';
+  }
+
+  @override
+  String get debtFormNameLabel => 'Tên khoản nợ';
+
+  @override
+  String debtFormInlineErrorSemantic(String message) {
+    return 'Lỗi biểu mẫu. $message';
+  }
+
+  @override
+  String get debtFormAdvancedSettings => 'Thiết lập nâng cao';
+
+  @override
+  String get debtFormCollapseAdvanced => 'Thu gọn các tuỳ chọn nâng cao';
+
+  @override
+  String get debtFormOpenAdvanced => 'Mở các tuỳ chọn nâng cao';
+
+  @override
+  String get debtFormInterestMethodSection => 'Cách tính lãi';
+
+  @override
+  String get debtFormMinimumPaymentMethodSection => 'Cách tính minimum payment';
+
+  @override
+  String get debtFormMinimumPercentLabel => 'Phần trăm tối thiểu';
+
+  @override
+  String get debtFormMinimumFloorLabel => 'Mức sàn tối thiểu';
+
+  @override
+  String get debtFormPaymentCadenceSection => 'Chu kỳ thanh toán';
+
+  @override
+  String get debtFormStatusSection => 'Trạng thái';
+
+  @override
+  String get debtFormPausedNoDateSemantic =>
+      'Khoản nợ đang tạm dừng, chưa chọn ngày kết thúc';
+
+  @override
+  String debtFormPausedUntilSemantic(String date) {
+    return 'Khoản nợ đang tạm dừng đến $date';
+  }
+
+  @override
+  String get debtFormPausedUntilLabel => 'Tạm dừng đến';
+
+  @override
+  String get debtFormNoDateSelected => 'Chưa chọn ngày';
+
+  @override
+  String get debtFormChooseDate => 'Chọn ngày';
+
+  @override
+  String get debtFormExcludeFromStrategyTitle => 'Loại khỏi chiến lược payoff';
+
+  @override
+  String get debtFormExcludeFromStrategySubtitle =>
+      'Khoản nợ này vẫn được lưu nhưng không được ưu tiên trong plan.';
+
+  @override
+  String get debtFormCurrentBalanceLabel => 'Số dư còn lại';
+
+  @override
+  String get debtFormAprLabel => 'Lãi suất (APR)';
+
+  @override
+  String debtFormSuggestionTitle(String type) {
+    return 'Gợi ý cho $type';
+  }
+
+  @override
+  String debtFormDefaultInterest(String method) {
+    return 'Lãi mặc định: $method';
+  }
+
+  @override
+  String debtFormWarningSemantic(String message) {
+    return 'Cảnh báo. $message';
+  }
+
+  @override
+  String get debtFormMinimumPaymentLabel => 'Khoản trả tối thiểu';
+
+  @override
+  String get debtFormMonthlyPaymentLabel => 'Khoản trả hàng tháng';
+
+  @override
+  String get debtFormDueDayLabel => 'Ngày đến hạn';
+
+  @override
+  String get debtFormRemainingBalanceLabel => 'Dư nợ còn lại';
+
+  @override
+  String get debtFormRemainingPrincipalLabel => 'Principal còn lại';
+
+  @override
+  String get debtFormOriginalLoanAmountLabel => 'Số tiền vay ban đầu';
+
+  @override
+  String get debtFormOriginalLoanValueLabel => 'Giá trị khoản vay ban đầu';
+
+  @override
+  String get debtFormOriginalPrincipalLabel => 'Số tiền gốc ban đầu';
+
+  @override
+  String get debtFormMinimumObligationHelper =>
+      'Nhập đúng nghĩa vụ tối thiểu mỗi kỳ.';
+
+  @override
+  String get debtFormStatementPriorityChip => 'Ưu tiên theo sao kê';
+
+  @override
+  String get debtFormFixedPaymentChip => 'Khoản trả cố định';
+
+  @override
+  String get debtFormMonthlyCadenceChip => 'Thường trả hàng tháng';
+
+  @override
+  String get debtFormFlexibleCadenceChip => 'Có thể bi-weekly hoặc monthly';
+
+  @override
+  String get debtFormVariableCadenceChip => 'Cadence có thể thay đổi';
+
+  @override
+  String get debtFormAgreementPaymentChip => 'Thường theo thoả thuận';
+
+  @override
+  String get debtFormFlexiblePaymentChip => 'Linh hoạt theo thực tế';
+
+  @override
+  String get debtFormTipLatestStatement => 'Sao kê mới nhất';
+
+  @override
+  String get debtFormTipAccurateApr => 'APR chính xác';
+
+  @override
+  String get debtFormTipDueDate => 'Ngày đến hạn';
+
+  @override
+  String get debtFormTipRemainingPrincipal => 'Principal còn lại';
+
+  @override
+  String get debtFormTipAutoDebit => 'Auto-debit';
+
+  @override
+  String get debtFormTipDefermentPause => 'Có thể tạm dừng nếu deferment';
+
+  @override
+  String get debtFormTipFixedApr => 'APR cố định';
+
+  @override
+  String get debtFormTipPrincipalOnly => 'Chỉ principal';
+
+  @override
+  String get debtFormTipFirstDayCommon => 'Ngày mùng 1 phổ biến';
+
+  @override
+  String get debtFormTipExtraLater => 'Extra trả thêm nhập sau';
+
+  @override
+  String get debtFormTipFixedPayment => 'Khoản trả cố định';
+
+  @override
+  String get debtFormTipLenderApr => 'APR của lender';
+
+  @override
+  String get debtFormTipAprCanBeZero => 'APR có thể bằng 0';
+
+  @override
+  String get debtFormTipPaymentPlan => 'Theo kế hoạch trả góp';
+
+  @override
+  String get debtFormTipNoFixedDate => 'Có thể không có ngày cố định';
+
+  @override
+  String get debtFormTipFlexible => 'Linh hoạt';
+
+  @override
+  String get debtFormTipStartAtZero => 'Có thể bắt đầu với 0%';
+
+  @override
+  String get debtFormTipAdjustLater => 'Tinh chỉnh sau';
+
+  @override
+  String get debtFormCreditCardHeadline => 'Bám theo sao kê gần nhất';
+
+  @override
+  String get debtFormCreditCardSummary =>
+      'Ưu tiên số dư statement hiện tại, APR trên sao kê, và minimum payment của kỳ gần nhất.';
+
+  @override
+  String get debtFormCreditCardNameHint =>
+      'VD: Chase Sapphire, Citi Double Cash';
+
+  @override
+  String get debtFormCreditCardNameHelper =>
+      'Dùng tên nhà phát hành hoặc tên thẻ để dễ nhận diện.';
+
+  @override
+  String get debtFormCreditCardBalanceLabel => 'Số dư statement';
+
+  @override
+  String get debtFormCreditCardBalanceHelper =>
+      'Nhập số dư bạn cần payoff lúc này.';
+
+  @override
+  String get debtFormCreditCardOriginalPrincipalLabel =>
+      'Số dư khi bắt đầu theo dõi';
+
+  @override
+  String get debtFormCreditCardOriginalPrincipalHelper =>
+      'Tùy chọn. Hữu ích nếu bạn muốn app hiển thị tiến độ kể từ hôm nay.';
+
+  @override
+  String get debtFormCreditCardDeferredPrincipalHint =>
+      'Nếu bạn biết số dư khi bắt đầu theo dõi, mở Nâng cao để theo dõi tiến độ chính xác hơn.';
+
+  @override
+  String get debtFormCreditCardAprHelper =>
+      'Dùng APR hiện trên sao kê hoặc ứng dụng ngân hàng.';
+
+  @override
+  String get debtFormCreditCardMinimumPaymentHelper =>
+      'Lấy trực tiếp từ sao kê gần nhất.';
+
+  @override
+  String get debtFormCreditCardDueDayLabel => 'Ngày đến hạn sao kê';
+
+  @override
+  String get debtFormCreditCardDueDayHint => 'VD: 15';
+
+  @override
+  String get debtFormCreditCardDueDayHelper =>
+      'Ngày bạn cần trả minimum để tránh fee và báo quá hạn.';
+
+  @override
+  String get debtFormCreditCardAdvancedGuidance =>
+      'Thẻ tín dụng thường dùng lãi kép theo ngày. App đang gợi ý cấu hình đó làm mặc định.';
+
+  @override
+  String get debtFormStudentLoanHeadline => 'Khoản vay trả góp dài hạn';
+
+  @override
+  String get debtFormStudentLoanSummary =>
+      'Tập trung vào dư nợ còn lại, khoản trả tối thiểu cố định, và ngày auto-debit hàng tháng.';
+
+  @override
+  String get debtFormStudentLoanNameHint => 'VD: Federal Loan, Sallie Mae';
+
+  @override
+  String get debtFormStudentLoanNameHelper =>
+      'Dùng tên servicer hoặc khoản vay để không nhầm giữa các loan.';
+
+  @override
+  String get debtFormStudentLoanBalanceHelper =>
+      'Lấy số principal còn nợ từ portal của khoản vay.';
+
+  @override
+  String get debtFormStudentLoanOriginalPrincipalHelper =>
+      'Giúp app hiển thị tiến độ payoff từ lúc giải ngân.';
+
+  @override
+  String get debtFormStudentLoanAprHelper =>
+      'Nhiều khoản vay học tập dùng APR cố định theo tháng.';
+
+  @override
+  String get debtFormStudentLoanMinimumPaymentHelper =>
+      'Lấy từ lịch trả hàng tháng hiện tại.';
+
+  @override
+  String get debtFormAutoDebitDayLabel => 'Ngày auto-debit';
+
+  @override
+  String get debtFormStudentLoanDueDayHint => 'VD: 5';
+
+  @override
+  String get debtFormStudentLoanDueDayHelper =>
+      'Ngày hệ thống thường rút tiền hoặc đến hạn trả.';
+
+  @override
+  String get debtFormStudentLoanAdvancedGuidance =>
+      'Vay học tập thường có kỳ hạn ổn định; simple monthly là cấu hình mặc định phù hợp.';
+
+  @override
+  String get debtFormCarLoanHeadline => 'Khoản vay trả góp tài sản';
+
+  @override
+  String get debtFormCarLoanSummary =>
+      'Ưu tiên principal còn lại, khoản trả cố định, và ngày đến hạn chuẩn để tránh trễ kỳ.';
+
+  @override
+  String get debtFormCarLoanNameHint =>
+      'VD: Toyota Financial, Wells Fargo Auto';
+
+  @override
+  String get debtFormCarLoanNameHelper =>
+      'Gắn với lender hoặc chiếc xe để dễ đối chiếu.';
+
+  @override
+  String get debtFormCarLoanBalanceHelper =>
+      'Lấy dư nợ gốc còn lại từ lender nếu có.';
+
+  @override
+  String get debtFormCarLoanOriginalPrincipalHelper =>
+      'Giúp bạn nhìn rõ tiến độ đã trả được bao nhiêu phần khoản vay.';
+
+  @override
+  String get debtFormCarLoanAprHelper =>
+      'Vay mua xe thường dùng APR cố định và lãi kép theo tháng.';
+
+  @override
+  String get debtFormCarLoanDueDayHint => 'VD: 12';
+
+  @override
+  String get debtFormCarLoanDueDayHelper =>
+      'Ngày lender chốt bạn đã trả kỳ hiện tại hay chưa.';
+
+  @override
+  String get debtFormCarLoanAdvancedGuidance =>
+      'Khoản vay mua xe thường khớp với compound monthly và minimum payment cố định.';
+
+  @override
+  String get debtFormMortgageHeadline =>
+      'Theo dõi principal, không phải giá nhà';
+
+  @override
+  String get debtFormMortgageSummary =>
+      'Hãy nhập phần gốc còn nợ, khoản trả tối thiểu hàng tháng, và ngày đến hạn mortgage.';
+
+  @override
+  String get debtFormMortgageNameHint => 'VD: Primary Home Mortgage';
+
+  @override
+  String get debtFormMortgageNameHelper =>
+      'Dùng tên khoản vay hoặc địa chỉ rút gọn.';
+
+  @override
+  String get debtFormMortgageBalanceHelper =>
+      'Chỉ nhập phần dư nợ gốc, không nhập giá trị căn nhà.';
+
+  @override
+  String get debtFormMortgageOriginalPrincipalHelper =>
+      'Dùng số tiền mortgage ban đầu để app tính phần trăm đã trả.';
+
+  @override
+  String get debtFormMortgageAprHelper =>
+      'Mortgage tiêu chuẩn thường đi theo lãi đơn theo tháng.';
+
+  @override
+  String get debtFormMortgageMinimumPaymentHelper =>
+      'Chỉ nhập nghĩa vụ tối thiểu mỗi tháng, chưa gồm extra principal.';
+
+  @override
+  String get debtFormMortgageDueDayLabel => 'Ngày đến hạn mortgage';
+
+  @override
+  String get debtFormMortgageDueDayHint => 'VD: 1';
+
+  @override
+  String get debtFormMortgageDueDayHelper =>
+      'Nhiều mortgage đến hạn vào đầu tháng.';
+
+  @override
+  String get debtFormMortgageAdvancedGuidance =>
+      'Với mortgage, simple monthly và minimum cố định thường là cấu hình gần thực tế nhất.';
+
+  @override
+  String get debtFormPersonalLoanHeadline => 'Khoản vay trả góp không tài sản';
+
+  @override
+  String get debtFormPersonalLoanSummary =>
+      'Tập trung vào dư nợ gốc, khoản trả tối thiểu hiện tại, và ngày lender thu tiền mỗi kỳ.';
+
+  @override
+  String get debtFormPersonalLoanNameHint =>
+      'VD: SoFi Personal Loan, LendingClub';
+
+  @override
+  String get debtFormPersonalLoanNameHelper =>
+      'Dùng tên lender hoặc mục đích khoản vay.';
+
+  @override
+  String get debtFormPersonalLoanBalanceHelper =>
+      'Lấy từ ứng dụng lender hoặc statement gần nhất.';
+
+  @override
+  String get debtFormPersonalLoanOriginalPrincipalHelper =>
+      'Giúp app thể hiện tiến độ trả nợ của khoản vay cá nhân.';
+
+  @override
+  String get debtFormPersonalLoanAprHelper =>
+      'Vay cá nhân thường là lãi kép theo tháng.';
+
+  @override
+  String get debtFormPersonalLoanMinimumPaymentHelper =>
+      'Nhập nghĩa vụ thanh toán hiện tại mỗi kỳ.';
+
+  @override
+  String get debtFormPersonalLoanDueDayHint => 'VD: 18';
+
+  @override
+  String get debtFormPersonalLoanDueDayHelper =>
+      'Ngày lender đánh dấu bạn bị trễ hạn nếu chưa trả.';
+
+  @override
+  String get debtFormPersonalLoanAdvancedGuidance =>
+      'Vay cá nhân thường mang cấu hình amortization chuẩn: compound monthly và khoản trả cố định.';
+
+  @override
+  String get debtFormMedicalHeadline => 'Thường là kế hoạch trả mềm';
+
+  @override
+  String get debtFormMedicalSummary =>
+      'Nếu khoản nợ không bị tính lãi, hãy nhập APR là 0 và dùng khoản thanh toán đã thoả thuận.';
+
+  @override
+  String get debtFormMedicalNameHint => 'VD: City Hospital Billing';
+
+  @override
+  String get debtFormMedicalNameHelper =>
+      'Dùng tên bệnh viện, phòng khám, hoặc đơn vị thu hộ.';
+
+  @override
+  String get debtFormMedicalBalanceLabel => 'Số tiền còn phải thanh toán';
+
+  @override
+  String get debtFormMedicalBalanceHelper =>
+      'Nhập số dư còn lại trên kế hoạch trả góp hiện tại.';
+
+  @override
+  String get debtFormMedicalOriginalPrincipalLabel => 'Tổng bill ban đầu';
+
+  @override
+  String get debtFormMedicalOriginalPrincipalHelper =>
+      'Tùy chọn. Dùng khi bạn muốn xem mình đã trả được bao nhiêu phần hoá đơn.';
+
+  @override
+  String get debtFormMedicalDeferredPrincipalHint =>
+      'Nếu bạn muốn tracking tổng bill ban đầu, mở Nâng cao để nhập số tiền gốc.';
+
+  @override
+  String get debtFormMedicalAprHelper =>
+      'Nhiều kế hoạch trả nợ y tế là 0%, nên nhập 0 nếu đúng thực tế.';
+
+  @override
+  String get debtFormMedicalMinimumPaymentLabel => 'Khoản thanh toán kỳ này';
+
+  @override
+  String get debtFormMedicalMinimumPaymentHelper =>
+      'Nhập đúng số đã được bệnh viện hoặc agency yêu cầu.';
+
+  @override
+  String get debtFormMedicalDueDayLabel => 'Ngày hẹn thanh toán';
+
+  @override
+  String get debtFormMedicalDueDayHint => 'VD: 20';
+
+  @override
+  String get debtFormMedicalDueDayHelper =>
+      'Có thể để trống và mặc định 15 nếu chưa có lịch rõ ràng.';
+
+  @override
+  String get debtFormMedicalAdvancedGuidance =>
+      'Nợ y tế thường đơn giản hơn: minimum cố định, APR có thể bằng 0, và không cần quá nhiều cấu hình.';
+
+  @override
+  String get debtFormOtherHeadline => 'Thiết lập linh hoạt theo thực tế';
+
+  @override
+  String get debtFormOtherSummary =>
+      'Dùng mục này cho các khoản không khớp loại chuẩn. Hãy nhập số dư, APR, minimum, rồi tinh chỉnh ở Nâng cao.';
+
+  @override
+  String get debtFormOtherNameHint => 'VD: Store Financing, Family Loan';
+
+  @override
+  String get debtFormOtherNameHelper =>
+      'Đặt tên đủ rõ để sau này bạn còn nhớ đây là khoản nào.';
+
+  @override
+  String get debtFormOtherBalanceHelper =>
+      'Nhập số bạn đang còn nợ ở thời điểm hiện tại.';
+
+  @override
+  String get debtFormOtherOriginalPrincipalHelper =>
+      'Tùy chọn. Hữu ích nếu bạn muốn app hiển thị tiến độ tốt hơn.';
+
+  @override
+  String get debtFormOtherDeferredPrincipalHint =>
+      'Bạn có thể thêm số tiền gốc ban đầu trong Nâng cao nếu muốn theo dõi tiến độ.';
+
+  @override
+  String get debtFormOtherAprHelper =>
+      'Không chắc APR? Hãy bắt đầu với 0 và cập nhật sau.';
+
+  @override
+  String get debtFormOtherMinimumPaymentHelper =>
+      'Nhập mức tối thiểu bạn phải trả mỗi kỳ.';
+
+  @override
+  String get debtFormOtherDueDayHint => 'VD: 15';
+
+  @override
+  String get debtFormOtherDueDayHelper =>
+      'Nếu chưa rõ, cứ để mặc định rồi chỉnh lại sau.';
+
+  @override
+  String get debtFormOtherAdvancedGuidance =>
+      'Mục này linh hoạt nhất. Bạn có thể giữ cấu hình mặc định trước rồi tinh chỉnh khi đã rõ thông tin.';
 }

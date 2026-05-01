@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../domain/entities/debt.dart';
@@ -12,6 +13,7 @@ class DebtDetailHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final progress = debtProgress(debt);
     final iconColor = debtTypeColor(debt.type);
     final isOverdueDebt = isDebtOverdue(debt);
@@ -66,7 +68,7 @@ class DebtDetailHeroCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: Text(
-                  debtStatusLabel(debt.status, debt: debt),
+                  debtStatusLabel(debt.status, l10n, debt: debt),
                   style: TextStyle(color: statusForegroundColor, fontSize: 11),
                 ),
               ),
@@ -74,7 +76,7 @@ class DebtDetailHeroCard extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Text(
-            'Số dư hiện tại',
+            l10n.debtDetailCurrentBalance,
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.72),
               fontSize: 12,
@@ -91,7 +93,9 @@ class DebtDetailHeroCard extends StatelessWidget {
             ),
           ),
           Text(
-            'Gốc ban đầu ${AppFormatters.formatCents(debt.originalPrincipal)}',
+            l10n.debtDetailOriginalPrincipalValue(
+              AppFormatters.formatCents(debt.originalPrincipal),
+            ),
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.56),
               fontSize: 11,
@@ -102,14 +106,14 @@ class DebtDetailHeroCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Đã hoàn thành ${(progress * 100).round()}%',
+                l10n.debtDetailProgressComplete((progress * 100).round()),
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.72),
                   fontSize: 12,
                 ),
               ),
               Text(
-                debt.type.label,
+                debtTypeDisplayName(debt.type, l10n),
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.9),
                   fontSize: 12,
@@ -139,9 +143,12 @@ class DebtDetailHeroCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'APR',
-                        style: TextStyle(color: Colors.white70, fontSize: 11),
+                      Text(
+                        l10n.debtDetailApr,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 11,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -171,9 +178,12 @@ class DebtDetailHeroCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Minimum payment',
-                        style: TextStyle(color: Colors.white70, fontSize: 11),
+                      Text(
+                        l10n.debtDetailMinimumPayment,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 11,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
