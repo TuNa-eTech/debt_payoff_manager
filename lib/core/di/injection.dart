@@ -57,6 +57,11 @@ import '../../data/repositories/interest_rate_history_repository_impl.dart';
 import '../../data/repositories/tracked_interest_rate_history_repository.dart';
 import '../../domain/repositories/interest_rate_history_repository.dart';
 import '../../features/progress/cubit/progress_cubit.dart';
+import '../../features/pricing/cubit/pricing_cubit.dart';
+import '../../features/pricing/data/firebase_entitlement_service.dart';
+import '../../features/pricing/data/in_app_purchase_service.dart';
+import '../../features/pricing/domain/entitlement_service.dart';
+import '../../features/pricing/domain/purchase_service.dart';
 import '../../features/scenarios/cubit/scenarios_cubit.dart';
 import '../../features/settings/cubit/settings_cubit.dart';
 import '../../features/sharing/cubit/sharing_cubit.dart';
@@ -78,6 +83,8 @@ void configureDependencies({
   NotificationService? notificationService,
   ShareLauncher? shareLauncher,
   CloudBackupService? cloudBackupService,
+  PurchaseService? purchaseService,
+  EntitlementService? entitlementService,
   String? seedLocaleCode,
 }) {
   // Database — singleton, opened once
@@ -251,6 +258,20 @@ void configureDependencies({
   getIt.registerLazySingleton<InviteLinkService>(
     () => AppLinksInviteLinkService(),
   );
+  getIt.registerLazySingleton<PurchaseService>(
+    () => purchaseService ?? InAppPurchaseService(),
+  );
+  getIt.registerLazySingleton<EntitlementService>(
+    () =>
+        entitlementService ??
+        FirebaseEntitlementService(
+          purchaseService: getIt<PurchaseService>(),
+          functions: getIt<FirebaseFunctions>(),
+          auth: getIt<FirebaseAuth>(),
+          initializer: getIt<FirebaseSyncInitializer>(),
+          settingsRepository: getIt<SettingsRepositoryImpl>(),
+        ),
+  );
 
   // Public repository contracts
   getIt.registerLazySingleton<DebtRepository>(
@@ -334,6 +355,7 @@ void configureDependencies({
     () => ScenariosCubit(
       scenarioRepository: getIt<ScenarioRepository>(),
       settingsRepository: getIt<SettingsRepository>(),
+      entitlementService: getIt<EntitlementService>(),
     ),
   );
 
@@ -364,11 +386,19 @@ void configureDependencies({
   getIt.registerLazySingleton<SettingsCubit>(
     () => SettingsCubit(settingsRepository: getIt<SettingsRepository>()),
   );
+  getIt.registerFactory<PricingCubit>(
+    () => PricingCubit(
+      purchaseService: getIt<PurchaseService>(),
+      entitlementService: getIt<EntitlementService>(),
+      settingsRepository: getIt<SettingsRepository>(),
+    ),
+  );
   getIt.registerFactory<SharingCubit>(
     () => SharingCubit(
       sharingService: getIt<SharingService>(),
       settingsRepository: getIt<SettingsRepository>(),
       authService: getIt<SyncAuthService>(),
+      entitlementService: getIt<EntitlementService>(),
     ),
   );
 

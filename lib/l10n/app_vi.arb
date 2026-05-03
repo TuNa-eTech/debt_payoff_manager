@@ -756,7 +756,7 @@
   "@logPaymentSavedMessage": {
     "description": "Snackbar shown after manually logging a payment."
   },
-  "pricingBody": "Bản MVP hiện tại vẫn giữ đầy đủ core payoff flow miễn phí. Premium là lộ trình tiếp theo cho cloud backup, PDF report và shared planning.",
+  "pricingBody": "Core payoff flow vẫn miễn phí. Premium mở các công cụ nâng cao cho planning, report và cộng tác.",
   "@pricingBody": {
     "description": "Body copy on the pricing page."
   },
@@ -792,7 +792,7 @@
   "@pricingHeadline": {
     "description": "Headline on the pricing page."
   },
-  "pricingMvpNotice": "Premium chưa mở trong bản MVP này.",
+  "pricingMvpNotice": "Premium được xử lý qua App Store. Bạn luôn có thể tiếp tục với bản miễn phí.",
   "@pricingMvpNotice": {
     "description": "Notice below the pricing CTA."
   },
@@ -816,7 +816,11 @@
   "@pricingPremiumBulletSharing": {
     "description": "Premium tier bullet describing sharing features."
   },
-  "pricingPremiumSubtitle": "Stub để chuẩn bị monetization, chưa có IAP",
+  "pricingPremiumBulletScenarios": "What-if scenarios và so sánh kịch bản",
+  "@pricingPremiumBulletScenarios": {
+    "description": "Premium tier bullet describing scenario planning."
+  },
+  "pricingPremiumSubtitle": "Power features cho kế hoạch trả nợ nghiêm túc",
   "@pricingPremiumSubtitle": {
     "description": "Subtitle for the premium tier card."
   },
@@ -827,6 +831,96 @@
   "pricingTrustMessage": "Cam kết trust không đổi khi lên Premium: không bank linking, không auto-charge mập mờ, và local export vẫn luôn khả dụng.",
   "@pricingTrustMessage": {
     "description": "Trust reassurance card copy on the pricing page."
+  },
+  "pricingPremiumLoadedSubtitle": "Chọn gói tháng hoặc năm",
+  "@pricingPremiumLoadedSubtitle": {
+    "description": "Subtitle for premium tier when App Store products are loaded."
+  },
+  "pricingMonthlyPlan": "Theo tháng",
+  "@pricingMonthlyPlan": {
+    "description": "Monthly premium subscription option title."
+  },
+  "pricingMonthlyPlanSubtitle": "Linh hoạt, gia hạn hàng tháng",
+  "@pricingMonthlyPlanSubtitle": {
+    "description": "Monthly premium subscription option subtitle."
+  },
+  "pricingYearlyPlan": "Theo năm",
+  "@pricingYearlyPlan": {
+    "description": "Yearly premium subscription option title."
+  },
+  "pricingYearlyPlanSubtitle": "Giá tốt nhất, gia hạn hằng năm",
+  "@pricingYearlyPlanSubtitle": {
+    "description": "Yearly premium subscription option subtitle."
+  },
+  "pricingPurchaseCta": "Nâng cấp {price}",
+  "@pricingPurchaseCta": {
+    "description": "Primary purchase button label with App Store price.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "pricingRestorePurchases": "Khôi phục giao dịch",
+  "@pricingRestorePurchases": {
+    "description": "Button label to restore App Store purchases."
+  },
+  "pricingPremiumActiveCta": "Premium đang hoạt động",
+  "@pricingPremiumActiveCta": {
+    "description": "Disabled purchase CTA when premium is active."
+  },
+  "pricingLoadingProducts": "Đang tải sản phẩm App Store...",
+  "@pricingLoadingProducts": {
+    "description": "Message while loading App Store products."
+  },
+  "pricingStoreUnavailableCta": "Store chưa khả dụng",
+  "@pricingStoreUnavailableCta": {
+    "description": "Disabled purchase CTA when store is unavailable."
+  },
+  "pricingStoreUnavailableMessage": "App Store hiện chưa khả dụng. Hãy kiểm tra kết nối hoặc thử lại sau.",
+  "@pricingStoreUnavailableMessage": {
+    "description": "Recoverable store unavailable message."
+  },
+  "pricingProductsMissingCta": "Chưa có sản phẩm",
+  "@pricingProductsMissingCta": {
+    "description": "Disabled purchase CTA when subscription products are missing."
+  },
+  "pricingProductsMissingMessage": "Premium products chưa khả dụng. Metadata trong sandbox có thể cần thêm thời gian để xuất hiện.",
+  "@pricingProductsMissingMessage": {
+    "description": "Recoverable product missing message."
+  },
+  "pricingNoTrialNotice": "Không có free trial. Subscription gia hạn qua Apple Account và có thể quản lý trong App Store settings.",
+  "@pricingNoTrialNotice": {
+    "description": "Subscription disclosure on the pricing page."
+  },
+  "pricingPremiumActiveTitle": "Premium đang hoạt động",
+  "@pricingPremiumActiveTitle": {
+    "description": "Title for active premium status card."
+  },
+  "pricingPremiumActiveBody": "Quyền Premium của bạn đang hoạt động.",
+  "@pricingPremiumActiveBody": {
+    "description": "Body for active premium without an expiry date."
+  },
+  "pricingPremiumActiveUntil": "Hoạt động đến {date}",
+  "@pricingPremiumActiveUntil": {
+    "description": "Body for active premium with an expiry date.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "premiumLockedTitle": "Tính năng Premium",
+  "@premiumLockedTitle": {
+    "description": "Title shown for locked premium entry points."
+  },
+  "premiumLockedBody": "Nâng cấp Premium để dùng power feature này. Core payoff plan vẫn miễn phí.",
+  "@premiumLockedBody": {
+    "description": "Body shown for locked premium entry points."
+  },
+  "premiumLockedAction": "Xem Premium",
+  "@premiumLockedAction": {
+    "description": "CTA shown for locked premium entry points."
   },
   "settingsCancel": "Hủy",
   "@settingsCancel": {

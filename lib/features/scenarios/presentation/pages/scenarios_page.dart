@@ -21,52 +21,61 @@ class ScenariosPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.scenariosTitle),
-        actions: [
-          IconButton(
-            icon: const Icon(LucideIcons.gitCompare),
-            tooltip: l10n.scenariosCompareAction,
-            onPressed: () => context.push(AppRoutes.compareScenarios),
-          ),
-          IconButton(
-            icon: const Icon(LucideIcons.plusCircle),
-            onPressed: () => _showAddDialog(context),
-          ),
-        ],
-      ),
-      body: BlocBuilder<ScenariosCubit, ScenariosState>(
-        builder: (context, state) {
-          if (state.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state.scenarios.isEmpty) {
-            return EmptyState(
-              title: l10n.scenariosEmptyTitle,
-              subtitle: l10n.scenariosEmptySubtitle,
-              icon: LucideIcons.gitBranch,
-            );
-          }
-
-          return ListView.separated(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.pagePaddingH,
-              vertical: AppDimensions.pagePaddingV,
+    return BlocListener<ScenariosCubit, ScenariosState>(
+      listenWhen: (previous, current) => previous.error != current.error,
+      listener: (context, state) {
+        final error = state.error;
+        if (error != null) {
+          context.showSnackBar(error, isError: true);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(l10n.scenariosTitle),
+          actions: [
+            IconButton(
+              icon: const Icon(LucideIcons.gitCompare),
+              tooltip: l10n.scenariosCompareAction,
+              onPressed: () => context.push(AppRoutes.compareScenarios),
             ),
-            itemCount: state.scenarios.length,
-            separatorBuilder: (_, _) =>
-                const SizedBox(height: AppDimensions.md),
-            itemBuilder: (context, index) {
-              final scenario = state.scenarios[index];
-              return _ScenarioCard(
-                scenario: scenario,
-                isActive: scenario.id == state.activeScenarioId,
+            IconButton(
+              icon: const Icon(LucideIcons.plusCircle),
+              onPressed: () => _showAddDialog(context),
+            ),
+          ],
+        ),
+        body: BlocBuilder<ScenariosCubit, ScenariosState>(
+          builder: (context, state) {
+            if (state.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (state.scenarios.isEmpty) {
+              return EmptyState(
+                title: l10n.scenariosEmptyTitle,
+                subtitle: l10n.scenariosEmptySubtitle,
+                icon: LucideIcons.gitBranch,
               );
-            },
-          );
-        },
+            }
+
+            return ListView.separated(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimensions.pagePaddingH,
+                vertical: AppDimensions.pagePaddingV,
+              ),
+              itemCount: state.scenarios.length,
+              separatorBuilder: (_, _) =>
+                  const SizedBox(height: AppDimensions.md),
+              itemBuilder: (context, index) {
+                final scenario = state.scenarios[index];
+                return _ScenarioCard(
+                  scenario: scenario,
+                  isActive: scenario.id == state.activeScenarioId,
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

@@ -244,44 +244,49 @@ void main() {
   });
 
   group('FirestoreSettingsSerializer', () {
-    test('round-trips singleton settings and nullable premium expiry', () {
-      final row = UserSettingsRow(
-        id: 'singleton',
-        trustLevel: 1,
-        firebaseUid: 'alice',
-        currencyCode: 'USD',
-        localeCode: 'en-US',
-        dayCountConvention: 'actual365',
-        notifPaymentReminder: true,
-        notifPaymentReminderDaysBefore: 7,
-        notifMilestone: false,
-        notifMonthlyLog: true,
-        onboardingStep: 5,
-        onboardingCompleted: true,
-        onboardingCompletedAt: updatedAt,
-        activeScenarioId: 'main',
-        isPremium: false,
-        premiumExpiresAt: null,
-        createdAt: createdAt,
-        updatedAt: updatedAt,
-      );
+    test(
+      'round-trips singleton settings without syncing entitlement cache',
+      () {
+        final row = UserSettingsRow(
+          id: 'singleton',
+          trustLevel: 1,
+          firebaseUid: 'alice',
+          currencyCode: 'USD',
+          localeCode: 'en-US',
+          dayCountConvention: 'actual365',
+          notifPaymentReminder: true,
+          notifPaymentReminderDaysBefore: 7,
+          notifMilestone: false,
+          notifMonthlyLog: true,
+          onboardingStep: 5,
+          onboardingCompleted: true,
+          onboardingCompletedAt: updatedAt,
+          activeScenarioId: 'main',
+          isPremium: true,
+          premiumExpiresAt: updatedAt,
+          createdAt: createdAt,
+          updatedAt: updatedAt,
+        );
 
-      final json = FirestoreSettingsSerializer.toFirestoreJson(row, metadata);
-      expect(json['id'], firestoreSettingsDocumentId);
-      expect(json['scenarioId'], firestoreDefaultScenarioId);
-      expect(json['premiumExpiresAt'], isNull);
-      expect(json['deletedAt'], isNull);
+        final json = FirestoreSettingsSerializer.toFirestoreJson(row, metadata);
+        expect(json['id'], firestoreSettingsDocumentId);
+        expect(json['scenarioId'], firestoreDefaultScenarioId);
+        expect(json['isPremium'], isFalse);
+        expect(json['premiumExpiresAt'], isNull);
+        expect(json['deletedAt'], isNull);
 
-      final input = FirestoreSettingsSerializer.fromFirestoreJson(json);
-      final companion = input.companion;
-      expect(input.scenarioId, firestoreDefaultScenarioId);
-      expect(_value(companion.id), firestoreSettingsDocumentId);
-      expect(_value(companion.firebaseUid), 'alice');
-      expect(_value(companion.notifPaymentReminderDaysBefore), 7);
-      expect(_value(companion.onboardingCompletedAt), updatedAt);
-      expect(_value(companion.premiumExpiresAt), isNull);
-      expect(_value(companion.activeScenarioId), 'main');
-    });
+        final input = FirestoreSettingsSerializer.fromFirestoreJson(json);
+        final companion = input.companion;
+        expect(input.scenarioId, firestoreDefaultScenarioId);
+        expect(_value(companion.id), firestoreSettingsDocumentId);
+        expect(_value(companion.firebaseUid), 'alice');
+        expect(_value(companion.notifPaymentReminderDaysBefore), 7);
+        expect(_value(companion.onboardingCompletedAt), updatedAt);
+        expect(_value(companion.isPremium), isFalse);
+        expect(_value(companion.premiumExpiresAt), isNull);
+        expect(_value(companion.activeScenarioId), 'main');
+      },
+    );
   });
 
   group('FirestoreScenarioSerializer', () {

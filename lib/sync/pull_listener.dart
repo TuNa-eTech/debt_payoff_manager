@@ -233,7 +233,8 @@ class DriftSyncPullApplier implements SyncPullApplier {
     )..where((row) => row.id.equals(input.id))).getSingleOrNull();
 
     if (!_shouldApply(
-      local?.createdAt, // We don't have updatedAt for scenarios in the DB, so we use createdAt as approximation or just allow overwrite if it's newer based on other data
+      local
+          ?.createdAt, // We don't have updatedAt for scenarios in the DB, so we use createdAt as approximation or just allow overwrite if it's newer based on other data
       input.updatedAt,
       local?.deletedAt,
       input.deletedAt,
@@ -326,7 +327,12 @@ class DriftSyncPullApplier implements SyncPullApplier {
 
     await _db
         .into(_db.userSettingsTable)
-        .insertOnConflictUpdate(input.companion);
+        .insertOnConflictUpdate(
+          input.companion.copyWith(
+            isPremium: Value(local?.isPremium ?? false),
+            premiumExpiresAt: Value(local?.premiumExpiresAt),
+          ),
+        );
     return true;
   }
 

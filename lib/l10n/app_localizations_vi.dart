@@ -547,7 +547,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get pricingBody =>
-      'Bản MVP hiện tại vẫn giữ đầy đủ core payoff flow miễn phí. Premium là lộ trình tiếp theo cho cloud backup, PDF report và shared planning.';
+      'Core payoff flow vẫn miễn phí. Premium mở các công cụ nâng cao cho planning, report và cộng tác.';
 
   @override
   String get pricingContinueFree => 'Tiếp tục với bản miễn phí';
@@ -579,7 +579,8 @@ class AppLocalizationsVi extends AppLocalizations {
       'Local-first trước. Premium chỉ mở khi thật sự thêm giá trị.';
 
   @override
-  String get pricingMvpNotice => 'Premium chưa mở trong bản MVP này.';
+  String get pricingMvpNotice =>
+      'Premium được xử lý qua App Store. Bạn luôn có thể tiếp tục với bản miễn phí.';
 
   @override
   String get pricingPageTitle => 'Free vs Premium';
@@ -600,8 +601,12 @@ class AppLocalizationsVi extends AppLocalizations {
       'Partner sharing và scenario comparison';
 
   @override
+  String get pricingPremiumBulletScenarios =>
+      'What-if scenarios và so sánh kịch bản';
+
+  @override
   String get pricingPremiumSubtitle =>
-      'Stub để chuẩn bị monetization, chưa có IAP';
+      'Power features cho kế hoạch trả nợ nghiêm túc';
 
   @override
   String get pricingPremiumTitle => 'Premium';
@@ -609,6 +614,75 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get pricingTrustMessage =>
       'Cam kết trust không đổi khi lên Premium: không bank linking, không auto-charge mập mờ, và local export vẫn luôn khả dụng.';
+
+  @override
+  String get pricingPremiumLoadedSubtitle => 'Chọn gói tháng hoặc năm';
+
+  @override
+  String get pricingMonthlyPlan => 'Theo tháng';
+
+  @override
+  String get pricingMonthlyPlanSubtitle => 'Linh hoạt, gia hạn hàng tháng';
+
+  @override
+  String get pricingYearlyPlan => 'Theo năm';
+
+  @override
+  String get pricingYearlyPlanSubtitle => 'Giá tốt nhất, gia hạn hằng năm';
+
+  @override
+  String pricingPurchaseCta(String price) {
+    return 'Nâng cấp $price';
+  }
+
+  @override
+  String get pricingRestorePurchases => 'Khôi phục giao dịch';
+
+  @override
+  String get pricingPremiumActiveCta => 'Premium đang hoạt động';
+
+  @override
+  String get pricingLoadingProducts => 'Đang tải sản phẩm App Store...';
+
+  @override
+  String get pricingStoreUnavailableCta => 'Store chưa khả dụng';
+
+  @override
+  String get pricingStoreUnavailableMessage =>
+      'App Store hiện chưa khả dụng. Hãy kiểm tra kết nối hoặc thử lại sau.';
+
+  @override
+  String get pricingProductsMissingCta => 'Chưa có sản phẩm';
+
+  @override
+  String get pricingProductsMissingMessage =>
+      'Premium products chưa khả dụng. Metadata trong sandbox có thể cần thêm thời gian để xuất hiện.';
+
+  @override
+  String get pricingNoTrialNotice =>
+      'Không có free trial. Subscription gia hạn qua Apple Account và có thể quản lý trong App Store settings.';
+
+  @override
+  String get pricingPremiumActiveTitle => 'Premium đang hoạt động';
+
+  @override
+  String get pricingPremiumActiveBody =>
+      'Quyền Premium của bạn đang hoạt động.';
+
+  @override
+  String pricingPremiumActiveUntil(String date) {
+    return 'Hoạt động đến $date';
+  }
+
+  @override
+  String get premiumLockedTitle => 'Tính năng Premium';
+
+  @override
+  String get premiumLockedBody =>
+      'Nâng cấp Premium để dùng power feature này. Core payoff plan vẫn miễn phí.';
+
+  @override
+  String get premiumLockedAction => 'Xem Premium';
 
   @override
   String get settingsCancel => 'Hủy';

@@ -995,7 +995,7 @@ abstract class AppLocalizations {
   /// Body copy on the pricing page.
   ///
   /// In en, this message translates to:
-  /// **'The current MVP keeps the full core payoff flow free. Premium is the next step for cloud backup, PDF reports, and shared planning.'**
+  /// **'The core payoff flow stays free. Premium unlocks power tools for deeper planning, reports, and collaboration.'**
   String get pricingBody;
 
   /// Primary CTA on the pricing page.
@@ -1049,7 +1049,7 @@ abstract class AppLocalizations {
   /// Notice below the pricing CTA.
   ///
   /// In en, this message translates to:
-  /// **'Premium is not available in this MVP yet.'**
+  /// **'Premium purchases are processed by the App Store. You can continue with Free at any time.'**
   String get pricingMvpNotice;
 
   /// App bar title on the pricing page.
@@ -1082,10 +1082,16 @@ abstract class AppLocalizations {
   /// **'Partner sharing and scenario comparison'**
   String get pricingPremiumBulletSharing;
 
+  /// Premium tier bullet describing scenario planning.
+  ///
+  /// In en, this message translates to:
+  /// **'What-if scenarios and scenario comparison'**
+  String get pricingPremiumBulletScenarios;
+
   /// Subtitle for the premium tier card.
   ///
   /// In en, this message translates to:
-  /// **'Monetization placeholder, no IAP yet'**
+  /// **'Power features for serious payoff planning'**
   String get pricingPremiumSubtitle;
 
   /// Title for the premium tier card.
@@ -1099,6 +1105,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Our trust model stays the same on Premium: no bank linking, no fuzzy auto-charges, and local export always stays available.'**
   String get pricingTrustMessage;
+
+  /// Subtitle for premium tier when App Store products are loaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose monthly or yearly Premium'**
+  String get pricingPremiumLoadedSubtitle;
+
+  /// Monthly premium subscription option title.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get pricingMonthlyPlan;
+
+  /// Monthly premium subscription option subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Flexible access, renews monthly'**
+  String get pricingMonthlyPlanSubtitle;
+
+  /// Yearly premium subscription option title.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get pricingYearlyPlan;
+
+  /// Yearly premium subscription option subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Best value, renews yearly'**
+  String get pricingYearlyPlanSubtitle;
+
+  /// Primary purchase button label with App Store price.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade for {price}'**
+  String pricingPurchaseCta(String price);
+
+  /// Button label to restore App Store purchases.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get pricingRestorePurchases;
+
+  /// Disabled purchase CTA when premium is active.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium is active'**
+  String get pricingPremiumActiveCta;
+
+  /// Message while loading App Store products.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading App Store products...'**
+  String get pricingLoadingProducts;
+
+  /// Disabled purchase CTA when store is unavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Store unavailable'**
+  String get pricingStoreUnavailableCta;
+
+  /// Recoverable store unavailable message.
+  ///
+  /// In en, this message translates to:
+  /// **'The App Store is unavailable right now. Check your connection or try again later.'**
+  String get pricingStoreUnavailableMessage;
+
+  /// Disabled purchase CTA when subscription products are missing.
+  ///
+  /// In en, this message translates to:
+  /// **'Products unavailable'**
+  String get pricingProductsMissingCta;
+
+  /// Recoverable product missing message.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium products are not available yet. Product metadata can take time to appear in sandbox.'**
+  String get pricingProductsMissingMessage;
+
+  /// Subscription disclosure on the pricing page.
+  ///
+  /// In en, this message translates to:
+  /// **'No free trial. Subscription renews through your Apple Account and can be managed in App Store settings.'**
+  String get pricingNoTrialNotice;
+
+  /// Title for active premium status card.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium active'**
+  String get pricingPremiumActiveTitle;
+
+  /// Body for active premium without an expiry date.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Premium access is active.'**
+  String get pricingPremiumActiveBody;
+
+  /// Body for active premium with an expiry date.
+  ///
+  /// In en, this message translates to:
+  /// **'Active until {date}'**
+  String pricingPremiumActiveUntil(String date);
+
+  /// Title shown for locked premium entry points.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium feature'**
+  String get premiumLockedTitle;
+
+  /// Body shown for locked premium entry points.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Premium to use this power feature. Your core payoff plan stays free.'**
+  String get premiumLockedBody;
+
+  /// CTA shown for locked premium entry points.
+  ///
+  /// In en, this message translates to:
+  /// **'View Premium'**
+  String get premiumLockedAction;
 
   /// Generic cancel action in settings dialogs.
   ///

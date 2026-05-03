@@ -46,7 +46,7 @@ We analyzed 6 top debt payoff apps on the US App Store. Every single one fails u
 - **What-If Scenarios** — Implemented for active-scenario app paths; bi-weekly/weekly cadence is deferred from v1.2
 - **Cloud Sync** — Engineering complete with QA waiver; real-device cross-sync and production cost monitoring remain release gates
 - **Partner Sharing** — Engineering complete and production Firebase Hosting/App Links assets verified for the iOS-first release target; Android release is deferred
-- **Premium / IAP** — Pricing narrative exists, but monetization flow is still a placeholder
+- **Premium / IAP** — Code/server gate verified for iOS-first `v1.5`; App Store sandbox/TestFlight QA remains
 
 See the full [Feature Spec →](docs/feature-spec.md)
 
@@ -79,7 +79,7 @@ lib/
     ├── monthly_action/ # Monthly Action View (home)
     ├── onboarding/     # Guided first-time setup
     ├── plan/           # Strategy + living payoff timeline
-    ├── pricing/        # Premium/pricing placeholder
+    ├── pricing/        # Premium pricing, IAP, and entitlement flow
     ├── progress/       # Progress dashboard
     ├── reports/        # Report preview + export
     └── settings/       # User preferences
@@ -193,6 +193,7 @@ Phase 1 acceptance uses golden test vectors TV-1 through TV-4: standard amortiza
 | [Data Schema](docs/data-schema.md) | Drift tables, indexes, invariants, migration strategy |
 | [Architecture Decisions](docs/architecture-decisions.md) | 21 ADRs with context, rationale, and consequences |
 | [Project Phases](docs/project-phases.md) | Phased roadmap with Design + Engineering tracks |
+| [Phase 11 Monetization & IAP Plan](docs/phase-11-monetization-iap-plan.md) | Detailed v1.5 Premium implementation plan |
 
 ---
 
@@ -210,6 +211,7 @@ Phase 7     ✅  Cloud Sync — engineering complete, real-device QA deferred
 Phase 8     🟡  Power Features — release candidate, cadence deferred
 Phase 9     🟡  Partner Sharing — iOS-first release target; Android deferred
 Phase 10    ✅  Reports & Reminders (v1.4 accepted scope)
+Phase 11    🟡  Monetization & IAP — code/server gate verified; iOS sandbox QA pending
 ```
 
 See the full [Project Phases →](docs/project-phases.md) for entry/exit criteria, accepted scope adjustments, and remaining backlog.
@@ -281,7 +283,7 @@ Contributions are welcome! Here's how you can help:
 
 ## Project Status
 
-> Active development continues beyond MVP. Core payoff flows are implemented in the repo; the main gaps are cloud sync, partner sharing, IAP, and remaining premium/polish backlog.
+> Active development continues beyond MVP. Core payoff flows are implemented in the repo; Phase 11 monetization/IAP is code/server gate verified, with real iOS sandbox/TestFlight validation still required before v1.5 release.
 
 | Component | Status |
 |---|---|
@@ -291,9 +293,9 @@ Contributions are welcome! Here's how you can help:
 | Core MVP Flows | ✅ Implemented end-to-end |
 | Reports & Reminders (`v1.4`) | ✅ Implemented in accepted scope |
 | Progress / Milestone Foundation | 🟡 Partial |
-| Cloud Sync | 📋 Not started in app layer |
+| Cloud Sync | ✅ Engineering complete; real-device QA and cost monitoring remain release gates |
 | Partner Sharing | 🟡 iOS-first release target; Android deferred |
-| Premium / IAP | 📋 Placeholder UI only |
+| Premium / IAP | 🟡 Code/server gate verified; iOS sandbox QA pending |
 
 ---
 

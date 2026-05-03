@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/repositories/settings_repository.dart';
+import '../../pricing/domain/entitlement_service.dart';
 import '../../../sync/sync_auth_service.dart';
 import '../data/sharing_service.dart';
 import '../domain/sharing_models.dart';
@@ -15,14 +16,17 @@ class SharingCubit extends Cubit<SharingState> {
     required SharingService sharingService,
     required SettingsRepository settingsRepository,
     required SyncAuthService authService,
+    required EntitlementService entitlementService,
   }) : _sharingService = sharingService,
        _settingsRepository = settingsRepository,
        _authService = authService,
+       _entitlementService = entitlementService,
        super(const SharingState());
 
   final SharingService _sharingService;
   final SettingsRepository _settingsRepository;
   final SyncAuthService _authService;
+  final EntitlementService _entitlementService;
   StreamSubscription<SharedPlan?>? _ownerPlanSubscription;
   StreamSubscription<List<SharedPlan>>? _partnerPlansSubscription;
 
@@ -90,6 +94,9 @@ class SharingCubit extends Cubit<SharingState> {
   }) async {
     await _run(() async {
       final settings = await _settingsRepository.getSettings();
+      if (!_entitlementService.isPremiumActive(settings)) {
+        throw StateError('Premium access is required.');
+      }
       final result = await _sharingService.createInvite(
         scenarioId: settings.activeScenarioId,
         partnerEmail: partnerEmail,

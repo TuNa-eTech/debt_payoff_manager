@@ -202,6 +202,10 @@ void main() {
       );
       await harness.planRepository.savePlan(makeRepoPlan(id: 'report-plan'));
       await harness.onboardingCubit.completeOnboarding();
+      final settings = await harness.settingsRepository.getSettings();
+      await harness.settingsRepository.updateSettings(
+        settings.copyWith(isPremium: true),
+      );
 
       await harness.pumpApp(tester);
       await _pumpUntilLocation(tester, harness, AppRoutes.home);

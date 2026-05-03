@@ -544,7 +544,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pricingBody =>
-      'The current MVP keeps the full core payoff flow free. Premium is the next step for cloud backup, PDF reports, and shared planning.';
+      'The core payoff flow stays free. Premium unlocks power tools for deeper planning, reports, and collaboration.';
 
   @override
   String get pricingContinueFree => 'Continue with Free';
@@ -576,7 +576,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'Local-first first. Premium only unlocks when it adds real value.';
 
   @override
-  String get pricingMvpNotice => 'Premium is not available in this MVP yet.';
+  String get pricingMvpNotice =>
+      'Premium purchases are processed by the App Store. You can continue with Free at any time.';
 
   @override
   String get pricingPageTitle => 'Free vs Premium';
@@ -597,7 +598,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Partner sharing and scenario comparison';
 
   @override
-  String get pricingPremiumSubtitle => 'Monetization placeholder, no IAP yet';
+  String get pricingPremiumBulletScenarios =>
+      'What-if scenarios and scenario comparison';
+
+  @override
+  String get pricingPremiumSubtitle =>
+      'Power features for serious payoff planning';
 
   @override
   String get pricingPremiumTitle => 'Premium';
@@ -605,6 +611,74 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get pricingTrustMessage =>
       'Our trust model stays the same on Premium: no bank linking, no fuzzy auto-charges, and local export always stays available.';
+
+  @override
+  String get pricingPremiumLoadedSubtitle => 'Choose monthly or yearly Premium';
+
+  @override
+  String get pricingMonthlyPlan => 'Monthly';
+
+  @override
+  String get pricingMonthlyPlanSubtitle => 'Flexible access, renews monthly';
+
+  @override
+  String get pricingYearlyPlan => 'Yearly';
+
+  @override
+  String get pricingYearlyPlanSubtitle => 'Best value, renews yearly';
+
+  @override
+  String pricingPurchaseCta(String price) {
+    return 'Upgrade for $price';
+  }
+
+  @override
+  String get pricingRestorePurchases => 'Restore purchases';
+
+  @override
+  String get pricingPremiumActiveCta => 'Premium is active';
+
+  @override
+  String get pricingLoadingProducts => 'Loading App Store products...';
+
+  @override
+  String get pricingStoreUnavailableCta => 'Store unavailable';
+
+  @override
+  String get pricingStoreUnavailableMessage =>
+      'The App Store is unavailable right now. Check your connection or try again later.';
+
+  @override
+  String get pricingProductsMissingCta => 'Products unavailable';
+
+  @override
+  String get pricingProductsMissingMessage =>
+      'Premium products are not available yet. Product metadata can take time to appear in sandbox.';
+
+  @override
+  String get pricingNoTrialNotice =>
+      'No free trial. Subscription renews through your Apple Account and can be managed in App Store settings.';
+
+  @override
+  String get pricingPremiumActiveTitle => 'Premium active';
+
+  @override
+  String get pricingPremiumActiveBody => 'Your Premium access is active.';
+
+  @override
+  String pricingPremiumActiveUntil(String date) {
+    return 'Active until $date';
+  }
+
+  @override
+  String get premiumLockedTitle => 'Premium feature';
+
+  @override
+  String get premiumLockedBody =>
+      'Upgrade to Premium to use this power feature. Your core payoff plan stays free.';
+
+  @override
+  String get premiumLockedAction => 'View Premium';
 
   @override
   String get settingsCancel => 'Cancel';

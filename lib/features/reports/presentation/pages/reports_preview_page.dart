@@ -17,6 +17,7 @@ import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_chip.dart';
 import '../../../../domain/entities/timeline_projection.dart';
 import '../../../../domain/entities/user_settings.dart';
+import '../../../pricing/domain/entitlement_service.dart';
 import '../../../debts/cubit/debts_cubit.dart';
 import '../../../debts/cubit/debts_state.dart';
 import '../../../plan/cubit/plan_timeline_cubit.dart';
@@ -371,6 +372,10 @@ class _ReportsPreviewPageState extends State<ReportsPreviewPage> {
     required PlanTimelineState planState,
     required UserSettings settings,
   }) async {
+    if (!getIt<EntitlementService>().isPremiumActive(settings)) {
+      context.showSnackBar(context.l10n.premiumLockedBody, isError: true);
+      return;
+    }
     setState(() => _isGenerating = true);
     try {
       final pdfBytes = await _reportGenerator.generateAmortizationReport(

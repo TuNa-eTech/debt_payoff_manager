@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:debt_payoff_manager/domain/entities/user_settings.dart';
 import 'package:debt_payoff_manager/domain/repositories/settings_repository.dart';
+import 'package:debt_payoff_manager/features/pricing/domain/entitlement_service.dart';
+import 'package:debt_payoff_manager/features/pricing/domain/premium_models.dart';
 import 'package:debt_payoff_manager/features/sharing/cubit/sharing_cubit.dart';
 import 'package:debt_payoff_manager/features/sharing/data/sharing_service.dart';
 import 'package:debt_payoff_manager/features/sharing/domain/sharing_models.dart';
@@ -12,16 +14,19 @@ void main() {
   late _FakeSharingService sharingService;
   late _FakeSettingsRepository settingsRepository;
   late _FakeSyncAuthService authService;
+  late _FakeEntitlementService entitlementService;
   late SharingCubit cubit;
 
   setUp(() {
     sharingService = _FakeSharingService();
     settingsRepository = _FakeSettingsRepository();
     authService = _FakeSyncAuthService();
+    entitlementService = _FakeEntitlementService();
     cubit = SharingCubit(
       sharingService: sharingService,
       settingsRepository: settingsRepository,
       authService: authService,
+      entitlementService: entitlementService,
     );
   });
 
@@ -52,6 +57,19 @@ void main() {
       );
     },
   );
+
+  test('createInvite blocks when premium is inactive', () async {
+    entitlementService.isActive = false;
+    await cubit.start();
+
+    await cubit.createInvite(
+      partnerEmail: 'partner@example.com',
+      mode: SharingPermissionMode.collaborative,
+    );
+
+    expect(sharingService.createdInviteEmail, isNull);
+    expect(cubit.state.errorMessage, contains('Premium'));
+  });
 
   test(
     'revokePartner downgrades to cloud backup when last partner is removed',
@@ -109,6 +127,32 @@ void main() {
       );
     },
   );
+}
+
+class _FakeEntitlementService implements EntitlementService {
+  var isActive = true;
+
+  @override
+  Future<void> dispose() async {}
+
+  @override
+  Future<void> init() async {}
+
+  @override
+  bool isPremiumActive(UserSettings? settings) => isActive;
+
+  @override
+  Future<EntitlementSnapshot> refreshEntitlement() async => isActive
+      ? const EntitlementSnapshot(status: EntitlementStatus.active)
+      : const EntitlementSnapshot.free();
+
+  @override
+  Future<EntitlementSnapshot> validatePurchase(
+    PremiumPurchase purchase,
+  ) async => refreshEntitlement();
+
+  @override
+  Stream<PremiumEntitlementEvent> watchEvents() => const Stream.empty();
 }
 
 SharedPlan _sharedPlan({

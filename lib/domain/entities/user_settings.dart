@@ -80,6 +80,7 @@ class UserSettings extends Equatable {
     String? activeScenarioId,
     bool? isPremium,
     DateTime? premiumExpiresAt,
+    bool clearPremiumExpiresAt = false,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -101,7 +102,9 @@ class UserSettings extends Equatable {
           onboardingCompletedAt ?? this.onboardingCompletedAt,
       activeScenarioId: activeScenarioId ?? this.activeScenarioId,
       isPremium: isPremium ?? this.isPremium,
-      premiumExpiresAt: premiumExpiresAt ?? this.premiumExpiresAt,
+      premiumExpiresAt: clearPremiumExpiresAt
+          ? null
+          : premiumExpiresAt ?? this.premiumExpiresAt,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

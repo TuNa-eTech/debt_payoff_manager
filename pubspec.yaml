@@ -57,6 +57,9 @@ dependencies:
   # Connectivity (sync engine §9)
   connectivity_plus: ^6.0.5
 
+  # Monetization (Phase 11)
+  in_app_purchase: ^3.2.3
+
   # Export & reports (Feature §2.6)
   archive: ^4.0.9
   pdf: ^3.11.1

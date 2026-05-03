@@ -23,6 +23,7 @@ import '../../../../domain/entities/user_settings.dart';
 import '../../../../domain/enums/strategy.dart';
 import '../../../../domain/repositories/plan_repository.dart';
 import '../../../../domain/repositories/settings_repository.dart';
+import '../../../pricing/domain/entitlement_service.dart';
 
 enum _SettingsDataAction { csvExport, localBackup, restoreBackup, clearAll }
 
@@ -60,6 +61,9 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       builder: (context, planSnapshot) {
         final plan = planSnapshot.data;
+        final isPremiumActive = getIt<EntitlementService>().isPremiumActive(
+          settings,
+        );
 
         return Scaffold(
           backgroundColor: AppColors.mdSurfaceContainerLow,
@@ -94,9 +98,15 @@ class _SettingsPageState extends State<SettingsPage> {
                     _buildDivider(),
                     _buildListTile(
                       title: l10n.scenariosTitle,
-                      subtitle: l10n.scenariosEmptySubtitle,
-                      trailingText: '',
-                      onTap: () => context.push(AppRoutes.scenarios),
+                      subtitle: isPremiumActive
+                          ? l10n.scenariosEmptySubtitle
+                          : l10n.premiumLockedBody,
+                      trailingText: isPremiumActive
+                          ? ''
+                          : l10n.premiumLockedTitle,
+                      onTap: () => isPremiumActive
+                          ? context.push(AppRoutes.scenarios)
+                          : _openPremiumFeature(),
                     ),
                   ],
                 ),
@@ -161,8 +171,15 @@ class _SettingsPageState extends State<SettingsPage> {
                     _buildListTile(
                       key: AppTestKeys.settingsReportsPreview,
                       title: l10n.settingsReportsPreviewTitle,
-                      subtitle: l10n.settingsReportsPreviewSubtitle,
-                      onTap: () => context.push(AppRoutes.reportsPreview),
+                      subtitle: isPremiumActive
+                          ? l10n.settingsReportsPreviewSubtitle
+                          : l10n.premiumLockedBody,
+                      trailingText: isPremiumActive
+                          ? ''
+                          : l10n.premiumLockedTitle,
+                      onTap: () => isPremiumActive
+                          ? context.push(AppRoutes.reportsPreview)
+                          : _openPremiumFeature(),
                     ),
                   ],
                 ),
@@ -207,16 +224,22 @@ class _SettingsPageState extends State<SettingsPage> {
                     _buildListTile(
                       key: AppTestKeys.settingsPartnerSharing,
                       title: l10n.settingsPartnerSharingTitle,
-                      subtitle: settings.trustLevel >= 1
+                      subtitle: !isPremiumActive
+                          ? l10n.premiumLockedBody
+                          : settings.trustLevel >= 1
                           ? l10n.settingsPartnerSharingSubtitleEnabled
                           : l10n.settingsPartnerSharingSubtitleDisabled,
-                      trailingText: settings.trustLevel >= 2
+                      trailingText: !isPremiumActive
+                          ? l10n.premiumLockedTitle
+                          : settings.trustLevel >= 2
                           ? l10n.settingsPartnerSharingOn
                           : l10n.settingsPartnerSharingOff,
                       enabled: !_isDataActionPending,
                       onTap: _isDataActionPending
                           ? null
-                          : () => context.push(AppRoutes.partnerSharing),
+                          : () => isPremiumActive
+                                ? context.push(AppRoutes.partnerSharing)
+                                : _openPremiumFeature(),
                     ),
                     _buildDivider(),
                     _buildListTile(
@@ -299,6 +322,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _updateSettings(UserSettings settings) {
     return _settingsRepository.updateSettings(settings);
+  }
+
+  void _openPremiumFeature() {
+    context.push(AppRoutes.pricing);
   }
 
   Future<void> _exportCsv() async {

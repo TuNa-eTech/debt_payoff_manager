@@ -358,6 +358,51 @@ describe('firestore.rules Phase 7 Level 1 sync', () => {
     );
   });
 
+  it('blocks client-side premium promotion in synced settings', async () => {
+    const alice = authedDb('alice');
+    const settingsRef = doc(alice, 'users/alice/settings/singleton');
+
+    await assertSucceeds(setDoc(settingsRef, validSettings()));
+    await assertFails(
+      setDoc(
+        settingsRef,
+        validSettings({
+          isPremium: true,
+          premiumExpiresAt: now(),
+        }),
+      ),
+    );
+  });
+
+  it('keeps entitlement documents server-owned but readable by the owner', async () => {
+    const alice = authedDb('alice');
+    const bob = authedDb('bob');
+    const entitlementRef = doc(alice, 'users/alice/entitlements/premium');
+
+    await testEnv.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), 'users/alice/entitlements/premium'), {
+        active: true,
+        productId: 'premium_monthly',
+        platform: 'ios',
+        originalTransactionId: 'original',
+        latestTransactionId: 'latest',
+        expiresAt: now(),
+        updatedAt: now(),
+      });
+    });
+
+    await assertSucceeds(getDoc(entitlementRef));
+    await assertFails(getDoc(doc(bob, 'users/alice/entitlements/premium')));
+    await assertFails(
+      setDoc(entitlementRef, {
+        active: true,
+        productId: 'premium_yearly',
+        platform: 'ios',
+        updatedAt: now(),
+      }),
+    );
+  });
+
   it('keeps shared plan writes server-owned', async () => {
     const alice = authedDb('alice');
 

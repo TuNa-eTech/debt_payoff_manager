@@ -24,6 +24,7 @@ import '../../features/debts/presentation/pages/rate_history_page.dart';
 import '../../features/progress/presentation/pages/progress_page.dart';
 import '../../features/progress/presentation/pages/monthly_summary_page.dart';
 import '../../features/pricing/presentation/pages/pricing_page.dart';
+import '../../features/pricing/domain/entitlement_service.dart';
 import '../../features/reports/presentation/pages/reports_preview_page.dart';
 import '../../features/scenarios/presentation/pages/compare_scenarios_page.dart';
 import '../../features/scenarios/presentation/pages/scenarios_page.dart';
@@ -115,6 +116,10 @@ GoRouter createRouter({
       if (settings.onboardingCompleted) {
         if (isOnboardingRoute) {
           return AppRoutes.home;
+        }
+        if (_isPremiumRoute(state.matchedLocation) &&
+            !getIt<EntitlementService>().isPremiumActive(settings)) {
+          return AppRoutes.pricing;
         }
         return null;
       }
@@ -301,6 +306,13 @@ GoRouter createRouter({
       ),
     ],
   );
+}
+
+bool _isPremiumRoute(String location) {
+  return location == AppRoutes.scenarios ||
+      location == AppRoutes.compareScenarios ||
+      location == AppRoutes.reportsPreview ||
+      location == AppRoutes.partnerSharing;
 }
 
 Future<String> _resolvePendingOnboardingRoute({

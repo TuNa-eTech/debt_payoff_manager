@@ -21,7 +21,8 @@
 11. [Phase 8 — Power Features (E7 + D6)](#phase-8--power-features)
 12. [Phase 9 — Partner Sharing (E8 + D7)](#phase-9--partner-sharing)
 13. [Phase 10 — Reports & Reminders (E9 + D8)](#phase-10--reports--reminders)
-14. [Gate Checklist per Phase](#gate-checklist-per-phase)
+14. [Phase 11 — Monetization & IAP (E10 + D9)](#phase-11--monetization--iap)
+15. [Gate Checklist per Phase](#gate-checklist-per-phase)
 
 ---
 
@@ -70,7 +71,7 @@ Legend:
 - Foundation + MVP: **~5 tháng** (Phases 0–6)
 - v1.1 Premium: **~2-3 tháng tiếp** (Phases 7–10)
 
-## Current status (April 25, 2026)
+## Current status (May 3, 2026)
 
 - **Phase 0 / E0** ở trạng thái **mostly complete trong repo**:
   - CI/workflows, dependency stack, codegen, và mobile Firebase config files đã hiện diện. Thêm vào đó, CI đã được migrate sang MacOS.
@@ -108,6 +109,12 @@ Legend:
 - **Phase 10** hiện **closed với accepted scope adjustments**:
   - Reminder scheduling, permission UX, report preview, PDF export, và generic system share flow đã nằm trong repo và test suite.
   - Các phần defer sang backlog từ closeout Phase 10: dedicated email-share flow, deeper PDF visual polish, và device-level notification QA evidence.
+- **Phase 11** hiện **code/server gate verified, iOS sandbox QA pending**:
+  - Pricing stub đã được thay bằng real `in_app_purchase` flow cho `premium_monthly` / `premium_yearly`, có purchase stream startup listener, restore, pending/error states, entitlement refresh, và local cache downgrade.
+  - Firebase `verifyPurchase` và `refreshEntitlement` đã deploy trên project `debt-payoff-manager-e6283`; Firestore rules đã deploy và chặn client tự promote Premium qua settings hoặc entitlement docs.
+  - Premium gates đã có ở Settings entry points, direct routes, và key premium actions cho scenarios, reports, và partner sharing; basic cloud sync vẫn Free.
+  - Validation hiện tại: Flutter analyze pass, Flutter tests 321/321 pass, Functions TypeScript build pass, Firebase MCP rules validation pass, Firestore rules emulator tests 18/18 pass.
+  - Chưa đóng Phase 11 release gate vì chưa có bằng chứng iOS sandbox/TestFlight với App Store products thật, cancel/expiry, interrupted/pending flow, restore after reinstall, và real Apple receipt validation.
 
 ---
 
@@ -641,27 +648,42 @@ Legend:
 
 **Duration:** 3-4 tuần · **Tracks:** E10 + D9
 
+**Status:** Code/server gate verified; iOS sandbox/TestFlight QA pending. Chi tiết implementation và audit evidence nằm ở [Phase 11 Monetization & IAP Plan](phase-11-monetization-iap-plan.md).
+
+**Accepted scope defaults**
+- Basic cloud sync stays Free as a trust feature.
+- Premium gates power features: scenarios, compare scenarios, advanced reports, partner sharing, custom milestones, and similar power-user tools.
+- Entitlement validation is Firebase server-authoritative.
+- Release gate is iOS-first; Android billing prep is allowed but Android production closeout is deferred until the current Gradle/Kotlin release blocker is resolved.
+
 ### Entry criteria
-- Phase 8 complete (Power Features stable)
-- User research confirm willingness-to-pay
+- Phase 10 closed with accepted scope adjustments
+- Phase 8 Power Features and Phase 9 Partner Sharing stable enough to gate
+- App Store subscription products can be configured for monthly/yearly Premium
+- Firebase Functions and Firestore rules are ready for entitlement validation/protection
 
 ### E10 — Engineering
 
 **Feature §3.1 In-App Purchase**
-- [ ] IAP integration (`in_app_purchase` package)
-- [ ] Free vs Premium tier enforcement (feature flags)
-- [ ] Purchase flow (monthly/yearly subscription)
-- [ ] Restore purchases
-- [ ] Receipt validation (server-side optional)
-- [ ] Subscription status sync across devices
-- [ ] Graceful downgrade (expired subscription → Free tier)
+- [x] IAP integration (`in_app_purchase` package)
+- [x] Purchase stream listener started early in app lifecycle
+- [x] Product lookup for `premium_monthly` and `premium_yearly`
+- [x] Purchase flow (monthly/yearly subscription)
+- [x] Restore purchases through the same validation path
+- [x] Firebase Functions receipt validation
+- [x] Server-authoritative entitlement refresh across devices
+- [x] Graceful downgrade (expired subscription → Free tier)
 
 **Feature §3.2 Premium Feature Gating**
-- [ ] Cloud sync (Phase 7) → Premium or Free tier decision
-- [ ] What-if scenarios (Phase 8) → Premium
-- [ ] Advanced reports (Phase 10) → Premium
-- [ ] Custom milestones → Premium
-- [ ] Pricing screen update (remove stub, wire real IAP)
+- [x] Cloud sync basics remain Free
+- [x] What-if scenarios (Phase 8) → Premium
+- [x] Scenario comparison (Phase 8) → Premium
+- [x] Partner sharing (Phase 9) → Premium
+- [x] Advanced reports / premium PDF polish (Phase 10) → Premium
+- [ ] Custom milestones / future power tools → Premium
+- [x] Pricing screen update: remove stub, load real products, purchase, restore, and continue-free states
+- [x] Direct route guards so deep links cannot bypass gating
+- [x] Action-level guards for key premium writes/exports/invites
 
 ### D9 — Design
 
@@ -671,10 +693,13 @@ Legend:
 - [ ] Downgrade empathy (don't punish, keep door open)
 
 ### Exit gate (Phase 11)
-- [ ] Purchase flow tested on iOS + Android (sandbox + production)
-- [ ] Premium features correctly gated
-- [ ] Restore purchases works reliably
-- [ ] **v1.5 Ship: Premium Tier**
+- [ ] Purchase flow tested on iOS sandbox/TestFlight
+- [x] Firebase server validation is the entitlement authority
+- [x] Premium features correctly gated at UI entry points and direct route/action level
+- [ ] Restore purchases works reliably with real App Store sandbox receipts
+- [x] Downgrade does not delete user data
+- [x] Android billing closeout explicitly tracked as deferred if Gradle/Kotlin blocker remains
+- [ ] **v1.5 Ship: Premium Tier (iOS-first)**
 
 ---
 

@@ -14,6 +14,7 @@ import 'core/services/milestone_notification_service.dart';
 import 'core/services/notification_service.dart';
 import 'core/services/reminder_scheduler_service.dart';
 import 'core/theme/app_colors.dart';
+import 'features/pricing/domain/entitlement_service.dart';
 import 'sync/cloud_backup_service.dart';
 
 void main() async {
@@ -58,6 +59,7 @@ Future<void> _appMain() async {
   getIt<ReminderSchedulerService>().init();
   getIt<MilestoneNotificationService>().init();
   await getIt<CloudBackupService>().init();
+  await getIt<EntitlementService>().init();
 
   runApp(const DebtPayoffApp());
 }

@@ -369,8 +369,10 @@ class FirestoreSettingsSerializer {
         'onboardingStep': row.onboardingStep,
         'onboardingCompleted': row.onboardingCompleted,
         'onboardingCompletedAt': row.onboardingCompletedAt?.toUtc(),
-        'isPremium': row.isPremium,
-        'premiumExpiresAt': row.premiumExpiresAt?.toUtc(),
+        // Premium entitlement is server-authoritative in Phase 11. The
+        // settings mirror keeps schema compatibility but never promotes access.
+        'isPremium': false,
+        'premiumExpiresAt': null,
         'activeScenarioId': row.activeScenarioId,
       },
     );
@@ -401,12 +403,11 @@ class FirestoreSettingsSerializer {
         onboardingCompletedAt: Value(
           _nullableUtcTimestamp(json, 'onboardingCompletedAt'),
         ),
-        isPremium: Value(_requiredBool(json, 'isPremium')),
-        premiumExpiresAt: Value(
-          _nullableUtcTimestamp(json, 'premiumExpiresAt'),
-        ),
+        isPremium: const Value(false),
+        premiumExpiresAt: const Value(null),
         activeScenarioId: Value(
-          _nullableString(json, 'activeScenarioId') ?? firestoreDefaultScenarioId,
+          _nullableString(json, 'activeScenarioId') ??
+              firestoreDefaultScenarioId,
         ),
         createdAt: Value(_requiredUtcTimestamp(json, 'createdAt')),
         updatedAt: Value(_requiredUtcTimestamp(json, 'updatedAt')),
@@ -475,10 +476,7 @@ class FirestoreScenarioSerializer {
       updatedAt: updatedAt ?? row.createdAt,
       deletedAt: row.deletedAt,
       metadata: metadata,
-      data: <String, Object?>{
-        'name': row.name,
-        'isMain': row.isMain,
-      },
+      data: <String, Object?>{'name': row.name, 'isMain': row.isMain},
     );
   }
 

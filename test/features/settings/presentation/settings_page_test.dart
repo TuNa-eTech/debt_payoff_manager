@@ -14,6 +14,8 @@ import 'package:debt_payoff_manager/domain/entities/plan.dart';
 import 'package:debt_payoff_manager/domain/entities/user_settings.dart';
 import 'package:debt_payoff_manager/domain/repositories/plan_repository.dart';
 import 'package:debt_payoff_manager/domain/repositories/settings_repository.dart';
+import 'package:debt_payoff_manager/features/pricing/domain/entitlement_service.dart';
+import 'package:debt_payoff_manager/features/pricing/domain/premium_models.dart';
 import 'package:debt_payoff_manager/features/settings/presentation/pages/settings_page.dart';
 import 'package:debt_payoff_manager/l10n/app_localizations.dart';
 
@@ -29,6 +31,35 @@ class _MockDataManagementService extends Mock
     implements DataManagementService {}
 
 class _MockShareLauncher extends Mock implements ShareLauncher {}
+
+class _FakeEntitlementService implements EntitlementService {
+  const _FakeEntitlementService();
+
+  @override
+  Future<void> dispose() async {}
+
+  @override
+  Future<void> init() async {}
+
+  @override
+  bool isPremiumActive(UserSettings? settings) =>
+      settings != null &&
+      settings.isPremium &&
+      (settings.premiumExpiresAt == null ||
+          settings.premiumExpiresAt!.isAfter(DateTime.now().toUtc()));
+
+  @override
+  Future<EntitlementSnapshot> refreshEntitlement() async =>
+      const EntitlementSnapshot.free();
+
+  @override
+  Future<EntitlementSnapshot> validatePurchase(
+    PremiumPurchase purchase,
+  ) async => const EntitlementSnapshot.free();
+
+  @override
+  Stream<PremiumEntitlementEvent> watchEvents() => const Stream.empty();
+}
 
 void main() {
   testWidgets('settings page keeps settings and plan streams across rebuilds', (
@@ -53,7 +84,8 @@ void main() {
       ..registerSingleton<PlanRepository>(planRepository)
       ..registerSingleton<BackupFilePicker>(_MockBackupFilePicker())
       ..registerSingleton<DataManagementService>(_MockDataManagementService())
-      ..registerSingleton<ShareLauncher>(_MockShareLauncher());
+      ..registerSingleton<ShareLauncher>(_MockShareLauncher())
+      ..registerSingleton<EntitlementService>(const _FakeEntitlementService());
     when(() => settingsRepository.watchSettings()).thenAnswer((_) {
       settingsWatchCalls += 1;
       return settingsStream.stream.cast<UserSettings>();
@@ -87,7 +119,8 @@ Widget _settingsTestApp() {
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
     home: BlocProvider(
-      create: (context) => SettingsCubit(settingsRepository: getIt<SettingsRepository>()),
+      create: (context) =>
+          SettingsCubit(settingsRepository: getIt<SettingsRepository>()),
       child: const SettingsPage(),
     ),
   );

@@ -126,6 +126,18 @@ class AppTestKeys {
     'partner-sharing:mode-collaborative',
   );
   static const pricingContinueFree = ValueKey<String>('pricing:continue-free');
+  static const pricingMonthlyProduct = ValueKey<String>(
+    'pricing:product-monthly',
+  );
+  static const pricingYearlyProduct = ValueKey<String>(
+    'pricing:product-yearly',
+  );
+  static const pricingPurchasePremium = ValueKey<String>(
+    'pricing:purchase-premium',
+  );
+  static const pricingRestorePurchases = ValueKey<String>(
+    'pricing:restore-purchases',
+  );
   static const settingsDataExportCsv = ValueKey<String>(
     'settings:data-export-csv',
   );

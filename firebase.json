@@ -23,6 +23,7 @@
   },
   "auth": {
     "providers": {
+      "anonymous": true,
       "googleSignIn": {
         "oAuthBrandDisplayName": "Debt Payoff Manager",
         "supportEmail": "anhtu.it.se@gmail.com"

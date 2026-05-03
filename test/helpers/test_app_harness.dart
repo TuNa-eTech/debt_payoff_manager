@@ -31,6 +31,9 @@ import 'package:debt_payoff_manager/domain/repositories/settings_repository.dart
 import 'package:debt_payoff_manager/features/debts/cubit/debts_cubit.dart';
 import 'package:debt_payoff_manager/features/onboarding/cubit/onboarding_cubit.dart';
 import 'package:debt_payoff_manager/features/onboarding/services/onboarding_analytics.dart';
+import 'package:debt_payoff_manager/features/pricing/domain/entitlement_service.dart';
+import 'package:debt_payoff_manager/features/pricing/domain/premium_models.dart';
+import 'package:debt_payoff_manager/features/pricing/domain/purchase_service.dart';
 import 'package:debt_payoff_manager/features/settings/cubit/settings_cubit.dart';
 import 'package:debt_payoff_manager/l10n/app_localizations.dart';
 import 'package:debt_payoff_manager/sync/cloud_backup_service.dart';
@@ -95,6 +98,8 @@ class TestAppHarness {
     NotificationService? notificationService,
     ShareLauncher? shareLauncher,
     CloudBackupService? cloudBackupService,
+    PurchaseService? purchaseService,
+    EntitlementService? entitlementService,
     String seedLocaleCode = AppLocale.fallbackLocaleCode,
     bool closeDbOnDispose = true,
   }) async {
@@ -114,6 +119,8 @@ class TestAppHarness {
       notificationService: notificationService,
       shareLauncher: shareLauncher,
       cloudBackupService: cloudBackupService ?? _NoopCloudBackupService(),
+      purchaseService: purchaseService ?? _NoopPurchaseService(),
+      entitlementService: entitlementService ?? _NoopEntitlementService(),
       seedLocaleCode: seedLocaleCode,
     );
 
@@ -186,9 +193,7 @@ class TestAppHarness {
     );
     await onboardingCubit.start();
 
-    final settingsCubit = SettingsCubit(
-      settingsRepository: settingsRepository,
-    );
+    final settingsCubit = SettingsCubit(settingsRepository: settingsRepository);
 
     final router = createRouter(
       settingsRepository: getIt<SettingsRepository>(),
@@ -258,6 +263,57 @@ class _NoopCloudBackupService implements CloudBackupService {
 
   @override
   Stream<CloudBackupRuntimeState> watchRuntimeState() => _controller.stream;
+}
+
+class _NoopPurchaseService implements PurchaseService {
+  const _NoopPurchaseService();
+
+  @override
+  Stream<PremiumPurchase> get purchaseStream => const Stream.empty();
+
+  @override
+  Future<void> buy(PremiumProduct product) async {}
+
+  @override
+  Future<void> completePurchase(PremiumPurchase purchase) async {}
+
+  @override
+  Future<bool> isAvailable() async => false;
+
+  @override
+  Future<List<PremiumProduct>> queryPremiumProducts() async => const [];
+
+  @override
+  Future<void> restorePurchases() async {}
+}
+
+class _NoopEntitlementService implements EntitlementService {
+  const _NoopEntitlementService();
+
+  @override
+  Future<void> dispose() async {}
+
+  @override
+  Future<void> init() async {}
+
+  @override
+  bool isPremiumActive(UserSettings? settings) =>
+      settings != null &&
+      settings.isPremium &&
+      (settings.premiumExpiresAt == null ||
+          settings.premiumExpiresAt!.isAfter(DateTime.now().toUtc()));
+
+  @override
+  Future<EntitlementSnapshot> refreshEntitlement() async =>
+      const EntitlementSnapshot.free();
+
+  @override
+  Future<EntitlementSnapshot> validatePurchase(
+    PremiumPurchase purchase,
+  ) async => const EntitlementSnapshot.free();
+
+  @override
+  Stream<PremiumEntitlementEvent> watchEvents() => const Stream.empty();
 }
 
 class _TestAppScope {

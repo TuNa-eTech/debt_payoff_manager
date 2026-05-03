@@ -247,6 +247,10 @@ service cloud.firestore {
         && isNullableTimestamp(data.premiumExpiresAt);
     }
 
+    function doesNotPromotePremium(data) {
+      return data.isPremium == false && data.premiumExpiresAt == null;
+    }
+
     function isValidMilestone(data) {
       return hasRequiredFields(data, [
           'id',
@@ -384,7 +388,13 @@ service cloud.firestore {
       allow create, update: if isOwner(uid)
         && docId == 'singleton'
         && request.resource.data.id == docId
-        && isValidSettings(request.resource.data);
+        && isValidSettings(request.resource.data)
+        && doesNotPromotePremium(request.resource.data);
+    }
+
+    match /users/{uid}/entitlements/{docId} {
+      allow read: if isOwner(uid);
+      allow write: if false;
     }
 
     match /users/{uid}/milestones/{docId} {

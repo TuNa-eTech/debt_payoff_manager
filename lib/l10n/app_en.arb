@@ -756,7 +756,7 @@
   "@logPaymentSavedMessage": {
     "description": "Snackbar shown after manually logging a payment."
   },
-  "pricingBody": "The current MVP keeps the full core payoff flow free. Premium is the next step for cloud backup, PDF reports, and shared planning.",
+  "pricingBody": "The core payoff flow stays free. Premium unlocks power tools for deeper planning, reports, and collaboration.",
   "@pricingBody": {
     "description": "Body copy on the pricing page."
   },
@@ -792,7 +792,7 @@
   "@pricingHeadline": {
     "description": "Headline on the pricing page."
   },
-  "pricingMvpNotice": "Premium is not available in this MVP yet.",
+  "pricingMvpNotice": "Premium purchases are processed by the App Store. You can continue with Free at any time.",
   "@pricingMvpNotice": {
     "description": "Notice below the pricing CTA."
   },
@@ -816,7 +816,11 @@
   "@pricingPremiumBulletSharing": {
     "description": "Premium tier bullet describing sharing features."
   },
-  "pricingPremiumSubtitle": "Monetization placeholder, no IAP yet",
+  "pricingPremiumBulletScenarios": "What-if scenarios and scenario comparison",
+  "@pricingPremiumBulletScenarios": {
+    "description": "Premium tier bullet describing scenario planning."
+  },
+  "pricingPremiumSubtitle": "Power features for serious payoff planning",
   "@pricingPremiumSubtitle": {
     "description": "Subtitle for the premium tier card."
   },
@@ -827,6 +831,96 @@
   "pricingTrustMessage": "Our trust model stays the same on Premium: no bank linking, no fuzzy auto-charges, and local export always stays available.",
   "@pricingTrustMessage": {
     "description": "Trust reassurance card copy on the pricing page."
+  },
+  "pricingPremiumLoadedSubtitle": "Choose monthly or yearly Premium",
+  "@pricingPremiumLoadedSubtitle": {
+    "description": "Subtitle for premium tier when App Store products are loaded."
+  },
+  "pricingMonthlyPlan": "Monthly",
+  "@pricingMonthlyPlan": {
+    "description": "Monthly premium subscription option title."
+  },
+  "pricingMonthlyPlanSubtitle": "Flexible access, renews monthly",
+  "@pricingMonthlyPlanSubtitle": {
+    "description": "Monthly premium subscription option subtitle."
+  },
+  "pricingYearlyPlan": "Yearly",
+  "@pricingYearlyPlan": {
+    "description": "Yearly premium subscription option title."
+  },
+  "pricingYearlyPlanSubtitle": "Best value, renews yearly",
+  "@pricingYearlyPlanSubtitle": {
+    "description": "Yearly premium subscription option subtitle."
+  },
+  "pricingPurchaseCta": "Upgrade for {price}",
+  "@pricingPurchaseCta": {
+    "description": "Primary purchase button label with App Store price.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "pricingRestorePurchases": "Restore purchases",
+  "@pricingRestorePurchases": {
+    "description": "Button label to restore App Store purchases."
+  },
+  "pricingPremiumActiveCta": "Premium is active",
+  "@pricingPremiumActiveCta": {
+    "description": "Disabled purchase CTA when premium is active."
+  },
+  "pricingLoadingProducts": "Loading App Store products...",
+  "@pricingLoadingProducts": {
+    "description": "Message while loading App Store products."
+  },
+  "pricingStoreUnavailableCta": "Store unavailable",
+  "@pricingStoreUnavailableCta": {
+    "description": "Disabled purchase CTA when store is unavailable."
+  },
+  "pricingStoreUnavailableMessage": "The App Store is unavailable right now. Check your connection or try again later.",
+  "@pricingStoreUnavailableMessage": {
+    "description": "Recoverable store unavailable message."
+  },
+  "pricingProductsMissingCta": "Products unavailable",
+  "@pricingProductsMissingCta": {
+    "description": "Disabled purchase CTA when subscription products are missing."
+  },
+  "pricingProductsMissingMessage": "Premium products are not available yet. Product metadata can take time to appear in sandbox.",
+  "@pricingProductsMissingMessage": {
+    "description": "Recoverable product missing message."
+  },
+  "pricingNoTrialNotice": "No free trial. Subscription renews through your Apple Account and can be managed in App Store settings.",
+  "@pricingNoTrialNotice": {
+    "description": "Subscription disclosure on the pricing page."
+  },
+  "pricingPremiumActiveTitle": "Premium active",
+  "@pricingPremiumActiveTitle": {
+    "description": "Title for active premium status card."
+  },
+  "pricingPremiumActiveBody": "Your Premium access is active.",
+  "@pricingPremiumActiveBody": {
+    "description": "Body for active premium without an expiry date."
+  },
+  "pricingPremiumActiveUntil": "Active until {date}",
+  "@pricingPremiumActiveUntil": {
+    "description": "Body for active premium with an expiry date.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "premiumLockedTitle": "Premium feature",
+  "@premiumLockedTitle": {
+    "description": "Title shown for locked premium entry points."
+  },
+  "premiumLockedBody": "Upgrade to Premium to use this power feature. Your core payoff plan stays free.",
+  "@premiumLockedBody": {
+    "description": "Body shown for locked premium entry points."
+  },
+  "premiumLockedAction": "View Premium",
+  "@premiumLockedAction": {
+    "description": "CTA shown for locked premium entry points."
   },
   "settingsCancel": "Cancel",
   "@settingsCancel": {
