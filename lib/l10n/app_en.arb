@@ -865,6 +865,18 @@
   "@pricingRestorePurchases": {
     "description": "Button label to restore App Store purchases."
   },
+  "pricingDebugClearPremium": "Debug: Clear local Premium",
+  "@pricingDebugClearPremium": {
+    "description": "Debug-only button label that clears cached Premium entitlement locally."
+  },
+  "pricingDebugClearPremiumMessage": "Premium cache cleared for debug.",
+  "@pricingDebugClearPremiumMessage": {
+    "description": "Debug-only confirmation after clearing cached Premium entitlement locally."
+  },
+  "pricingDebugManageSubscription": "Debug: Manage App Store subscription",
+  "@pricingDebugManageSubscription": {
+    "description": "Debug-only button label that opens the App Store subscription management sheet."
+  },
   "pricingPremiumActiveCta": "Premium is active",
   "@pricingPremiumActiveCta": {
     "description": "Disabled purchase CTA when premium is active."
@@ -910,6 +922,27 @@
       }
     }
   },
+  "pricingPurchaseSuccessTitle": "Premium is active",
+  "@pricingPurchaseSuccessTitle": {
+    "description": "Dialog title shown after a successful Premium purchase or restore."
+  },
+  "pricingPurchaseSuccessBody": "Your purchase was verified. Premium features are now unlocked.",
+  "@pricingPurchaseSuccessBody": {
+    "description": "Dialog body shown after successful Premium activation without an expiry date."
+  },
+  "pricingPurchaseSuccessBodyUntil": "Your purchase was verified. Premium is active until {date}.",
+  "@pricingPurchaseSuccessBodyUntil": {
+    "description": "Dialog body shown after successful Premium activation with an expiry date.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "pricingPurchaseSuccessAction": "Done",
+  "@pricingPurchaseSuccessAction": {
+    "description": "Dialog action label for successful Premium activation."
+  },
   "premiumLockedTitle": "Premium feature",
   "@premiumLockedTitle": {
     "description": "Title shown for locked premium entry points."
@@ -921,6 +954,30 @@
   "premiumLockedAction": "View Premium",
   "@premiumLockedAction": {
     "description": "CTA shown for locked premium entry points."
+  },
+  "settingsSectionSubscription": "SUBSCRIPTION",
+  "@settingsSectionSubscription": {
+    "description": "Settings section title for subscription and Premium status."
+  },
+  "settingsPremiumTitle": "Premium",
+  "@settingsPremiumTitle": {
+    "description": "Settings row title for Premium subscription."
+  },
+  "settingsPremiumSubtitleActive": "View your subscription status and restore purchases.",
+  "@settingsPremiumSubtitleActive": {
+    "description": "Settings Premium row subtitle when Premium is active."
+  },
+  "settingsPremiumSubtitleFree": "View plans or restore an App Store purchase.",
+  "@settingsPremiumSubtitleFree": {
+    "description": "Settings Premium row subtitle when Premium is not active."
+  },
+  "settingsPremiumStatusActive": "Active",
+  "@settingsPremiumStatusActive": {
+    "description": "Settings Premium row trailing status when Premium is active."
+  },
+  "settingsPremiumStatusFree": "Free",
+  "@settingsPremiumStatusFree": {
+    "description": "Settings Premium row trailing status when Premium is not active."
   },
   "settingsCancel": "Cancel",
   "@settingsCancel": {

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:debt_payoff_manager/core/constants/app_test_keys.dart';
 import 'package:debt_payoff_manager/core/di/injection.dart';
 import 'package:debt_payoff_manager/core/services/backup_file_picker.dart';
 import 'package:debt_payoff_manager/core/services/data_management_service.dart';
@@ -101,6 +102,8 @@ void main() {
     await tester.pump();
 
     expect(find.text('Settings'), findsOneWidget);
+    expect(find.byKey(AppTestKeys.settingsPremium), findsOneWidget);
+    expect(find.text('Free'), findsOneWidget);
     expect(settingsWatchCalls, 1);
     expect(planWatchCalls, 1);
 

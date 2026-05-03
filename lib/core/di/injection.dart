@@ -58,8 +58,8 @@ import '../../data/repositories/tracked_interest_rate_history_repository.dart';
 import '../../domain/repositories/interest_rate_history_repository.dart';
 import '../../features/progress/cubit/progress_cubit.dart';
 import '../../features/pricing/cubit/pricing_cubit.dart';
-import '../../features/pricing/data/firebase_entitlement_service.dart';
 import '../../features/pricing/data/in_app_purchase_service.dart';
+import '../../features/pricing/data/storekit_entitlement_service.dart';
 import '../../features/pricing/domain/entitlement_service.dart';
 import '../../features/pricing/domain/purchase_service.dart';
 import '../../features/scenarios/cubit/scenarios_cubit.dart';
@@ -264,11 +264,8 @@ void configureDependencies({
   getIt.registerLazySingleton<EntitlementService>(
     () =>
         entitlementService ??
-        FirebaseEntitlementService(
+        StoreKitEntitlementService(
           purchaseService: getIt<PurchaseService>(),
-          functions: getIt<FirebaseFunctions>(),
-          auth: getIt<FirebaseAuth>(),
-          initializer: getIt<FirebaseSyncInitializer>(),
           settingsRepository: getIt<SettingsRepositoryImpl>(),
         ),
   );

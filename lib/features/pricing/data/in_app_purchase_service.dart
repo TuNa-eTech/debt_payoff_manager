@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:in_app_purchase_storekit/store_kit_2_wrappers.dart';
 
 import '../domain/premium_models.dart';
 import '../domain/purchase_service.dart';
@@ -6,6 +11,10 @@ import '../domain/purchase_service.dart';
 class InAppPurchaseService implements PurchaseService {
   InAppPurchaseService({InAppPurchase? inAppPurchase})
     : _inAppPurchase = inAppPurchase ?? InAppPurchase.instance;
+
+  static const MethodChannel _subscriptionChannel = MethodChannel(
+    'debt_payoff_manager/subscriptions',
+  );
 
   final InAppPurchase _inAppPurchase;
   final Map<PremiumProductId, ProductDetails> _productsById = {};
@@ -44,6 +53,19 @@ class InAppPurchaseService implements PurchaseService {
   }
 
   @override
+  Future<List<PremiumPurchase>> queryPastPurchases() async {
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.iOS) {
+      return const <PremiumPurchase>[];
+    }
+
+    final transactions = await SK2Transaction.transactions();
+    return transactions
+        .map(_mapStoreKit2Transaction)
+        .whereType<PremiumPurchase>()
+        .toList(growable: false);
+  }
+
+  @override
   Future<void> buy(PremiumProduct product) async {
     final details = _productsById[product.id];
     if (details == null) {
@@ -59,6 +81,16 @@ class InAppPurchaseService implements PurchaseService {
 
   @override
   Future<void> restorePurchases() => _inAppPurchase.restorePurchases();
+
+  @override
+  Future<void> openSubscriptionManagement() async {
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.iOS) {
+      throw UnsupportedError(
+        'Subscription management is only available on iOS.',
+      );
+    }
+    await _subscriptionChannel.invokeMethod<void>('openManageSubscriptions');
+  }
 
   @override
   Future<void> completePurchase(PremiumPurchase purchase) async {
@@ -98,6 +130,33 @@ class InAppPurchaseService implements PurchaseService {
       rawDetails: details,
       completeRawPurchase: completeRawPurchase,
     );
+  }
+
+  PremiumPurchase? _mapStoreKit2Transaction(SK2Transaction transaction) {
+    final productId = PremiumProductId.fromStoreId(transaction.productId);
+    if (productId == null) return null;
+    return PremiumPurchase(
+      productId: productId,
+      status: PremiumPurchaseStatus.purchased,
+      pendingCompletePurchase: false,
+      transactionId: transaction.id,
+      localVerificationData: _storeKit2LocalVerificationData(transaction),
+      serverVerificationData: transaction.receiptData,
+      source: 'app_store',
+    );
+  }
+
+  String? _storeKit2LocalVerificationData(SK2Transaction transaction) {
+    final jsonRepresentation = transaction.jsonRepresentation;
+    if (jsonRepresentation != null && jsonRepresentation.trim().isNotEmpty) {
+      return jsonRepresentation;
+    }
+    final expirationDate = transaction.expirationDate;
+    if (expirationDate == null || expirationDate.trim().isEmpty) return null;
+    return jsonEncode(<String, Object?>{
+      'productId': transaction.productId,
+      'expiresDate': expirationDate,
+    });
   }
 
   PremiumPurchaseStatus _mapStatus(PurchaseStatus status) {

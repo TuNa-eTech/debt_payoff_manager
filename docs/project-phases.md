@@ -109,12 +109,13 @@ Legend:
 - **Phase 10** hiện **closed với accepted scope adjustments**:
   - Reminder scheduling, permission UX, report preview, PDF export, và generic system share flow đã nằm trong repo và test suite.
   - Các phần defer sang backlog từ closeout Phase 10: dedicated email-share flow, deeper PDF visual polish, và device-level notification QA evidence.
-- **Phase 11** hiện **code/server gate verified, iOS sandbox QA pending**:
-  - Pricing stub đã được thay bằng real `in_app_purchase` flow cho `premium_monthly` / `premium_yearly`, có purchase stream startup listener, restore, pending/error states, entitlement refresh, và local cache downgrade.
-  - Firebase `verifyPurchase` và `refreshEntitlement` đã deploy trên project `debt-payoff-manager-e6283`; Firestore rules đã deploy và chặn client tự promote Premium qua settings hoặc entitlement docs.
+- **Phase 11** hiện **code gate verified, iOS sandbox/TestFlight QA pending**:
+  - Pricing stub đã được thay bằng real `in_app_purchase` + StoreKit 2 flow cho `premium_monthly` / `premium_yearly`, có purchase stream startup listener, restore, pending/error states, entitlement refresh từ StoreKit 2 transaction history, local cache downgrade, và success dialog sau khi Premium active.
+  - IAP backend validation đã được gỡ khỏi active architecture theo quyết định StoreKit 2 iOS-first; Firebase Functions hiện chỉ còn phục vụ Partner Sharing, không còn là entitlement authority cho Premium.
+  - Settings đã có entry Premium để xem trạng thái/gói mua; debug iOS có nút mở App Store subscription management và nút clear Premium local cache để test downgrade UI.
   - Premium gates đã có ở Settings entry points, direct routes, và key premium actions cho scenarios, reports, và partner sharing; basic cloud sync vẫn Free.
-  - Validation hiện tại: Flutter analyze pass, Flutter tests 321/321 pass, Functions TypeScript build pass, Firebase MCP rules validation pass, Firestore rules emulator tests 18/18 pass.
-  - Chưa đóng Phase 11 release gate vì chưa có bằng chứng iOS sandbox/TestFlight với App Store products thật, cancel/expiry, interrupted/pending flow, restore after reinstall, và real Apple receipt validation.
+  - Validation hiện tại: targeted Flutter pricing/settings tests pass, targeted Flutter analyze pass, `git diff --check` pass. Native iOS StoreKit bridge vẫn cần build/device verification trong sandbox/TestFlight.
+  - Chưa đóng Phase 11 release gate vì chưa có bằng chứng iOS sandbox/TestFlight với App Store products thật, cancel/expiry, interrupted/pending flow, restore after reinstall, và subscription management sheet trên device.
 
 ---
 
@@ -648,19 +649,19 @@ Legend:
 
 **Duration:** 3-4 tuần · **Tracks:** E10 + D9
 
-**Status:** Code/server gate verified; iOS sandbox/TestFlight QA pending. Chi tiết implementation và audit evidence nằm ở [Phase 11 Monetization & IAP Plan](phase-11-monetization-iap-plan.md).
+**Status:** Code gate verified; iOS sandbox/TestFlight QA pending. Chi tiết implementation và audit evidence nằm ở [Phase 11 Monetization & IAP Plan](phase-11-monetization-iap-plan.md).
 
 **Accepted scope defaults**
 - Basic cloud sync stays Free as a trust feature.
 - Premium gates power features: scenarios, compare scenarios, advanced reports, partner sharing, custom milestones, and similar power-user tools.
-- Entitlement validation is Firebase server-authoritative.
+- Entitlement validation is StoreKit 2 local-authoritative for the iOS-first release; backend subscription validation is deferred unless cross-device/server-authoritative lifecycle monitoring becomes necessary.
 - Release gate is iOS-first; Android billing prep is allowed but Android production closeout is deferred until the current Gradle/Kotlin release blocker is resolved.
 
 ### Entry criteria
 - Phase 10 closed with accepted scope adjustments
 - Phase 8 Power Features and Phase 9 Partner Sharing stable enough to gate
 - App Store subscription products can be configured for monthly/yearly Premium
-- Firebase Functions and Firestore rules are ready for entitlement validation/protection
+- StoreKit 2 transaction history is available on iOS; Firebase Functions remain available for Partner Sharing only
 
 ### E10 — Engineering
 
@@ -669,9 +670,9 @@ Legend:
 - [x] Purchase stream listener started early in app lifecycle
 - [x] Product lookup for `premium_monthly` and `premium_yearly`
 - [x] Purchase flow (monthly/yearly subscription)
-- [x] Restore purchases through the same validation path
-- [x] Firebase Functions receipt validation
-- [x] Server-authoritative entitlement refresh across devices
+- [x] Restore purchases through the same StoreKit 2 entitlement path
+- [x] StoreKit 2 transaction validation from local transaction/JWS payload
+- [x] Entitlement refresh from StoreKit 2 transaction history
 - [x] Graceful downgrade (expired subscription → Free tier)
 
 **Feature §3.2 Premium Feature Gating**
@@ -689,14 +690,14 @@ Legend:
 
 - [ ] Pricing page redesign (value proposition, tier comparison)
 - [ ] Paywall UX (timing: post-aha, non-intrusive)
-- [ ] Upgrade celebration (welcome to Premium)
+- [x] Upgrade success dialog after Premium activation
 - [ ] Downgrade empathy (don't punish, keep door open)
 
 ### Exit gate (Phase 11)
 - [ ] Purchase flow tested on iOS sandbox/TestFlight
-- [x] Firebase server validation is the entitlement authority
+- [x] StoreKit 2 local entitlement flow is wired as the iOS-first authority
 - [x] Premium features correctly gated at UI entry points and direct route/action level
-- [ ] Restore purchases works reliably with real App Store sandbox receipts
+- [ ] Restore purchases works reliably with real App Store sandbox transactions
 - [x] Downgrade does not delete user data
 - [x] Android billing closeout explicitly tracked as deferred if Gradle/Kotlin blocker remains
 - [ ] **v1.5 Ship: Premium Tier (iOS-first)**

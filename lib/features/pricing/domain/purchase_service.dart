@@ -7,9 +7,13 @@ abstract interface class PurchaseService {
 
   Future<List<PremiumProduct>> queryPremiumProducts();
 
+  Future<List<PremiumPurchase>> queryPastPurchases();
+
   Future<void> buy(PremiumProduct product);
 
   Future<void> restorePurchases();
+
+  Future<void> openSubscriptionManagement();
 
   Future<void> completePurchase(PremiumPurchase purchase);
 }

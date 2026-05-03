@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -45,6 +48,14 @@ class _PricingView extends StatelessWidget {
           listener: (context, state) {
             if (state.errorMessage != null) {
               context.showSnackBar(state.errorMessage!, isError: true);
+            } else if (state.message == pricingPremiumActivatedMessage) {
+              unawaited(
+                _showPremiumActivatedDialog(context, state.premiumExpiresAt),
+              );
+            } else if (state.message == pricingDebugPremiumClearedMessage) {
+              context.showSnackBar(
+                context.l10n.pricingDebugClearPremiumMessage,
+              );
             } else if (state.message != null) {
               context.showSnackBar(state.message!);
             }
@@ -131,6 +142,32 @@ class _PricingView extends StatelessWidget {
                         ? context.read<PricingCubit>().restorePurchases
                         : null,
                   ),
+                  if (_showDebugSubscriptionActions()) ...[
+                    const SizedBox(height: AppDimensions.md),
+                    AppButton.outlined(
+                      key: AppTestKeys.pricingDebugManageSubscription,
+                      label: l10n.pricingDebugManageSubscription,
+                      fullWidth: true,
+                      icon: LucideIcons.externalLink,
+                      onPressed: state.isPurchasing
+                          ? null
+                          : context
+                                .read<PricingCubit>()
+                                .openSubscriptionManagement,
+                    ),
+                  ],
+                  if (kDebugMode && state.isPremiumActive) ...[
+                    const SizedBox(height: AppDimensions.md),
+                    AppButton.error(
+                      key: AppTestKeys.pricingDebugClearPremium,
+                      label: l10n.pricingDebugClearPremium,
+                      fullWidth: true,
+                      icon: LucideIcons.bug,
+                      onPressed: state.isPurchasing
+                          ? null
+                          : context.read<PricingCubit>().debugClearPremiumCache,
+                    ),
+                  ],
                   const SizedBox(height: AppDimensions.md),
                   SizedBox(
                     key: AppTestKeys.pricingContinueFree,
@@ -163,6 +200,10 @@ class _PricingView extends StatelessWidget {
         !state.isPremiumActive;
   }
 
+  bool _showDebugSubscriptionActions() {
+    return kDebugMode && defaultTargetPlatform == TargetPlatform.iOS;
+  }
+
   String _purchaseLabel(BuildContext context, PricingState state) {
     final l10n = context.l10n;
     if (state.isPremiumActive) return l10n.pricingPremiumActiveCta;
@@ -179,6 +220,38 @@ class _PricingView extends StatelessWidget {
     if (!state.isStoreAvailable) return l10n.pricingStoreUnavailableMessage;
     if (state.products.isEmpty) return l10n.pricingProductsMissingMessage;
     return l10n.pricingNoTrialNotice;
+  }
+
+  Future<void> _showPremiumActivatedDialog(
+    BuildContext context,
+    DateTime? expiresAt,
+  ) {
+    final l10n = context.l10n;
+    final body = expiresAt == null
+        ? l10n.pricingPurchaseSuccessBody
+        : l10n.pricingPurchaseSuccessBodyUntil(
+            expiresAt.toLocal().toString().split(' ').first,
+          );
+
+    return showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.mdSurface,
+        icon: const Icon(
+          LucideIcons.badgeCheck,
+          color: AppColors.mdPrimary,
+          size: AppDimensions.iconLg,
+        ),
+        title: Text(l10n.pricingPurchaseSuccessTitle),
+        content: Text(body),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(l10n.pricingPurchaseSuccessAction),
+          ),
+        ],
+      ),
+    );
   }
 }
 

@@ -88,6 +88,7 @@ class AppTestKeys {
   static const settingsReportsPreview = ValueKey<String>(
     'settings:reports-preview',
   );
+  static const settingsPremium = ValueKey<String>('settings:premium');
   static const settingsLocale = ValueKey<String>('settings:locale');
   static const settingsLocaleOptionEnglish = ValueKey<String>(
     'settings:locale-option-english',
@@ -137,6 +138,12 @@ class AppTestKeys {
   );
   static const pricingRestorePurchases = ValueKey<String>(
     'pricing:restore-purchases',
+  );
+  static const pricingDebugClearPremium = ValueKey<String>(
+    'pricing:debug-clear-premium',
+  );
+  static const pricingDebugManageSubscription = ValueKey<String>(
+    'pricing:debug-manage-subscription',
   );
   static const settingsDataExportCsv = ValueKey<String>(
     'settings:data-export-csv',

@@ -8,6 +8,9 @@ import '../domain/premium_models.dart';
 import '../domain/purchase_service.dart';
 import 'pricing_state.dart';
 
+const pricingPremiumActivatedMessage = 'pricing.premiumActivated';
+const pricingDebugPremiumClearedMessage = 'pricing.debugPremiumCleared';
+
 class PricingCubit extends Cubit<PricingState> {
   PricingCubit({
     required PurchaseService purchaseService,
@@ -72,7 +75,9 @@ class PricingCubit extends Cubit<PricingState> {
       emit(state.copyWith(errorMessage: 'Premium products are not available.'));
       return;
     }
-    emit(state.copyWith(isPurchasing: true, clearError: true));
+    emit(
+      state.copyWith(isPurchasing: true, clearError: true, clearMessage: true),
+    );
     try {
       await _purchaseService.buy(product);
     } catch (error) {
@@ -83,7 +88,9 @@ class PricingCubit extends Cubit<PricingState> {
   }
 
   Future<void> restorePurchases() async {
-    emit(state.copyWith(isPurchasing: true, clearError: true));
+    emit(
+      state.copyWith(isPurchasing: true, clearError: true, clearMessage: true),
+    );
     try {
       await _purchaseService.restorePurchases();
     } catch (error) {
@@ -93,13 +100,51 @@ class PricingCubit extends Cubit<PricingState> {
     }
   }
 
+  Future<void> openSubscriptionManagement() async {
+    emit(state.copyWith(clearError: true, clearMessage: true));
+    try {
+      await _purchaseService.openSubscriptionManagement();
+    } catch (error) {
+      emit(state.copyWith(errorMessage: _cleanError(error)));
+    }
+  }
+
   Future<void> refreshEntitlement() async {
     await _entitlementService.refreshEntitlement();
   }
 
+  Future<void> debugClearPremiumCache() async {
+    var debugEnabled = false;
+    assert(() {
+      debugEnabled = true;
+      return true;
+    }());
+    if (!debugEnabled) return;
+
+    final settings = await _settingsRepository.getSettings();
+    await _settingsRepository.updateSettings(
+      settings.copyWith(isPremium: false, clearPremiumExpiresAt: true),
+    );
+    emit(
+      state.copyWith(
+        isPurchasing: false,
+        isPremiumActive: false,
+        clearPremiumExpiresAt: true,
+        message: pricingDebugPremiumClearedMessage,
+        clearError: true,
+      ),
+    );
+  }
+
   void _onEvent(PremiumEntitlementEvent event) {
     if (event.isPending) {
-      emit(state.copyWith(isPurchasing: true, clearError: true));
+      emit(
+        state.copyWith(
+          isPurchasing: true,
+          clearError: true,
+          clearMessage: true,
+        ),
+      );
       return;
     }
     if (event.isError) {
@@ -107,6 +152,7 @@ class PricingCubit extends Cubit<PricingState> {
         state.copyWith(
           isPurchasing: false,
           errorMessage: event.message ?? 'Purchase could not be completed.',
+          clearMessage: true,
         ),
       );
       return;
@@ -119,7 +165,7 @@ class PricingCubit extends Cubit<PricingState> {
         isPremiumActive: snapshot.isActive,
         premiumExpiresAt: snapshot.expiresAt,
         clearPremiumExpiresAt: snapshot.expiresAt == null,
-        message: snapshot.isActive ? 'Premium is active.' : null,
+        message: snapshot.isActive ? pricingPremiumActivatedMessage : null,
       ),
     );
   }

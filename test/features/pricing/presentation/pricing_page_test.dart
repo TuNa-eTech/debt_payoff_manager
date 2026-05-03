@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:debt_payoff_manager/core/constants/app_test_keys.dart';
@@ -73,20 +74,113 @@ void main() {
       expect(button.onPressed, isNull);
       expect(purchaseService.boughtProducts, isEmpty);
     });
+
+    testWidgets('debug clear premium button resets cached premium', (
+      tester,
+    ) async {
+      final purchaseService = _FakePurchaseService();
+      final settingsRepository = _InMemorySettingsRepository(
+        makeRepoSettings(
+          isPremium: true,
+          premiumExpiresAt: DateTime.now().toUtc().add(
+            const Duration(days: 30),
+          ),
+        ),
+      );
+      await _pumpPricingPage(
+        tester,
+        purchaseService: purchaseService,
+        settingsRepository: settingsRepository,
+      );
+
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.byKey(AppTestKeys.pricingDebugClearPremium),
+        300,
+      );
+      expect(find.text('Debug: Clear local Premium'), findsOneWidget);
+      await tester.tap(find.byKey(AppTestKeys.pricingDebugClearPremium));
+      await tester.pump();
+
+      expect(settingsRepository._settings.isPremium, isFalse);
+      expect(settingsRepository._settings.premiumExpiresAt, isNull);
+    });
+
+    testWidgets('debug manage subscription button opens App Store sheet', (
+      tester,
+    ) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      try {
+        final purchaseService = _FakePurchaseService();
+        await _pumpPricingPage(tester, purchaseService: purchaseService);
+
+        await tester.pumpAndSettle();
+        await tester.scrollUntilVisible(
+          find.byKey(AppTestKeys.pricingDebugManageSubscription),
+          300,
+        );
+        await tester.ensureVisible(
+          find.byKey(AppTestKeys.pricingDebugManageSubscription),
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(
+          find.byKey(AppTestKeys.pricingDebugManageSubscription),
+        );
+        await tester.pump();
+
+        expect(purchaseService.manageSubscriptionCount, 1);
+      } finally {
+        debugDefaultTargetPlatformOverride = null;
+      }
+    });
+
+    testWidgets('shows success dialog when premium becomes active', (
+      tester,
+    ) async {
+      final purchaseService = _FakePurchaseService();
+      final entitlementService = _FakeEntitlementService();
+      await _pumpPricingPage(
+        tester,
+        purchaseService: purchaseService,
+        entitlementService: entitlementService,
+      );
+
+      await tester.pumpAndSettle();
+      entitlementService.addEvent(
+        PremiumEntitlementEvent.resolved(
+          EntitlementSnapshot(
+            status: EntitlementStatus.active,
+            expiresAt: DateTime.utc(2030, 1, 15, 12),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text(
+          'Your purchase was verified. Premium is active until 2030-01-15.',
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('Done'), findsOneWidget);
+    });
   });
 }
 
 Future<void> _pumpPricingPage(
   WidgetTester tester, {
   required _FakePurchaseService purchaseService,
+  _InMemorySettingsRepository? settingsRepository,
+  _FakeEntitlementService? entitlementService,
 }) async {
   await getIt.reset();
-  final settingsRepository = _InMemorySettingsRepository(makeRepoSettings());
-  final entitlementService = _FakeEntitlementService();
+  final repository =
+      settingsRepository ?? _InMemorySettingsRepository(makeRepoSettings());
+  final entitlement = entitlementService ?? _FakeEntitlementService();
   getIt
     ..registerSingleton<PurchaseService>(purchaseService)
-    ..registerSingleton<EntitlementService>(entitlementService)
-    ..registerSingleton<SettingsRepository>(settingsRepository)
+    ..registerSingleton<EntitlementService>(entitlement)
+    ..registerSingleton<SettingsRepository>(repository)
     ..registerFactory<PricingCubit>(
       () => PricingCubit(
         purchaseService: getIt<PurchaseService>(),
@@ -96,8 +190,8 @@ Future<void> _pumpPricingPage(
     );
   addTearDown(() async {
     await getIt.reset();
-    await settingsRepository.dispose();
-    await entitlementService.dispose();
+    await repository.dispose();
+    await entitlement.dispose();
   });
 
   await tester.pumpWidget(
@@ -116,6 +210,7 @@ class _FakePurchaseService implements PurchaseService {
   final bool _isAvailable;
   final boughtProducts = <PremiumProductId>[];
   var restoreCount = 0;
+  var manageSubscriptionCount = 0;
   final _controller = StreamController<PremiumPurchase>.broadcast();
 
   @override
@@ -155,14 +250,24 @@ class _FakePurchaseService implements PurchaseService {
   }
 
   @override
+  Future<List<PremiumPurchase>> queryPastPurchases() async => const [];
+
+  @override
   Future<void> restorePurchases() async {
     restoreCount += 1;
+  }
+
+  @override
+  Future<void> openSubscriptionManagement() async {
+    manageSubscriptionCount += 1;
   }
 }
 
 class _FakeEntitlementService implements EntitlementService {
   _FakeEntitlementService();
   final _controller = StreamController<PremiumEntitlementEvent>.broadcast();
+
+  void addEvent(PremiumEntitlementEvent event) => _controller.add(event);
 
   @override
   Future<void> dispose() => _controller.close();

@@ -1148,6 +1148,24 @@ abstract class AppLocalizations {
   /// **'Restore purchases'**
   String get pricingRestorePurchases;
 
+  /// Debug-only button label that clears cached Premium entitlement locally.
+  ///
+  /// In en, this message translates to:
+  /// **'Debug: Clear local Premium'**
+  String get pricingDebugClearPremium;
+
+  /// Debug-only confirmation after clearing cached Premium entitlement locally.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium cache cleared for debug.'**
+  String get pricingDebugClearPremiumMessage;
+
+  /// Debug-only button label that opens the App Store subscription management sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Debug: Manage App Store subscription'**
+  String get pricingDebugManageSubscription;
+
   /// Disabled purchase CTA when premium is active.
   ///
   /// In en, this message translates to:
@@ -1208,6 +1226,30 @@ abstract class AppLocalizations {
   /// **'Active until {date}'**
   String pricingPremiumActiveUntil(String date);
 
+  /// Dialog title shown after a successful Premium purchase or restore.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium is active'**
+  String get pricingPurchaseSuccessTitle;
+
+  /// Dialog body shown after successful Premium activation without an expiry date.
+  ///
+  /// In en, this message translates to:
+  /// **'Your purchase was verified. Premium features are now unlocked.'**
+  String get pricingPurchaseSuccessBody;
+
+  /// Dialog body shown after successful Premium activation with an expiry date.
+  ///
+  /// In en, this message translates to:
+  /// **'Your purchase was verified. Premium is active until {date}.'**
+  String pricingPurchaseSuccessBodyUntil(String date);
+
+  /// Dialog action label for successful Premium activation.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get pricingPurchaseSuccessAction;
+
   /// Title shown for locked premium entry points.
   ///
   /// In en, this message translates to:
@@ -1225,6 +1267,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View Premium'**
   String get premiumLockedAction;
+
+  /// Settings section title for subscription and Premium status.
+  ///
+  /// In en, this message translates to:
+  /// **'SUBSCRIPTION'**
+  String get settingsSectionSubscription;
+
+  /// Settings row title for Premium subscription.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get settingsPremiumTitle;
+
+  /// Settings Premium row subtitle when Premium is active.
+  ///
+  /// In en, this message translates to:
+  /// **'View your subscription status and restore purchases.'**
+  String get settingsPremiumSubtitleActive;
+
+  /// Settings Premium row subtitle when Premium is not active.
+  ///
+  /// In en, this message translates to:
+  /// **'View plans or restore an App Store purchase.'**
+  String get settingsPremiumSubtitleFree;
+
+  /// Settings Premium row trailing status when Premium is active.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get settingsPremiumStatusActive;
+
+  /// Settings Premium row trailing status when Premium is not active.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get settingsPremiumStatusFree;
 
   /// Generic cancel action in settings dialogs.
   ///

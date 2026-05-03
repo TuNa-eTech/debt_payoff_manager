@@ -185,6 +185,23 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 const SizedBox(height: AppDimensions.md),
                 _buildSection(
+                  title: l10n.settingsSectionSubscription,
+                  children: [
+                    _buildListTile(
+                      key: AppTestKeys.settingsPremium,
+                      title: l10n.settingsPremiumTitle,
+                      subtitle: isPremiumActive
+                          ? l10n.settingsPremiumSubtitleActive
+                          : l10n.settingsPremiumSubtitleFree,
+                      trailingText: isPremiumActive
+                          ? l10n.settingsPremiumStatusActive
+                          : l10n.settingsPremiumStatusFree,
+                      onTap: () => context.push(AppRoutes.pricing),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppDimensions.md),
+                _buildSection(
                   title: l10n.settingsSectionOptions,
                   children: [
                     _buildListTile(

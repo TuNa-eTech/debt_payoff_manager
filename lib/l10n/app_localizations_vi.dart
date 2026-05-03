@@ -639,6 +639,17 @@ class AppLocalizationsVi extends AppLocalizations {
   String get pricingRestorePurchases => 'Khôi phục giao dịch';
 
   @override
+  String get pricingDebugClearPremium => 'Debug: Xóa Premium local';
+
+  @override
+  String get pricingDebugClearPremiumMessage =>
+      'Đã xóa Premium local cho debug.';
+
+  @override
+  String get pricingDebugManageSubscription =>
+      'Debug: Quản lý subscription App Store';
+
+  @override
   String get pricingPremiumActiveCta => 'Premium đang hoạt động';
 
   @override
@@ -675,6 +686,21 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get pricingPurchaseSuccessTitle => 'Premium đã kích hoạt';
+
+  @override
+  String get pricingPurchaseSuccessBody =>
+      'Giao dịch đã được xác nhận. Các tính năng Premium hiện đã được mở khóa.';
+
+  @override
+  String pricingPurchaseSuccessBodyUntil(String date) {
+    return 'Giao dịch đã được xác nhận. Premium hoạt động đến $date.';
+  }
+
+  @override
+  String get pricingPurchaseSuccessAction => 'Xong';
+
+  @override
   String get premiumLockedTitle => 'Tính năng Premium';
 
   @override
@@ -683,6 +709,26 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get premiumLockedAction => 'Xem Premium';
+
+  @override
+  String get settingsSectionSubscription => 'GÓI DỊCH VỤ';
+
+  @override
+  String get settingsPremiumTitle => 'Premium';
+
+  @override
+  String get settingsPremiumSubtitleActive =>
+      'Xem trạng thái gói và khôi phục giao dịch.';
+
+  @override
+  String get settingsPremiumSubtitleFree =>
+      'Xem gói Premium hoặc khôi phục giao dịch App Store.';
+
+  @override
+  String get settingsPremiumStatusActive => 'Đang hoạt động';
+
+  @override
+  String get settingsPremiumStatusFree => 'Free';
 
   @override
   String get settingsCancel => 'Hủy';

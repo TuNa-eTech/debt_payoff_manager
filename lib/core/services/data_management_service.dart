@@ -260,6 +260,8 @@ class DataManagementService {
     final settings = await (_db.select(
       _db.userSettingsTable,
     )..where((row) => row.id.equals('singleton'))).getSingleOrNull();
+    final preservedIsPremium = settings?.isPremium ?? false;
+    final preservedPremiumExpiresAt = settings?.premiumExpiresAt;
 
     if ((settings?.trustLevel ?? 0) > 0) {
       throw StateError(
@@ -274,7 +276,11 @@ class DataManagementService {
 
     await _db.transaction(() async {
       await _db.clearAllUserData();
-      await _restoreUserSettings(parsed.rowsByFileStem['user_settings']!);
+      await _restoreUserSettings(
+        parsed.rowsByFileStem['user_settings']!,
+        preservedIsPremium: preservedIsPremium,
+        preservedPremiumExpiresAt: preservedPremiumExpiresAt,
+      );
       await _restorePlans(parsed.rowsByFileStem['plans']!);
       await _restoreDebts(parsed.rowsByFileStem['debts']!);
       await _restorePayments(parsed.rowsByFileStem['payments']!);
@@ -797,7 +803,11 @@ class DataManagementService {
     }
   }
 
-  Future<void> _restoreUserSettings(List<Map<String, dynamic>> rows) async {
+  Future<void> _restoreUserSettings(
+    List<Map<String, dynamic>> rows, {
+    required bool preservedIsPremium,
+    required DateTime? preservedPremiumExpiresAt,
+  }) async {
     final row = rows.single;
 
     await _db
@@ -908,22 +918,8 @@ class DataManagementService {
                 fileName: 'user_settings.json',
               ),
             ),
-            isPremium: Value(
-              _readRequiredBool(
-                row,
-                'is_premium',
-                tableName: 'user_settings',
-                fileName: 'user_settings.json',
-              ),
-            ),
-            premiumExpiresAt: Value(
-              _readOptionalUtcDateTime(
-                row,
-                'premium_expires_at',
-                tableName: 'user_settings',
-                fileName: 'user_settings.json',
-              ),
-            ),
+            isPremium: Value(preservedIsPremium),
+            premiumExpiresAt: Value(preservedPremiumExpiresAt),
             createdAt: Value(
               _readUtcDateTime(
                 row,

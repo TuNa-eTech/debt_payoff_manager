@@ -1,6 +1,6 @@
 # Phase 11 Monetization & IAP Plan
 
-**Status:** Code/server gate verified; iOS sandbox/TestFlight QA pending
+**Status:** Code gate verified; iOS sandbox/TestFlight QA pending
 
 **Target release:** v1.5 Premium Tier
 
@@ -13,36 +13,35 @@ Phase 11 replaces the Free vs Premium stub with real subscription purchasing and
 Accepted product decisions:
 
 - **Tier policy:** Power-only Premium.
-- **Validation:** Firebase server validation is the source of truth.
+- **Validation:** StoreKit 2 local entitlement validation is the source of truth for the iOS-first release.
 - **Platform scope:** iOS-first release gate.
+- **Backend scope:** Firebase IAP receipt validation is removed from the active flow; server-side subscription lifecycle monitoring is deferred.
 
 ## Implementation Audit — May 3, 2026
 
-Repo/server implementation is complete enough for iOS sandbox QA:
+Repo implementation is complete enough for iOS sandbox QA:
 
-- `in_app_purchase` is wired through `PurchaseService` / `InAppPurchaseService`.
-- `EntitlementService` subscribes to purchase updates during app startup, validates purchases through Firebase Functions, completes store purchases, refreshes entitlement, and caches entitlement locally in `UserSettings`.
-- `PricingPage` now loads App Store products, supports monthly/yearly selection, purchase, restore, continue-free, loading, unavailable-store, missing-product, active-premium, and trust states.
+- `in_app_purchase` and `in_app_purchase_storekit` are wired through `PurchaseService` / `InAppPurchaseService`.
+- `EntitlementService` now uses StoreKit 2 transactions/JWS payloads locally, subscribes to purchase updates during app startup, completes store purchases, refreshes entitlement from transaction history, and caches entitlement locally in `UserSettings`.
+- `PricingPage` now loads App Store products, supports monthly/yearly selection, purchase, restore, continue-free, loading, unavailable-store, missing-product, active-premium, debug subscription management, debug local premium clear, trust states, and a success dialog after Premium activation.
 - Premium Settings entry points, direct premium routes, and key premium actions are gated for scenarios, compare scenarios, reports, and partner sharing.
-- Firebase callable functions `verifyPurchase` and `refreshEntitlement` are deployed to `debt-payoff-manager-e6283`.
-- `verifyPurchase` is bound to `APP_STORE_SHARED_SECRET`, rejects Android for the iOS-first release, verifies Apple receipts, and writes `users/{uid}/entitlements/premium`.
-- Firestore rules are deployed and keep entitlement docs server-owned while blocking client-side promotion through synced settings.
-- Local secret handling was corrected so `APP_STORE_SHARED_SECRET` lives in Secret Manager and local `.secret.local`, not in deploy-loaded `.env`.
+- Settings has a Premium row so users can find the current subscription status and restore/manage their purchase path.
+- The debug iOS flow includes an App Store subscription management button backed by native StoreKit `AppStore.showManageSubscriptions(in:)`; `in_app_purchase` does not expose that sheet directly.
+- Firebase callable functions for IAP are no longer part of the active architecture. The deployed Functions code now only contains Partner Sharing callables.
 
 Verification evidence from this audit:
 
-- `fvm flutter analyze`: pass, no issues found.
-- `fvm flutter test`: pass, 321/321 tests.
-- `functions` TypeScript build: pass.
-- Firebase MCP `firebase_validate_security_rules`: pass.
-- Firestore rules emulator suite: pass, 18/18 tests.
-- Firebase deployed functions list includes `verifyPurchase` and `refreshEntitlement` as callable Node.js 22 functions in `us-central1`.
+- `rtk fvm flutter test test/features/pricing/cubit/pricing_cubit_test.dart test/features/pricing/presentation/pricing_page_test.dart`: pass.
+- `rtk fvm flutter test test/features/pricing/cubit/pricing_cubit_test.dart test/features/pricing/presentation/pricing_page_test.dart test/features/pricing/data/storekit_entitlement_service_test.dart test/features/settings/presentation/settings_page_test.dart`: pass.
+- `rtk fvm flutter analyze lib/features/pricing test/features/pricing`: pass, no issues found.
+- `rtk fvm flutter analyze lib/features/pricing lib/features/settings lib/core/constants/app_test_keys.dart test/features/pricing test/features/settings/presentation/settings_page_test.dart test/helpers/test_app_harness.dart`: pass, no issues found.
+- `rtk git diff --check`: pass.
 
-Remaining release blockers are outside the current repo/server code gate:
+Remaining release blockers are outside the current repo code gate:
 
 - Real App Store product metadata must be visible to sandbox/TestFlight for `premium_monthly` and `premium_yearly`.
 - iOS sandbox/TestFlight purchase, restore, cancel/expiry, interrupted/pending flow, and downgrade must be manually verified.
-- No real Apple sandbox receipt has been exercised against `verifyPurchase` yet.
+- Native iOS StoreKit subscription-management bridge must be verified on simulator/device build and real sandbox account.
 - Android billing closeout remains deferred.
 
 ## Entry Criteria
@@ -50,7 +49,7 @@ Remaining release blockers are outside the current repo/server code gate:
 - Phase 10 is closed with accepted scope adjustments.
 - Phase 8 power features and Phase 9 partner sharing are stable enough to gate.
 - App Store product setup can be completed for `premium_monthly` and `premium_yearly`.
-- Firebase Functions and Firestore rules are available for entitlement validation and protection.
+- StoreKit 2 transaction history is available on iOS; Firebase Functions remain available for Partner Sharing only.
 
 ## Tier Policy
 
@@ -75,38 +74,35 @@ Downgrade rule: expired users move back to Free without deleting data. Premium-o
 
 ### Flutter IAP layer
 
-- Add `in_app_purchase`.
+- Add `in_app_purchase` and `in_app_purchase_storekit`.
 - Subscribe to `InAppPurchase.instance.purchaseStream` early in app startup and keep one active listener.
 - Query store products for:
   - `premium_monthly`
   - `premium_yearly`
 - Handle store unavailable, product not found, pending purchase, purchase error, purchased, restored, and pending completion states.
+- Read current StoreKit 2 transactions with `SK2Transaction.transactions()` for entitlement refresh and restore reconciliation.
+- Decode StoreKit 2 local transaction JSON/JWS payloads to validate product ID, expiration, and revocation locally.
 - Always call `completePurchase` when `pendingCompletePurchase` is true after local processing has finished.
+- Use a small native iOS MethodChannel only for the debug subscription-management sheet because the Flutter IAP plugin does not expose `AppStore.showManageSubscriptions(in:)`.
 
 ### App services
 
 - Add `PurchaseService` for store availability, product lookup, start purchase, restore purchases, and purchase stream translation into app states.
-- Add `EntitlementService` for entitlement refresh, validation calls, local cache updates, expiry checks, and downgrade handling.
+- Add `EntitlementService` for StoreKit 2 entitlement refresh, local validation, local cache updates, expiry checks, and downgrade handling.
 - Add `PremiumFeature` enum for gateable features:
   - `scenarios`
   - `compareScenarios`
   - `advancedReports`
   - `partnerSharing`
   - `customMilestones`
-- Keep `UserSettings.isPremium` and `UserSettings.premiumExpiresAt` as local cache fields only; they are not the authority.
+- Keep `UserSettings.isPremium` and `UserSettings.premiumExpiresAt` as local cache fields only; StoreKit 2 transactions are the authority.
 
 ### Firebase backend
 
-- Add callable `verifyPurchase`.
-  - Requires Firebase Auth.
-  - Accepts platform, product ID, purchase/transaction ID, and server verification data.
-  - Verifies with the relevant store backend.
-  - Writes server entitlement through Admin SDK.
-- Add callable `refreshEntitlement`.
-  - Requires Firebase Auth.
-  - Returns the current entitlement status for the signed-in user.
-- Store entitlement in a server-owned document or protected fields that normal clients cannot promote.
-- Update Firestore rules so clients cannot directly grant Premium by writing `isPremium` or `premiumExpiresAt`.
+- No Firebase callable is required for the active iOS-first IAP flow.
+- Existing Cloud Functions remain for Partner Sharing only.
+- Do not reintroduce `APP_STORE_SHARED_SECRET` or receipt-validation Functions unless the product explicitly decides to support server-authoritative cross-device subscription lifecycle monitoring.
+- Firestore remains relevant for sync and partner sharing, but Premium entitlement is local StoreKit 2 state for this release.
 
 ## Implementation Milestones
 
@@ -125,13 +121,17 @@ Downgrade rule: expired users move back to Free without deleting data. Premium-o
 - [x] Add purchase, restore, continue-free, loading, error, and product-not-found states.
 - [x] Preserve trust copy: no bank linking, local export stays available, no aggressive paywall.
 - [x] Add upgrade success and restore success feedback.
+- [x] Add Settings Premium entry point.
+- [x] Add debug-only iOS subscription-management button.
+- [x] Add debug-only local Premium cache clear button for downgrade UI testing.
 
-### Milestone 3 — Server Validation
+### Milestone 3 — StoreKit 2 Entitlement
 
-- [x] Implement Firebase Functions callable contracts.
-- [x] Add protected entitlement storage.
-- [x] Add Firestore rules tests for client-side premium spoofing.
-- [ ] Add Functions tests for unauthenticated, invalid product, invalid platform, invalid receipt, valid purchase, restore/refresh, and expiry.
+- [x] Implement StoreKit 2 transaction-history refresh.
+- [x] Validate product ID, expiration, and revocation locally from StoreKit 2 transaction payloads.
+- [x] Gracefully fall back to cached local entitlement if StoreKit transaction refresh fails.
+- [x] Remove obsolete Firebase entitlement service from Flutter.
+- [x] Remove obsolete IAP receipt-validation backend from active Functions code.
 
 ### Milestone 4 — Premium Gating
 
@@ -145,15 +145,16 @@ Downgrade rule: expired users move back to Free without deleting data. Premium-o
 - [x] Refresh entitlement on app start, pricing screen entry, and restore completion.
 - [x] Expired entitlement switches to Free gracefully.
 - [x] Existing Premium-created data remains available in read-only or limited mode where practical.
-- [x] Restore purchases validates through the same server path as a new purchase.
+- [x] Restore purchases validates through the same StoreKit 2 local entitlement path as a new purchase.
 
 ### Milestone 6 — iOS Release Readiness
 
-- [ ] Configure App Store subscriptions and sandbox users.
+- [x] Configure App Store IAP key reference for setup notes.
+- [ ] Confirm App Store subscriptions are visible to sandbox/TestFlight users.
 - [ ] Test monthly/yearly purchase, cancel, restore after reinstall, pending/interrupted flow, renewal/expiry sandbox behavior, and downgrade.
 - [x] Prepare Android product IDs and billing notes, but keep Android closeout deferred until the current Gradle/Kotlin release blocker is resolved.
 
-## App Store / Firebase Setup Required
+## App Store Setup Required
 
 These are outside the repo and must be completed before real iOS sandbox/TestFlight validation:
 
@@ -175,13 +176,8 @@ These are outside the repo and must be completed before real iOS sandbox/TestFli
 6. Create at least two Sandbox Apple Accounts:
    - one clean purchase tester
    - one interrupted/expiry tester
-7. Enable Firebase Auth Anonymous provider for purchase validation sessions.
-8. Configure Firebase Functions secret/env:
-   - `APP_STORE_SHARED_SECRET`
-9. Deploy Functions and Firestore rules before sandbox QA:
-   - `verifyPurchase`
-   - `refreshEntitlement`
-   - protected `users/{uid}/entitlements/premium`
+7. Keep Firebase Functions focused on Partner Sharing for the active release.
+8. Do not deploy or depend on IAP receipt-validation Functions for StoreKit 2 sandbox QA.
 
 ## Test Matrix
 
@@ -190,8 +186,8 @@ These are outside the repo and must be completed before real iOS sandbox/TestFli
 - Store unavailable disables purchase CTA and explains the issue.
 - Product not found shows a recoverable error.
 - Pending purchase shows pending state without unlocking Premium.
-- Purchased/restored purchase calls server validation.
-- Invalid validation does not unlock Premium.
+- Purchased/restored purchase updates entitlement through StoreKit 2 local validation.
+- Invalid/malformed local transaction payload does not unlock Premium.
 - Active entitlement unlocks Premium features.
 - Expired entitlement downgrades to Free without deleting data.
 
@@ -202,32 +198,33 @@ These are outside the repo and must be completed before real iOS sandbox/TestFli
 - Restore button calls restore flow and handles restored purchases through validation.
 - Free users see locked premium entry points.
 - Premium users enter gated screens normally.
+- Successful Premium activation shows a confirmation dialog.
+- Settings exposes Premium status and the subscription entry point.
 
 ### Firebase tests
 
-- Firestore rules block direct client writes that promote Premium.
-- Firestore rules allow normal settings writes that do not alter protected entitlement state.
-- `verifyPurchase` rejects unauthenticated and malformed requests.
-- `refreshEntitlement` returns the correct active/expired state.
+- Partner Sharing Functions and Firestore rules remain covered by the Phase 9 validation path.
+- There is no active IAP Firebase callable to test after the StoreKit 2 migration.
 
 ### Manual QA
 
 - iOS sandbox purchase monthly and yearly.
 - iOS restore after reinstall/sign-in.
 - iOS cancellation/expiry in sandbox.
+- iOS App Store subscription management sheet opens from debug flow.
 - Regression pass: onboarding, cloud backup, scenario list, report preview/export, partner sharing, and settings data controls.
 
 ## Exit Gate
 
 - Real IAP purchase and restore flow tested on iOS sandbox/TestFlight.
-- Firebase server validation is the entitlement authority.
+- StoreKit 2 local entitlement validation is the iOS-first authority.
 - Premium gates work at UI entry points and direct route/action level.
 - Free users retain local-first core value and basic cloud sync.
 - Downgrade does not delete user data.
 - `fvm flutter analyze` passes.
 - `fvm flutter test` passes.
 - Firestore rules tests pass.
-- Functions build/tests pass.
+- Functions build/tests pass for non-IAP callable scope when Functions code changes.
 - **v1.5 Premium Tier is ready for iOS-first release.**
 
 ## Deferred Backlog
@@ -235,4 +232,4 @@ These are outside the repo and must be completed before real iOS sandbox/TestFli
 - Android production billing closeout after Gradle/Kotlin release blocker is resolved.
 - Deeper Premium PDF visual polish if not required for first v1.5 acceptance.
 - Dedicated email-share flow from Phase 10 backlog.
-- Advanced server-side subscription lifecycle monitoring beyond the initial validation/refresh path.
+- Advanced server-side subscription lifecycle monitoring, if later needed for cross-device entitlement authority or analytics.

@@ -369,7 +369,7 @@ class FirestoreSettingsSerializer {
         'onboardingStep': row.onboardingStep,
         'onboardingCompleted': row.onboardingCompleted,
         'onboardingCompletedAt': row.onboardingCompletedAt?.toUtc(),
-        // Premium entitlement is server-authoritative in Phase 11. The
+        // Premium entitlement is StoreKit-authoritative on device. The
         // settings mirror keeps schema compatibility but never promotes access.
         'isPremium': false,
         'premiumExpiresAt': null,

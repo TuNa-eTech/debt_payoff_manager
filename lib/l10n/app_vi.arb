@@ -865,6 +865,18 @@
   "@pricingRestorePurchases": {
     "description": "Button label to restore App Store purchases."
   },
+  "pricingDebugClearPremium": "Debug: Xóa Premium local",
+  "@pricingDebugClearPremium": {
+    "description": "Debug-only button label that clears cached Premium entitlement locally."
+  },
+  "pricingDebugClearPremiumMessage": "Đã xóa Premium local cho debug.",
+  "@pricingDebugClearPremiumMessage": {
+    "description": "Debug-only confirmation after clearing cached Premium entitlement locally."
+  },
+  "pricingDebugManageSubscription": "Debug: Quản lý subscription App Store",
+  "@pricingDebugManageSubscription": {
+    "description": "Debug-only button label that opens the App Store subscription management sheet."
+  },
   "pricingPremiumActiveCta": "Premium đang hoạt động",
   "@pricingPremiumActiveCta": {
     "description": "Disabled purchase CTA when premium is active."
@@ -910,6 +922,27 @@
       }
     }
   },
+  "pricingPurchaseSuccessTitle": "Premium đã kích hoạt",
+  "@pricingPurchaseSuccessTitle": {
+    "description": "Dialog title shown after a successful Premium purchase or restore."
+  },
+  "pricingPurchaseSuccessBody": "Giao dịch đã được xác nhận. Các tính năng Premium hiện đã được mở khóa.",
+  "@pricingPurchaseSuccessBody": {
+    "description": "Dialog body shown after successful Premium activation without an expiry date."
+  },
+  "pricingPurchaseSuccessBodyUntil": "Giao dịch đã được xác nhận. Premium hoạt động đến {date}.",
+  "@pricingPurchaseSuccessBodyUntil": {
+    "description": "Dialog body shown after successful Premium activation with an expiry date.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "pricingPurchaseSuccessAction": "Xong",
+  "@pricingPurchaseSuccessAction": {
+    "description": "Dialog action label for successful Premium activation."
+  },
   "premiumLockedTitle": "Tính năng Premium",
   "@premiumLockedTitle": {
     "description": "Title shown for locked premium entry points."
@@ -921,6 +954,30 @@
   "premiumLockedAction": "Xem Premium",
   "@premiumLockedAction": {
     "description": "CTA shown for locked premium entry points."
+  },
+  "settingsSectionSubscription": "GÓI DỊCH VỤ",
+  "@settingsSectionSubscription": {
+    "description": "Settings section title for subscription and Premium status."
+  },
+  "settingsPremiumTitle": "Premium",
+  "@settingsPremiumTitle": {
+    "description": "Settings row title for Premium subscription."
+  },
+  "settingsPremiumSubtitleActive": "Xem trạng thái gói và khôi phục giao dịch.",
+  "@settingsPremiumSubtitleActive": {
+    "description": "Settings Premium row subtitle when Premium is active."
+  },
+  "settingsPremiumSubtitleFree": "Xem gói Premium hoặc khôi phục giao dịch App Store.",
+  "@settingsPremiumSubtitleFree": {
+    "description": "Settings Premium row subtitle when Premium is not active."
+  },
+  "settingsPremiumStatusActive": "Đang hoạt động",
+  "@settingsPremiumStatusActive": {
+    "description": "Settings Premium row trailing status when Premium is active."
+  },
+  "settingsPremiumStatusFree": "Free",
+  "@settingsPremiumStatusFree": {
+    "description": "Settings Premium row trailing status when Premium is not active."
   },
   "settingsCancel": "Hủy",
   "@settingsCancel": {

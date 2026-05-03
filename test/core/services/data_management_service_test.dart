@@ -361,6 +361,42 @@ void main() {
     },
   );
 
+  test(
+    'restoreFromLocalBackup does not import Premium entitlement from backup',
+    () async {
+      await _seedRichDataset(
+        db: db,
+        debtRepository: debtRepository,
+        paymentRepository: paymentRepository,
+        planRepository: planRepository,
+        settingsRepository: settingsRepository,
+      );
+
+      final settings = await settingsRepository.getSettings();
+      await settingsRepository.updateSettings(
+        settings.copyWith(
+          isPremium: true,
+          premiumExpiresAt: DateTime.utc(2027),
+        ),
+      );
+      final artifact = await service.generateLocalBackupBundle();
+
+      final currentSettings = await settingsRepository.getSettings();
+      await settingsRepository.updateSettings(
+        currentSettings.copyWith(isPremium: false, clearPremiumExpiresAt: true),
+      );
+
+      await service.restoreFromLocalBackup(
+        filePath: artifact.path,
+        fileName: artifact.fileName,
+      );
+
+      final restoredSettings = await settingsRepository.getSettings();
+      expect(restoredSettings.isPremium, isFalse);
+      expect(restoredSettings.premiumExpiresAt, isNull);
+    },
+  );
+
   test('inspectLocalBackupBundle rejects CSV export bundles', () async {
     final artifact = await service.generateCsvExportBundle();
 

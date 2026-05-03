@@ -1,13 +1,13 @@
 <claude-mem-context>
 # Memory Context
 
-# [Debt-Payoff-Manager] recent context, 2026-05-03 12:22pm GMT+7
+# [Debt-Payoff-Manager] recent context, 2026-05-03 9:15pm GMT+7
 
 Legend: 🎯session 🔴bugfix 🟣feature 🔄refactor ✅change 🔵discovery ⚖️decision 🚨security_alert 🔐security_note
 Format: ID TIME TYPE TITLE
 Fetch details: get_observations([IDs]) | Search: mem-search skill
 
-Stats: 50 obs (20,549t read) | 791,135t work | 97% savings
+Stats: 50 obs (20,894t read) | 904,302t work | 98% savings
 
 ### Apr 25, 2026
 S19 Phase 7 Cloud Sync (Firestore) — Audit actual implementation status vs documentation claims (Apr 25 at 8:32 PM)
@@ -17,18 +17,8 @@ S38 Audit and disable unused skills in Debt-Payoff-Manager's .claude/skills dire
 ### Apr 26, 2026
 S39 Audit and disable unused skills in Debt-Payoff-Manager's .claude/skills — completed successfully (Apr 26 at 10:14 AM)
 S40 Phase 8 progress check — what has been done and what remains for Debt-Payoff-Manager v1.2 (Apr 26 at 10:15 AM)
-123 3:48p ⚖️ Phase 8 Next Action: Fix Task 2 Interest Rate History Repository Write Methods
-124 " ⚖️ Phase 8 Session Work Plan — Three Tasks Queued in Priority Order
-125 " 🔵 Pre-existing CloudBackupService Mock Failures Known in Test Suite
-126 " 🔵 InterestRateHistory Entity Structure — Missing createdAt/updatedAt for Companion Mapping
-127 " 🔵 rate_history_page.dart and Repository Impl Compile Clean — No Errors
-128 3:52p 🟣 InterestRateHistory Repository Write Methods Implemented — Task 2 Complete
-129 " 🔵 Payment and Plan Entity Structures — Key Fields for MonthlySummaryService
-130 3:54p 🔵 PaymentType Enum Uses "charge" Not "newCharge" — Progress Report Name Was Misleading
-131 3:55p 🔵 DI Registration Pattern for MonthlySummaryService — Follows MonthlyActionService Template
-132 " 🔵 AppFormatters Has formatMonthYear and formatMonthsDuration — Ready for MonthlySummaryPage
-133 " 🟣 MonthlySummaryService Created — Task 4 Service Layer Complete
-134 " 🔵 app_en.arb Is 2554 Lines — Monthly Summary L10n Strings Must Be Appended After scenariosCopyDebtsSuccess
+S41 Continue implementing Phase 11 Monetization & In-App Purchase (IAP) for Debt Payoff Manager. Verify implementation completion and test status. (Apr 26 at 3:46 PM)
+132 3:55p 🔵 AppFormatters Has formatMonthYear and formatMonthsDuration — Ready for MonthlySummaryPage
 ### Apr 30, 2026
 135 6:50p 🔵 Phase 7 Cloud Sync — Implementation Complete, Awaiting Real-Device QA
 136 6:51p 🔵 Phase 7 Sync Layer — Detailed Implementation Architecture Confirmed
@@ -53,7 +43,6 @@ S40 Phase 8 progress check — what has been done and what remains for Debt-Payo
 153 10:52a 🔵 Pricing Feature Development with Firebase Integration and Monetization Plan
 154 " ✅ Pricing Feature Implementation Scope and Changes Summary
 155 " 🔵 Change Detection Analysis: Low-Risk Feature Implementation
-S41 Continue implementing Phase 11 Monetization & In-App Purchase (IAP) for Debt Payoff Manager. Verify implementation completion and test status. (May 3 at 11:12 AM)
 160 11:20a 🔵 APP_STORE_SHARED_SECRET environment variable usage and Phase 11 IAP architecture
 161 11:23a 🔵 APP_STORE_SHARED_SECRET environment variable configuration and verifyPurchase Cloud Function integration
 162 " 🔵 APP_STORE_SHARED_SECRET integration with Apple receipt validation in Cloud Functions
@@ -71,14 +60,26 @@ S41 Continue implementing Phase 11 Monetization & In-App Purchase (IAP) for Debt
 174 11:31a 🟣 Phase 11 IAP verifyPurchase Cloud Function deployment completed successfully
 175 " ✅ Added .secret.local to .gitignore to prevent local secrets from being committed
 176 11:37a 🔵 Phase 11 Monetization & IAP implementation substantially underway
+177 8:43p ✅ Added test key for premium settings entry point
+178 " ✅ Add Debug Test Key for Premium Clear Action
+179 8:56p 🔄 Test teardown refactored from addTearDown callback to try/finally block
+180 " 🔵 All pricing and settings tests pass after refactoring
+181 " 🔵 Flutter in_app_purchase plugin lacks direct iOS manage subscriptions API
+S42 Investigate Firebase permission error occurring after successful payment/checkout on iOS, related to iOS App Store subscription management functionality (May 3 at 8:59 PM)
+182 9:07p 🔵 Session process routing rejects unknown process IDs
+183 9:09p 🔵 What-If Scenarios Feature Status: Partial Phase 8 Implementation
+184 " 🔵 What-If Scenarios Phase 8 Completion Status: 80% Done, Visual Comparison Chart Pending
+185 " 🔵 Phase 8 What-If Scenarios: Documentation Status Conflict — Marked Complete vs 80% With Pending Work
+186 9:10p 🔵 What-If Scenarios: ScenarioId Parameter Already Implemented in PlanTimelineCubit
+187 " 🔵 What-If Scenarios Feature: 95% Complete, Only Chart Visualization Missing
 
-Access 791k tokens of past work via get_observations([IDs]) or mem-search skill.
+Access 904k tokens of past work via get_observations([IDs]) or mem-search skill.
 </claude-mem-context>
 
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **debt_payoff_manager** (557 symbols, 573 relationships, 0 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **debt_payoff_manager** (574 symbols, 590 relationships, 0 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

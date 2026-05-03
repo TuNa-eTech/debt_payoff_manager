@@ -77,7 +77,9 @@ void main() {
     test('reflects cached premium expired from settings', () async {
       settingsRepository.settings = makeRepoSettings(
         isPremium: true,
-        premiumExpiresAt: DateTime.now().toUtc().subtract(const Duration(days: 1)),
+        premiumExpiresAt: DateTime.now().toUtc().subtract(
+          const Duration(days: 1),
+        ),
       );
 
       await cubit.load();
@@ -150,16 +152,47 @@ void main() {
     });
   });
 
-  group('entitlement events', () {
-    test('pending purchase sets isPurchasing without unlocking premium', () async {
+  group('openSubscriptionManagement', () {
+    test('calls purchase service subscription management', () async {
       await cubit.load();
+      await cubit.openSubscriptionManagement();
 
-      entitlementService.addEvent(const PremiumEntitlementEvent.pending());
-      await Future<void>.delayed(Duration.zero);
-
-      expect(cubit.state.isPurchasing, isTrue);
-      expect(cubit.state.isPremiumActive, isFalse);
+      expect(purchaseService.manageSubscriptionCount, 1);
     });
+  });
+
+  group('debugClearPremiumCache', () {
+    test('clears cached premium entitlement in debug mode', () async {
+      settingsRepository.settings = makeRepoSettings(
+        isPremium: true,
+        premiumExpiresAt: DateTime.now().toUtc().add(const Duration(days: 30)),
+      );
+      await cubit.load();
+      expect(cubit.state.isPremiumActive, isTrue);
+
+      await cubit.debugClearPremiumCache();
+
+      expect(settingsRepository.settings.isPremium, isFalse);
+      expect(settingsRepository.settings.premiumExpiresAt, isNull);
+      expect(cubit.state.isPremiumActive, isFalse);
+      expect(cubit.state.premiumExpiresAt, isNull);
+      expect(cubit.state.message, pricingDebugPremiumClearedMessage);
+    });
+  });
+
+  group('entitlement events', () {
+    test(
+      'pending purchase sets isPurchasing without unlocking premium',
+      () async {
+        await cubit.load();
+
+        entitlementService.addEvent(const PremiumEntitlementEvent.pending());
+        await Future<void>.delayed(Duration.zero);
+
+        expect(cubit.state.isPurchasing, isTrue);
+        expect(cubit.state.isPremiumActive, isFalse);
+      },
+    );
 
     test('error event clears purchasing and sets error message', () async {
       await cubit.load();
@@ -191,7 +224,7 @@ void main() {
 
       expect(cubit.state.isPremiumActive, isTrue);
       expect(cubit.state.isPurchasing, isFalse);
-      expect(cubit.state.message, isNotNull);
+      expect(cubit.state.message, pricingPremiumActivatedMessage);
     });
 
     test('expired snapshot downgrades to free', () async {
@@ -237,6 +270,7 @@ class _FakePurchaseService implements PurchaseService {
   final bool _isAvailable;
   final boughtProducts = <PremiumProductId>[];
   var restoreCount = 0;
+  var manageSubscriptionCount = 0;
   Duration? buyDelay;
 
   @override
@@ -270,6 +304,9 @@ class _FakePurchaseService implements PurchaseService {
   }
 
   @override
+  Future<List<PremiumPurchase>> queryPastPurchases() async => const [];
+
+  @override
   Future<void> buy(PremiumProduct product) async {
     if (buyDelay != null) await Future<void>.delayed(buyDelay!);
     boughtProducts.add(product.id);
@@ -278,6 +315,11 @@ class _FakePurchaseService implements PurchaseService {
   @override
   Future<void> restorePurchases() async {
     restoreCount += 1;
+  }
+
+  @override
+  Future<void> openSubscriptionManagement() async {
+    manageSubscriptionCount += 1;
   }
 
   @override
@@ -303,8 +345,9 @@ class _FakeEntitlementService implements EntitlementService {
   }
 
   @override
-  Future<EntitlementSnapshot> validatePurchase(PremiumPurchase purchase) async =>
-      const EntitlementSnapshot.free();
+  Future<EntitlementSnapshot> validatePurchase(
+    PremiumPurchase purchase,
+  ) async => const EntitlementSnapshot.free();
 
   @override
   bool isPremiumActive(UserSettings? settings) {

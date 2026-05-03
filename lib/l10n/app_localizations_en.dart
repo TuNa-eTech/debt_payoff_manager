@@ -636,6 +636,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pricingRestorePurchases => 'Restore purchases';
 
   @override
+  String get pricingDebugClearPremium => 'Debug: Clear local Premium';
+
+  @override
+  String get pricingDebugClearPremiumMessage =>
+      'Premium cache cleared for debug.';
+
+  @override
+  String get pricingDebugManageSubscription =>
+      'Debug: Manage App Store subscription';
+
+  @override
   String get pricingPremiumActiveCta => 'Premium is active';
 
   @override
@@ -671,6 +682,21 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get pricingPurchaseSuccessTitle => 'Premium is active';
+
+  @override
+  String get pricingPurchaseSuccessBody =>
+      'Your purchase was verified. Premium features are now unlocked.';
+
+  @override
+  String pricingPurchaseSuccessBodyUntil(String date) {
+    return 'Your purchase was verified. Premium is active until $date.';
+  }
+
+  @override
+  String get pricingPurchaseSuccessAction => 'Done';
+
+  @override
   String get premiumLockedTitle => 'Premium feature';
 
   @override
@@ -679,6 +705,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get premiumLockedAction => 'View Premium';
+
+  @override
+  String get settingsSectionSubscription => 'SUBSCRIPTION';
+
+  @override
+  String get settingsPremiumTitle => 'Premium';
+
+  @override
+  String get settingsPremiumSubtitleActive =>
+      'View your subscription status and restore purchases.';
+
+  @override
+  String get settingsPremiumSubtitleFree =>
+      'View plans or restore an App Store purchase.';
+
+  @override
+  String get settingsPremiumStatusActive => 'Active';
+
+  @override
+  String get settingsPremiumStatusFree => 'Free';
 
   @override
   String get settingsCancel => 'Cancel';

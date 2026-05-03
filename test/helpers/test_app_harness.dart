@@ -284,6 +284,12 @@ class _NoopPurchaseService implements PurchaseService {
   Future<List<PremiumProduct>> queryPremiumProducts() async => const [];
 
   @override
+  Future<List<PremiumPurchase>> queryPastPurchases() async => const [];
+
+  @override
+  Future<void> openSubscriptionManagement() async {}
+
+  @override
   Future<void> restorePurchases() async {}
 }
 

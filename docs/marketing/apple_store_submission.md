@@ -130,7 +130,11 @@ Use these headlines on the current 5-screen flow:
 
 ## Submission Guardrails
 
-Do not claim these as live features in App Store metadata for the current MVP:
+These guardrails describe the original MVP submission posture. For the current
+Phase 11/v1.5 work, use the project phase docs before publishing subscription
+metadata.
+
+Do not claim these as live features in App Store metadata for the MVP build:
 
 - cloud backup across devices
 - partner sharing
@@ -159,15 +163,15 @@ Safe claims for the current build:
 - The current app targets both iPhone and iPad, so App Store submission will need iPad screenshots unless iPad support is removed.
 - The `*_V2.png` screenshot files are 1284 x 2779, which is off by 1 pixel from the standard 6.5-inch portrait size. Use the non-V2 assets or crop the V2 assets before upload.
 
-### Product Truth For Current MVP
+### Product Truth For MVP Build
 
-Current MVP messaging should stay aligned with these implemented capabilities:
+MVP messaging should stay aligned with these implemented capabilities:
 
 - onboarding is live end-to-end
 - living plan, payment logging, monthly action, and timeline are implemented
 - Trust Layer Level 0 is implemented: CSV export, local backup ZIP, restore, clear all
-- Free vs Premium is only a stub right now
-- no real IAP flow yet
+- Free vs Premium was only a stub in the MVP build
+- real IAP flow is Phase 11/v1.5 scope, not MVP scope
 - no real cloud backup flow yet
 
 ## Suggested Next Docs To Prepare
