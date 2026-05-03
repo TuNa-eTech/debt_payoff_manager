@@ -6819,6 +6819,545 @@ class ScenariosTableCompanion extends UpdateCompanion<ScenarioRow> {
   }
 }
 
+class $ScenarioAssumptionsTableTable extends ScenarioAssumptionsTable
+    with TableInfo<$ScenarioAssumptionsTableTable, ScenarioAssumptionRow> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ScenarioAssumptionsTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    clientDefault: () => Uuid().v4(),
+  );
+  static const VerificationMeta _scenarioIdMeta = const VerificationMeta(
+    'scenarioId',
+  );
+  @override
+  late final GeneratedColumn<String> scenarioId = GeneratedColumn<String>(
+    'scenario_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<ScenarioAssumptionType, String>
+  type =
+      GeneratedColumn<String>(
+        'type',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<ScenarioAssumptionType>(
+        $ScenarioAssumptionsTableTable.$convertertype,
+      );
+  static const VerificationMeta _summaryMeta = const VerificationMeta(
+    'summary',
+  );
+  @override
+  late final GeneratedColumn<String> summary = GeneratedColumn<String>(
+    'summary',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(
+      minTextLength: 1,
+      maxTextLength: 240,
+    ),
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _paramsJsonMeta = const VerificationMeta(
+    'paramsJson',
+  );
+  @override
+  late final GeneratedColumn<String> paramsJson = GeneratedColumn<String>(
+    'params_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('{}'),
+  );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, String> createdAt =
+      GeneratedColumn<String>(
+        'created_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>(
+        $ScenarioAssumptionsTableTable.$convertercreatedAt,
+      );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime, String> updatedAt =
+      GeneratedColumn<String>(
+        'updated_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>(
+        $ScenarioAssumptionsTableTable.$converterupdatedAt,
+      );
+  @override
+  late final GeneratedColumnWithTypeConverter<DateTime?, String> deletedAt =
+      GeneratedColumn<String>(
+        'deleted_at',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      ).withConverter<DateTime?>(
+        $ScenarioAssumptionsTableTable.$converterdeletedAtn,
+      );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    scenarioId,
+    type,
+    summary,
+    paramsJson,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'scenario_assumptions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ScenarioAssumptionRow> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('scenario_id')) {
+      context.handle(
+        _scenarioIdMeta,
+        scenarioId.isAcceptableOrUnknown(data['scenario_id']!, _scenarioIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_scenarioIdMeta);
+    }
+    if (data.containsKey('summary')) {
+      context.handle(
+        _summaryMeta,
+        summary.isAcceptableOrUnknown(data['summary']!, _summaryMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_summaryMeta);
+    }
+    if (data.containsKey('params_json')) {
+      context.handle(
+        _paramsJsonMeta,
+        paramsJson.isAcceptableOrUnknown(data['params_json']!, _paramsJsonMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ScenarioAssumptionRow map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ScenarioAssumptionRow(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      scenarioId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}scenario_id'],
+      )!,
+      type: $ScenarioAssumptionsTableTable.$convertertype.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}type'],
+        )!,
+      ),
+      summary: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}summary'],
+      )!,
+      paramsJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}params_json'],
+      )!,
+      createdAt: $ScenarioAssumptionsTableTable.$convertercreatedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}created_at'],
+        )!,
+      ),
+      updatedAt: $ScenarioAssumptionsTableTable.$converterupdatedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}updated_at'],
+        )!,
+      ),
+      deletedAt: $ScenarioAssumptionsTableTable.$converterdeletedAtn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}deleted_at'],
+        ),
+      ),
+    );
+  }
+
+  @override
+  $ScenarioAssumptionsTableTable createAlias(String alias) {
+    return $ScenarioAssumptionsTableTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<ScenarioAssumptionType, String> $convertertype =
+      const ScenarioAssumptionTypeConverter();
+  static TypeConverter<DateTime, String> $convertercreatedAt =
+      const UtcDateTimeConverter();
+  static TypeConverter<DateTime, String> $converterupdatedAt =
+      const UtcDateTimeConverter();
+  static TypeConverter<DateTime, String> $converterdeletedAt =
+      const UtcDateTimeConverter();
+  static TypeConverter<DateTime?, String?> $converterdeletedAtn =
+      NullAwareTypeConverter.wrap($converterdeletedAt);
+}
+
+class ScenarioAssumptionRow extends DataClass
+    implements Insertable<ScenarioAssumptionRow> {
+  final String id;
+  final String scenarioId;
+  final ScenarioAssumptionType type;
+  final String summary;
+  final String paramsJson;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final DateTime? deletedAt;
+  const ScenarioAssumptionRow({
+    required this.id,
+    required this.scenarioId,
+    required this.type,
+    required this.summary,
+    required this.paramsJson,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['scenario_id'] = Variable<String>(scenarioId);
+    {
+      map['type'] = Variable<String>(
+        $ScenarioAssumptionsTableTable.$convertertype.toSql(type),
+      );
+    }
+    map['summary'] = Variable<String>(summary);
+    map['params_json'] = Variable<String>(paramsJson);
+    {
+      map['created_at'] = Variable<String>(
+        $ScenarioAssumptionsTableTable.$convertercreatedAt.toSql(createdAt),
+      );
+    }
+    {
+      map['updated_at'] = Variable<String>(
+        $ScenarioAssumptionsTableTable.$converterupdatedAt.toSql(updatedAt),
+      );
+    }
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<String>(
+        $ScenarioAssumptionsTableTable.$converterdeletedAtn.toSql(deletedAt),
+      );
+    }
+    return map;
+  }
+
+  ScenarioAssumptionsTableCompanion toCompanion(bool nullToAbsent) {
+    return ScenarioAssumptionsTableCompanion(
+      id: Value(id),
+      scenarioId: Value(scenarioId),
+      type: Value(type),
+      summary: Value(summary),
+      paramsJson: Value(paramsJson),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+    );
+  }
+
+  factory ScenarioAssumptionRow.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ScenarioAssumptionRow(
+      id: serializer.fromJson<String>(json['id']),
+      scenarioId: serializer.fromJson<String>(json['scenarioId']),
+      type: serializer.fromJson<ScenarioAssumptionType>(json['type']),
+      summary: serializer.fromJson<String>(json['summary']),
+      paramsJson: serializer.fromJson<String>(json['paramsJson']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'scenarioId': serializer.toJson<String>(scenarioId),
+      'type': serializer.toJson<ScenarioAssumptionType>(type),
+      'summary': serializer.toJson<String>(summary),
+      'paramsJson': serializer.toJson<String>(paramsJson),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+    };
+  }
+
+  ScenarioAssumptionRow copyWith({
+    String? id,
+    String? scenarioId,
+    ScenarioAssumptionType? type,
+    String? summary,
+    String? paramsJson,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    Value<DateTime?> deletedAt = const Value.absent(),
+  }) => ScenarioAssumptionRow(
+    id: id ?? this.id,
+    scenarioId: scenarioId ?? this.scenarioId,
+    type: type ?? this.type,
+    summary: summary ?? this.summary,
+    paramsJson: paramsJson ?? this.paramsJson,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+  );
+  ScenarioAssumptionRow copyWithCompanion(
+    ScenarioAssumptionsTableCompanion data,
+  ) {
+    return ScenarioAssumptionRow(
+      id: data.id.present ? data.id.value : this.id,
+      scenarioId: data.scenarioId.present
+          ? data.scenarioId.value
+          : this.scenarioId,
+      type: data.type.present ? data.type.value : this.type,
+      summary: data.summary.present ? data.summary.value : this.summary,
+      paramsJson: data.paramsJson.present
+          ? data.paramsJson.value
+          : this.paramsJson,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ScenarioAssumptionRow(')
+          ..write('id: $id, ')
+          ..write('scenarioId: $scenarioId, ')
+          ..write('type: $type, ')
+          ..write('summary: $summary, ')
+          ..write('paramsJson: $paramsJson, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    scenarioId,
+    type,
+    summary,
+    paramsJson,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ScenarioAssumptionRow &&
+          other.id == this.id &&
+          other.scenarioId == this.scenarioId &&
+          other.type == this.type &&
+          other.summary == this.summary &&
+          other.paramsJson == this.paramsJson &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt);
+}
+
+class ScenarioAssumptionsTableCompanion
+    extends UpdateCompanion<ScenarioAssumptionRow> {
+  final Value<String> id;
+  final Value<String> scenarioId;
+  final Value<ScenarioAssumptionType> type;
+  final Value<String> summary;
+  final Value<String> paramsJson;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<DateTime?> deletedAt;
+  final Value<int> rowid;
+  const ScenarioAssumptionsTableCompanion({
+    this.id = const Value.absent(),
+    this.scenarioId = const Value.absent(),
+    this.type = const Value.absent(),
+    this.summary = const Value.absent(),
+    this.paramsJson = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ScenarioAssumptionsTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String scenarioId,
+    required ScenarioAssumptionType type,
+    required String summary,
+    this.paramsJson = const Value.absent(),
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : scenarioId = Value(scenarioId),
+       type = Value(type),
+       summary = Value(summary),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<ScenarioAssumptionRow> custom({
+    Expression<String>? id,
+    Expression<String>? scenarioId,
+    Expression<String>? type,
+    Expression<String>? summary,
+    Expression<String>? paramsJson,
+    Expression<String>? createdAt,
+    Expression<String>? updatedAt,
+    Expression<String>? deletedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (scenarioId != null) 'scenario_id': scenarioId,
+      if (type != null) 'type': type,
+      if (summary != null) 'summary': summary,
+      if (paramsJson != null) 'params_json': paramsJson,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ScenarioAssumptionsTableCompanion copyWith({
+    Value<String>? id,
+    Value<String>? scenarioId,
+    Value<ScenarioAssumptionType>? type,
+    Value<String>? summary,
+    Value<String>? paramsJson,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<DateTime?>? deletedAt,
+    Value<int>? rowid,
+  }) {
+    return ScenarioAssumptionsTableCompanion(
+      id: id ?? this.id,
+      scenarioId: scenarioId ?? this.scenarioId,
+      type: type ?? this.type,
+      summary: summary ?? this.summary,
+      paramsJson: paramsJson ?? this.paramsJson,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (scenarioId.present) {
+      map['scenario_id'] = Variable<String>(scenarioId.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(
+        $ScenarioAssumptionsTableTable.$convertertype.toSql(type.value),
+      );
+    }
+    if (summary.present) {
+      map['summary'] = Variable<String>(summary.value);
+    }
+    if (paramsJson.present) {
+      map['params_json'] = Variable<String>(paramsJson.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<String>(
+        $ScenarioAssumptionsTableTable.$convertercreatedAt.toSql(
+          createdAt.value,
+        ),
+      );
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<String>(
+        $ScenarioAssumptionsTableTable.$converterupdatedAt.toSql(
+          updatedAt.value,
+        ),
+      );
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<String>(
+        $ScenarioAssumptionsTableTable.$converterdeletedAtn.toSql(
+          deletedAt.value,
+        ),
+      );
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ScenarioAssumptionsTableCompanion(')
+          ..write('id: $id, ')
+          ..write('scenarioId: $scenarioId, ')
+          ..write('type: $type, ')
+          ..write('summary: $summary, ')
+          ..write('paramsJson: $paramsJson, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -6836,6 +7375,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $TimelineCacheTableTable timelineCacheTable =
       $TimelineCacheTableTable(this);
   late final $ScenariosTableTable scenariosTable = $ScenariosTableTable(this);
+  late final $ScenarioAssumptionsTableTable scenarioAssumptionsTable =
+      $ScenarioAssumptionsTableTable(this);
   late final Index idxPlansScenario = Index(
     'idx_plans_scenario',
     'CREATE UNIQUE INDEX idx_plans_scenario ON plans (scenario_id) WHERE deleted_at IS NULL',
@@ -6854,6 +7395,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     syncStateTable,
     timelineCacheTable,
     scenariosTable,
+    scenarioAssumptionsTable,
     idxPlansScenario,
   ];
 }
@@ -10768,6 +11310,294 @@ typedef $$ScenariosTableTableProcessedTableManager =
       ScenarioRow,
       PrefetchHooks Function()
     >;
+typedef $$ScenarioAssumptionsTableTableCreateCompanionBuilder =
+    ScenarioAssumptionsTableCompanion Function({
+      Value<String> id,
+      required String scenarioId,
+      required ScenarioAssumptionType type,
+      required String summary,
+      Value<String> paramsJson,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<int> rowid,
+    });
+typedef $$ScenarioAssumptionsTableTableUpdateCompanionBuilder =
+    ScenarioAssumptionsTableCompanion Function({
+      Value<String> id,
+      Value<String> scenarioId,
+      Value<ScenarioAssumptionType> type,
+      Value<String> summary,
+      Value<String> paramsJson,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<DateTime?> deletedAt,
+      Value<int> rowid,
+    });
+
+class $$ScenarioAssumptionsTableTableFilterComposer
+    extends Composer<_$AppDatabase, $ScenarioAssumptionsTableTable> {
+  $$ScenarioAssumptionsTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get scenarioId => $composableBuilder(
+    column: $table.scenarioId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    ScenarioAssumptionType,
+    ScenarioAssumptionType,
+    String
+  >
+  get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<String> get summary => $composableBuilder(
+    column: $table.summary,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get paramsJson => $composableBuilder(
+    column: $table.paramsJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get createdAt =>
+      $composableBuilder(
+        column: $table.createdAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get updatedAt =>
+      $composableBuilder(
+        column: $table.updatedAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnWithTypeConverterFilters<DateTime?, DateTime, String> get deletedAt =>
+      $composableBuilder(
+        column: $table.deletedAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+}
+
+class $$ScenarioAssumptionsTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $ScenarioAssumptionsTableTable> {
+  $$ScenarioAssumptionsTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get scenarioId => $composableBuilder(
+    column: $table.scenarioId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get summary => $composableBuilder(
+    column: $table.summary,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get paramsJson => $composableBuilder(
+    column: $table.paramsJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ScenarioAssumptionsTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ScenarioAssumptionsTableTable> {
+  $$ScenarioAssumptionsTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get scenarioId => $composableBuilder(
+    column: $table.scenarioId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<ScenarioAssumptionType, String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get summary =>
+      $composableBuilder(column: $table.summary, builder: (column) => column);
+
+  GeneratedColumn<String> get paramsJson => $composableBuilder(
+    column: $table.paramsJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<DateTime, String> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime, String> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime?, String> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+}
+
+class $$ScenarioAssumptionsTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ScenarioAssumptionsTableTable,
+          ScenarioAssumptionRow,
+          $$ScenarioAssumptionsTableTableFilterComposer,
+          $$ScenarioAssumptionsTableTableOrderingComposer,
+          $$ScenarioAssumptionsTableTableAnnotationComposer,
+          $$ScenarioAssumptionsTableTableCreateCompanionBuilder,
+          $$ScenarioAssumptionsTableTableUpdateCompanionBuilder,
+          (
+            ScenarioAssumptionRow,
+            BaseReferences<
+              _$AppDatabase,
+              $ScenarioAssumptionsTableTable,
+              ScenarioAssumptionRow
+            >,
+          ),
+          ScenarioAssumptionRow,
+          PrefetchHooks Function()
+        > {
+  $$ScenarioAssumptionsTableTableTableManager(
+    _$AppDatabase db,
+    $ScenarioAssumptionsTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ScenarioAssumptionsTableTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$ScenarioAssumptionsTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$ScenarioAssumptionsTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> scenarioId = const Value.absent(),
+                Value<ScenarioAssumptionType> type = const Value.absent(),
+                Value<String> summary = const Value.absent(),
+                Value<String> paramsJson = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ScenarioAssumptionsTableCompanion(
+                id: id,
+                scenarioId: scenarioId,
+                type: type,
+                summary: summary,
+                paramsJson: paramsJson,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                required String scenarioId,
+                required ScenarioAssumptionType type,
+                required String summary,
+                Value<String> paramsJson = const Value.absent(),
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<DateTime?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ScenarioAssumptionsTableCompanion.insert(
+                id: id,
+                scenarioId: scenarioId,
+                type: type,
+                summary: summary,
+                paramsJson: paramsJson,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ScenarioAssumptionsTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ScenarioAssumptionsTableTable,
+      ScenarioAssumptionRow,
+      $$ScenarioAssumptionsTableTableFilterComposer,
+      $$ScenarioAssumptionsTableTableOrderingComposer,
+      $$ScenarioAssumptionsTableTableAnnotationComposer,
+      $$ScenarioAssumptionsTableTableCreateCompanionBuilder,
+      $$ScenarioAssumptionsTableTableUpdateCompanionBuilder,
+      (
+        ScenarioAssumptionRow,
+        BaseReferences<
+          _$AppDatabase,
+          $ScenarioAssumptionsTableTable,
+          ScenarioAssumptionRow
+        >,
+      ),
+      ScenarioAssumptionRow,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -10793,4 +11623,9 @@ class $AppDatabaseManager {
       $$TimelineCacheTableTableTableManager(_db, _db.timelineCacheTable);
   $$ScenariosTableTableTableManager get scenariosTable =>
       $$ScenariosTableTableTableManager(_db, _db.scenariosTable);
+  $$ScenarioAssumptionsTableTableTableManager get scenarioAssumptionsTable =>
+      $$ScenarioAssumptionsTableTableTableManager(
+        _db,
+        _db.scenarioAssumptionsTable,
+      );
 }

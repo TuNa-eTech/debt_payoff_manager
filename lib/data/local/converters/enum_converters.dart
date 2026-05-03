@@ -7,6 +7,7 @@ import '../../../domain/enums/milestone_type.dart';
 import '../../../domain/enums/min_payment_type.dart';
 import '../../../domain/enums/payment_cadence.dart';
 import '../../../domain/enums/payment_type.dart';
+import '../../../domain/enums/scenario_assumption_type.dart';
 import '../../../domain/enums/strategy.dart';
 
 /// Enum ↔ String converters for Drift.
@@ -114,4 +115,16 @@ class MilestoneTypeConverter extends TypeConverter<MilestoneType, String> {
 
   @override
   String toSql(MilestoneType value) => value.name;
+}
+
+class ScenarioAssumptionTypeConverter
+    extends TypeConverter<ScenarioAssumptionType, String> {
+  const ScenarioAssumptionTypeConverter();
+
+  @override
+  ScenarioAssumptionType fromSql(String fromDb) =>
+      ScenarioAssumptionType.values.byName(fromDb);
+
+  @override
+  String toSql(ScenarioAssumptionType value) => value.name;
 }

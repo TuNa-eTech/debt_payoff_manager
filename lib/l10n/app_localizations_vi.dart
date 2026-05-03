@@ -2034,6 +2034,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get scenariosAddTitle => 'Kịch bản mới';
 
   @override
+  String get scenariosEditTitle => 'Sửa kịch bản';
+
+  @override
   String get scenariosNameHint => 'Tên kịch bản';
 
   @override
@@ -2097,6 +2100,132 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get scenariosCompareAction => 'So sánh';
+
+  @override
+  String get scenariosCreateWhatIfAction => 'Tạo What-if';
+
+  @override
+  String get scenariosAssumptionsTitle => 'Giả định';
+
+  @override
+  String get scenariosCompareMonthlyCommitment => 'Cam kết mỗi tháng';
+
+  @override
+  String get scenariosCompareFirstTarget => 'Khoản ưu tiên';
+
+  @override
+  String get scenarioLabTitle => 'Tạo What-if';
+
+  @override
+  String get scenarioLabSubtitle =>
+      'Xem tác động của một thay đổi đáng kể trước khi lưu thành kịch bản.';
+
+  @override
+  String get scenarioLabTemplatesTitle => 'Chọn giả định';
+
+  @override
+  String get scenarioLabTemplateExtraMonthly => 'Trả thêm mỗi tháng';
+
+  @override
+  String get scenarioLabTemplateExtraMonthlySubtitle =>
+      'Xem cam kết tháng cao hơn làm đổi ngày trả hết và tiền lãi thế nào.';
+
+  @override
+  String get scenarioLabTemplateStrategy => 'Đổi chiến lược';
+
+  @override
+  String get scenarioLabTemplateStrategySubtitle =>
+      'So sánh snowball và avalanche mà không đổi kế hoạch đang dùng.';
+
+  @override
+  String get scenarioLabTemplateBonus => 'Khoản tiền một lần';
+
+  @override
+  String get scenarioLabTemplateBonusSubtitle =>
+      'Mô phỏng bonus, hoàn thuế hoặc tiền tặng trong bản sau.';
+
+  @override
+  String get scenarioLabAssumptionTitle => 'Chi tiết giả định';
+
+  @override
+  String get scenarioLabExtraAmountLabel => 'Số tiền trả thêm mỗi tháng';
+
+  @override
+  String get scenarioLabScenarioNameLabel => 'Tên kịch bản';
+
+  @override
+  String get scenarioLabScenarioNameHint =>
+      'Không bắt buộc. Mặc định theo tóm tắt giả định.';
+
+  @override
+  String get scenarioLabPreviewAction => 'Xem tác động';
+
+  @override
+  String get scenarioLabPreviewTitle => 'Tác động dự kiến';
+
+  @override
+  String get scenarioLabSaveAction => 'Lưu kịch bản';
+
+  @override
+  String get scenarioLabSavedTitle => 'Đã lưu kịch bản';
+
+  @override
+  String scenarioLabSavedBody(String name) {
+    return '$name đã sẵn sàng để so sánh hoặc đặt làm kế hoạch đang dùng.';
+  }
+
+  @override
+  String get scenarioLabCompareAction => 'So sánh';
+
+  @override
+  String get scenarioLabMakeActiveAction => 'Đặt làm đang dùng';
+
+  @override
+  String get scenarioLabDebtFreeDate => 'Ngày debt-free';
+
+  @override
+  String get scenarioLabProjectedInterest => 'Lãi dự kiến';
+
+  @override
+  String get scenarioLabMonthlyCommitment => 'Cam kết mỗi tháng';
+
+  @override
+  String get scenarioLabFirstTarget => 'Khoản ưu tiên';
+
+  @override
+  String get scenarioLabTimingImpact => 'Tác động thời gian';
+
+  @override
+  String get scenarioLabInterestImpact => 'Tác động tiền lãi';
+
+  @override
+  String scenarioLabMonthsEarlier(int months) {
+    return 'Sớm hơn $months tháng';
+  }
+
+  @override
+  String scenarioLabMonthsLater(int months) {
+    return 'Trễ hơn $months tháng';
+  }
+
+  @override
+  String scenarioLabInterestSaved(String amount) {
+    return 'Tiết kiệm $amount';
+  }
+
+  @override
+  String scenarioLabInterestAdded(String amount) {
+    return 'Tăng thêm $amount';
+  }
+
+  @override
+  String get scenarioLabNoTargetDebt => 'Không có khoản ưu tiên';
+
+  @override
+  String get scenarioLabNoTimingChange => 'Không đổi thời gian';
+
+  @override
+  String get scenarioLabNoInterestChange => 'Không đổi tiền lãi';
 
   @override
   String get scenariosCopyDebtsTitle => 'Sao chép khoản nợ sang kịch bản khác';

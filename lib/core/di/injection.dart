@@ -11,17 +11,20 @@ import '../../data/repositories/debt_repository_impl.dart';
 import '../../data/repositories/milestone_repository_impl.dart';
 import '../../data/repositories/payment_repository_impl.dart';
 import '../../data/repositories/plan_repository_impl.dart';
+import '../../data/repositories/scenario_assumption_repository_impl.dart';
 import '../../data/repositories/settings_repository_impl.dart';
 import '../../data/repositories/tracked_debt_repository.dart';
 import '../../data/repositories/tracked_milestone_repository.dart';
 import '../../data/repositories/tracked_payment_repository.dart';
 import '../../data/repositories/tracked_plan_repository.dart';
+import '../../data/repositories/tracked_scenario_assumption_repository.dart';
 import '../../data/repositories/tracked_scenario_repository.dart';
 import '../../data/repositories/tracked_settings_repository.dart';
 import '../../domain/repositories/debt_repository.dart';
 import '../../domain/repositories/milestone_repository.dart';
 import '../../domain/repositories/payment_repository.dart';
 import '../../domain/repositories/plan_repository.dart';
+import '../../domain/repositories/scenario_assumption_repository.dart';
 import '../../domain/repositories/settings_repository.dart';
 import '../../features/debts/cubit/debts_cubit.dart';
 import '../../features/monthly_action/cubit/monthly_action_cubit.dart';
@@ -49,6 +52,7 @@ import '../services/payment_logging_service.dart';
 import '../services/plan_recast_service.dart';
 import '../services/reminder_scheduler_service.dart';
 import '../services/report_generator_service.dart';
+import '../services/scenario_lab_service.dart';
 import '../services/share_launcher.dart';
 import '../services/streak_service.dart';
 import '../../data/repositories/scenario_repository_impl.dart';
@@ -62,6 +66,7 @@ import '../../features/pricing/data/in_app_purchase_service.dart';
 import '../../features/pricing/data/storekit_entitlement_service.dart';
 import '../../features/pricing/domain/entitlement_service.dart';
 import '../../features/pricing/domain/purchase_service.dart';
+import '../../features/scenarios/cubit/scenario_lab_cubit.dart';
 import '../../features/scenarios/cubit/scenarios_cubit.dart';
 import '../../features/settings/cubit/settings_cubit.dart';
 import '../../features/sharing/cubit/sharing_cubit.dart';
@@ -110,6 +115,9 @@ void configureDependencies({
   );
   getIt.registerLazySingleton<InterestRateHistoryRepositoryImpl>(
     () => InterestRateHistoryRepositoryImpl(db: getIt<AppDatabase>()),
+  );
+  getIt.registerLazySingleton<ScenarioAssumptionRepositoryImpl>(
+    () => ScenarioAssumptionRepositoryImpl(db: getIt<AppDatabase>()),
   );
 
   // Local stores
@@ -348,12 +356,31 @@ void configureDependencies({
       syncStateStore: getIt<SyncStateStore>(),
     ),
   );
+  getIt.registerLazySingleton<ScenarioAssumptionRepository>(
+    () => TrackedScenarioAssumptionRepository(
+      base: getIt<ScenarioAssumptionRepositoryImpl>(),
+      syncStateStore: getIt<SyncStateStore>(),
+    ),
+  );
+  getIt.registerLazySingleton<ScenarioLabService>(
+    () => ScenarioLabService(
+      settingsRepository: getIt<SettingsRepository>(),
+      scenarioRepository: getIt<ScenarioRepository>(),
+      scenarioAssumptionRepository: getIt<ScenarioAssumptionRepository>(),
+      debtRepository: getIt<DebtRepository>(),
+      planRepository: getIt<PlanRepository>(),
+      planRecastService: getIt<PlanRecastService>(),
+    ),
+  );
   getIt.registerFactory<ScenariosCubit>(
     () => ScenariosCubit(
       scenarioRepository: getIt<ScenarioRepository>(),
       settingsRepository: getIt<SettingsRepository>(),
       entitlementService: getIt<EntitlementService>(),
     ),
+  );
+  getIt.registerFactory<ScenarioLabCubit>(
+    () => ScenarioLabCubit(scenarioLabService: getIt<ScenarioLabService>()),
   );
 
   // Interest Rate History

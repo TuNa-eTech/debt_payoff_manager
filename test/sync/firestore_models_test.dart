@@ -7,6 +7,7 @@ import 'package:debt_payoff_manager/domain/enums/milestone_type.dart';
 import 'package:debt_payoff_manager/domain/enums/min_payment_type.dart';
 import 'package:debt_payoff_manager/domain/enums/payment_cadence.dart';
 import 'package:debt_payoff_manager/domain/enums/payment_type.dart';
+import 'package:debt_payoff_manager/domain/enums/scenario_assumption_type.dart';
 import 'package:debt_payoff_manager/domain/enums/strategy.dart';
 import 'package:debt_payoff_manager/sync/firestore_models.dart';
 import 'package:drift/drift.dart' show Value;
@@ -311,6 +312,40 @@ void main() {
       expect(_value(companion.id), 'scenario-2');
       expect(_value(companion.name), 'Aggressive Payoff');
       expect(_value(companion.isMain), false);
+    });
+  });
+
+  group('FirestoreScenarioAssumptionSerializer', () {
+    test('round-trips assumption type and params JSON', () {
+      final row = ScenarioAssumptionRow(
+        id: 'assumption-1',
+        scenarioId: 'scenario-2',
+        type: ScenarioAssumptionType.extraMonthly,
+        summary: 'Extra \$50.00/month',
+        paramsJson: '{"deltaExtraMonthlyCents":5000}',
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+        deletedAt: null,
+      );
+
+      final json = FirestoreScenarioAssumptionSerializer.toFirestoreJson(
+        row,
+        metadata,
+      );
+      expect(json['id'], 'assumption-1');
+      expect(json['scenarioId'], 'scenario-2');
+      expect(json['type'], 'extraMonthly');
+      expect(json['summary'], 'Extra \$50.00/month');
+      expect(json['paramsJson'], '{"deltaExtraMonthlyCents":5000}');
+
+      final input = FirestoreScenarioAssumptionSerializer.fromFirestoreJson(
+        json,
+      );
+      final companion = input.companion;
+      expect(input.scenarioId, 'scenario-2');
+      expect(_value(companion.id), 'assumption-1');
+      expect(_value(companion.type), ScenarioAssumptionType.extraMonthly);
+      expect(_value(companion.paramsJson), '{"deltaExtraMonthlyCents":5000}');
     });
   });
 

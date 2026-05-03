@@ -26,7 +26,9 @@ import '../../features/progress/presentation/pages/monthly_summary_page.dart';
 import '../../features/pricing/presentation/pages/pricing_page.dart';
 import '../../features/pricing/domain/entitlement_service.dart';
 import '../../features/reports/presentation/pages/reports_preview_page.dart';
+import '../../features/scenarios/cubit/scenario_lab_cubit.dart';
 import '../../features/scenarios/presentation/pages/compare_scenarios_page.dart';
+import '../../features/scenarios/presentation/pages/create_what_if_page.dart';
 import '../../features/scenarios/presentation/pages/scenarios_page.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/sync_backup_page.dart';
@@ -68,6 +70,7 @@ class AppRoutes {
   static const String reportsPreview = '/settings/reports';
   static const String pricing = '/settings/pricing';
   static const String scenarios = '/settings/scenarios';
+  static const String createWhatIf = '/settings/scenarios/new';
   static const String compareScenarios = '/settings/scenarios/compare';
   static const String partnerSharing = '/settings/sharing';
   static const String inviteAccept = '/invite';
@@ -301,6 +304,13 @@ GoRouter createRouter({
         builder: (context, state) => const ScenariosPage(),
       ),
       GoRoute(
+        path: AppRoutes.createWhatIf,
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<ScenarioLabCubit>(),
+          child: const CreateWhatIfPage(),
+        ),
+      ),
+      GoRoute(
         path: AppRoutes.compareScenarios,
         builder: (context, state) => const CompareScenariosPage(),
       ),
@@ -310,6 +320,7 @@ GoRouter createRouter({
 
 bool _isPremiumRoute(String location) {
   return location == AppRoutes.scenarios ||
+      location == AppRoutes.createWhatIf ||
       location == AppRoutes.compareScenarios ||
       location == AppRoutes.reportsPreview ||
       location == AppRoutes.partnerSharing;

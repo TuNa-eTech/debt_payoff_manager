@@ -2023,6 +2023,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scenariosAddTitle => 'New scenario';
 
   @override
+  String get scenariosEditTitle => 'Edit scenario';
+
+  @override
   String get scenariosNameHint => 'Scenario name';
 
   @override
@@ -2086,6 +2089,132 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scenariosCompareAction => 'Compare';
+
+  @override
+  String get scenariosCreateWhatIfAction => 'Create What-if';
+
+  @override
+  String get scenariosAssumptionsTitle => 'Assumptions';
+
+  @override
+  String get scenariosCompareMonthlyCommitment => 'Monthly commitment';
+
+  @override
+  String get scenariosCompareFirstTarget => 'First target';
+
+  @override
+  String get scenarioLabTitle => 'Create What-if';
+
+  @override
+  String get scenarioLabSubtitle =>
+      'Preview a meaningful change before saving it as a scenario.';
+
+  @override
+  String get scenarioLabTemplatesTitle => 'Choose an assumption';
+
+  @override
+  String get scenarioLabTemplateExtraMonthly => 'Pay extra monthly';
+
+  @override
+  String get scenarioLabTemplateExtraMonthlySubtitle =>
+      'See how a higher monthly commitment changes payoff date and interest.';
+
+  @override
+  String get scenarioLabTemplateStrategy => 'Change strategy';
+
+  @override
+  String get scenarioLabTemplateStrategySubtitle =>
+      'Compare snowball and avalanche without changing your active plan.';
+
+  @override
+  String get scenarioLabTemplateBonus => 'One-time bonus';
+
+  @override
+  String get scenarioLabTemplateBonusSubtitle =>
+      'Model a bonus, tax refund, or gift in a future release.';
+
+  @override
+  String get scenarioLabAssumptionTitle => 'Assumption details';
+
+  @override
+  String get scenarioLabExtraAmountLabel => 'Extra amount per month';
+
+  @override
+  String get scenarioLabScenarioNameLabel => 'Scenario name';
+
+  @override
+  String get scenarioLabScenarioNameHint =>
+      'Optional. Defaults to the assumption summary.';
+
+  @override
+  String get scenarioLabPreviewAction => 'Preview impact';
+
+  @override
+  String get scenarioLabPreviewTitle => 'Preview impact';
+
+  @override
+  String get scenarioLabSaveAction => 'Save scenario';
+
+  @override
+  String get scenarioLabSavedTitle => 'Scenario saved';
+
+  @override
+  String scenarioLabSavedBody(String name) {
+    return '$name is ready to compare or make active.';
+  }
+
+  @override
+  String get scenarioLabCompareAction => 'Compare';
+
+  @override
+  String get scenarioLabMakeActiveAction => 'Make active';
+
+  @override
+  String get scenarioLabDebtFreeDate => 'Debt-free date';
+
+  @override
+  String get scenarioLabProjectedInterest => 'Projected interest';
+
+  @override
+  String get scenarioLabMonthlyCommitment => 'Monthly commitment';
+
+  @override
+  String get scenarioLabFirstTarget => 'First target';
+
+  @override
+  String get scenarioLabTimingImpact => 'Timing impact';
+
+  @override
+  String get scenarioLabInterestImpact => 'Interest impact';
+
+  @override
+  String scenarioLabMonthsEarlier(int months) {
+    return '$months months earlier';
+  }
+
+  @override
+  String scenarioLabMonthsLater(int months) {
+    return '$months months later';
+  }
+
+  @override
+  String scenarioLabInterestSaved(String amount) {
+    return '$amount saved';
+  }
+
+  @override
+  String scenarioLabInterestAdded(String amount) {
+    return '$amount more';
+  }
+
+  @override
+  String get scenarioLabNoTargetDebt => 'No target';
+
+  @override
+  String get scenarioLabNoTimingChange => 'No timing change';
+
+  @override
+  String get scenarioLabNoInterestChange => 'No interest change';
 
   @override
   String get scenariosCopyDebtsTitle => 'Copy debts to another scenario';

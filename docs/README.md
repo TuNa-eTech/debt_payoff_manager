@@ -15,6 +15,7 @@ As of **May 3, 2026**, the repository reflects this project status:
 
 - [Project Phases](project-phases.md): master progress tracker and gate status
 - [Phase 11 Monetization & IAP Plan](phase-11-monetization-iap-plan.md): detailed v1.5 Premium implementation plan
+- [What-if Scenarios Lab Plan](what-if-scenarios-lab.md): guided Scenario Lab upgrade plan for Premium user value
 - [Release Notes v1.4](release-notes/v1.4.md): latest shipped post-MVP scope
 - [Release Notes v1.0](release-notes/v1.0.md): original MVP launch snapshot
 - [Feature Spec](feature-spec.md): product scope and feature tiers

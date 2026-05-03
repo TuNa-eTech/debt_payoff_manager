@@ -328,6 +328,35 @@ service cloud.firestore {
         && data.isMain is bool;
     }
 
+    function isValidScenarioAssumption(data) {
+      return hasRequiredFields(data, [
+          'id',
+          'scenarioId',
+          'type',
+          'summary',
+          'paramsJson',
+          'createdAt',
+          'updatedAt',
+          'deletedAt',
+          '_deviceId',
+          '_schemaVersion'
+        ])
+        && hasValidSyncFields(data)
+        && data.type in [
+          'extraMonthly',
+          'lumpSum',
+          'strategyChange',
+          'aprChange',
+          'pausePayment',
+          'futureCharge'
+        ]
+        && data.summary is string
+        && data.summary.size() > 0
+        && data.summary.size() <= 240
+        && data.paramsJson is string
+        && data.paramsJson.size() <= 4000;
+    }
+
     function isValidSharedPlan(data) {
       return hasRequiredFields(data, [
           'ownerUid',
@@ -357,6 +386,14 @@ service cloud.firestore {
       allow create, update: if isOwner(uid)
         && request.resource.data.id == docId
         && isValidScenario(request.resource.data);
+    }
+
+    match /users/{uid}/scenarioAssumptions/{docId} {
+      allow read: if canReadOwnerOrShared(uid);
+      allow delete: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+        && request.resource.data.id == docId
+        && isValidScenarioAssumption(request.resource.data);
     }
 
     match /users/{uid}/debts/{docId} {

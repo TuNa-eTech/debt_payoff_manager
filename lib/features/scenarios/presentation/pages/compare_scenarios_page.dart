@@ -9,12 +9,19 @@ import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/widgets/app_card.dart';
+import '../../../../core/widgets/app_chip.dart';
+import '../../../../domain/entities/debt.dart';
 import '../../../../domain/entities/plan.dart';
 import '../../../../domain/entities/scenario.dart';
+import '../../../../domain/entities/scenario_assumption.dart';
 import '../../../../domain/entities/user_settings.dart';
+import '../../../../domain/enums/debt_status.dart';
 import '../../../../domain/repositories/debt_repository.dart';
 import '../../../../domain/repositories/plan_repository.dart';
+import '../../../../domain/repositories/scenario_assumption_repository.dart';
 import '../../../../domain/repositories/scenario_repository.dart';
+import '../../../../domain/repositories/settings_repository.dart';
+import '../../../../engine/strategy_sorter.dart';
 
 // ---------------------------------------------------------------------------
 // Data model
@@ -25,13 +32,19 @@ class _ScenarioSnapshot {
     required this.scenario,
     required this.debtCount,
     required this.totalBalance,
+    required this.monthlyCommitment,
+    required this.assumptions,
     this.plan,
+    this.firstTargetDebt,
   });
 
   final Scenario scenario;
   final int debtCount;
   final int totalBalance; // cents
+  final int monthlyCommitment; // cents
+  final List<ScenarioAssumption> assumptions;
   final Plan? plan;
+  final Debt? firstTargetDebt;
 
   DateTime? get debtFreeDate => plan?.projectedDebtFreeDate;
   int? get projectedInterest => plan?.totalInterestProjected;
@@ -53,6 +66,9 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
   late final ScenarioRepository _scenarioRepo = getIt<ScenarioRepository>();
   late final DebtRepository _debtRepo = getIt<DebtRepository>();
   late final PlanRepository _planRepo = getIt<PlanRepository>();
+  late final SettingsRepository _settingsRepo = getIt<SettingsRepository>();
+  late final ScenarioAssumptionRepository _assumptionRepo =
+      getIt<ScenarioAssumptionRepository>();
   late final PlanRecastService? _planRecastService =
       getIt.isRegistered<PlanRecastService>()
       ? getIt<PlanRecastService>()
@@ -73,23 +89,53 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
 
   Future<void> _loadScenarios() async {
     final list = await _scenarioRepo.getAllScenarios();
+    final settings = await _settingsRepo.getSettings();
     if (!mounted) return;
-    setState(() => _scenarios = list);
-    // Pre-select first two if available
-    if (list.isNotEmpty) {
-      _selectedA = list.first;
-      _loadSnapshot('a', list.first);
+    if (list.isEmpty) {
+      setState(() => _scenarios = list);
+      return;
     }
-    if (list.length >= 2) {
-      _selectedB = list[1];
-      _loadSnapshot('b', list[1]);
+
+    final baseline = _findScenarioOrFirst(list, settings.activeScenarioId);
+    final comparison = await _preferredComparisonScenario(list, baseline.id);
+    if (!mounted) return;
+    setState(() {
+      _scenarios = list;
+      _selectedA = baseline;
+      _selectedB = comparison;
+    });
+    await _loadSnapshot('a', baseline);
+    if (comparison != null) await _loadSnapshot('b', comparison);
+  }
+
+  Scenario _findScenarioOrFirst(List<Scenario> scenarios, String id) {
+    for (final scenario in scenarios) {
+      if (scenario.id == id) return scenario;
     }
+    return scenarios.first;
+  }
+
+  Future<Scenario?> _preferredComparisonScenario(
+    List<Scenario> scenarios,
+    String baselineId,
+  ) async {
+    for (final scenario in scenarios.reversed) {
+      if (scenario.id == baselineId) continue;
+      final assumptions = await _assumptionRepo.getByScenario(scenario.id);
+      if (assumptions.isNotEmpty) return scenario;
+    }
+
+    for (final scenario in scenarios) {
+      if (scenario.id != baselineId) return scenario;
+    }
+    return null;
   }
 
   Future<void> _loadSnapshot(String slot, Scenario scenario) async {
     setState(() => _loading = true);
     try {
       final debts = await _debtRepo.getAllDebts(scenarioId: scenario.id);
+      final assumptions = await _assumptionRepo.getByScenario(scenario.id);
       var plan = await _planRepo.getCurrentPlan(scenarioId: scenario.id);
       if (_isStale(plan)) {
         final recast = await _planRecastService?.recast(
@@ -102,7 +148,10 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
         scenario: scenario,
         debtCount: debts.length,
         totalBalance: totalBalance,
+        monthlyCommitment: _monthlyCommitment(debts, plan),
+        assumptions: assumptions,
         plan: plan,
+        firstTargetDebt: _firstTargetDebt(debts, plan),
       );
       if (!mounted) return;
       setState(() {
@@ -119,6 +168,34 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
         (plan.projectedDebtFreeDate == null ||
             plan.totalInterestProjected == null ||
             plan.totalInterestSaved == null);
+  }
+
+  int _monthlyCommitment(List<Debt> debts, Plan? plan) {
+    final minimums = debts
+        .where(
+          (debt) =>
+              debt.status != DebtStatus.archived && debt.currentBalance > 0,
+        )
+        .fold<int>(0, (sum, debt) => sum + debt.minimumPayment);
+    return minimums + (plan?.extraMonthlyAmount ?? 0);
+  }
+
+  Debt? _firstTargetDebt(List<Debt> debts, Plan? plan) {
+    if (plan == null) return null;
+    final activeDebts = debts
+        .where(
+          (debt) =>
+              debt.status != DebtStatus.archived &&
+              debt.currentBalance > 0 &&
+              !debt.excludeFromStrategy,
+        )
+        .toList(growable: false);
+    if (activeDebts.isEmpty) return null;
+    return StrategySorter.sort(
+      activeDebts,
+      plan.strategy,
+      plan.customOrder,
+    ).first;
   }
 
   @override
@@ -249,6 +326,8 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
               : null,
         ),
         const SizedBox(height: AppDimensions.md),
+        _AssumptionComparisonRow(snapA: a, snapB: b),
+        const SizedBox(height: AppDimensions.md),
 
         // Metric rows
         _CompareMetricRow(
@@ -258,6 +337,30 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
           valueB: '${b.debtCount}',
           highlightA: a.debtCount <= b.debtCount,
           highlightB: b.debtCount <= a.debtCount,
+        ),
+        const SizedBox(height: AppDimensions.sm),
+        _CompareMetricRow(
+          rowLabel: l10n.scenariosCompareMonthlyCommitment,
+          icon: LucideIcons.walletCards,
+          valueA: AppFormatters.formatCents(
+            a.monthlyCommitment,
+            currencyCode: currencyCode,
+            localeCode: localeCode,
+          ),
+          valueB: AppFormatters.formatCents(
+            b.monthlyCommitment,
+            currencyCode: currencyCode,
+            localeCode: localeCode,
+          ),
+          highlightA: a.monthlyCommitment <= b.monthlyCommitment,
+          highlightB: b.monthlyCommitment <= a.monthlyCommitment,
+        ),
+        const SizedBox(height: AppDimensions.sm),
+        _CompareMetricRow(
+          rowLabel: l10n.scenariosCompareFirstTarget,
+          icon: LucideIcons.target,
+          valueA: a.firstTargetDebt?.name ?? l10n.scenarioLabNoTargetDebt,
+          valueB: b.firstTargetDebt?.name ?? l10n.scenarioLabNoTargetDebt,
         ),
         const SizedBox(height: AppDimensions.sm),
         _CompareMetricRow(
@@ -393,6 +496,86 @@ class _CompareScenariosPageState extends State<CompareScenariosPage> {
     final diff =
         (later.year - earlier.year) * 12 + (later.month - earlier.month);
     return diff > 0 ? diff : null;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Assumptions
+// ---------------------------------------------------------------------------
+
+class _AssumptionComparisonRow extends StatelessWidget {
+  const _AssumptionComparisonRow({required this.snapA, required this.snapB});
+
+  final _ScenarioSnapshot snapA;
+  final _ScenarioSnapshot snapB;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return AppCard(
+      color: AppColors.mdSurfaceContainerLow,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                LucideIcons.listChecks,
+                size: 16,
+                color: AppColors.mdOnSurfaceVariant,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                l10n.scenariosAssumptionsTitle,
+                style: AppTextStyles.labelSmall.copyWith(
+                  color: AppColors.mdOnSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppDimensions.sm),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: _AssumptionCell(snapshot: snapA)),
+              const SizedBox(width: AppDimensions.md),
+              Expanded(child: _AssumptionCell(snapshot: snapB)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AssumptionCell extends StatelessWidget {
+  const _AssumptionCell({required this.snapshot});
+
+  final _ScenarioSnapshot snapshot;
+
+  @override
+  Widget build(BuildContext context) {
+    final assumptions = snapshot.assumptions;
+    if (assumptions.isEmpty) {
+      return Text(
+        snapshot.scenario.isMain
+            ? context.l10n.scenariosMainBadge
+            : context.l10n.scenariosCompareNotAvailable,
+        style: AppTextStyles.bodyMedium.copyWith(
+          color: AppColors.mdOnSurfaceVariant,
+        ),
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (final assumption in assumptions.take(3))
+          Padding(
+            padding: const EdgeInsets.only(bottom: AppDimensions.xs),
+            child: AppChip.status(label: assumption.summary),
+          ),
+      ],
+    );
   }
 }
 

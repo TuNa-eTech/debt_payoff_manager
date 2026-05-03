@@ -28,9 +28,7 @@ class ScenarioRepositoryImpl implements ScenarioRepository {
     final query = _db.select(_db.scenariosTable)
       ..where((s) => s.deletedAt.isNull())
       ..orderBy([(s) => OrderingTerm.asc(s.createdAt)]);
-    return query.watch().map(
-      (rows) => rows.map((r) => r.toDomain()).toList(),
-    );
+    return query.watch().map((rows) => rows.map((r) => r.toDomain()).toList());
   }
 
   @override
@@ -40,11 +38,21 @@ class ScenarioRepositoryImpl implements ScenarioRepository {
   }
 
   @override
+  Future<void> renameScenario(String id, String name) async {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return;
+    await (_db.update(_db.scenariosTable)..where((s) => s.id.equals(id))).write(
+      ScenariosTableCompanion(name: Value(trimmed)),
+    );
+  }
+
+  @override
   Future<bool> deleteScenario(String id) async {
     if (id == 'main') return false;
     final now = DateTime.now().toUtc();
-    await (_db.update(_db.scenariosTable)..where((s) => s.id.equals(id)))
-        .write(ScenariosTableCompanion(deletedAt: Value(now)));
+    await (_db.update(_db.scenariosTable)..where((s) => s.id.equals(id))).write(
+      ScenariosTableCompanion(deletedAt: Value(now)),
+    );
     return true;
   }
 
@@ -55,58 +63,66 @@ class ScenarioRepositoryImpl implements ScenarioRepository {
 
     await _db.transaction(() async {
       // Copy scenario metadata
-      await _db.into(_db.scenariosTable).insert(
-        ScenariosTableCompanion.insert(
-          id: Value(newId),
-          name: newName,
-          createdAt: now,
-        ),
-      );
+      await _db
+          .into(_db.scenariosTable)
+          .insert(
+            ScenariosTableCompanion.insert(
+              id: Value(newId),
+              name: newName,
+              createdAt: now,
+            ),
+          );
 
       // Copy debts (new IDs, new scenarioId, reset balance to original)
-      final sourceDebts = await (_db.select(_db.debtsTable)
-            ..where((d) => d.scenarioId.equals(sourceId))
-            ..where((d) => d.deletedAt.isNull()))
-          .get();
+      final sourceDebts =
+          await (_db.select(_db.debtsTable)
+                ..where((d) => d.scenarioId.equals(sourceId))
+                ..where((d) => d.deletedAt.isNull()))
+              .get();
 
       for (final debtRow in sourceDebts) {
         final debt = debtRow.toDomain();
         final newDebtId = _uuid.v4();
-        await _db.into(_db.debtsTable).insert(
-          debt
-              .copyWith(
-                id: newDebtId,
-                scenarioId: newId,
-                currentBalance: debt.originalPrincipal,
-                createdAt: now,
-                updatedAt: now,
-              )
-              .toCompanion(),
-        );
+        await _db
+            .into(_db.debtsTable)
+            .insert(
+              debt
+                  .copyWith(
+                    id: newDebtId,
+                    scenarioId: newId,
+                    currentBalance: debt.originalPrincipal,
+                    createdAt: now,
+                    updatedAt: now,
+                  )
+                  .toCompanion(),
+            );
       }
 
       // Copy plan (new scenarioId)
-      final sourcePlan = await (_db.select(_db.plansTable)
-            ..where((p) => p.scenarioId.equals(sourceId))
-            ..where((p) => p.deletedAt.isNull()))
-          .getSingleOrNull();
+      final sourcePlan =
+          await (_db.select(_db.plansTable)
+                ..where((p) => p.scenarioId.equals(sourceId))
+                ..where((p) => p.deletedAt.isNull()))
+              .getSingleOrNull();
 
       if (sourcePlan != null) {
         final plan = sourcePlan.toDomain();
-        await _db.into(_db.plansTable).insert(
-          plan
-              .copyWith(
-                id: _uuid.v4(),
-                scenarioId: newId,
-                lastRecastAt: now,
-                projectedDebtFreeDate: null,
-                totalInterestProjected: null,
-                totalInterestSaved: null,
-                createdAt: now,
-                updatedAt: now,
-              )
-              .toCompanion(),
-        );
+        await _db
+            .into(_db.plansTable)
+            .insert(
+              plan
+                  .copyWith(
+                    id: _uuid.v4(),
+                    scenarioId: newId,
+                    lastRecastAt: now,
+                    projectedDebtFreeDate: null,
+                    totalInterestProjected: null,
+                    totalInterestSaved: null,
+                    createdAt: now,
+                    updatedAt: now,
+                  )
+                  .toCompanion(),
+            );
       }
     });
 
@@ -117,25 +133,28 @@ class ScenarioRepositoryImpl implements ScenarioRepository {
   Future<int> copyDebtsToScenario(String sourceId, String targetId) async {
     int copied = 0;
     await _db.transaction(() async {
-      final sourceDebts = await (_db.select(_db.debtsTable)
-            ..where((d) => d.scenarioId.equals(sourceId))
-            ..where((d) => d.deletedAt.isNull()))
-          .get();
+      final sourceDebts =
+          await (_db.select(_db.debtsTable)
+                ..where((d) => d.scenarioId.equals(sourceId))
+                ..where((d) => d.deletedAt.isNull()))
+              .get();
 
       for (final debtRow in sourceDebts) {
         final debt = debtRow.toDomain();
         final now = DateTime.now().toUtc();
-        await _db.into(_db.debtsTable).insert(
-          debt
-              .copyWith(
-                id: _uuid.v4(),
-                scenarioId: targetId,
-                currentBalance: debt.originalPrincipal,
-                createdAt: now,
-                updatedAt: now,
-              )
-              .toCompanion(),
-        );
+        await _db
+            .into(_db.debtsTable)
+            .insert(
+              debt
+                  .copyWith(
+                    id: _uuid.v4(),
+                    scenarioId: targetId,
+                    currentBalance: debt.originalPrincipal,
+                    createdAt: now,
+                    updatedAt: now,
+                  )
+                  .toCompanion(),
+            );
         copied++;
       }
     });

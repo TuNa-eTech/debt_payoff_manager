@@ -2631,6 +2631,10 @@
   "@scenariosAddTitle": {
     "description": "Dialog title for adding a scenario"
   },
+  "scenariosEditTitle": "Edit scenario",
+  "@scenariosEditTitle": {
+    "description": "Dialog title for renaming a scenario"
+  },
   "scenariosNameHint": "Scenario name",
   "@scenariosNameHint": {
     "description": "Text field hint for scenario name"
@@ -2720,6 +2724,159 @@
   "scenariosCompareAction": "Compare",
   "@scenariosCompareAction": {
     "description": "Button label to open comparison page"
+  },
+  "scenariosCreateWhatIfAction": "Create What-if",
+  "@scenariosCreateWhatIfAction": {
+    "description": "Button label to open the what-if scenario lab"
+  },
+  "scenariosAssumptionsTitle": "Assumptions",
+  "@scenariosAssumptionsTitle": {
+    "description": "Section title for scenario assumptions"
+  },
+  "scenariosCompareMonthlyCommitment": "Monthly commitment",
+  "@scenariosCompareMonthlyCommitment": {
+    "description": "Label for monthly payment commitment in comparison"
+  },
+  "scenariosCompareFirstTarget": "First target",
+  "@scenariosCompareFirstTarget": {
+    "description": "Label for first payoff target in comparison"
+  },
+  "scenarioLabTitle": "Create What-if",
+  "@scenarioLabTitle": {
+    "description": "App bar title for the what-if scenario lab"
+  },
+  "scenarioLabSubtitle": "Preview a meaningful change before saving it as a scenario.",
+  "@scenarioLabSubtitle": {
+    "description": "Short subtitle for the what-if scenario lab"
+  },
+  "scenarioLabTemplatesTitle": "Choose an assumption",
+  "@scenarioLabTemplatesTitle": {
+    "description": "Section title for scenario lab templates"
+  },
+  "scenarioLabTemplateExtraMonthly": "Pay extra monthly",
+  "@scenarioLabTemplateExtraMonthly": {
+    "description": "Scenario lab template title for extra monthly payments"
+  },
+  "scenarioLabTemplateExtraMonthlySubtitle": "See how a higher monthly commitment changes payoff date and interest.",
+  "@scenarioLabTemplateExtraMonthlySubtitle": {
+    "description": "Scenario lab template subtitle for extra monthly payments"
+  },
+  "scenarioLabTemplateStrategy": "Change strategy",
+  "@scenarioLabTemplateStrategy": {
+    "description": "Scenario lab template title for strategy change"
+  },
+  "scenarioLabTemplateStrategySubtitle": "Compare snowball and avalanche without changing your active plan.",
+  "@scenarioLabTemplateStrategySubtitle": {
+    "description": "Scenario lab template subtitle for strategy change"
+  },
+  "scenarioLabTemplateBonus": "One-time bonus",
+  "@scenarioLabTemplateBonus": {
+    "description": "Scenario lab template title for a future lump sum"
+  },
+  "scenarioLabTemplateBonusSubtitle": "Model a bonus, tax refund, or gift in a future release.",
+  "@scenarioLabTemplateBonusSubtitle": {
+    "description": "Scenario lab template subtitle for a future lump sum"
+  },
+  "scenarioLabAssumptionTitle": "Assumption details",
+  "@scenarioLabAssumptionTitle": {
+    "description": "Section title for scenario lab input form"
+  },
+  "scenarioLabExtraAmountLabel": "Extra amount per month",
+  "@scenarioLabExtraAmountLabel": {
+    "description": "Currency field label for extra monthly amount"
+  },
+  "scenarioLabScenarioNameLabel": "Scenario name",
+  "@scenarioLabScenarioNameLabel": {
+    "description": "Optional scenario name field label"
+  },
+  "scenarioLabScenarioNameHint": "Optional. Defaults to the assumption summary.",
+  "@scenarioLabScenarioNameHint": {
+    "description": "Optional scenario name field hint"
+  },
+  "scenarioLabPreviewAction": "Preview impact",
+  "@scenarioLabPreviewAction": {
+    "description": "Action to preview scenario impact"
+  },
+  "scenarioLabPreviewTitle": "Preview impact",
+  "@scenarioLabPreviewTitle": {
+    "description": "Title for scenario lab impact card"
+  },
+  "scenarioLabSaveAction": "Save scenario",
+  "@scenarioLabSaveAction": {
+    "description": "Action to save the previewed scenario"
+  },
+  "scenarioLabSavedTitle": "Scenario saved",
+  "@scenarioLabSavedTitle": {
+    "description": "Success title after saving a scenario"
+  },
+  "scenarioLabSavedBody": "{name} is ready to compare or make active.",
+  "@scenarioLabSavedBody": {
+    "description": "Success message after saving a scenario",
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "scenarioLabCompareAction": "Compare",
+  "@scenarioLabCompareAction": {
+    "description": "Action to compare after saving a scenario"
+  },
+  "scenarioLabMakeActiveAction": "Make active",
+  "@scenarioLabMakeActiveAction": {
+    "description": "Action to make the saved scenario active"
+  },
+  "scenarioLabDebtFreeDate": "Debt-free date",
+  "@scenarioLabDebtFreeDate": {
+    "description": "Preview metric label for debt-free date"
+  },
+  "scenarioLabProjectedInterest": "Projected interest",
+  "@scenarioLabProjectedInterest": {
+    "description": "Preview metric label for projected interest"
+  },
+  "scenarioLabMonthlyCommitment": "Monthly commitment",
+  "@scenarioLabMonthlyCommitment": {
+    "description": "Preview metric label for monthly commitment"
+  },
+  "scenarioLabFirstTarget": "First target",
+  "@scenarioLabFirstTarget": {
+    "description": "Preview metric label for first target debt"
+  },
+  "scenarioLabTimingImpact": "Timing impact",
+  "@scenarioLabTimingImpact": {
+    "description": "Preview metric label for months saved or added"
+  },
+  "scenarioLabInterestImpact": "Interest impact",
+  "@scenarioLabInterestImpact": {
+    "description": "Preview metric label for interest saved or added"
+  },
+  "scenarioLabMonthsEarlier": "{months} months earlier",
+  "@scenarioLabMonthsEarlier": {
+    "description": "Preview value for faster payoff",
+    "placeholders": { "months": { "type": "int" } }
+  },
+  "scenarioLabMonthsLater": "{months} months later",
+  "@scenarioLabMonthsLater": {
+    "description": "Preview value for slower payoff",
+    "placeholders": { "months": { "type": "int" } }
+  },
+  "scenarioLabInterestSaved": "{amount} saved",
+  "@scenarioLabInterestSaved": {
+    "description": "Preview value for interest saved",
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "scenarioLabInterestAdded": "{amount} more",
+  "@scenarioLabInterestAdded": {
+    "description": "Preview value for added interest",
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "scenarioLabNoTargetDebt": "No target",
+  "@scenarioLabNoTargetDebt": {
+    "description": "Shown when no debt can be targeted"
+  },
+  "scenarioLabNoTimingChange": "No timing change",
+  "@scenarioLabNoTimingChange": {
+    "description": "Shown when payoff timing does not change"
+  },
+  "scenarioLabNoInterestChange": "No interest change",
+  "@scenarioLabNoInterestChange": {
+    "description": "Shown when projected interest does not change"
   },
   "scenariosCopyDebtsTitle": "Copy debts to another scenario",
   "@scenariosCopyDebtsTitle": {

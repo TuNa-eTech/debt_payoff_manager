@@ -61,6 +61,12 @@ class ScenariosCubit extends Cubit<ScenariosState> {
     await _scenarioRepository.addScenario(scenario);
   }
 
+  Future<void> renameScenario(String id, String name) async {
+    if (name.trim().isEmpty) return;
+    if (!await _requirePremium()) return;
+    await _scenarioRepository.renameScenario(id, name.trim());
+  }
+
   Future<void> duplicateScenario(String sourceId, String newName) async {
     if (newName.trim().isEmpty) return;
     if (!await _requirePremium()) return;

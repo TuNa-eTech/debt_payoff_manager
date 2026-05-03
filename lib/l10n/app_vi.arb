@@ -2631,6 +2631,10 @@
   "@scenariosAddTitle": {
     "description": "Dialog title for adding a scenario"
   },
+  "scenariosEditTitle": "Sửa kịch bản",
+  "@scenariosEditTitle": {
+    "description": "Dialog title for renaming a scenario"
+  },
   "scenariosNameHint": "Tên kịch bản",
   "@scenariosNameHint": {
     "description": "Text field hint for scenario name"
@@ -2720,6 +2724,159 @@
   "scenariosCompareAction": "So sánh",
   "@scenariosCompareAction": {
     "description": "Button label to open comparison page"
+  },
+  "scenariosCreateWhatIfAction": "Tạo What-if",
+  "@scenariosCreateWhatIfAction": {
+    "description": "Button label to open the what-if scenario lab"
+  },
+  "scenariosAssumptionsTitle": "Giả định",
+  "@scenariosAssumptionsTitle": {
+    "description": "Section title for scenario assumptions"
+  },
+  "scenariosCompareMonthlyCommitment": "Cam kết mỗi tháng",
+  "@scenariosCompareMonthlyCommitment": {
+    "description": "Label for monthly payment commitment in comparison"
+  },
+  "scenariosCompareFirstTarget": "Khoản ưu tiên",
+  "@scenariosCompareFirstTarget": {
+    "description": "Label for first payoff target in comparison"
+  },
+  "scenarioLabTitle": "Tạo What-if",
+  "@scenarioLabTitle": {
+    "description": "App bar title for the what-if scenario lab"
+  },
+  "scenarioLabSubtitle": "Xem tác động của một thay đổi đáng kể trước khi lưu thành kịch bản.",
+  "@scenarioLabSubtitle": {
+    "description": "Short subtitle for the what-if scenario lab"
+  },
+  "scenarioLabTemplatesTitle": "Chọn giả định",
+  "@scenarioLabTemplatesTitle": {
+    "description": "Section title for scenario lab templates"
+  },
+  "scenarioLabTemplateExtraMonthly": "Trả thêm mỗi tháng",
+  "@scenarioLabTemplateExtraMonthly": {
+    "description": "Scenario lab template title for extra monthly payments"
+  },
+  "scenarioLabTemplateExtraMonthlySubtitle": "Xem cam kết tháng cao hơn làm đổi ngày trả hết và tiền lãi thế nào.",
+  "@scenarioLabTemplateExtraMonthlySubtitle": {
+    "description": "Scenario lab template subtitle for extra monthly payments"
+  },
+  "scenarioLabTemplateStrategy": "Đổi chiến lược",
+  "@scenarioLabTemplateStrategy": {
+    "description": "Scenario lab template title for strategy change"
+  },
+  "scenarioLabTemplateStrategySubtitle": "So sánh snowball và avalanche mà không đổi kế hoạch đang dùng.",
+  "@scenarioLabTemplateStrategySubtitle": {
+    "description": "Scenario lab template subtitle for strategy change"
+  },
+  "scenarioLabTemplateBonus": "Khoản tiền một lần",
+  "@scenarioLabTemplateBonus": {
+    "description": "Scenario lab template title for a future lump sum"
+  },
+  "scenarioLabTemplateBonusSubtitle": "Mô phỏng bonus, hoàn thuế hoặc tiền tặng trong bản sau.",
+  "@scenarioLabTemplateBonusSubtitle": {
+    "description": "Scenario lab template subtitle for a future lump sum"
+  },
+  "scenarioLabAssumptionTitle": "Chi tiết giả định",
+  "@scenarioLabAssumptionTitle": {
+    "description": "Section title for scenario lab input form"
+  },
+  "scenarioLabExtraAmountLabel": "Số tiền trả thêm mỗi tháng",
+  "@scenarioLabExtraAmountLabel": {
+    "description": "Currency field label for extra monthly amount"
+  },
+  "scenarioLabScenarioNameLabel": "Tên kịch bản",
+  "@scenarioLabScenarioNameLabel": {
+    "description": "Optional scenario name field label"
+  },
+  "scenarioLabScenarioNameHint": "Không bắt buộc. Mặc định theo tóm tắt giả định.",
+  "@scenarioLabScenarioNameHint": {
+    "description": "Optional scenario name field hint"
+  },
+  "scenarioLabPreviewAction": "Xem tác động",
+  "@scenarioLabPreviewAction": {
+    "description": "Action to preview scenario impact"
+  },
+  "scenarioLabPreviewTitle": "Tác động dự kiến",
+  "@scenarioLabPreviewTitle": {
+    "description": "Title for scenario lab impact card"
+  },
+  "scenarioLabSaveAction": "Lưu kịch bản",
+  "@scenarioLabSaveAction": {
+    "description": "Action to save the previewed scenario"
+  },
+  "scenarioLabSavedTitle": "Đã lưu kịch bản",
+  "@scenarioLabSavedTitle": {
+    "description": "Success title after saving a scenario"
+  },
+  "scenarioLabSavedBody": "{name} đã sẵn sàng để so sánh hoặc đặt làm kế hoạch đang dùng.",
+  "@scenarioLabSavedBody": {
+    "description": "Success message after saving a scenario",
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "scenarioLabCompareAction": "So sánh",
+  "@scenarioLabCompareAction": {
+    "description": "Action to compare after saving a scenario"
+  },
+  "scenarioLabMakeActiveAction": "Đặt làm đang dùng",
+  "@scenarioLabMakeActiveAction": {
+    "description": "Action to make the saved scenario active"
+  },
+  "scenarioLabDebtFreeDate": "Ngày debt-free",
+  "@scenarioLabDebtFreeDate": {
+    "description": "Preview metric label for debt-free date"
+  },
+  "scenarioLabProjectedInterest": "Lãi dự kiến",
+  "@scenarioLabProjectedInterest": {
+    "description": "Preview metric label for projected interest"
+  },
+  "scenarioLabMonthlyCommitment": "Cam kết mỗi tháng",
+  "@scenarioLabMonthlyCommitment": {
+    "description": "Preview metric label for monthly commitment"
+  },
+  "scenarioLabFirstTarget": "Khoản ưu tiên",
+  "@scenarioLabFirstTarget": {
+    "description": "Preview metric label for first target debt"
+  },
+  "scenarioLabTimingImpact": "Tác động thời gian",
+  "@scenarioLabTimingImpact": {
+    "description": "Preview metric label for months saved or added"
+  },
+  "scenarioLabInterestImpact": "Tác động tiền lãi",
+  "@scenarioLabInterestImpact": {
+    "description": "Preview metric label for interest saved or added"
+  },
+  "scenarioLabMonthsEarlier": "Sớm hơn {months} tháng",
+  "@scenarioLabMonthsEarlier": {
+    "description": "Preview value for faster payoff",
+    "placeholders": { "months": { "type": "int" } }
+  },
+  "scenarioLabMonthsLater": "Trễ hơn {months} tháng",
+  "@scenarioLabMonthsLater": {
+    "description": "Preview value for slower payoff",
+    "placeholders": { "months": { "type": "int" } }
+  },
+  "scenarioLabInterestSaved": "Tiết kiệm {amount}",
+  "@scenarioLabInterestSaved": {
+    "description": "Preview value for interest saved",
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "scenarioLabInterestAdded": "Tăng thêm {amount}",
+  "@scenarioLabInterestAdded": {
+    "description": "Preview value for added interest",
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "scenarioLabNoTargetDebt": "Không có khoản ưu tiên",
+  "@scenarioLabNoTargetDebt": {
+    "description": "Shown when no debt can be targeted"
+  },
+  "scenarioLabNoTimingChange": "Không đổi thời gian",
+  "@scenarioLabNoTimingChange": {
+    "description": "Shown when payoff timing does not change"
+  },
+  "scenarioLabNoInterestChange": "Không đổi tiền lãi",
+  "@scenarioLabNoInterestChange": {
+    "description": "Shown when projected interest does not change"
   },
   "scenariosCopyDebtsTitle": "Sao chép khoản nợ sang kịch bản khác",
   "@scenariosCopyDebtsTitle": {

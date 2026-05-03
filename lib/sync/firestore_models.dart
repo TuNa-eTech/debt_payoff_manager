@@ -9,6 +9,7 @@ import '../domain/enums/milestone_type.dart';
 import '../domain/enums/min_payment_type.dart';
 import '../domain/enums/payment_cadence.dart';
 import '../domain/enums/payment_type.dart';
+import '../domain/enums/scenario_assumption_type.dart';
 import '../domain/enums/strategy.dart';
 
 typedef FirestoreJson = Map<String, Object?>;
@@ -23,7 +24,8 @@ enum FirestoreSyncCollection {
   interestRateHistory('interestRateHistory'),
   milestones('milestones'),
   settings('settings'),
-  scenarios('scenarios');
+  scenarios('scenarios'),
+  scenarioAssumptions('scenarioAssumptions');
 
   const FirestoreSyncCollection(this.path);
 
@@ -490,6 +492,46 @@ class FirestoreScenarioSerializer {
         name: Value(_requiredString(json, 'name')),
         isMain: Value(_requiredBool(json, 'isMain')),
         createdAt: Value(_requiredUtcTimestamp(json, 'createdAt')),
+        deletedAt: Value(_nullableUtcTimestamp(json, 'deletedAt')),
+      ),
+    );
+  }
+}
+
+class FirestoreScenarioAssumptionSerializer {
+  const FirestoreScenarioAssumptionSerializer._();
+
+  static FirestoreJson toFirestoreJson(
+    ScenarioAssumptionRow row,
+    FirestoreSyncMetadata metadata,
+  ) {
+    return _withMirrorFields(
+      id: row.id,
+      scenarioId: row.scenarioId,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+      deletedAt: row.deletedAt,
+      metadata: metadata,
+      data: <String, Object?>{
+        'type': row.type.name,
+        'summary': row.summary,
+        'paramsJson': row.paramsJson,
+      },
+    );
+  }
+
+  static FirestoreMirrorInput<ScenarioAssumptionsTableCompanion>
+  fromFirestoreJson(FirestoreJson json) {
+    return _mirrorInput(
+      json,
+      ScenarioAssumptionsTableCompanion(
+        id: Value(_requiredString(json, 'id')),
+        scenarioId: Value(_requiredString(json, 'scenarioId')),
+        type: Value(_requiredEnum(ScenarioAssumptionType.values, json, 'type')),
+        summary: Value(_requiredString(json, 'summary')),
+        paramsJson: Value(_requiredString(json, 'paramsJson')),
+        createdAt: Value(_requiredUtcTimestamp(json, 'createdAt')),
+        updatedAt: Value(_requiredUtcTimestamp(json, 'updatedAt')),
         deletedAt: Value(_nullableUtcTimestamp(json, 'deletedAt')),
       ),
     );

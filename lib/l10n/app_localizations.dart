@@ -3628,6 +3628,12 @@ abstract class AppLocalizations {
   /// **'New scenario'**
   String get scenariosAddTitle;
 
+  /// Dialog title for renaming a scenario
+  ///
+  /// In en, this message translates to:
+  /// **'Edit scenario'**
+  String get scenariosEditTitle;
+
   /// Text field hint for scenario name
   ///
   /// In en, this message translates to:
@@ -3747,6 +3753,228 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Compare'**
   String get scenariosCompareAction;
+
+  /// Button label to open the what-if scenario lab
+  ///
+  /// In en, this message translates to:
+  /// **'Create What-if'**
+  String get scenariosCreateWhatIfAction;
+
+  /// Section title for scenario assumptions
+  ///
+  /// In en, this message translates to:
+  /// **'Assumptions'**
+  String get scenariosAssumptionsTitle;
+
+  /// Label for monthly payment commitment in comparison
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly commitment'**
+  String get scenariosCompareMonthlyCommitment;
+
+  /// Label for first payoff target in comparison
+  ///
+  /// In en, this message translates to:
+  /// **'First target'**
+  String get scenariosCompareFirstTarget;
+
+  /// App bar title for the what-if scenario lab
+  ///
+  /// In en, this message translates to:
+  /// **'Create What-if'**
+  String get scenarioLabTitle;
+
+  /// Short subtitle for the what-if scenario lab
+  ///
+  /// In en, this message translates to:
+  /// **'Preview a meaningful change before saving it as a scenario.'**
+  String get scenarioLabSubtitle;
+
+  /// Section title for scenario lab templates
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an assumption'**
+  String get scenarioLabTemplatesTitle;
+
+  /// Scenario lab template title for extra monthly payments
+  ///
+  /// In en, this message translates to:
+  /// **'Pay extra monthly'**
+  String get scenarioLabTemplateExtraMonthly;
+
+  /// Scenario lab template subtitle for extra monthly payments
+  ///
+  /// In en, this message translates to:
+  /// **'See how a higher monthly commitment changes payoff date and interest.'**
+  String get scenarioLabTemplateExtraMonthlySubtitle;
+
+  /// Scenario lab template title for strategy change
+  ///
+  /// In en, this message translates to:
+  /// **'Change strategy'**
+  String get scenarioLabTemplateStrategy;
+
+  /// Scenario lab template subtitle for strategy change
+  ///
+  /// In en, this message translates to:
+  /// **'Compare snowball and avalanche without changing your active plan.'**
+  String get scenarioLabTemplateStrategySubtitle;
+
+  /// Scenario lab template title for a future lump sum
+  ///
+  /// In en, this message translates to:
+  /// **'One-time bonus'**
+  String get scenarioLabTemplateBonus;
+
+  /// Scenario lab template subtitle for a future lump sum
+  ///
+  /// In en, this message translates to:
+  /// **'Model a bonus, tax refund, or gift in a future release.'**
+  String get scenarioLabTemplateBonusSubtitle;
+
+  /// Section title for scenario lab input form
+  ///
+  /// In en, this message translates to:
+  /// **'Assumption details'**
+  String get scenarioLabAssumptionTitle;
+
+  /// Currency field label for extra monthly amount
+  ///
+  /// In en, this message translates to:
+  /// **'Extra amount per month'**
+  String get scenarioLabExtraAmountLabel;
+
+  /// Optional scenario name field label
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario name'**
+  String get scenarioLabScenarioNameLabel;
+
+  /// Optional scenario name field hint
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. Defaults to the assumption summary.'**
+  String get scenarioLabScenarioNameHint;
+
+  /// Action to preview scenario impact
+  ///
+  /// In en, this message translates to:
+  /// **'Preview impact'**
+  String get scenarioLabPreviewAction;
+
+  /// Title for scenario lab impact card
+  ///
+  /// In en, this message translates to:
+  /// **'Preview impact'**
+  String get scenarioLabPreviewTitle;
+
+  /// Action to save the previewed scenario
+  ///
+  /// In en, this message translates to:
+  /// **'Save scenario'**
+  String get scenarioLabSaveAction;
+
+  /// Success title after saving a scenario
+  ///
+  /// In en, this message translates to:
+  /// **'Scenario saved'**
+  String get scenarioLabSavedTitle;
+
+  /// Success message after saving a scenario
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is ready to compare or make active.'**
+  String scenarioLabSavedBody(String name);
+
+  /// Action to compare after saving a scenario
+  ///
+  /// In en, this message translates to:
+  /// **'Compare'**
+  String get scenarioLabCompareAction;
+
+  /// Action to make the saved scenario active
+  ///
+  /// In en, this message translates to:
+  /// **'Make active'**
+  String get scenarioLabMakeActiveAction;
+
+  /// Preview metric label for debt-free date
+  ///
+  /// In en, this message translates to:
+  /// **'Debt-free date'**
+  String get scenarioLabDebtFreeDate;
+
+  /// Preview metric label for projected interest
+  ///
+  /// In en, this message translates to:
+  /// **'Projected interest'**
+  String get scenarioLabProjectedInterest;
+
+  /// Preview metric label for monthly commitment
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly commitment'**
+  String get scenarioLabMonthlyCommitment;
+
+  /// Preview metric label for first target debt
+  ///
+  /// In en, this message translates to:
+  /// **'First target'**
+  String get scenarioLabFirstTarget;
+
+  /// Preview metric label for months saved or added
+  ///
+  /// In en, this message translates to:
+  /// **'Timing impact'**
+  String get scenarioLabTimingImpact;
+
+  /// Preview metric label for interest saved or added
+  ///
+  /// In en, this message translates to:
+  /// **'Interest impact'**
+  String get scenarioLabInterestImpact;
+
+  /// Preview value for faster payoff
+  ///
+  /// In en, this message translates to:
+  /// **'{months} months earlier'**
+  String scenarioLabMonthsEarlier(int months);
+
+  /// Preview value for slower payoff
+  ///
+  /// In en, this message translates to:
+  /// **'{months} months later'**
+  String scenarioLabMonthsLater(int months);
+
+  /// Preview value for interest saved
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} saved'**
+  String scenarioLabInterestSaved(String amount);
+
+  /// Preview value for added interest
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} more'**
+  String scenarioLabInterestAdded(String amount);
+
+  /// Shown when no debt can be targeted
+  ///
+  /// In en, this message translates to:
+  /// **'No target'**
+  String get scenarioLabNoTargetDebt;
+
+  /// Shown when payoff timing does not change
+  ///
+  /// In en, this message translates to:
+  /// **'No timing change'**
+  String get scenarioLabNoTimingChange;
+
+  /// Shown when projected interest does not change
+  ///
+  /// In en, this message translates to:
+  /// **'No interest change'**
+  String get scenarioLabNoInterestChange;
 
   /// Dialog title for copying debts between scenarios
   ///

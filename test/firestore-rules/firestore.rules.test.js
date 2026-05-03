@@ -183,6 +183,22 @@ function validScenario(overrides = {}) {
   };
 }
 
+function validScenarioAssumption(overrides = {}) {
+  return {
+    id: 'assumption-1',
+    scenarioId: 'main',
+    type: 'extraMonthly',
+    summary: 'Extra $50.00/month',
+    paramsJson: '{"deltaExtraMonthlyCents":5000}',
+    createdAt: now(),
+    updatedAt: now(),
+    deletedAt: null,
+    _deviceId: 'ios-simulator',
+    _schemaVersion: 1,
+    ...overrides,
+  };
+}
+
 function validSharedPlan(overrides = {}) {
   return {
     ownerUid: 'alice',
@@ -243,6 +259,11 @@ describe('firestore.rules Phase 7 Level 1 sync', () => {
       ['users/alice/payments/payment-1', validPayment, { note: 'manual log' }],
       ['users/alice/plans/plan-1', validPlan, { extraMonthlyAmountCents: 40000 }],
       ['users/alice/scenarios/main', validScenario, { name: 'Main household plan' }],
+      [
+        'users/alice/scenarioAssumptions/assumption-1',
+        validScenarioAssumption,
+        { summary: 'Extra $75.00/month' },
+      ],
       ['users/alice/settings/singleton', validSettings, { localeCode: 'vi-VN' }],
       ['users/alice/milestones/milestone-1', validMilestone, { seen: true }],
       [

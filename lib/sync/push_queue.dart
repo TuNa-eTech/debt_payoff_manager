@@ -125,6 +125,7 @@ class DriftSyncPushQueue implements SyncPushQueue {
       ...await _collectPlans(),
       ...await _collectSettings(),
       ...await _collectMilestones(),
+      ...await _collectScenarioAssumptions(),
       ...await _collectInterestRateHistory(),
     ];
 
@@ -266,6 +267,26 @@ class DriftSyncPushQueue implements SyncPushQueue {
             collection: FirestoreSyncCollection.interestRateHistory,
             documentId: row.id,
             data: FirestoreInterestRateHistorySerializer.toFirestoreJson(
+              row,
+              _metadata!,
+            ),
+          ),
+        )
+        .toList();
+  }
+
+  Future<List<SyncQueueEntry>> _collectScenarioAssumptions() async {
+    final state = await _syncStateStore.getState(
+      FirestoreSyncCollection.scenarioAssumptions.path,
+    );
+    final rows = await _db.select(_db.scenarioAssumptionsTable).get();
+    return rows
+        .where((row) => _shouldPush(state, row.updatedAt, row.deletedAt))
+        .map(
+          (row) => SyncQueueEntry(
+            collection: FirestoreSyncCollection.scenarioAssumptions,
+            documentId: row.id,
+            data: FirestoreScenarioAssumptionSerializer.toFirestoreJson(
               row,
               _metadata!,
             ),

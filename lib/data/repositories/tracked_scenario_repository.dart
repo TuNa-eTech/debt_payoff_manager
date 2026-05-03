@@ -7,8 +7,8 @@ class TrackedScenarioRepository implements ScenarioRepository {
   TrackedScenarioRepository({
     required ScenarioRepositoryImpl base,
     required SyncStateStore syncStateStore,
-  })  : _base = base,
-        _syncStateStore = syncStateStore;
+  }) : _base = base,
+       _syncStateStore = syncStateStore;
 
   final ScenarioRepositoryImpl _base;
   final SyncStateStore _syncStateStore;
@@ -24,6 +24,12 @@ class TrackedScenarioRepository implements ScenarioRepository {
     final added = await _base.addScenario(scenario);
     await _syncStateStore.markDirty('scenarios');
     return added;
+  }
+
+  @override
+  Future<void> renameScenario(String id, String name) async {
+    await _base.renameScenario(id, name);
+    await _syncStateStore.markDirty('scenarios');
   }
 
   @override

@@ -40,7 +40,8 @@ class ScenariosPage extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(LucideIcons.plusCircle),
-              onPressed: () => _showAddDialog(context),
+              tooltip: l10n.scenariosCreateWhatIfAction,
+              onPressed: () => context.push(AppRoutes.createWhatIf),
             ),
           ],
         ),
@@ -76,17 +77,6 @@ class ScenariosPage extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
-  }
-
-  void _showAddDialog(BuildContext context) {
-    showDialog<void>(
-      context: context,
-      builder: (dialogContext) => _ScenarioNameDialog(
-        title: context.l10n.scenariosAddTitle,
-        confirmLabel: context.l10n.commonAdd,
-        onConfirm: (name) => context.read<ScenariosCubit>().addScenario(name),
       ),
     );
   }
@@ -140,6 +130,10 @@ class _ScenarioCard extends StatelessWidget {
                   child: Text(l10n.scenariosActiveBadge),
                 ),
               PopupMenuItem(
+                value: _ScenarioAction.rename,
+                child: Text(l10n.commonEdit),
+              ),
+              PopupMenuItem(
                 value: _ScenarioAction.duplicate,
                 child: Text(l10n.scenariosDuplicateTitle),
               ),
@@ -169,6 +163,17 @@ class _ScenarioCard extends StatelessWidget {
     switch (action) {
       case _ScenarioAction.setActive:
         await cubit.setActive(scenario.id);
+      case _ScenarioAction.rename:
+        if (!context.mounted) return;
+        await showDialog<void>(
+          context: context,
+          builder: (dialogContext) => _ScenarioNameDialog(
+            title: l10n.scenariosEditTitle,
+            initialValue: scenario.name,
+            confirmLabel: l10n.commonSave,
+            onConfirm: (name) => cubit.renameScenario(scenario.id, name),
+          ),
+        );
       case _ScenarioAction.duplicate:
         if (!context.mounted) return;
         await showDialog<void>(
@@ -288,7 +293,7 @@ class _ScenarioCard extends StatelessWidget {
   }
 }
 
-enum _ScenarioAction { setActive, duplicate, copyDebts, delete }
+enum _ScenarioAction { setActive, rename, duplicate, copyDebts, delete }
 
 class _ScenarioNameDialog extends StatefulWidget {
   const _ScenarioNameDialog({

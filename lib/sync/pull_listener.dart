@@ -204,6 +204,8 @@ class DriftSyncPullApplier implements SyncPullApplier {
         return 5;
       case FirestoreSyncCollection.milestones:
         return 6;
+      case FirestoreSyncCollection.scenarioAssumptions:
+        return 7;
     }
   }
 
@@ -223,6 +225,8 @@ class DriftSyncPullApplier implements SyncPullApplier {
         return _applyMilestone(change.data);
       case FirestoreSyncCollection.interestRateHistory:
         return _applyInterestRateHistory(change.data);
+      case FirestoreSyncCollection.scenarioAssumptions:
+        return _applyScenarioAssumption(change.data);
     }
   }
 
@@ -374,6 +378,27 @@ class DriftSyncPullApplier implements SyncPullApplier {
 
     await _db
         .into(_db.interestRateHistoryTable)
+        .insertOnConflictUpdate(input.companion);
+    return true;
+  }
+
+  Future<bool> _applyScenarioAssumption(FirestoreJson json) async {
+    final input = FirestoreScenarioAssumptionSerializer.fromFirestoreJson(json);
+    final local = await (_db.select(
+      _db.scenarioAssumptionsTable,
+    )..where((row) => row.id.equals(input.id))).getSingleOrNull();
+
+    if (!_shouldApply(
+      local?.updatedAt,
+      input.updatedAt,
+      local?.deletedAt,
+      input.deletedAt,
+    )) {
+      return false;
+    }
+
+    await _db
+        .into(_db.scenarioAssumptionsTable)
         .insertOnConflictUpdate(input.companion);
     return true;
   }

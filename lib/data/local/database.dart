@@ -10,6 +10,7 @@ import '../../domain/enums/milestone_type.dart';
 import '../../domain/enums/min_payment_type.dart';
 import '../../domain/enums/payment_cadence.dart';
 import '../../domain/enums/payment_type.dart';
+import '../../domain/enums/scenario_assumption_type.dart';
 import '../../domain/enums/strategy.dart';
 import 'converters/datetime_converters.dart';
 import 'converters/decimal_converter.dart';
@@ -19,6 +20,7 @@ import 'tables/interest_rate_history_table.dart';
 import 'tables/milestones_table.dart';
 import 'tables/payments_table.dart';
 import 'tables/plans_table.dart';
+import 'tables/scenario_assumptions_table.dart';
 import 'tables/scenarios_table.dart';
 import 'tables/sync_state_table.dart';
 import 'tables/timeline_cache_table.dart';
@@ -28,7 +30,7 @@ part 'database.g.dart';
 
 /// SQLite database setup using Drift.
 ///
-/// Per data-schema.md — 8 tables, schema version 1.
+/// Per data-schema.md — Drift source of truth for local-first data.
 /// Per ADR-002: Drift as local database.
 /// Per ADR-004: INTEGER cents for money, never REAL/DOUBLE.
 ///
@@ -44,6 +46,7 @@ part 'database.g.dart';
     SyncStateTable,
     TimelineCacheTable,
     ScenariosTable,
+    ScenarioAssumptionsTable,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -57,7 +60,7 @@ class AppDatabase extends _$AppDatabase {
   final String _initialLocaleCode;
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -69,6 +72,9 @@ class AppDatabase extends _$AppDatabase {
           userSettingsTable,
           userSettingsTable.activeScenarioId,
         );
+      }
+      if (from < 3) {
+        await m.createTable(scenarioAssumptionsTable);
       }
     },
     beforeOpen: (details) async {
@@ -98,6 +104,7 @@ class AppDatabase extends _$AppDatabase {
     await delete(syncStateTable).go();
     await delete(debtsTable).go();
     await delete(plansTable).go();
+    await delete(scenarioAssumptionsTable).go();
     await delete(scenariosTable).go();
     await delete(userSettingsTable).go();
 

@@ -11,6 +11,9 @@ abstract class ScenarioRepository {
   /// Add a new scenario.
   Future<Scenario> addScenario(Scenario scenario);
 
+  /// Rename an existing scenario.
+  Future<void> renameScenario(String id, String name);
+
   /// Soft-delete a scenario by id.
   ///
   /// Guard: returns false if [id] == 'main' (main scenario cannot be deleted).
