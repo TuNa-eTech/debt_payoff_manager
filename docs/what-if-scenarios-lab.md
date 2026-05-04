@@ -564,7 +564,7 @@ Exit criteria:
 
 - [x] Add assumptions summary to each selected scenario.
 - [x] Add monthly commitment row.
-- [ ] Add current active plan as an easy baseline.
+- [x] Add current active plan as an easy baseline.
 - [x] Add first target debt row when projection data is available.
 - [ ] Add Make active CTA for saved scenario.
 
@@ -624,6 +624,8 @@ Targeted tests:
 Critical cases:
 
 - Extra monthly scenario changes only cloned plan.
+- Saved scenario clones the preview source scenario even if the active scenario
+  changes before save.
 - Strategy scenario changes only cloned plan.
 - Lump sum does not create payments.
 - Deleting scenario soft-deletes or hides assumptions.
@@ -635,6 +637,30 @@ Critical cases:
   - one assumption
   - multiple assumptions
   - stale plan requiring recast
+
+## Double-check Evidence — 2026-05-03
+
+Logic/flow review:
+
+- Preview generation reads the current active scenario and stores
+  `sourceScenarioId` on the preview.
+- Save now reloads debts and plan from `preview.sourceScenarioId`, not the
+  active scenario at save time. This prevents saving a What-if that accidentally
+  clones a different scenario after navigation or active-scenario changes.
+- Compare preselects the active/current plan as baseline and the latest saved
+  scenario with assumptions as the comparison candidate, so a newly created
+  What-if is visible without manual dropdown changes.
+
+Verification:
+
+- `rtk fvm flutter test test/core/services/scenario_lab_service_test.dart`
+  passed, including the active-scenario-switch regression.
+- `rtk fvm flutter analyze lib/core/services/scenario_lab_service.dart test/core/services/scenario_lab_service_test.dart`
+  passed.
+- `rtk fvm flutter test test/features/scenarios/presentation/pages/compare_scenarios_page_test.dart`
+  passed, including active-baseline preselection.
+- `rtk fvm flutter analyze lib/features/scenarios/presentation/pages/compare_scenarios_page.dart lib/features/scenarios/presentation/pages/create_what_if_page.dart lib/features/scenarios/presentation/pages/scenarios_page.dart test/features/scenarios/presentation/pages/compare_scenarios_page_test.dart`
+  passed.
 
 ## Release Acceptance Criteria
 

@@ -114,7 +114,7 @@ class ScenarioLabService {
 
     await _scenarioRepository.addScenario(scenario);
 
-    final input = await _loadInput();
+    final input = await _loadInput(scenarioId: preview.sourceScenarioId);
     for (final debt in input.debts) {
       await _debtRepository.addDebt(
         debt.copyWith(

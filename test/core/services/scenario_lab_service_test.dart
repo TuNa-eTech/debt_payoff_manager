@@ -12,6 +12,7 @@ import 'package:debt_payoff_manager/data/repositories/plan_repository_impl.dart'
 import 'package:debt_payoff_manager/data/repositories/scenario_assumption_repository_impl.dart';
 import 'package:debt_payoff_manager/data/repositories/scenario_repository_impl.dart';
 import 'package:debt_payoff_manager/data/repositories/settings_repository_impl.dart';
+import 'package:debt_payoff_manager/domain/entities/scenario.dart';
 import 'package:debt_payoff_manager/domain/enums/scenario_assumption_type.dart';
 
 import '../../data/repositories/repository_test_helpers.dart';
@@ -22,6 +23,7 @@ void main() {
   late PlanRepositoryImpl planRepository;
   late ScenarioRepositoryImpl scenarioRepository;
   late ScenarioAssumptionRepositoryImpl assumptionRepository;
+  late SettingsRepositoryImpl settingsRepository;
   late ScenarioLabService service;
 
   setUp(() {
@@ -30,6 +32,7 @@ void main() {
     planRepository = PlanRepositoryImpl(db: db);
     scenarioRepository = ScenarioRepositoryImpl(db: db);
     assumptionRepository = ScenarioAssumptionRepositoryImpl(db: db);
+    settingsRepository = SettingsRepositoryImpl(db: db);
     final recastService = PlanRecastService(
       debtRepository: debtRepository,
       interestRateHistoryRepository: InterestRateHistoryRepositoryImpl(db: db),
@@ -38,7 +41,7 @@ void main() {
       timelineCacheStore: TimelineCacheStore(db: db),
     );
     service = ScenarioLabService(
-      settingsRepository: SettingsRepositoryImpl(db: db),
+      settingsRepository: settingsRepository,
       scenarioRepository: scenarioRepository,
       scenarioAssumptionRepository: assumptionRepository,
       debtRepository: debtRepository,
@@ -86,6 +89,59 @@ void main() {
         expect(assumptions, hasLength(1));
         expect(assumptions.single.type, ScenarioAssumptionType.extraMonthly);
         expect(assumptions.single.params['deltaExtraMonthlyCents'], 5000);
+      },
+    );
+
+    test(
+      'saves from the preview source when active scenario changes before save',
+      () async {
+        await debtRepository.addDebt(
+          makeRepoDebt(
+            id: 'main-debt',
+            name: 'Main debt',
+            currentBalance: 120000,
+            minimumPayment: 10000,
+          ),
+        );
+
+        await scenarioRepository.addScenario(
+          Scenario(
+            id: 'alternate',
+            name: 'Alternate scenario',
+            createdAt: DateTime.utc(2026, 5, 3),
+          ),
+        );
+        await debtRepository.addDebt(
+          makeRepoDebt(
+            id: 'alternate-debt',
+            scenarioId: 'alternate',
+            name: 'Alternate debt',
+            currentBalance: 900000,
+            minimumPayment: 20000,
+          ),
+        );
+        await planRepository.savePlan(
+          makeRepoPlan(id: 'alternate-plan', scenarioId: 'alternate'),
+        );
+
+        final preview = await service.previewExtraMonthly(
+          deltaExtraMonthlyCents: 5000,
+        );
+
+        final settings = await settingsRepository.getSettings();
+        await settingsRepository.updateSettings(
+          settings.copyWith(activeScenarioId: 'alternate'),
+        );
+
+        final saved = await service.savePreview(preview);
+        final debts = await debtRepository.getAllDebts(
+          scenarioId: saved.scenario.id,
+        );
+
+        expect(preview.sourceScenarioId, 'main');
+        expect(debts, hasLength(1));
+        expect(debts.single.name, 'Main debt');
+        expect(debts.single.currentBalance, 120000);
       },
     );
   });

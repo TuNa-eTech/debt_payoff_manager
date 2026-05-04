@@ -523,7 +523,7 @@ Legend:
 - [x] Scenario comparison view (side-by-side metrics) — `CompareScenariosPage` with delta winner banner
 - [x] Scenario isolation (payments không log vào non-main) — `scenarioId` guard in `PaymentLoggingService`
 - [x] ScenarioId propagation qua app shell/repository queries — timeline, debt list/add debt, reminders, progress, settings plan summary, monthly action, monthly summary use active scenario
-- [x] What-if Lab guided creation UX — first implementation slice complete in [`docs/what-if-scenarios-lab.md`](what-if-scenarios-lab.md): extra monthly and strategy templates, persisted assumptions, preview/save flow, sync/rules support, and compare assumption/monthly commitment rows. Lump sum, backup/restore, and deeper compare actions remain deferred.
+- [x] What-if Lab guided creation UX — first implementation slice complete in [`docs/what-if-scenarios-lab.md`](what-if-scenarios-lab.md): extra monthly and strategy templates, persisted assumptions, preview/save flow, sync/rules support, compare assumption/monthly commitment rows, active-baseline compare preselection, rename/edit scenario action, and source-scenario-safe save flow. Lump sum, backup/restore, and deeper compare actions remain deferred.
 
 **Feature §2.2 Edge-Case Debt Handling**
 - [x] Forbearance/pause UI + engine support — `DebtStatus.paused`, `pausedUntil`, `isPaused()`, `_showPauseDialog`, engine skip
