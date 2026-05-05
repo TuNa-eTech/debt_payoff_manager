@@ -60,6 +60,7 @@ dependencies:
   # Monetization (Phase 11)
   in_app_purchase: ^3.2.3
   in_app_purchase_storekit: ^0.4.8+1
+  url_launcher: ^6.3.0
 
   # Export & reports (Feature §2.6)
   archive: ^4.0.9

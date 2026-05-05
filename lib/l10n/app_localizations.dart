@@ -1208,6 +1208,18 @@ abstract class AppLocalizations {
   /// **'No free trial. Subscription renews through your Apple Account and can be managed in App Store settings.'**
   String get pricingNoTrialNotice;
 
+  /// Link label for the Privacy Policy on the pricing / subscription page.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get pricingPrivacyPolicy;
+
+  /// Link label for the Terms of Service / EULA on the pricing / subscription page.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get pricingTermsOfService;
+
   /// Title for active premium status card.
   ///
   /// In en, this message translates to:

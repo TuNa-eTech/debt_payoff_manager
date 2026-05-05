@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
+import '../../../../core/constants/app_urls.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/extensions/context_extensions.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -176,7 +178,9 @@ class _PricingView extends StatelessWidget {
                       onPressed: context.pop,
                     ),
                   ),
-                  const SizedBox(height: AppDimensions.md),
+                  const SizedBox(height: AppDimensions.lg),
+                  const _LegalLinksRow(),
+                  const SizedBox(height: AppDimensions.sm),
                   Text(
                     _footerMessage(context, state),
                     style: AppTextStyles.bodySmall.copyWith(
@@ -433,6 +437,63 @@ class _TrustCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Displays tappable Privacy Policy and Terms of Service links.
+///
+/// Required by Apple Guideline 3.1.2(c) — must be present in any
+/// screen that offers auto-renewable subscription purchases.
+class _LegalLinksRow extends StatelessWidget {
+  const _LegalLinksRow();
+
+  Future<void> _launch(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TextButton(
+          onPressed: () => _launch(AppUrls.privacyPolicy),
+          style: TextButton.styleFrom(
+            foregroundColor: AppColors.mdOnSurfaceVariant,
+            textStyle: AppTextStyles.bodySmall,
+            visualDensity: VisualDensity.compact,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.sm,
+              vertical: AppDimensions.xs,
+            ),
+          ),
+          child: Text(l10n.pricingPrivacyPolicy),
+        ),
+        Text(
+          '·',
+          style: AppTextStyles.bodySmall.copyWith(
+            color: AppColors.mdOnSurfaceVariant,
+          ),
+        ),
+        TextButton(
+          onPressed: () => _launch(AppUrls.termsOfService),
+          style: TextButton.styleFrom(
+            foregroundColor: AppColors.mdOnSurfaceVariant,
+            textStyle: AppTextStyles.bodySmall,
+            visualDensity: VisualDensity.compact,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.sm,
+              vertical: AppDimensions.xs,
+            ),
+          ),
+          child: Text(l10n.pricingTermsOfService),
+        ),
+      ],
     );
   }
 }

@@ -674,6 +674,12 @@ class AppLocalizationsVi extends AppLocalizations {
       'Không có free trial. Subscription gia hạn qua Apple Account và có thể quản lý trong App Store settings.';
 
   @override
+  String get pricingPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get pricingTermsOfService => 'Terms of Service';
+
+  @override
   String get pricingPremiumActiveTitle => 'Premium đang hoạt động';
 
   @override

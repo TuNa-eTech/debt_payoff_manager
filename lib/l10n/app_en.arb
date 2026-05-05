@@ -905,6 +905,14 @@
   "@pricingNoTrialNotice": {
     "description": "Subscription disclosure on the pricing page."
   },
+  "pricingPrivacyPolicy": "Privacy Policy",
+  "@pricingPrivacyPolicy": {
+    "description": "Link label for the Privacy Policy on the pricing / subscription page."
+  },
+  "pricingTermsOfService": "Terms of Service",
+  "@pricingTermsOfService": {
+    "description": "Link label for the Terms of Service / EULA on the pricing / subscription page."
+  },
   "pricingPremiumActiveTitle": "Premium active",
   "@pricingPremiumActiveTitle": {
     "description": "Title for active premium status card."

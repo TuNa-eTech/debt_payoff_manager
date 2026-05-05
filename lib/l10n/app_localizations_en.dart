@@ -671,6 +671,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'No free trial. Subscription renews through your Apple Account and can be managed in App Store settings.';
 
   @override
+  String get pricingPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get pricingTermsOfService => 'Terms of Service';
+
+  @override
   String get pricingPremiumActiveTitle => 'Premium active';
 
   @override
