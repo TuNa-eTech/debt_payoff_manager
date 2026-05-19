@@ -1436,6 +1436,10 @@
   "@welcomeSubtitle": {
     "description": "Subtitle on the welcome page."
   },
+  "welcomeValuePreview": "In a few minutes, you will see your debt-free date and first monthly action.",
+  "@welcomeValuePreview": {
+    "description": "Short value preview shown on the onboarding welcome page."
+  },
   "welcomeTitle": "Take control of debt,\nfree your future.",
   "@welcomeTitle": {
     "description": "Headline on the welcome page."
@@ -1585,6 +1589,75 @@
   "@onboardingDebtEntrySave": {
     "description": "Save action for debt entry page"
   },
+  "onboardingDebtTypeTitle": "What type of debt is this?",
+  "@onboardingDebtTypeTitle": {
+    "description": "Title for onboarding debt type chooser."
+  },
+  "onboardingDebtTypeSubtitle": "Start with one debt. You can add the rest after this.",
+  "@onboardingDebtTypeSubtitle": {
+    "description": "Subtitle for onboarding debt type chooser."
+  },
+  "onboardingDebtTypeContinue": "Continue",
+  "@onboardingDebtTypeContinue": {
+    "description": "Continue action from onboarding debt type chooser."
+  },
+  "onboardingDebtTypeCreditCardDescription": "Cards, store cards, or revolving balances.",
+  "@onboardingDebtTypeCreditCardDescription": {},
+  "onboardingDebtTypeStudentLoanDescription": "Federal, private, or education loans.",
+  "@onboardingDebtTypeStudentLoanDescription": {},
+  "onboardingDebtTypeCarLoanDescription": "Auto loans with a regular monthly payment.",
+  "@onboardingDebtTypeCarLoanDescription": {},
+  "onboardingDebtTypeMortgageDescription": "Home loans you want in the payoff plan.",
+  "@onboardingDebtTypeMortgageDescription": {},
+  "onboardingDebtTypePersonalDescription": "Personal loans, installment loans, or fixed loans.",
+  "@onboardingDebtTypePersonalDescription": {},
+  "onboardingDebtTypeMedicalDescription": "Medical bills or payment plans.",
+  "@onboardingDebtTypeMedicalDescription": {},
+  "onboardingDebtTypePaydayLoanDescription": "Short-term loans or cash advances.",
+  "@onboardingDebtTypePaydayLoanDescription": {},
+  "onboardingDebtTypeBuyNowPayLaterDescription": "Affirm, Klarna, Afterpay, or pay-in-4 balances.",
+  "@onboardingDebtTypeBuyNowPayLaterDescription": {},
+  "onboardingDebtTypeStoreFinancingDescription": "Retail, furniture, appliance, or promo financing.",
+  "@onboardingDebtTypeStoreFinancingDescription": {},
+  "onboardingDebtTypeLineOfCreditDescription": "Personal, bank, or overdraft credit lines.",
+  "@onboardingDebtTypeLineOfCreditDescription": {},
+  "onboardingDebtTypeTaxDebtDescription": "IRS, state tax, or payment-plan balances.",
+  "@onboardingDebtTypeTaxDebtDescription": {},
+  "onboardingDebtTypeCollectionsDescription": "Accounts with a collection agency.",
+  "@onboardingDebtTypeCollectionsDescription": {},
+  "onboardingDebtTypeFamilyLoanDescription": "Money owed to family or friends.",
+  "@onboardingDebtTypeFamilyLoanDescription": {},
+  "onboardingDebtTypeHomeEquityDescription": "Home equity loans or HELOC balances.",
+  "@onboardingDebtTypeHomeEquityDescription": {},
+  "onboardingDebtTypeOtherDescription": "Any debt that does not fit the presets.",
+  "@onboardingDebtTypeOtherDescription": {},
+  "onboardingDebtDetailsTitle": "Add {type} details",
+  "@onboardingDebtDetailsTitle": {
+    "description": "Title for onboarding minimal debt form.",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingDebtDetailsSubtitle": "Enter the four numbers the plan needs first.",
+  "@onboardingDebtDetailsSubtitle": {
+    "description": "Subtitle for onboarding minimal debt form."
+  },
+  "onboardingDebtBalanceHelper": "Use the remaining balance from your latest statement.",
+  "@onboardingDebtBalanceHelper": {},
+  "onboardingDebtAprHelper": "Find this on your statement. Enter 0 if there is no interest.",
+  "@onboardingDebtAprHelper": {},
+  "onboardingDebtMinimumPaymentHelper": "Find this on your statement. You can update it later.",
+  "@onboardingDebtMinimumPaymentHelper": {},
+  "onboardingDebtOptionalDetails": "Optional details",
+  "@onboardingDebtOptionalDetails": {
+    "description": "Collapsed optional details label in onboarding debt form."
+  },
+  "onboardingDebtOptionalDetailsSubtitle": "Due day, original balance, and advanced plan settings.",
+  "@onboardingDebtOptionalDetailsSubtitle": {
+    "description": "Collapsed optional details subtitle in onboarding debt form."
+  },
   "onboardingStep1": "Step 1/4",
   "@onboardingStep1": {
     "description": "Step 1 progress label"
@@ -1601,7 +1674,7 @@
   "@onboardingAddAnotherEmpty": {
     "description": "Empty state text for add another debt page"
   },
-  "onboardingAddAnotherCount": "You have saved {count} debts. You can add more or continue to strategy selection.",
+  "onboardingAddAnotherCount": "You have saved {count} debts. Edit anything that looks off, add another debt, or see your plan.",
   "@onboardingAddAnotherCount": {
     "description": "Text showing count of saved debts",
     "placeholders": {
@@ -1614,13 +1687,17 @@
   "@onboardingAddAnotherRequirement": {
     "description": "Requirement text for adding debt"
   },
-  "onboardingAddAnotherContinue": "Choose Strategy",
+  "onboardingAddAnotherContinue": "Choose payoff plan",
   "@onboardingAddAnotherContinue": {
     "description": "Continue action to strategy selection"
   },
   "onboardingAddAnotherAddMore": "Add Another Debt",
   "@onboardingAddAnotherAddMore": {
     "description": "Action to add another debt"
+  },
+  "onboardingAddAnotherEditDebt": "Edit debt",
+  "@onboardingAddAnotherEditDebt": {
+    "description": "Inline edit action for debts in onboarding review."
   },
   "onboardingStrategyTitle": "Choose Strategy",
   "@onboardingStrategyTitle": {
@@ -1638,7 +1715,7 @@
   "@onboardingStrategyRequirement": {
     "description": "Requirement text for strategy selection"
   },
-  "onboardingStrategyDescription": "The app is comparing live projections of Snowball and Avalanche based on your current debts.",
+  "onboardingStrategyDescription": "The app is comparing Snowball and Avalanche based on your debt numbers.",
   "@onboardingStrategyDescription": {
     "description": "Description of strategy preview"
   },
@@ -1662,11 +1739,19 @@
   "@onboardingStrategyAvalancheFallback": {
     "description": "Fallback text for avalanche strategy"
   },
-  "onboardingStrategyChangeNote": "You can change your strategy anytime after onboarding. The plan summary and timeline will recast automatically.",
+  "onboardingStrategySnowballRecommendation": "Fastest early win",
+  "@onboardingStrategySnowballRecommendation": {
+    "description": "Short recommendation badge for snowball strategy."
+  },
+  "onboardingStrategyAvalancheRecommendation": "Lower interest",
+  "@onboardingStrategyAvalancheRecommendation": {
+    "description": "Short recommendation badge for avalanche strategy."
+  },
+  "onboardingStrategyChangeNote": "You can change your strategy anytime after onboarding. Your plan will update with the new choice.",
   "@onboardingStrategyChangeNote": {
     "description": "Note about changing strategy later"
   },
-  "onboardingStrategyContinue": "Save Strategy & Continue",
+  "onboardingStrategyContinue": "Save plan choice",
   "@onboardingStrategyContinue": {
     "description": "Action to save strategy and continue"
   },
@@ -1683,11 +1768,11 @@
       }
     }
   },
-  "onboardingStrategyPreviewCalculating": "Calculating payoff date and projected interest from current data...",
+  "onboardingStrategyPreviewCalculating": "Calculating payoff date and interest from your numbers...",
   "@onboardingStrategyPreviewCalculating": {
     "description": "Text when preview is calculating"
   },
-  "onboardingStrategyPreviewRecasting": "Recasting",
+  "onboardingStrategyPreviewRecasting": "Updating",
   "@onboardingStrategyPreviewRecasting": {
     "description": "Text when preview is recasting"
   },
@@ -1739,7 +1824,7 @@
   "@onboardingExtraSubtitle": {
     "description": "Subtitle for extra amount page"
   },
-  "onboardingExtraDescription": "Default is $0. Preview will live recast after 300ms to show your actual debt-free date and saved interest.",
+  "onboardingExtraDescription": "Start with $0 if that is realistic. The preview updates as you change the amount.",
   "@onboardingExtraDescription": {
     "description": "Description for extra amount"
   },
@@ -1759,15 +1844,15 @@
       }
     }
   },
-  "onboardingExtraMaxLabel": "Max",
-  "@onboardingExtraMaxLabel": {
-    "description": "Label for max extra amount"
+  "onboardingExtraAmountInputLabel": "Amount",
+  "@onboardingExtraAmountInputLabel": {
+    "description": "Label for direct extra amount input in onboarding."
   },
   "onboardingExtraWhatsNextTitle": "What happens next?",
   "@onboardingExtraWhatsNextTitle": {
     "description": "Title for what's next section"
   },
-  "onboardingExtraWhatsNextDescription": "This extra amount will be used as additional budget each month. When you save, your plan summary and timeline cache will recast immediately.",
+  "onboardingExtraWhatsNextDescription": "This amount becomes your planned extra budget each month. You can change it later from the plan.",
   "@onboardingExtraWhatsNextDescription": {
     "description": "Description for what's next"
   },
@@ -1778,6 +1863,10 @@
   "onboardingExtraUseZero": "Use $0 for now",
   "@onboardingExtraUseZero": {
     "description": "Action to use zero extra amount"
+  },
+  "onboardingExtraUseZeroHelper": "You can change this later.",
+  "@onboardingExtraUseZeroHelper": {
+    "description": "Helper copy under zero extra amount action."
   },
   "onboardingExtraError": "Could not save extra budget. Please try again.",
   "@onboardingExtraError": {
@@ -1791,7 +1880,7 @@
   "@onboardingExtraPreviewTitle": {
     "description": "Title for live preview"
   },
-  "onboardingExtraPreviewRecasting": "Recasting...",
+  "onboardingExtraPreviewRecasting": "Updating...",
   "@onboardingExtraPreviewRecasting": {
     "description": "Text when extra preview is recasting"
   },
@@ -1816,7 +1905,7 @@
   "@onboardingAhaEmpty": {
     "description": "Empty state text for aha moment"
   },
-  "onboardingAhaRecasting": "Your plan is recasting.",
+  "onboardingAhaRecasting": "Your plan is updating.",
   "@onboardingAhaRecasting": {
     "description": "Text when aha moment is recasting"
   },
@@ -1833,7 +1922,7 @@
   "@onboardingAhaEmptySubtitle": {
     "description": "Empty state subtitle for aha moment"
   },
-  "onboardingAhaReadySubtitle": "Plan has been recast. Your monthly checklist is ready.",
+  "onboardingAhaReadySubtitle": "Your payoff plan is ready. The first monthly checklist is next.",
   "@onboardingAhaReadySubtitle": {
     "description": "Ready subtitle for aha moment"
   },
@@ -1853,7 +1942,7 @@
   "@onboardingAhaDataCompact": {
     "description": "Compact text for local data"
   },
-  "onboardingAhaDataFull": "Your data is saved locally on your device. From here you can open the Monthly Action View to check off actual payments and watch the timeline recast instantly.",
+  "onboardingAhaDataFull": "Your data is saved locally on your device. From here you can open the Monthly Action View to check off real payments and keep the plan current.",
   "@onboardingAhaDataFull": {
     "description": "Full text for local data"
   },
@@ -1865,7 +1954,15 @@
   "@onboardingAhaOpenMonthly": {
     "description": "Action to open monthly view"
   },
-  "onboardingAhaRecastingShort": "Recasting",
+  "onboardingAhaNextActionTitle": "Next: make this month's payments visible",
+  "@onboardingAhaNextActionTitle": {
+    "description": "Next action title on onboarding aha screen."
+  },
+  "onboardingAhaNextActionDescription": "Monthly Action shows the minimums and extra payment to check off first.",
+  "@onboardingAhaNextActionDescription": {
+    "description": "Next action description on onboarding aha screen."
+  },
+  "onboardingAhaRecastingShort": "Updating",
   "@onboardingAhaRecastingShort": {
     "description": "Short text for recasting"
   },
@@ -3117,6 +3214,14 @@
   "debtTypeMortgage": "Mortgage",
   "debtTypePersonal": "Personal loan",
   "debtTypeMedical": "Medical debt",
+  "debtTypePaydayLoan": "Payday loan",
+  "debtTypeBuyNowPayLater": "Buy now, pay later",
+  "debtTypeStoreFinancing": "Store financing",
+  "debtTypeLineOfCredit": "Line of credit",
+  "debtTypeTaxDebt": "Tax debt",
+  "debtTypeCollections": "Collection account",
+  "debtTypeFamilyLoan": "Family loan",
+  "debtTypeHomeEquity": "Home equity / HELOC",
   "debtTypeOther": "Other debt",
   "debtStatusTracking": "Tracking",
   "debtStatusOverdue": "Overdue",

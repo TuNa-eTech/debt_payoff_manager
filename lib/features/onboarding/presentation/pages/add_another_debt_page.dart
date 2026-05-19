@@ -1,6 +1,7 @@
 import 'package:debt_payoff_manager/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -117,6 +118,9 @@ class AddAnotherDebtPage extends StatelessWidget {
                                     bottom: AppDimensions.md,
                                   ),
                                   child: AppCard(
+                                    onTap: () => context.push(
+                                      AppRoutes.editDebtPath(debt.id),
+                                    ),
                                     child: Row(
                                       children: [
                                         Container(
@@ -164,6 +168,24 @@ class AddAnotherDebtPage extends StatelessWidget {
                                               .copyWith(
                                                 fontFamily: 'Roboto Mono',
                                               ),
+                                        ),
+                                        const SizedBox(width: AppDimensions.sm),
+                                        IconButton(
+                                          key:
+                                              AppTestKeys.onboardingReviewDebtEdit(
+                                                debt.id,
+                                              ),
+                                          tooltip: context
+                                              .l10n
+                                              .onboardingAddAnotherEditDebt,
+                                          icon: const Icon(
+                                            LucideIcons.pencil,
+                                            size: AppDimensions.iconSm,
+                                          ),
+                                          color: AppColors.mdOnSurfaceVariant,
+                                          onPressed: () => context.push(
+                                            AppRoutes.editDebtPath(debt.id),
+                                          ),
                                         ),
                                       ],
                                     ),

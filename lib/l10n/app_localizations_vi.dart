@@ -1111,6 +1111,10 @@ class AppLocalizationsVi extends AppLocalizations {
       'Tạo kế hoạch trả nợ cá nhân hoá trong 3 phút.\nKhông tài khoản. Không chạm ngân hàng.';
 
   @override
+  String get welcomeValuePreview =>
+      'Sau vài phút, bạn sẽ thấy ngày hết nợ và việc cần làm đầu tiên trong tháng.';
+
+  @override
   String get welcomeTitle => 'Kiểm soát nợ,\ngiải phóng tương lai.';
 
   @override
@@ -1227,6 +1231,104 @@ class AppLocalizationsVi extends AppLocalizations {
   String get onboardingDebtEntrySave => 'Lưu khoản nợ';
 
   @override
+  String get onboardingDebtTypeTitle => 'Đây là loại khoản nợ nào?';
+
+  @override
+  String get onboardingDebtTypeSubtitle =>
+      'Bắt đầu với một khoản nợ trước. Bạn có thể thêm các khoản còn lại sau.';
+
+  @override
+  String get onboardingDebtTypeContinue => 'Tiếp tục';
+
+  @override
+  String get onboardingDebtTypeCreditCardDescription =>
+      'Thẻ tín dụng, thẻ cửa hàng, hoặc dư nợ xoay vòng.';
+
+  @override
+  String get onboardingDebtTypeStudentLoanDescription =>
+      'Khoản vay học tập liên bang, tư nhân, hoặc giáo dục.';
+
+  @override
+  String get onboardingDebtTypeCarLoanDescription =>
+      'Khoản vay mua xe có payment hằng tháng.';
+
+  @override
+  String get onboardingDebtTypeMortgageDescription =>
+      'Khoản vay nhà bạn muốn đưa vào kế hoạch.';
+
+  @override
+  String get onboardingDebtTypePersonalDescription =>
+      'Vay cá nhân, vay trả góp, hoặc khoản vay cố định.';
+
+  @override
+  String get onboardingDebtTypeMedicalDescription =>
+      'Hóa đơn y tế hoặc payment plan.';
+
+  @override
+  String get onboardingDebtTypePaydayLoanDescription =>
+      'Khoản vay ngắn hạn hoặc cash advance.';
+
+  @override
+  String get onboardingDebtTypeBuyNowPayLaterDescription =>
+      'Affirm, Klarna, Afterpay, hoặc pay-in-4.';
+
+  @override
+  String get onboardingDebtTypeStoreFinancingDescription =>
+      'Tài trợ mua hàng retail, nội thất, thiết bị, hoặc promo.';
+
+  @override
+  String get onboardingDebtTypeLineOfCreditDescription =>
+      'Hạn mức tín dụng cá nhân, ngân hàng, hoặc overdraft.';
+
+  @override
+  String get onboardingDebtTypeTaxDebtDescription =>
+      'IRS, thuế bang, hoặc payment plan thuế.';
+
+  @override
+  String get onboardingDebtTypeCollectionsDescription =>
+      'Khoản nợ đã vào collection agency.';
+
+  @override
+  String get onboardingDebtTypeFamilyLoanDescription =>
+      'Tiền vay từ gia đình hoặc bạn bè.';
+
+  @override
+  String get onboardingDebtTypeHomeEquityDescription =>
+      'Home equity loan hoặc HELOC.';
+
+  @override
+  String get onboardingDebtTypeOtherDescription =>
+      'Khoản nợ không khớp với các loại có sẵn.';
+
+  @override
+  String onboardingDebtDetailsTitle(String type) {
+    return 'Nhập thông tin $type';
+  }
+
+  @override
+  String get onboardingDebtDetailsSubtitle =>
+      'Nhập trước bốn con số app cần để dựng kế hoạch.';
+
+  @override
+  String get onboardingDebtBalanceHelper =>
+      'Dùng số dư còn lại trên statement mới nhất.';
+
+  @override
+  String get onboardingDebtAprHelper =>
+      'Có thể tìm trên statement. Nhập 0 nếu khoản này không tính lãi.';
+
+  @override
+  String get onboardingDebtMinimumPaymentHelper =>
+      'Có thể tìm trên statement. Bạn có thể cập nhật lại sau.';
+
+  @override
+  String get onboardingDebtOptionalDetails => 'Thông tin tuỳ chọn';
+
+  @override
+  String get onboardingDebtOptionalDetailsSubtitle =>
+      'Ngày đến hạn, dư nợ ban đầu, và thiết lập nâng cao.';
+
+  @override
   String get onboardingStep1 => 'Bước 1/4';
 
   @override
@@ -1240,7 +1342,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String onboardingAddAnotherCount(int count) {
-    return 'Bạn đã lưu $count khoản nợ. Có thể thêm tiếp hoặc sang bước chọn chiến lược.';
+    return 'Bạn đã lưu $count khoản nợ. Hãy sửa nếu có gì chưa đúng, thêm khoản khác, hoặc xem kế hoạch.';
   }
 
   @override
@@ -1248,10 +1350,13 @@ class AppLocalizationsVi extends AppLocalizations {
       'Hãy thêm ít nhất 1 khoản nợ để app có thể tiếp tục onboarding.';
 
   @override
-  String get onboardingAddAnotherContinue => 'Sang bước chọn chiến lược';
+  String get onboardingAddAnotherContinue => 'Chọn kế hoạch trả nợ';
 
   @override
   String get onboardingAddAnotherAddMore => 'Thêm một khoản nợ nữa';
+
+  @override
+  String get onboardingAddAnotherEditDebt => 'Sửa khoản nợ';
 
   @override
   String get onboardingStrategyTitle => 'Chọn chiến lược';
@@ -1269,7 +1374,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get onboardingStrategyDescription =>
-      'App đang so projection thật của Snowball và Avalanche từ dữ liệu khoản nợ hiện tại của bạn.';
+      'App đang so Snowball và Avalanche dựa trên số liệu khoản nợ của bạn.';
 
   @override
   String get onboardingStrategyEmptyTitle =>
@@ -1291,11 +1396,17 @@ class AppLocalizationsVi extends AppLocalizations {
       'Ưu tiên APR cao nhất để giảm lãi.';
 
   @override
-  String get onboardingStrategyChangeNote =>
-      'Bạn có thể đổi chiến lược bất kỳ lúc nào sau onboarding. Mỗi lần đổi, plan summary và timeline cache sẽ recast lại.';
+  String get onboardingStrategySnowballRecommendation => 'Thắng lợi sớm nhất';
 
   @override
-  String get onboardingStrategyContinue => 'Lưu chiến lược và tiếp tục';
+  String get onboardingStrategyAvalancheRecommendation => 'Giảm lãi hơn';
+
+  @override
+  String get onboardingStrategyChangeNote =>
+      'Bạn có thể đổi chiến lược bất kỳ lúc nào sau onboarding. Kế hoạch sẽ cập nhật theo lựa chọn mới.';
+
+  @override
+  String get onboardingStrategyContinue => 'Lưu lựa chọn kế hoạch';
 
   @override
   String get onboardingStrategyTopPriorityExcluded =>
@@ -1308,10 +1419,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get onboardingStrategyPreviewCalculating =>
-      'Đang tính payoff date và projected interest từ dữ liệu hiện tại...';
+      'Đang tính ngày hết nợ và tiền lãi từ số liệu của bạn...';
 
   @override
-  String get onboardingStrategyPreviewRecasting => 'Đang recast';
+  String get onboardingStrategyPreviewRecasting => 'Đang cập nhật';
 
   @override
   String onboardingStrategyPreviewSummary(
@@ -1349,7 +1460,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get onboardingExtraDescription =>
-      'Mặc định là \$0. Preview sẽ recast live sau 300ms để cho bạn thấy debt-free date và lãi tiết kiệm thật.';
+      'Bắt đầu với \$0 nếu đó là mức thực tế. Preview sẽ cập nhật khi bạn đổi số tiền.';
 
   @override
   String get onboardingExtraMonthlyLabel => 'Extra payment mỗi tháng';
@@ -1360,20 +1471,23 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get onboardingExtraMaxLabel => 'Max';
+  String get onboardingExtraAmountInputLabel => 'Số tiền';
 
   @override
   String get onboardingExtraWhatsNextTitle => 'Điều gì xảy ra tiếp theo?';
 
   @override
   String get onboardingExtraWhatsNextDescription =>
-      'Khoản extra này sẽ được dùng làm ngân sách trả thêm mỗi tháng. Khi bạn bấm lưu, plan summary và timeline cache sẽ recast ngay.';
+      'Số tiền này sẽ là ngân sách trả thêm mỗi tháng. Bạn có thể đổi lại trong phần kế hoạch.';
 
   @override
   String get onboardingExtraSave => 'Lưu và xem tóm tắt';
 
   @override
   String get onboardingExtraUseZero => 'Dùng \$0 lúc này';
+
+  @override
+  String get onboardingExtraUseZeroHelper => 'Bạn có thể đổi lại sau.';
 
   @override
   String get onboardingExtraError =>
@@ -1387,7 +1501,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get onboardingExtraPreviewTitle => 'Live preview';
 
   @override
-  String get onboardingExtraPreviewRecasting => 'Đang recast...';
+  String get onboardingExtraPreviewRecasting => 'Đang cập nhật...';
 
   @override
   String onboardingExtraPreviewDebtFree(String extraAmount) {
@@ -1404,7 +1518,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get onboardingAhaEmpty => 'Bạn chưa có khoản nợ nào trong kế hoạch.';
 
   @override
-  String get onboardingAhaRecasting => 'Kế hoạch của bạn đang recast.';
+  String get onboardingAhaRecasting => 'Kế hoạch của bạn đang cập nhật.';
 
   @override
   String onboardingAhaDebtFree(String date) {
@@ -1417,7 +1531,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get onboardingAhaReadySubtitle =>
-      'Kế hoạch đã được recast. Checklist tháng này đã sẵn sàng.';
+      'Kế hoạch trả nợ đã sẵn sàng. Checklist tháng này là bước tiếp theo.';
 
   @override
   String get onboardingAhaSummaryTitle => 'Tóm tắt hiện tại';
@@ -1434,7 +1548,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get onboardingAhaDataFull =>
-      'Dữ liệu của bạn đã được lưu local trên thiết bị. Từ đây bạn có thể vào Monthly Action View để check off payment thật và xem timeline recast ngay.';
+      'Dữ liệu của bạn đã được lưu local trên thiết bị. Từ đây bạn có thể vào Monthly Action View để check off payment thật và giữ kế hoạch luôn cập nhật.';
 
   @override
   String get onboardingAhaBackToAdd => 'Quay lại thêm khoản nợ';
@@ -1443,7 +1557,15 @@ class AppLocalizationsVi extends AppLocalizations {
   String get onboardingAhaOpenMonthly => 'Mở Monthly Action View';
 
   @override
-  String get onboardingAhaRecastingShort => 'Đang recast';
+  String get onboardingAhaNextActionTitle =>
+      'Tiếp theo: làm rõ payment tháng này';
+
+  @override
+  String get onboardingAhaNextActionDescription =>
+      'Monthly Action cho bạn thấy khoản tối thiểu và khoản trả thêm cần check off trước.';
+
+  @override
+  String get onboardingAhaRecastingShort => 'Đang cập nhật';
 
   @override
   String get onboardingAhaDebtFreeDate => 'Debt-free date';
@@ -2539,6 +2661,30 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get debtTypeMedical => 'Nợ y tế';
+
+  @override
+  String get debtTypePaydayLoan => 'Payday loan';
+
+  @override
+  String get debtTypeBuyNowPayLater => 'Mua trước trả sau';
+
+  @override
+  String get debtTypeStoreFinancing => 'Tài trợ mua hàng';
+
+  @override
+  String get debtTypeLineOfCredit => 'Hạn mức tín dụng';
+
+  @override
+  String get debtTypeTaxDebt => 'Nợ thuế';
+
+  @override
+  String get debtTypeCollections => 'Khoản collection';
+
+  @override
+  String get debtTypeFamilyLoan => 'Vay gia đình/bạn bè';
+
+  @override
+  String get debtTypeHomeEquity => 'Home equity / HELOC';
 
   @override
   String get debtTypeOther => 'Khoản nợ khác';

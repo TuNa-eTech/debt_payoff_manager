@@ -22,6 +22,22 @@ IconData debtTypeIcon(DebtType type) {
       return LucideIcons.wallet;
     case DebtType.medical:
       return LucideIcons.heartPulse;
+    case DebtType.paydayLoan:
+      return LucideIcons.badgeDollarSign;
+    case DebtType.buyNowPayLater:
+      return LucideIcons.calendarClock;
+    case DebtType.storeFinancing:
+      return LucideIcons.store;
+    case DebtType.lineOfCredit:
+      return LucideIcons.walletCards;
+    case DebtType.taxDebt:
+      return LucideIcons.landmark;
+    case DebtType.collections:
+      return LucideIcons.receipt;
+    case DebtType.familyLoan:
+      return LucideIcons.piggyBank;
+    case DebtType.homeEquity:
+      return LucideIcons.fileText;
     case DebtType.other:
       return LucideIcons.circleEllipsis;
   }
@@ -41,6 +57,22 @@ Color debtTypeColor(DebtType type) {
       return AppColors.info;
     case DebtType.medical:
       return AppColors.mdError;
+    case DebtType.paydayLoan:
+      return AppColors.warning;
+    case DebtType.buyNowPayLater:
+      return AppColors.mdTertiary;
+    case DebtType.storeFinancing:
+      return AppColors.interestAmber;
+    case DebtType.lineOfCredit:
+      return AppColors.info;
+    case DebtType.taxDebt:
+      return AppColors.mdSecondary;
+    case DebtType.collections:
+      return AppColors.mdError;
+    case DebtType.familyLoan:
+      return AppColors.success;
+    case DebtType.homeEquity:
+      return AppColors.mdSecondary;
     case DebtType.other:
       return AppColors.mdOnSurfaceVariant;
   }
@@ -60,6 +92,22 @@ String debtTypeDisplayName(DebtType type, AppLocalizations l10n) {
       return l10n.debtTypePersonal;
     case DebtType.medical:
       return l10n.debtTypeMedical;
+    case DebtType.paydayLoan:
+      return l10n.debtTypePaydayLoan;
+    case DebtType.buyNowPayLater:
+      return l10n.debtTypeBuyNowPayLater;
+    case DebtType.storeFinancing:
+      return l10n.debtTypeStoreFinancing;
+    case DebtType.lineOfCredit:
+      return l10n.debtTypeLineOfCredit;
+    case DebtType.taxDebt:
+      return l10n.debtTypeTaxDebt;
+    case DebtType.collections:
+      return l10n.debtTypeCollections;
+    case DebtType.familyLoan:
+      return l10n.debtTypeFamilyLoan;
+    case DebtType.homeEquity:
+      return l10n.debtTypeHomeEquity;
     case DebtType.other:
       return l10n.debtTypeOther;
   }

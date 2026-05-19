@@ -19,6 +19,7 @@ import 'package:debt_payoff_manager/data/repositories/debt_repository_impl.dart'
 import 'package:debt_payoff_manager/domain/entities/debt.dart';
 import 'package:debt_payoff_manager/domain/entities/payment.dart';
 import 'package:debt_payoff_manager/domain/enums/debt_status.dart';
+import 'package:debt_payoff_manager/domain/enums/debt_type.dart';
 import 'package:debt_payoff_manager/domain/repositories/debt_repository.dart';
 import 'package:debt_payoff_manager/domain/repositories/payment_repository.dart';
 import 'package:debt_payoff_manager/features/debts/cubit/debt_form_cubit.dart';
@@ -180,6 +181,139 @@ void main() {
         expect(find.text('Enter a debt name.'), findsNothing);
       },
     );
+
+    testWidgets('onboarding debt form starts with a debt type chooser', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: BlocProvider(
+            create: (_) => DebtFormCubit.create(
+              debtRepository: repo,
+              mode: DebtFormMode.onboarding,
+            ),
+            child: DebtFormScaffold(
+              mode: DebtFormMode.onboarding,
+              title: 'Add your first debt',
+              primaryActionLabel: 'Save debt',
+              onSaved: (context, debt) {},
+              onCancel: () {},
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(
+        find.byKey(AppTestKeys.onboardingDebtTypeContinue),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(
+          AppTestKeys.onboardingDebtTypeOption(DebtType.creditCard.name),
+        ),
+        findsOneWidget,
+      );
+      expect(find.byKey(AppTestKeys.debtFormName), findsNothing);
+
+      await tester.tap(find.byKey(AppTestKeys.onboardingDebtTypeContinue));
+      await tester.pump();
+
+      expect(find.byKey(AppTestKeys.debtFormName), findsOneWidget);
+      expect(find.byKey(AppTestKeys.debtFormOriginalPrincipal), findsNothing);
+      expect(
+        find.byKey(AppTestKeys.onboardingDebtOptionalDetails),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('onboarding debt form back returns from details to chooser', (
+      tester,
+    ) async {
+      var cancelCount = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: BlocProvider(
+            create: (_) => DebtFormCubit.create(
+              debtRepository: repo,
+              mode: DebtFormMode.onboarding,
+            ),
+            child: DebtFormScaffold(
+              mode: DebtFormMode.onboarding,
+              title: 'Add your first debt',
+              primaryActionLabel: 'Save debt',
+              backButtonKey: AppTestKeys.onboardingDebtEntryBack,
+              onSaved: (context, debt) {},
+              onCancel: () => cancelCount += 1,
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      await tester.tap(find.byKey(AppTestKeys.onboardingDebtTypeContinue));
+      await tester.pump();
+      expect(find.byKey(AppTestKeys.debtFormName), findsOneWidget);
+
+      await tester.tap(find.byKey(AppTestKeys.onboardingDebtEntryBack));
+      await tester.pump();
+
+      expect(find.byKey(AppTestKeys.debtFormName), findsNothing);
+      expect(
+        find.byKey(AppTestKeys.onboardingDebtTypeContinue),
+        findsOneWidget,
+      );
+      expect(cancelCount, 0);
+
+      await tester.tap(find.byKey(AppTestKeys.onboardingDebtEntryBack));
+      await tester.pump();
+
+      expect(cancelCount, 1);
+    });
+
+    testWidgets('onboarding optional debt details are collapsed by default', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: BlocProvider(
+            create: (_) => DebtFormCubit.create(
+              debtRepository: repo,
+              mode: DebtFormMode.onboarding,
+            ),
+            child: DebtFormScaffold(
+              mode: DebtFormMode.onboarding,
+              title: 'Add your first debt',
+              primaryActionLabel: 'Save debt',
+              onSaved: (context, debt) {},
+              onCancel: () {},
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      await tester.tap(find.byKey(AppTestKeys.onboardingDebtTypeContinue));
+      await tester.pump();
+
+      expect(find.byKey(AppTestKeys.debtFormOriginalPrincipal), findsNothing);
+      expect(find.byKey(AppTestKeys.debtFormDueDay), findsNothing);
+
+      await tester.ensureVisible(
+        find.byKey(AppTestKeys.onboardingDebtOptionalDetails),
+      );
+      await tester.tap(find.byKey(AppTestKeys.onboardingDebtOptionalDetails));
+      await tester.pump();
+
+      expect(find.byKey(AppTestKeys.debtFormOriginalPrincipal), findsOneWidget);
+      expect(find.byKey(AppTestKeys.debtFormDueDay), findsOneWidget);
+    });
 
     testWidgets('shared overdue debt card renders an overdue badge', (
       tester,

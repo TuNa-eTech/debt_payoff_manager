@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../../core/constants/app_test_keys.dart';
 import '../../../../core/extensions/context_extensions.dart';
@@ -10,10 +11,13 @@ import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/widgets/app_card.dart';
 import '../../../../domain/entities/debt.dart';
+import '../../../../domain/enums/debt_type.dart';
 import '../../../../domain/repositories/debt_repository.dart';
 import '../../../../domain/repositories/settings_repository.dart';
 import '../../cubit/debt_form_cubit.dart';
+import '../debt_ui_utils.dart';
 import '../widgets/debt_form_fields.dart';
 
 class AddDebtPage extends StatelessWidget {
@@ -103,6 +107,8 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
   late final TextEditingController _dueDayController;
   late final TextEditingController _minimumPaymentPercentController;
   late final TextEditingController _minimumPaymentFloorController;
+  _OnboardingDebtEntryPhase _onboardingPhase =
+      _OnboardingDebtEntryPhase.selectType;
 
   @override
   void initState() {
@@ -155,13 +161,13 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
   @override
   Widget build(BuildContext context) {
     final isOnboarding = widget.mode == DebtFormMode.onboarding;
-    return Scaffold(
+    final scaffold = Scaffold(
       appBar: isOnboarding
           ? AppBar(
               leading: IconButton(
                 key: widget.backButtonKey,
                 icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                onPressed: widget.onCancel,
+                onPressed: _handleBack,
               ),
               title: Text(widget.title),
             )
@@ -205,81 +211,96 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
                           ),
                           const SizedBox(height: 24),
                         ],
-                        DebtFormFields(
-                          mode: widget.mode,
-                          nameController: _nameController,
-                          currentBalanceController: _currentBalanceController,
-                          aprController: _aprController,
-                          minPaymentController: _minimumPaymentController,
-                          originalPrincipalController:
-                              _originalPrincipalController,
-                          dueDateController: _dueDayController,
-                          minimumPaymentPercentController:
-                              _minimumPaymentPercentController,
-                          minimumPaymentFloorController:
-                              _minimumPaymentFloorController,
-                          selectedDebtType: state.selectedType,
-                          interestMethod: state.interestMethod,
-                          minimumPaymentType: state.minimumPaymentType,
-                          paymentCadence: state.paymentCadence,
-                          status: state.status,
-                          excludeFromStrategy: state.excludeFromStrategy,
-                          showAdvanced: state.showAdvanced,
-                          showOriginalPrincipalByDefault:
-                              state.showOriginalPrincipalByDefault,
-                          showDueDayByDefault: state.showDueDayByDefault,
-                          pausedUntil: state.pausedUntil,
-                          onDebtTypeChanged: (type) {
-                            final cubit = context.read<DebtFormCubit>();
-                            cubit.setDebtType(type);
-                            _refreshFormFeedback();
-                          },
-                          onInterestMethodChanged: (method) {
-                            final cubit = context.read<DebtFormCubit>();
-                            cubit.setInterestMethod(method);
-                            _refreshFormFeedback();
-                          },
-                          onMinimumPaymentTypeChanged: (type) {
-                            final cubit = context.read<DebtFormCubit>();
-                            cubit.setMinimumPaymentType(type);
-                            _refreshFormFeedback();
-                          },
-                          onPaymentCadenceChanged: (cadence) {
-                            final cubit = context.read<DebtFormCubit>();
-                            cubit.setPaymentCadence(cadence);
-                            _refreshFormFeedback();
-                          },
-                          onStatusChanged: (status) {
-                            final cubit = context.read<DebtFormCubit>();
-                            cubit.setStatus(status);
-                            _refreshFormFeedback();
-                          },
-                          onExcludeFromStrategyChanged: context
-                              .read<DebtFormCubit>()
-                              .setExcludeFromStrategy,
-                          onToggleAdvanced: context
-                              .read<DebtFormCubit>()
-                              .toggleAdvanced,
-                          onCoreFieldChanged: _refreshFormFeedback,
-                          onSelectPausedUntil: _selectPausedUntil,
-                          onClearPausedUntil: () {
-                            context.read<DebtFormCubit>().setPausedUntil(null);
-                            _refreshFormFeedback();
-                          },
-                          nameError: state.nameError,
-                          originalPrincipalError: state.originalPrincipalError,
-                          currentBalanceError: state.currentBalanceError,
-                          aprError: state.aprError,
-                          minPaymentError: state.minimumPaymentError,
-                          dueDayError: state.dueDayError,
-                          minimumPaymentPercentError:
-                              state.minimumPaymentPercentError,
-                          minimumPaymentFloorError:
-                              state.minimumPaymentFloorError,
-                          pausedUntilError: state.pausedUntilError,
-                          inlineError: state.inlineError,
-                          warnings: state.warnings,
-                        ),
+                        if (isOnboarding &&
+                            _onboardingPhase ==
+                                _OnboardingDebtEntryPhase.selectType)
+                          _OnboardingDebtTypeChooser(
+                            selectedType: state.selectedType,
+                            onSelected: (type) {
+                              final cubit = context.read<DebtFormCubit>();
+                              cubit.setDebtType(type);
+                              _refreshFormFeedback();
+                            },
+                          )
+                        else
+                          DebtFormFields(
+                            mode: widget.mode,
+                            nameController: _nameController,
+                            currentBalanceController: _currentBalanceController,
+                            aprController: _aprController,
+                            minPaymentController: _minimumPaymentController,
+                            originalPrincipalController:
+                                _originalPrincipalController,
+                            dueDateController: _dueDayController,
+                            minimumPaymentPercentController:
+                                _minimumPaymentPercentController,
+                            minimumPaymentFloorController:
+                                _minimumPaymentFloorController,
+                            selectedDebtType: state.selectedType,
+                            interestMethod: state.interestMethod,
+                            minimumPaymentType: state.minimumPaymentType,
+                            paymentCadence: state.paymentCadence,
+                            status: state.status,
+                            excludeFromStrategy: state.excludeFromStrategy,
+                            showAdvanced: state.showAdvanced,
+                            showOriginalPrincipalByDefault:
+                                state.showOriginalPrincipalByDefault,
+                            showDueDayByDefault: state.showDueDayByDefault,
+                            pausedUntil: state.pausedUntil,
+                            onDebtTypeChanged: (type) {
+                              final cubit = context.read<DebtFormCubit>();
+                              cubit.setDebtType(type);
+                              _refreshFormFeedback();
+                            },
+                            onInterestMethodChanged: (method) {
+                              final cubit = context.read<DebtFormCubit>();
+                              cubit.setInterestMethod(method);
+                              _refreshFormFeedback();
+                            },
+                            onMinimumPaymentTypeChanged: (type) {
+                              final cubit = context.read<DebtFormCubit>();
+                              cubit.setMinimumPaymentType(type);
+                              _refreshFormFeedback();
+                            },
+                            onPaymentCadenceChanged: (cadence) {
+                              final cubit = context.read<DebtFormCubit>();
+                              cubit.setPaymentCadence(cadence);
+                              _refreshFormFeedback();
+                            },
+                            onStatusChanged: (status) {
+                              final cubit = context.read<DebtFormCubit>();
+                              cubit.setStatus(status);
+                              _refreshFormFeedback();
+                            },
+                            onExcludeFromStrategyChanged: context
+                                .read<DebtFormCubit>()
+                                .setExcludeFromStrategy,
+                            onToggleAdvanced: context
+                                .read<DebtFormCubit>()
+                                .toggleAdvanced,
+                            onCoreFieldChanged: _refreshFormFeedback,
+                            onSelectPausedUntil: _selectPausedUntil,
+                            onClearPausedUntil: () {
+                              context.read<DebtFormCubit>().setPausedUntil(
+                                null,
+                              );
+                              _refreshFormFeedback();
+                            },
+                            nameError: state.nameError,
+                            originalPrincipalError:
+                                state.originalPrincipalError,
+                            currentBalanceError: state.currentBalanceError,
+                            aprError: state.aprError,
+                            minPaymentError: state.minimumPaymentError,
+                            dueDayError: state.dueDayError,
+                            minimumPaymentPercentError:
+                                state.minimumPaymentPercentError,
+                            minimumPaymentFloorError:
+                                state.minimumPaymentFloorError,
+                            pausedUntilError: state.pausedUntilError,
+                            inlineError: state.inlineError,
+                            warnings: state.warnings,
+                          ),
                         const SizedBox(height: 120),
                       ],
                     ),
@@ -291,6 +312,17 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
           ],
         ),
       ),
+    );
+
+    if (!isOnboarding) return scaffold;
+
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        _handleBack();
+      },
+      child: scaffold,
     );
   }
 
@@ -318,6 +350,29 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
               flex: widget.mode == DebtFormMode.onboarding ? 1 : 2,
               child: BlocBuilder<DebtFormCubit, DebtFormState>(
                 builder: (context, state) {
+                  if (widget.mode == DebtFormMode.onboarding &&
+                      _onboardingPhase ==
+                          _OnboardingDebtEntryPhase.selectType) {
+                    return FilledButton(
+                      key: AppTestKeys.onboardingDebtTypeContinue,
+                      onPressed: () {
+                        setState(
+                          () => _onboardingPhase =
+                              _OnboardingDebtEntryPhase.enterDetails,
+                        );
+                      },
+                      style: FilledButton.styleFrom(
+                        minimumSize: const Size.fromHeight(
+                          AppDimensions.buttonHeightLg,
+                        ),
+                        backgroundColor: AppColors.mdPrimary,
+                        foregroundColor: AppColors.mdOnPrimary,
+                        shape: const StadiumBorder(),
+                      ),
+                      child: Text(context.l10n.onboardingDebtTypeContinue),
+                    );
+                  }
+
                   return FilledButton(
                     key: AppTestKeys.debtFormSave,
                     onPressed: state.isSubmitting
@@ -367,6 +422,16 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
     widget.onSaved(this.context, debt);
   }
 
+  void _handleBack() {
+    if (widget.mode == DebtFormMode.onboarding &&
+        _onboardingPhase == _OnboardingDebtEntryPhase.enterDetails) {
+      setState(() => _onboardingPhase = _OnboardingDebtEntryPhase.selectType);
+      return;
+    }
+
+    widget.onCancel();
+  }
+
   Future<void> _selectPausedUntil() async {
     final cubit = context.read<DebtFormCubit>();
     final now = DateTime.now();
@@ -404,5 +469,127 @@ class _DebtEditorScaffoldState extends State<DebtFormScaffold> {
       return NumberFormat('#,##0.00', 'en_US').format(value);
     }
     return _currencyDisplayFormat.format(value);
+  }
+}
+
+enum _OnboardingDebtEntryPhase { selectType, enterDetails }
+
+class _OnboardingDebtTypeChooser extends StatelessWidget {
+  const _OnboardingDebtTypeChooser({
+    required this.selectedType,
+    required this.onSelected,
+  });
+
+  final DebtType selectedType;
+  final ValueChanged<DebtType> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          context.l10n.onboardingDebtTypeTitle,
+          style: AppTextStyles.headlineSmall,
+        ),
+        const SizedBox(height: AppDimensions.sm),
+        Text(
+          context.l10n.onboardingDebtTypeSubtitle,
+          style: AppTextStyles.bodyMedium.copyWith(
+            color: AppColors.mdOnSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: AppDimensions.lg),
+        ...DebtType.values.map((type) {
+          final selected = type == selectedType;
+          final color = debtTypeColor(type);
+          return Padding(
+            padding: const EdgeInsets.only(bottom: AppDimensions.md),
+            child: AppCard(
+              key: AppTestKeys.onboardingDebtTypeOption(type.name),
+              onTap: () => onSelected(type),
+              color: selected
+                  ? AppColors.mdPrimaryContainer
+                  : AppColors.mdSurface,
+              borderColor: selected
+                  ? AppColors.mdPrimary
+                  : AppColors.mdOutlineVariant,
+              borderWidth: selected ? 2 : 1,
+              child: Row(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: color.withValues(alpha: 0.12),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(debtTypeIcon(type), color: color, size: 22),
+                  ),
+                  const SizedBox(width: AppDimensions.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          debtTypeDisplayName(type, context.l10n),
+                          style: AppTextStyles.titleMedium,
+                        ),
+                        const SizedBox(height: AppDimensions.xs),
+                        Text(
+                          _descriptionFor(context, type),
+                          style: AppTextStyles.bodySmall.copyWith(
+                            color: AppColors.mdOnSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    selected ? LucideIcons.checkCircle2 : LucideIcons.circle,
+                    color: selected ? AppColors.mdPrimary : AppColors.mdOutline,
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
+  String _descriptionFor(BuildContext context, DebtType type) {
+    switch (type) {
+      case DebtType.creditCard:
+        return context.l10n.onboardingDebtTypeCreditCardDescription;
+      case DebtType.studentLoan:
+        return context.l10n.onboardingDebtTypeStudentLoanDescription;
+      case DebtType.carLoan:
+        return context.l10n.onboardingDebtTypeCarLoanDescription;
+      case DebtType.mortgage:
+        return context.l10n.onboardingDebtTypeMortgageDescription;
+      case DebtType.personal:
+        return context.l10n.onboardingDebtTypePersonalDescription;
+      case DebtType.medical:
+        return context.l10n.onboardingDebtTypeMedicalDescription;
+      case DebtType.paydayLoan:
+        return context.l10n.onboardingDebtTypePaydayLoanDescription;
+      case DebtType.buyNowPayLater:
+        return context.l10n.onboardingDebtTypeBuyNowPayLaterDescription;
+      case DebtType.storeFinancing:
+        return context.l10n.onboardingDebtTypeStoreFinancingDescription;
+      case DebtType.lineOfCredit:
+        return context.l10n.onboardingDebtTypeLineOfCreditDescription;
+      case DebtType.taxDebt:
+        return context.l10n.onboardingDebtTypeTaxDebtDescription;
+      case DebtType.collections:
+        return context.l10n.onboardingDebtTypeCollectionsDescription;
+      case DebtType.familyLoan:
+        return context.l10n.onboardingDebtTypeFamilyLoanDescription;
+      case DebtType.homeEquity:
+        return context.l10n.onboardingDebtTypeHomeEquityDescription;
+      case DebtType.other:
+        return context.l10n.onboardingDebtTypeOtherDescription;
+    }
   }
 }

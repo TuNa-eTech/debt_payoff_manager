@@ -1428,6 +1428,10 @@
   "@welcomeSubtitle": {
     "description": "Subtitle on the welcome page."
   },
+  "welcomeValuePreview": "Sau vài phút, bạn sẽ thấy ngày hết nợ và việc cần làm đầu tiên trong tháng.",
+  "@welcomeValuePreview": {
+    "description": "Short value preview shown on the onboarding welcome page."
+  },
   "welcomeTitle": "Kiểm soát nợ,\ngiải phóng tương lai.",
   "@welcomeTitle": {
     "description": "Headline on the welcome page."
@@ -1577,6 +1581,75 @@
   "@onboardingDebtEntrySave": {
     "description": "Save action for debt entry page"
   },
+  "onboardingDebtTypeTitle": "Đây là loại khoản nợ nào?",
+  "@onboardingDebtTypeTitle": {
+    "description": "Title for onboarding debt type chooser."
+  },
+  "onboardingDebtTypeSubtitle": "Bắt đầu với một khoản nợ trước. Bạn có thể thêm các khoản còn lại sau.",
+  "@onboardingDebtTypeSubtitle": {
+    "description": "Subtitle for onboarding debt type chooser."
+  },
+  "onboardingDebtTypeContinue": "Tiếp tục",
+  "@onboardingDebtTypeContinue": {
+    "description": "Continue action from onboarding debt type chooser."
+  },
+  "onboardingDebtTypeCreditCardDescription": "Thẻ tín dụng, thẻ cửa hàng, hoặc dư nợ xoay vòng.",
+  "@onboardingDebtTypeCreditCardDescription": {},
+  "onboardingDebtTypeStudentLoanDescription": "Khoản vay học tập liên bang, tư nhân, hoặc giáo dục.",
+  "@onboardingDebtTypeStudentLoanDescription": {},
+  "onboardingDebtTypeCarLoanDescription": "Khoản vay mua xe có payment hằng tháng.",
+  "@onboardingDebtTypeCarLoanDescription": {},
+  "onboardingDebtTypeMortgageDescription": "Khoản vay nhà bạn muốn đưa vào kế hoạch.",
+  "@onboardingDebtTypeMortgageDescription": {},
+  "onboardingDebtTypePersonalDescription": "Vay cá nhân, vay trả góp, hoặc khoản vay cố định.",
+  "@onboardingDebtTypePersonalDescription": {},
+  "onboardingDebtTypeMedicalDescription": "Hóa đơn y tế hoặc payment plan.",
+  "@onboardingDebtTypeMedicalDescription": {},
+  "onboardingDebtTypePaydayLoanDescription": "Khoản vay ngắn hạn hoặc cash advance.",
+  "@onboardingDebtTypePaydayLoanDescription": {},
+  "onboardingDebtTypeBuyNowPayLaterDescription": "Affirm, Klarna, Afterpay, hoặc pay-in-4.",
+  "@onboardingDebtTypeBuyNowPayLaterDescription": {},
+  "onboardingDebtTypeStoreFinancingDescription": "Tài trợ mua hàng retail, nội thất, thiết bị, hoặc promo.",
+  "@onboardingDebtTypeStoreFinancingDescription": {},
+  "onboardingDebtTypeLineOfCreditDescription": "Hạn mức tín dụng cá nhân, ngân hàng, hoặc overdraft.",
+  "@onboardingDebtTypeLineOfCreditDescription": {},
+  "onboardingDebtTypeTaxDebtDescription": "IRS, thuế bang, hoặc payment plan thuế.",
+  "@onboardingDebtTypeTaxDebtDescription": {},
+  "onboardingDebtTypeCollectionsDescription": "Khoản nợ đã vào collection agency.",
+  "@onboardingDebtTypeCollectionsDescription": {},
+  "onboardingDebtTypeFamilyLoanDescription": "Tiền vay từ gia đình hoặc bạn bè.",
+  "@onboardingDebtTypeFamilyLoanDescription": {},
+  "onboardingDebtTypeHomeEquityDescription": "Home equity loan hoặc HELOC.",
+  "@onboardingDebtTypeHomeEquityDescription": {},
+  "onboardingDebtTypeOtherDescription": "Khoản nợ không khớp với các loại có sẵn.",
+  "@onboardingDebtTypeOtherDescription": {},
+  "onboardingDebtDetailsTitle": "Nhập thông tin {type}",
+  "@onboardingDebtDetailsTitle": {
+    "description": "Title for onboarding minimal debt form.",
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingDebtDetailsSubtitle": "Nhập trước bốn con số app cần để dựng kế hoạch.",
+  "@onboardingDebtDetailsSubtitle": {
+    "description": "Subtitle for onboarding minimal debt form."
+  },
+  "onboardingDebtBalanceHelper": "Dùng số dư còn lại trên statement mới nhất.",
+  "@onboardingDebtBalanceHelper": {},
+  "onboardingDebtAprHelper": "Có thể tìm trên statement. Nhập 0 nếu khoản này không tính lãi.",
+  "@onboardingDebtAprHelper": {},
+  "onboardingDebtMinimumPaymentHelper": "Có thể tìm trên statement. Bạn có thể cập nhật lại sau.",
+  "@onboardingDebtMinimumPaymentHelper": {},
+  "onboardingDebtOptionalDetails": "Thông tin tuỳ chọn",
+  "@onboardingDebtOptionalDetails": {
+    "description": "Collapsed optional details label in onboarding debt form."
+  },
+  "onboardingDebtOptionalDetailsSubtitle": "Ngày đến hạn, dư nợ ban đầu, và thiết lập nâng cao.",
+  "@onboardingDebtOptionalDetailsSubtitle": {
+    "description": "Collapsed optional details subtitle in onboarding debt form."
+  },
   "onboardingStep1": "Bước 1/4",
   "@onboardingStep1": {
     "description": "Step 1 progress label"
@@ -1593,7 +1666,7 @@
   "@onboardingAddAnotherEmpty": {
     "description": "Empty state text for add another debt page"
   },
-  "onboardingAddAnotherCount": "Bạn đã lưu {count} khoản nợ. Có thể thêm tiếp hoặc sang bước chọn chiến lược.",
+  "onboardingAddAnotherCount": "Bạn đã lưu {count} khoản nợ. Hãy sửa nếu có gì chưa đúng, thêm khoản khác, hoặc xem kế hoạch.",
   "@onboardingAddAnotherCount": {
     "description": "Text showing count of saved debts",
     "placeholders": {
@@ -1606,13 +1679,17 @@
   "@onboardingAddAnotherRequirement": {
     "description": "Requirement text for adding debt"
   },
-  "onboardingAddAnotherContinue": "Sang bước chọn chiến lược",
+  "onboardingAddAnotherContinue": "Chọn kế hoạch trả nợ",
   "@onboardingAddAnotherContinue": {
     "description": "Continue action to strategy selection"
   },
   "onboardingAddAnotherAddMore": "Thêm một khoản nợ nữa",
   "@onboardingAddAnotherAddMore": {
     "description": "Action to add another debt"
+  },
+  "onboardingAddAnotherEditDebt": "Sửa khoản nợ",
+  "@onboardingAddAnotherEditDebt": {
+    "description": "Inline edit action for debts in onboarding review."
   },
   "onboardingStrategyTitle": "Chọn chiến lược",
   "@onboardingStrategyTitle": {
@@ -1630,7 +1707,7 @@
   "@onboardingStrategyRequirement": {
     "description": "Requirement text for strategy selection"
   },
-  "onboardingStrategyDescription": "App đang so projection thật của Snowball và Avalanche từ dữ liệu khoản nợ hiện tại của bạn.",
+  "onboardingStrategyDescription": "App đang so Snowball và Avalanche dựa trên số liệu khoản nợ của bạn.",
   "@onboardingStrategyDescription": {
     "description": "Description of strategy preview"
   },
@@ -1654,11 +1731,19 @@
   "@onboardingStrategyAvalancheFallback": {
     "description": "Fallback text for avalanche strategy"
   },
-  "onboardingStrategyChangeNote": "Bạn có thể đổi chiến lược bất kỳ lúc nào sau onboarding. Mỗi lần đổi, plan summary và timeline cache sẽ recast lại.",
+  "onboardingStrategySnowballRecommendation": "Thắng lợi sớm nhất",
+  "@onboardingStrategySnowballRecommendation": {
+    "description": "Short recommendation badge for snowball strategy."
+  },
+  "onboardingStrategyAvalancheRecommendation": "Giảm lãi hơn",
+  "@onboardingStrategyAvalancheRecommendation": {
+    "description": "Short recommendation badge for avalanche strategy."
+  },
+  "onboardingStrategyChangeNote": "Bạn có thể đổi chiến lược bất kỳ lúc nào sau onboarding. Kế hoạch sẽ cập nhật theo lựa chọn mới.",
   "@onboardingStrategyChangeNote": {
     "description": "Note about changing strategy later"
   },
-  "onboardingStrategyContinue": "Lưu chiến lược và tiếp tục",
+  "onboardingStrategyContinue": "Lưu lựa chọn kế hoạch",
   "@onboardingStrategyContinue": {
     "description": "Action to save strategy and continue"
   },
@@ -1675,11 +1760,11 @@
       }
     }
   },
-  "onboardingStrategyPreviewCalculating": "Đang tính payoff date và projected interest từ dữ liệu hiện tại...",
+  "onboardingStrategyPreviewCalculating": "Đang tính ngày hết nợ và tiền lãi từ số liệu của bạn...",
   "@onboardingStrategyPreviewCalculating": {
     "description": "Text when preview is calculating"
   },
-  "onboardingStrategyPreviewRecasting": "Đang recast",
+  "onboardingStrategyPreviewRecasting": "Đang cập nhật",
   "@onboardingStrategyPreviewRecasting": {
     "description": "Text when preview is recasting"
   },
@@ -1731,7 +1816,7 @@
   "@onboardingExtraSubtitle": {
     "description": "Subtitle for extra amount page"
   },
-  "onboardingExtraDescription": "Mặc định là $0. Preview sẽ recast live sau 300ms để cho bạn thấy debt-free date và lãi tiết kiệm thật.",
+  "onboardingExtraDescription": "Bắt đầu với $0 nếu đó là mức thực tế. Preview sẽ cập nhật khi bạn đổi số tiền.",
   "@onboardingExtraDescription": {
     "description": "Description for extra amount"
   },
@@ -1751,15 +1836,15 @@
       }
     }
   },
-  "onboardingExtraMaxLabel": "Max",
-  "@onboardingExtraMaxLabel": {
-    "description": "Label for max extra amount"
+  "onboardingExtraAmountInputLabel": "Số tiền",
+  "@onboardingExtraAmountInputLabel": {
+    "description": "Label for direct extra amount input in onboarding."
   },
   "onboardingExtraWhatsNextTitle": "Điều gì xảy ra tiếp theo?",
   "@onboardingExtraWhatsNextTitle": {
     "description": "Title for what's next section"
   },
-  "onboardingExtraWhatsNextDescription": "Khoản extra này sẽ được dùng làm ngân sách trả thêm mỗi tháng. Khi bạn bấm lưu, plan summary và timeline cache sẽ recast ngay.",
+  "onboardingExtraWhatsNextDescription": "Số tiền này sẽ là ngân sách trả thêm mỗi tháng. Bạn có thể đổi lại trong phần kế hoạch.",
   "@onboardingExtraWhatsNextDescription": {
     "description": "Description for what's next"
   },
@@ -1770,6 +1855,10 @@
   "onboardingExtraUseZero": "Dùng $0 lúc này",
   "@onboardingExtraUseZero": {
     "description": "Action to use zero extra amount"
+  },
+  "onboardingExtraUseZeroHelper": "Bạn có thể đổi lại sau.",
+  "@onboardingExtraUseZeroHelper": {
+    "description": "Helper copy under zero extra amount action."
   },
   "onboardingExtraError": "Không thể lưu ngân sách thêm. Vui lòng thử lại.",
   "@onboardingExtraError": {
@@ -1783,7 +1872,7 @@
   "@onboardingExtraPreviewTitle": {
     "description": "Title for live preview"
   },
-  "onboardingExtraPreviewRecasting": "Đang recast...",
+  "onboardingExtraPreviewRecasting": "Đang cập nhật...",
   "@onboardingExtraPreviewRecasting": {
     "description": "Text when extra preview is recasting"
   },
@@ -1808,7 +1897,7 @@
   "@onboardingAhaEmpty": {
     "description": "Empty state text for aha moment"
   },
-  "onboardingAhaRecasting": "Kế hoạch của bạn đang recast.",
+  "onboardingAhaRecasting": "Kế hoạch của bạn đang cập nhật.",
   "@onboardingAhaRecasting": {
     "description": "Text when aha moment is recasting"
   },
@@ -1825,7 +1914,7 @@
   "@onboardingAhaEmptySubtitle": {
     "description": "Empty state subtitle for aha moment"
   },
-  "onboardingAhaReadySubtitle": "Kế hoạch đã được recast. Checklist tháng này đã sẵn sàng.",
+  "onboardingAhaReadySubtitle": "Kế hoạch trả nợ đã sẵn sàng. Checklist tháng này là bước tiếp theo.",
   "@onboardingAhaReadySubtitle": {
     "description": "Ready subtitle for aha moment"
   },
@@ -1845,7 +1934,7 @@
   "@onboardingAhaDataCompact": {
     "description": "Compact text for local data"
   },
-  "onboardingAhaDataFull": "Dữ liệu của bạn đã được lưu local trên thiết bị. Từ đây bạn có thể vào Monthly Action View để check off payment thật và xem timeline recast ngay.",
+  "onboardingAhaDataFull": "Dữ liệu của bạn đã được lưu local trên thiết bị. Từ đây bạn có thể vào Monthly Action View để check off payment thật và giữ kế hoạch luôn cập nhật.",
   "@onboardingAhaDataFull": {
     "description": "Full text for local data"
   },
@@ -1857,7 +1946,15 @@
   "@onboardingAhaOpenMonthly": {
     "description": "Action to open monthly view"
   },
-  "onboardingAhaRecastingShort": "Đang recast",
+  "onboardingAhaNextActionTitle": "Tiếp theo: làm rõ payment tháng này",
+  "@onboardingAhaNextActionTitle": {
+    "description": "Next action title on onboarding aha screen."
+  },
+  "onboardingAhaNextActionDescription": "Monthly Action cho bạn thấy khoản tối thiểu và khoản trả thêm cần check off trước.",
+  "@onboardingAhaNextActionDescription": {
+    "description": "Next action description on onboarding aha screen."
+  },
+  "onboardingAhaRecastingShort": "Đang cập nhật",
   "@onboardingAhaRecastingShort": {
     "description": "Short text for recasting"
   },
@@ -3109,6 +3206,14 @@
   "debtTypeMortgage": "Thế chấp",
   "debtTypePersonal": "Vay cá nhân",
   "debtTypeMedical": "Nợ y tế",
+  "debtTypePaydayLoan": "Payday loan",
+  "debtTypeBuyNowPayLater": "Mua trước trả sau",
+  "debtTypeStoreFinancing": "Tài trợ mua hàng",
+  "debtTypeLineOfCredit": "Hạn mức tín dụng",
+  "debtTypeTaxDebt": "Nợ thuế",
+  "debtTypeCollections": "Khoản collection",
+  "debtTypeFamilyLoan": "Vay gia đình/bạn bè",
+  "debtTypeHomeEquity": "Home equity / HELOC",
   "debtTypeOther": "Khoản nợ khác",
   "debtStatusTracking": "Đang theo dõi",
   "debtStatusOverdue": "Quá hạn",

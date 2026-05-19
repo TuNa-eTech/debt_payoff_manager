@@ -22,6 +22,8 @@ void main() {
     await _tapButton(tester, AppTestKeys.welcomeAddFirstDebt);
     await _pumpUntilLocation(tester, harness, AppRoutes.debtEntry);
 
+    await _tapButton(tester, AppTestKeys.onboardingDebtTypeContinue);
+
     await _enterText(tester, AppTestKeys.debtFormName, 'Visa Platinum');
     await _enterText(tester, AppTestKeys.debtFormCurrentBalance, '1200');
     await _enterText(tester, AppTestKeys.debtFormApr, '19.99');

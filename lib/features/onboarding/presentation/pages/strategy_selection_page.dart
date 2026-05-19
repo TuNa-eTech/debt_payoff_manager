@@ -203,6 +203,9 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                                       .l10n
                                       .onboardingStrategySnowballFallback,
                                 ),
+                                recommendationText: context
+                                    .l10n
+                                    .onboardingStrategySnowballRecommendation,
                                 badgeColor: AppColors.mdPrimaryContainer,
                                 badgeTextColor: AppColors.mdOnPrimaryContainer,
                                 icon: LucideIcons.snowflake,
@@ -234,6 +237,9 @@ class _StrategySelectionPageState extends State<StrategySelectionPage> {
                                       .l10n
                                       .onboardingStrategyAvalancheFallback,
                                 ),
+                                recommendationText: context
+                                    .l10n
+                                    .onboardingStrategyAvalancheRecommendation,
                                 badgeColor: AppColors.mdSecondaryContainer,
                                 badgeTextColor:
                                     AppColors.mdOnSecondaryContainer,
@@ -604,6 +610,7 @@ class _StrategyCard extends StatelessWidget {
     required this.subtitle,
     required this.detail,
     required this.badgeText,
+    required this.recommendationText,
     required this.badgeColor,
     required this.badgeTextColor,
     required this.icon,
@@ -615,6 +622,7 @@ class _StrategyCard extends StatelessWidget {
   final String subtitle;
   final String detail;
   final String badgeText;
+  final String recommendationText;
   final Color badgeColor;
   final Color badgeTextColor;
   final IconData icon;
@@ -682,6 +690,11 @@ class _StrategyCard extends StatelessWidget {
                         children: [
                           Text(title, style: AppTextStyles.titleMedium),
                           const SizedBox(height: AppDimensions.xs),
+                          AppChip.status(
+                            label: recommendationText,
+                            icon: LucideIcons.badgeCheck,
+                          ),
+                          const SizedBox(height: AppDimensions.sm),
                           Text(
                             subtitle,
                             style: AppTextStyles.bodyMedium.copyWith(

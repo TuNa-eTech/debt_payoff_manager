@@ -8,6 +8,14 @@ enum DebtType {
   mortgage('Mortgage'),
   personal('Personal Loan'),
   medical('Medical Debt'),
+  paydayLoan('Payday Loan'),
+  buyNowPayLater('Buy Now Pay Later'),
+  storeFinancing('Store Financing'),
+  lineOfCredit('Line of Credit'),
+  taxDebt('Tax Debt'),
+  collections('Collection Account'),
+  familyLoan('Family Loan'),
+  homeEquity('Home Equity / HELOC'),
   other('Other');
 
   const DebtType(this.label);

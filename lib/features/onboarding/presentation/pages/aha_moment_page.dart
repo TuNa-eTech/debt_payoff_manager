@@ -381,32 +381,104 @@ class AhaMomentPage extends StatelessWidget {
                             AppDimensions.lg,
                             AppDimensions.lg,
                           ),
-                          child: SizedBox(
-                            key: AppTestKeys.onboardingComplete,
-                            child: AppButton.filledLg(
-                              label: trackedDebts.isEmpty
-                                  ? context.l10n.onboardingAhaBackToAdd
-                                  : context.l10n.onboardingAhaOpenMonthly,
-                              trailingIcon: trackedDebts.isEmpty
-                                  ? null
-                                  : LucideIcons.arrowRight,
-                              fullWidth: true,
-                              onPressed: () async {
-                                if (trackedDebts.isEmpty) {
-                                  await navigateToOnboardingStep(
-                                    context,
-                                    step: OnboardingStep.addDebt,
-                                    route: AppRoutes.debtEntry,
-                                  );
-                                  return;
-                                }
-                                await context
-                                    .read<OnboardingCubit>()
-                                    .completeOnboarding();
-                                if (!context.mounted) return;
-                                context.go(AppRoutes.home);
-                              },
-                            ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (trackedDebts.isNotEmpty) ...[
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(
+                                    AppDimensions.md,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.mdOnPrimary.withValues(
+                                      alpha: 0.12,
+                                    ),
+                                    borderRadius: BorderRadius.circular(
+                                      AppDimensions.radiusLg,
+                                    ),
+                                    border: Border.all(
+                                      color: AppColors.mdOnPrimary.withValues(
+                                        alpha: 0.18,
+                                      ),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Icon(
+                                        LucideIcons.listChecks,
+                                        size: AppDimensions.iconMd,
+                                        color: AppColors.mdOnPrimary,
+                                      ),
+                                      const SizedBox(width: AppDimensions.sm),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              context
+                                                  .l10n
+                                                  .onboardingAhaNextActionTitle,
+                                              style: AppTextStyles.titleSmall
+                                                  .copyWith(
+                                                    color:
+                                                        AppColors.mdOnPrimary,
+                                                  ),
+                                            ),
+                                            const SizedBox(
+                                              height: AppDimensions.xs,
+                                            ),
+                                            Text(
+                                              context
+                                                  .l10n
+                                                  .onboardingAhaNextActionDescription,
+                                              style: AppTextStyles.bodySmall
+                                                  .copyWith(
+                                                    color: AppColors.mdOnPrimary
+                                                        .withValues(
+                                                          alpha: 0.84,
+                                                        ),
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: AppDimensions.md),
+                              ],
+                              SizedBox(
+                                key: AppTestKeys.onboardingComplete,
+                                child: AppButton.filledLg(
+                                  label: trackedDebts.isEmpty
+                                      ? context.l10n.onboardingAhaBackToAdd
+                                      : context.l10n.onboardingAhaOpenMonthly,
+                                  trailingIcon: trackedDebts.isEmpty
+                                      ? null
+                                      : LucideIcons.arrowRight,
+                                  fullWidth: true,
+                                  onPressed: () async {
+                                    if (trackedDebts.isEmpty) {
+                                      await navigateToOnboardingStep(
+                                        context,
+                                        step: OnboardingStep.addDebt,
+                                        route: AppRoutes.debtEntry,
+                                      );
+                                      return;
+                                    }
+                                    await context
+                                        .read<OnboardingCubit>()
+                                        .completeOnboarding();
+                                    if (!context.mounted) return;
+                                    context.go(AppRoutes.home);
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

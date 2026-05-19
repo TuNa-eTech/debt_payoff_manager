@@ -34,6 +34,8 @@ void main() {
         await _tapButton(tester, AppTestKeys.welcomeAddFirstDebt);
         await _pumpUntilLocation(tester, harness, AppRoutes.debtEntry);
 
+        await _tapButton(tester, AppTestKeys.onboardingDebtTypeContinue);
+
         await _enterText(tester, AppTestKeys.debtFormName, 'Visa Platinum');
         await _enterText(tester, AppTestKeys.debtFormCurrentBalance, '1200');
         await _enterText(tester, AppTestKeys.debtFormApr, '19.99');
@@ -130,6 +132,8 @@ void main() {
         await _tapButton(tester, AppTestKeys.welcomeAddFirstDebt);
         await _pumpUntilLocation(tester, harness, AppRoutes.debtEntry);
 
+        await _tapButton(tester, AppTestKeys.onboardingDebtTypeContinue);
+
         await _enterText(tester, AppTestKeys.debtFormName, 'Visa Platinum');
         await _enterText(tester, AppTestKeys.debtFormCurrentBalance, '1200');
         await _enterText(tester, AppTestKeys.debtFormApr, '19.99');
@@ -181,6 +185,8 @@ void main() {
 
         await _tapButton(tester, AppTestKeys.welcomeAddFirstDebt);
         await _pumpUntilLocation(tester, harness, AppRoutes.debtEntry);
+
+        await _tapButton(tester, AppTestKeys.onboardingDebtTypeContinue);
 
         await _enterText(tester, AppTestKeys.debtFormName, 'Visa Platinum');
         await _enterText(tester, AppTestKeys.debtFormCurrentBalance, '1200');
@@ -343,7 +349,9 @@ void main() {
       await tester.ensureVisible(reminderTile);
       await tester.tap(reminderTile);
       await tester.pump(const Duration(milliseconds: 50));
-      await tester.tap(reminderTile); // Toggle back to true to trigger permission check
+      await tester.tap(
+        reminderTile,
+      ); // Toggle back to true to trigger permission check
       await tester.pump(const Duration(milliseconds: 50));
 
       expect(harness.router.state.matchedLocation, AppRoutes.settings);
@@ -419,7 +427,9 @@ void main() {
       );
       await tester.pumpUntilVisible(find.byKey(AppTestKeys.snackbarUndo));
       expect(find.byType(SnackBar), findsOneWidget);
-      tester.state<ScaffoldMessengerState>(find.byType(ScaffoldMessenger)).clearSnackBars();
+      tester
+          .state<ScaffoldMessengerState>(find.byType(ScaffoldMessenger))
+          .clearSnackBars();
       await tester.pumpAndSettle();
       expect(find.byType(SnackBar), findsNothing);
 

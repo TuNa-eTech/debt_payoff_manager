@@ -50,33 +50,26 @@ class DebtEntryPage extends StatelessWidget {
         builder: (context) {
           return OnboardingStepTracker(
             screen: OnboardingAnalyticsScreen.debtEntry,
-            child: PopScope(
-              canPop: false,
-              onPopInvokedWithResult: (didPop, result) {
-                if (didPop) return;
-                _handleBack(context);
+            child: DebtFormScaffold(
+              mode: DebtFormMode.onboarding,
+              title: context.l10n.onboardingDebtEntryTitle,
+              primaryActionLabel: context.l10n.onboardingDebtEntrySave,
+              progressLabel: context.l10n.onboardingStep1,
+              progressValue: 0.25,
+              backButtonKey: AppTestKeys.onboardingDebtEntryBack,
+              onCancel: () => _handleBack(context),
+              onSaved: (context, debt) async {
+                unawaited(
+                  getIt<OnboardingAnalytics>().trackDebtSaved(
+                    debtCount: context.read<DebtsCubit>().state.debts.length,
+                  ),
+                );
+                await navigateToOnboardingStep(
+                  context,
+                  step: OnboardingStep.addDebt,
+                  route: AppRoutes.addAnotherDebt,
+                );
               },
-              child: DebtFormScaffold(
-                mode: DebtFormMode.onboarding,
-                title: context.l10n.onboardingDebtEntryTitle,
-                primaryActionLabel: context.l10n.onboardingDebtEntrySave,
-                progressLabel: context.l10n.onboardingStep1,
-                progressValue: 0.25,
-                backButtonKey: AppTestKeys.onboardingDebtEntryBack,
-                onCancel: () => _handleBack(context),
-                onSaved: (context, debt) async {
-                  unawaited(
-                    getIt<OnboardingAnalytics>().trackDebtSaved(
-                      debtCount: context.read<DebtsCubit>().state.debts.length,
-                    ),
-                  );
-                  await navigateToOnboardingStep(
-                    context,
-                    step: OnboardingStep.addDebt,
-                    route: AppRoutes.addAnotherDebt,
-                  );
-                },
-              ),
             ),
           );
         },

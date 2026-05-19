@@ -19,6 +19,12 @@ class AppTestKeys {
   static const onboardingDebtEntryBack = ValueKey<String>(
     'onboarding:debt-entry-back',
   );
+  static const onboardingDebtTypeContinue = ValueKey<String>(
+    'onboarding:debt-type-continue',
+  );
+  static const onboardingDebtOptionalDetails = ValueKey<String>(
+    'onboarding:debt-optional-details',
+  );
   static const onboardingAddAnotherBack = ValueKey<String>(
     'onboarding:add-another-back',
   );
@@ -40,12 +46,21 @@ class AppTestKeys {
   static const onboardingExtraPreset100 = ValueKey<String>(
     'onboarding:extra-preset-100',
   );
+  static const onboardingExtraAmountInput = ValueKey<String>(
+    'onboarding:extra-amount-input',
+  );
   static const onboardingExtraBack = ValueKey<String>('onboarding:extra-back');
   static const onboardingExtraContinue = ValueKey<String>(
     'onboarding:extra-continue',
   );
   static const onboardingAhaBack = ValueKey<String>('onboarding:aha-back');
   static const onboardingComplete = ValueKey<String>('onboarding:complete');
+
+  static ValueKey<String> onboardingDebtTypeOption(String type) =>
+      ValueKey<String>('onboarding:debt-type:$type');
+
+  static ValueKey<String> onboardingReviewDebtEdit(String debtId) =>
+      ValueKey<String>('onboarding:review-debt-edit:$debtId');
 
   // Debt form
   static const debtFormName = ValueKey<String>('debt-form:name');

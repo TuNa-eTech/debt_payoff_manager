@@ -8,6 +8,7 @@ import '../../../../core/i18n/app_locale.dart';
 import '../../../../core/i18n/app_locale_picker_sheet.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../domain/repositories/settings_repository.dart';
@@ -36,22 +37,23 @@ class WelcomePage extends StatelessWidget {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.pagePaddingH,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 100),
+                      const SizedBox(height: AppDimensions.xl * 2),
                       // Icon
                       Container(
                         height: 64,
                         width: 64,
                         decoration: BoxDecoration(
                           color: AppColors.mdPrimaryContainer,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: AppColors.mdOutlineVariant,
-                            width: 1,
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radius2xl,
                           ),
+                          border: Border.all(color: AppColors.mdOutlineVariant),
                         ),
                         child: const Center(
                           child: Icon(
@@ -61,29 +63,55 @@ class WelcomePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: AppDimensions.xl),
                       // Title
                       Text(
                         l10n.welcomeTitle,
                         style: AppTextStyles.headlineLarge.copyWith(
-                          // 40sp
-                          letterSpacing: -1.5,
                           height: 1.15,
-                          color: AppColors.mdOnSurface.withValues(
-                            alpha: 0.95,
-                          ), // #000000F2
+                          color: AppColors.mdOnSurface.withValues(alpha: 0.95),
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: AppDimensions.md),
                       // Subtitle
                       Text(
                         l10n.welcomeSubtitle,
                         style: AppTextStyles.bodyLarge.copyWith(
-                          color: const Color(0xFF615D59), // #615D59
+                          color: AppColors.mdOnSurfaceVariant,
                           height: 1.5,
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: AppDimensions.md),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(AppDimensions.md),
+                        decoration: BoxDecoration(
+                          color: AppColors.mdSurfaceContainerLow,
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.radiusLg,
+                          ),
+                          border: Border.all(color: AppColors.mdOutlineVariant),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              LucideIcons.calendarCheck,
+                              size: AppDimensions.iconMd,
+                              color: AppColors.mdPrimary,
+                            ),
+                            const SizedBox(width: AppDimensions.sm),
+                            Expanded(
+                              child: Text(
+                                l10n.welcomeValuePreview,
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: AppColors.mdOnSurfaceVariant,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: AppDimensions.md),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: SizedBox(
@@ -119,10 +147,10 @@ class WelcomePage extends StatelessWidget {
               // Bottom Action Area
               Container(
                 padding: const EdgeInsets.fromLTRB(
-                  24,
-                  24,
-                  24,
-                  48,
+                  AppDimensions.lg,
+                  AppDimensions.lg,
+                  AppDimensions.lg,
+                  AppDimensions.xl + AppDimensions.md,
                 ), // Bottom padding for home indicator
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -140,21 +168,21 @@ class WelcomePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppDimensions.md),
                     // Trust Badges
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: AppDimensions.md,
+                      runSpacing: AppDimensions.sm,
                       children: [
                         _buildTrustBadge(
                           LucideIcons.shield,
                           l10n.welcomeTrustLocalFirst,
                         ),
-                        const SizedBox(width: 20),
                         _buildTrustBadge(
                           LucideIcons.ban,
                           l10n.welcomeTrustNoBankSync,
                         ),
-                        const SizedBox(width: 20),
                         _buildTrustBadge(
                           LucideIcons.lock,
                           l10n.welcomeTrustFree,
@@ -176,11 +204,10 @@ class WelcomePage extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 14, color: AppColors.mdPrimary),
-        const SizedBox(width: 4),
+        const SizedBox(width: AppDimensions.xs),
         Text(
           label,
           style: AppTextStyles.labelSmall.copyWith(
-            fontSize: 11,
             color: AppColors.mdOnSurfaceVariant,
             letterSpacing: 0,
           ),

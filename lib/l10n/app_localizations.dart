@@ -1982,6 +1982,12 @@ abstract class AppLocalizations {
   /// **'Build a personalized payoff plan in 3 minutes.\nNo account. No bank connection.'**
   String get welcomeSubtitle;
 
+  /// Short value preview shown on the onboarding welcome page.
+  ///
+  /// In en, this message translates to:
+  /// **'In a few minutes, you will see your debt-free date and first monthly action.'**
+  String get welcomeValuePreview;
+
   /// Headline on the welcome page.
   ///
   /// In en, this message translates to:
@@ -2196,6 +2202,156 @@ abstract class AppLocalizations {
   /// **'Save Debt'**
   String get onboardingDebtEntrySave;
 
+  /// Title for onboarding debt type chooser.
+  ///
+  /// In en, this message translates to:
+  /// **'What type of debt is this?'**
+  String get onboardingDebtTypeTitle;
+
+  /// Subtitle for onboarding debt type chooser.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with one debt. You can add the rest after this.'**
+  String get onboardingDebtTypeSubtitle;
+
+  /// Continue action from onboarding debt type chooser.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get onboardingDebtTypeContinue;
+
+  /// No description provided for @onboardingDebtTypeCreditCardDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Cards, store cards, or revolving balances.'**
+  String get onboardingDebtTypeCreditCardDescription;
+
+  /// No description provided for @onboardingDebtTypeStudentLoanDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Federal, private, or education loans.'**
+  String get onboardingDebtTypeStudentLoanDescription;
+
+  /// No description provided for @onboardingDebtTypeCarLoanDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto loans with a regular monthly payment.'**
+  String get onboardingDebtTypeCarLoanDescription;
+
+  /// No description provided for @onboardingDebtTypeMortgageDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Home loans you want in the payoff plan.'**
+  String get onboardingDebtTypeMortgageDescription;
+
+  /// No description provided for @onboardingDebtTypePersonalDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal loans, installment loans, or fixed loans.'**
+  String get onboardingDebtTypePersonalDescription;
+
+  /// No description provided for @onboardingDebtTypeMedicalDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical bills or payment plans.'**
+  String get onboardingDebtTypeMedicalDescription;
+
+  /// No description provided for @onboardingDebtTypePaydayLoanDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Short-term loans or cash advances.'**
+  String get onboardingDebtTypePaydayLoanDescription;
+
+  /// No description provided for @onboardingDebtTypeBuyNowPayLaterDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Affirm, Klarna, Afterpay, or pay-in-4 balances.'**
+  String get onboardingDebtTypeBuyNowPayLaterDescription;
+
+  /// No description provided for @onboardingDebtTypeStoreFinancingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Retail, furniture, appliance, or promo financing.'**
+  String get onboardingDebtTypeStoreFinancingDescription;
+
+  /// No description provided for @onboardingDebtTypeLineOfCreditDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal, bank, or overdraft credit lines.'**
+  String get onboardingDebtTypeLineOfCreditDescription;
+
+  /// No description provided for @onboardingDebtTypeTaxDebtDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'IRS, state tax, or payment-plan balances.'**
+  String get onboardingDebtTypeTaxDebtDescription;
+
+  /// No description provided for @onboardingDebtTypeCollectionsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts with a collection agency.'**
+  String get onboardingDebtTypeCollectionsDescription;
+
+  /// No description provided for @onboardingDebtTypeFamilyLoanDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Money owed to family or friends.'**
+  String get onboardingDebtTypeFamilyLoanDescription;
+
+  /// No description provided for @onboardingDebtTypeHomeEquityDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Home equity loans or HELOC balances.'**
+  String get onboardingDebtTypeHomeEquityDescription;
+
+  /// No description provided for @onboardingDebtTypeOtherDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Any debt that does not fit the presets.'**
+  String get onboardingDebtTypeOtherDescription;
+
+  /// Title for onboarding minimal debt form.
+  ///
+  /// In en, this message translates to:
+  /// **'Add {type} details'**
+  String onboardingDebtDetailsTitle(String type);
+
+  /// Subtitle for onboarding minimal debt form.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the four numbers the plan needs first.'**
+  String get onboardingDebtDetailsSubtitle;
+
+  /// No description provided for @onboardingDebtBalanceHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the remaining balance from your latest statement.'**
+  String get onboardingDebtBalanceHelper;
+
+  /// No description provided for @onboardingDebtAprHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Find this on your statement. Enter 0 if there is no interest.'**
+  String get onboardingDebtAprHelper;
+
+  /// No description provided for @onboardingDebtMinimumPaymentHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Find this on your statement. You can update it later.'**
+  String get onboardingDebtMinimumPaymentHelper;
+
+  /// Collapsed optional details label in onboarding debt form.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional details'**
+  String get onboardingDebtOptionalDetails;
+
+  /// Collapsed optional details subtitle in onboarding debt form.
+  ///
+  /// In en, this message translates to:
+  /// **'Due day, original balance, and advanced plan settings.'**
+  String get onboardingDebtOptionalDetailsSubtitle;
+
   /// Step 1 progress label
   ///
   /// In en, this message translates to:
@@ -2223,7 +2379,7 @@ abstract class AppLocalizations {
   /// Text showing count of saved debts
   ///
   /// In en, this message translates to:
-  /// **'You have saved {count} debts. You can add more or continue to strategy selection.'**
+  /// **'You have saved {count} debts. Edit anything that looks off, add another debt, or see your plan.'**
   String onboardingAddAnotherCount(int count);
 
   /// Requirement text for adding debt
@@ -2235,7 +2391,7 @@ abstract class AppLocalizations {
   /// Continue action to strategy selection
   ///
   /// In en, this message translates to:
-  /// **'Choose Strategy'**
+  /// **'Choose payoff plan'**
   String get onboardingAddAnotherContinue;
 
   /// Action to add another debt
@@ -2243,6 +2399,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add Another Debt'**
   String get onboardingAddAnotherAddMore;
+
+  /// Inline edit action for debts in onboarding review.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit debt'**
+  String get onboardingAddAnotherEditDebt;
 
   /// Title for strategy selection page
   ///
@@ -2271,7 +2433,7 @@ abstract class AppLocalizations {
   /// Description of strategy preview
   ///
   /// In en, this message translates to:
-  /// **'The app is comparing live projections of Snowball and Avalanche based on your current debts.'**
+  /// **'The app is comparing Snowball and Avalanche based on your debt numbers.'**
   String get onboardingStrategyDescription;
 
   /// Empty state title for strategy selection
@@ -2304,16 +2466,28 @@ abstract class AppLocalizations {
   /// **'Prioritize the highest APR to reduce interest.'**
   String get onboardingStrategyAvalancheFallback;
 
+  /// Short recommendation badge for snowball strategy.
+  ///
+  /// In en, this message translates to:
+  /// **'Fastest early win'**
+  String get onboardingStrategySnowballRecommendation;
+
+  /// Short recommendation badge for avalanche strategy.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower interest'**
+  String get onboardingStrategyAvalancheRecommendation;
+
   /// Note about changing strategy later
   ///
   /// In en, this message translates to:
-  /// **'You can change your strategy anytime after onboarding. The plan summary and timeline will recast automatically.'**
+  /// **'You can change your strategy anytime after onboarding. Your plan will update with the new choice.'**
   String get onboardingStrategyChangeNote;
 
   /// Action to save strategy and continue
   ///
   /// In en, this message translates to:
-  /// **'Save Strategy & Continue'**
+  /// **'Save plan choice'**
   String get onboardingStrategyContinue;
 
   /// Text when all debts are excluded from strategy
@@ -2331,13 +2505,13 @@ abstract class AppLocalizations {
   /// Text when preview is calculating
   ///
   /// In en, this message translates to:
-  /// **'Calculating payoff date and projected interest from current data...'**
+  /// **'Calculating payoff date and interest from your numbers...'**
   String get onboardingStrategyPreviewCalculating;
 
   /// Text when preview is recasting
   ///
   /// In en, this message translates to:
-  /// **'Recasting'**
+  /// **'Updating'**
   String get onboardingStrategyPreviewRecasting;
 
   /// Summary of strategy preview
@@ -2395,7 +2569,7 @@ abstract class AppLocalizations {
   /// Description for extra amount
   ///
   /// In en, this message translates to:
-  /// **'Default is \$0. Preview will live recast after 300ms to show your actual debt-free date and saved interest.'**
+  /// **'Start with \$0 if that is realistic. The preview updates as you change the amount.'**
   String get onboardingExtraDescription;
 
   /// Label for extra monthly payment
@@ -2410,11 +2584,11 @@ abstract class AppLocalizations {
   /// **'{strategy} · Tracking {count} debts'**
   String onboardingExtraTrackedCount(String strategy, int count);
 
-  /// Label for max extra amount
+  /// Label for direct extra amount input in onboarding.
   ///
   /// In en, this message translates to:
-  /// **'Max'**
-  String get onboardingExtraMaxLabel;
+  /// **'Amount'**
+  String get onboardingExtraAmountInputLabel;
 
   /// Title for what's next section
   ///
@@ -2425,7 +2599,7 @@ abstract class AppLocalizations {
   /// Description for what's next
   ///
   /// In en, this message translates to:
-  /// **'This extra amount will be used as additional budget each month. When you save, your plan summary and timeline cache will recast immediately.'**
+  /// **'This amount becomes your planned extra budget each month. You can change it later from the plan.'**
   String get onboardingExtraWhatsNextDescription;
 
   /// Save action for extra amount
@@ -2439,6 +2613,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Use \$0 for now'**
   String get onboardingExtraUseZero;
+
+  /// Helper copy under zero extra amount action.
+  ///
+  /// In en, this message translates to:
+  /// **'You can change this later.'**
+  String get onboardingExtraUseZeroHelper;
 
   /// Error message when saving extra amount fails
   ///
@@ -2461,7 +2641,7 @@ abstract class AppLocalizations {
   /// Text when extra preview is recasting
   ///
   /// In en, this message translates to:
-  /// **'Recasting...'**
+  /// **'Updating...'**
   String get onboardingExtraPreviewRecasting;
 
   /// Text showing debt-free date with extra amount
@@ -2491,7 +2671,7 @@ abstract class AppLocalizations {
   /// Text when aha moment is recasting
   ///
   /// In en, this message translates to:
-  /// **'Your plan is recasting.'**
+  /// **'Your plan is updating.'**
   String get onboardingAhaRecasting;
 
   /// Text showing debt-free date in aha moment
@@ -2509,7 +2689,7 @@ abstract class AppLocalizations {
   /// Ready subtitle for aha moment
   ///
   /// In en, this message translates to:
-  /// **'Plan has been recast. Your monthly checklist is ready.'**
+  /// **'Your payoff plan is ready. The first monthly checklist is next.'**
   String get onboardingAhaReadySubtitle;
 
   /// Title for aha moment summary
@@ -2539,7 +2719,7 @@ abstract class AppLocalizations {
   /// Full text for local data
   ///
   /// In en, this message translates to:
-  /// **'Your data is saved locally on your device. From here you can open the Monthly Action View to check off actual payments and watch the timeline recast instantly.'**
+  /// **'Your data is saved locally on your device. From here you can open the Monthly Action View to check off real payments and keep the plan current.'**
   String get onboardingAhaDataFull;
 
   /// Action to go back and add debt
@@ -2554,10 +2734,22 @@ abstract class AppLocalizations {
   /// **'Open Monthly Action View'**
   String get onboardingAhaOpenMonthly;
 
+  /// Next action title on onboarding aha screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Next: make this month\'s payments visible'**
+  String get onboardingAhaNextActionTitle;
+
+  /// Next action description on onboarding aha screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Action shows the minimums and extra payment to check off first.'**
+  String get onboardingAhaNextActionDescription;
+
   /// Short text for recasting
   ///
   /// In en, this message translates to:
-  /// **'Recasting'**
+  /// **'Updating'**
   String get onboardingAhaRecastingShort;
 
   /// Label for debt-free date in aha moment
@@ -4512,6 +4704,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Medical debt'**
   String get debtTypeMedical;
+
+  /// No description provided for @debtTypePaydayLoan.
+  ///
+  /// In en, this message translates to:
+  /// **'Payday loan'**
+  String get debtTypePaydayLoan;
+
+  /// No description provided for @debtTypeBuyNowPayLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy now, pay later'**
+  String get debtTypeBuyNowPayLater;
+
+  /// No description provided for @debtTypeStoreFinancing.
+  ///
+  /// In en, this message translates to:
+  /// **'Store financing'**
+  String get debtTypeStoreFinancing;
+
+  /// No description provided for @debtTypeLineOfCredit.
+  ///
+  /// In en, this message translates to:
+  /// **'Line of credit'**
+  String get debtTypeLineOfCredit;
+
+  /// No description provided for @debtTypeTaxDebt.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax debt'**
+  String get debtTypeTaxDebt;
+
+  /// No description provided for @debtTypeCollections.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection account'**
+  String get debtTypeCollections;
+
+  /// No description provided for @debtTypeFamilyLoan.
+  ///
+  /// In en, this message translates to:
+  /// **'Family loan'**
+  String get debtTypeFamilyLoan;
+
+  /// No description provided for @debtTypeHomeEquity.
+  ///
+  /// In en, this message translates to:
+  /// **'Home equity / HELOC'**
+  String get debtTypeHomeEquity;
 
   /// No description provided for @debtTypeOther.
   ///

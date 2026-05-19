@@ -79,9 +79,17 @@ class DebtFormState extends Equatable {
         case DebtType.carLoan:
         case DebtType.mortgage:
         case DebtType.personal:
+        case DebtType.storeFinancing:
+        case DebtType.taxDebt:
+        case DebtType.homeEquity:
           return true;
         case DebtType.creditCard:
         case DebtType.medical:
+        case DebtType.paydayLoan:
+        case DebtType.buyNowPayLater:
+        case DebtType.lineOfCredit:
+        case DebtType.collections:
+        case DebtType.familyLoan:
         case DebtType.other:
           return false;
       }
@@ -92,9 +100,17 @@ class DebtFormState extends Equatable {
       case DebtType.carLoan:
       case DebtType.mortgage:
       case DebtType.personal:
+      case DebtType.storeFinancing:
+      case DebtType.taxDebt:
+      case DebtType.homeEquity:
         return true;
       case DebtType.creditCard:
       case DebtType.medical:
+      case DebtType.paydayLoan:
+      case DebtType.buyNowPayLater:
+      case DebtType.lineOfCredit:
+      case DebtType.collections:
+      case DebtType.familyLoan:
       case DebtType.other:
         return false;
     }
@@ -109,6 +125,14 @@ class DebtFormState extends Equatable {
       case DebtType.carLoan:
       case DebtType.mortgage:
       case DebtType.personal:
+      case DebtType.paydayLoan:
+      case DebtType.buyNowPayLater:
+      case DebtType.storeFinancing:
+      case DebtType.lineOfCredit:
+      case DebtType.taxDebt:
+      case DebtType.collections:
+      case DebtType.familyLoan:
+      case DebtType.homeEquity:
         return true;
       case DebtType.medical:
       case DebtType.other:
@@ -795,10 +819,18 @@ class DebtFormCubit extends Cubit<DebtFormState> {
       case DebtType.studentLoan:
       case DebtType.mortgage:
       case DebtType.medical:
+      case DebtType.taxDebt:
+      case DebtType.collections:
+      case DebtType.familyLoan:
+      case DebtType.homeEquity:
       case DebtType.other:
         return InterestMethod.simpleMonthly;
       case DebtType.carLoan:
       case DebtType.personal:
+      case DebtType.paydayLoan:
+      case DebtType.buyNowPayLater:
+      case DebtType.storeFinancing:
+      case DebtType.lineOfCredit:
         return InterestMethod.compoundMonthly;
     }
   }

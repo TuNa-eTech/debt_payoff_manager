@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:debt_payoff_manager/l10n/app_localizations.dart';
 
+import 'package:debt_payoff_manager/core/constants/app_test_keys.dart';
 import 'package:debt_payoff_manager/domain/repositories/debt_repository.dart';
 import 'package:debt_payoff_manager/features/debts/cubit/debts_cubit.dart';
 import 'package:debt_payoff_manager/features/debts/cubit/debts_state.dart';
@@ -46,6 +47,10 @@ void main() {
     await tester.pump();
 
     expect(find.text('Visa'), findsOneWidget);
-    expect(find.text('Choose Strategy'), findsOneWidget);
+    expect(find.text('Choose payoff plan'), findsOneWidget);
+    expect(
+      find.byKey(AppTestKeys.onboardingReviewDebtEdit('visa')),
+      findsOneWidget,
+    );
   });
 }

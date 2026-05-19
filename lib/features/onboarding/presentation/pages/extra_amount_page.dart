@@ -16,10 +16,12 @@ import '../../../../core/services/plan_recast_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/utils/currency_input_formatter.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_chip.dart';
+import '../../../../core/widgets/app_text_field.dart';
 import '../../../../domain/entities/debt.dart';
 import '../../../../domain/entities/plan.dart';
 import '../../../../domain/enums/strategy.dart';
@@ -41,6 +43,7 @@ class ExtraAmountPage extends StatefulWidget {
 class _ExtraAmountPageState extends State<ExtraAmountPage> {
   final PlanRepository _planRepository = getIt.get<PlanRepository>();
   final PlanRecastService _planRecastService = getIt.get<PlanRecastService>();
+  late final TextEditingController _extraAmountController;
 
   Plan? _plan;
   double _extraAmount = 0;
@@ -55,12 +58,14 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
   @override
   void dispose() {
     _previewDebounce?.cancel();
+    _extraAmountController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+    _extraAmountController = TextEditingController(text: '0');
     _loadPlan();
   }
 
@@ -70,6 +75,7 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
     setState(() {
       _plan = plan;
       _extraAmount = (plan?.extraMonthlyAmount ?? 0) / 100;
+      _syncExtraAmountController();
       _isLoading = false;
     });
   }
@@ -202,49 +208,80 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                               ),
                             ),
                             const SizedBox(height: AppDimensions.lg),
-                            SliderTheme(
-                              data: SliderTheme.of(context).copyWith(
-                                activeTrackColor: AppColors.mdPrimary,
-                                inactiveTrackColor:
-                                    AppColors.mdSurfaceContainerHighest,
-                                thumbColor: AppColors.mdPrimary,
-                                trackHeight: 6,
-                              ),
-                              child: Slider(
-                                value: _extraAmount.clamp(0, 1000),
-                                min: 0,
-                                max: 1000,
-                                divisions: 20,
-                                onChanged: (value) {
-                                  _setExtraAmount(
-                                    value,
-                                    trackedDebts: trackedDebts,
-                                  );
-                                },
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppDimensions.sm,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '\$0',
-                                    style: AppTextStyles.labelSmall.copyWith(
-                                      color: AppColors.mdOnSurfaceVariant,
-                                    ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      SliderTheme(
+                                        data: SliderTheme.of(context).copyWith(
+                                          activeTrackColor: AppColors.mdPrimary,
+                                          inactiveTrackColor: AppColors
+                                              .mdSurfaceContainerHighest,
+                                          thumbColor: AppColors.mdPrimary,
+                                          trackHeight: 6,
+                                        ),
+                                        child: Slider(
+                                          value: _extraAmount.clamp(0, 1000),
+                                          min: 0,
+                                          max: 1000,
+                                          divisions: 20,
+                                          onChanged: (value) {
+                                            _setExtraAmount(
+                                              value,
+                                              trackedDebts: trackedDebts,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: AppDimensions.sm,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              '\$0',
+                                              style: AppTextStyles.labelSmall
+                                                  .copyWith(
+                                                    color: AppColors
+                                                        .mdOnSurfaceVariant,
+                                                  ),
+                                            ),
+                                            Text(
+                                              '\$1000',
+                                              style: AppTextStyles.labelSmall
+                                                  .copyWith(
+                                                    color: AppColors
+                                                        .mdOnSurfaceVariant,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    '\$1000',
-                                    style: AppTextStyles.labelSmall.copyWith(
-                                      color: AppColors.mdOnSurfaceVariant,
-                                    ),
+                                ),
+                                const SizedBox(width: AppDimensions.md),
+                                SizedBox(
+                                  width: 132,
+                                  child: AppTextField.currency(
+                                    key: AppTestKeys.onboardingExtraAmountInput,
+                                    label: context
+                                        .l10n
+                                        .onboardingExtraAmountInputLabel,
+                                    controller: _extraAmountController,
+                                    onChanged: (value) =>
+                                        _setExtraAmountFromInput(
+                                          value,
+                                          trackedDebts: trackedDebts,
+                                        ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: AppDimensions.lg),
                             Wrap(
@@ -252,31 +289,31 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                               runSpacing: AppDimensions.sm,
                               children: [
                                 _AmountChip(
-                                  label: '+\$50',
-                                  onTap: () => _bumpExtra(
+                                  label: '\$0',
+                                  onTap: () => _setExtraAmount(
+                                    0,
+                                    trackedDebts: trackedDebts,
+                                  ),
+                                ),
+                                _AmountChip(
+                                  label: '\$25',
+                                  onTap: () => _setExtraAmount(
+                                    25,
+                                    trackedDebts: trackedDebts,
+                                  ),
+                                ),
+                                _AmountChip(
+                                  label: '\$50',
+                                  onTap: () => _setExtraAmount(
                                     50,
                                     trackedDebts: trackedDebts,
                                   ),
                                 ),
                                 _AmountChip(
                                   key: AppTestKeys.onboardingExtraPreset100,
-                                  label: '+\$100',
-                                  onTap: () => _bumpExtra(
-                                    100,
-                                    trackedDebts: trackedDebts,
-                                  ),
-                                ),
-                                _AmountChip(
-                                  label: '+\$200',
-                                  onTap: () => _bumpExtra(
-                                    200,
-                                    trackedDebts: trackedDebts,
-                                  ),
-                                ),
-                                _AmountChip(
-                                  label: context.l10n.onboardingExtraMaxLabel,
+                                  label: '\$100',
                                   onTap: () => _setExtraAmount(
-                                    1000,
+                                    100,
                                     trackedDebts: trackedDebts,
                                   ),
                                 ),
@@ -358,6 +395,14 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
                                 ? null
                                 : () => _saveAndContinue(amountCents: 0),
                           ),
+                          const SizedBox(height: AppDimensions.xs),
+                          Text(
+                            context.l10n.onboardingExtraUseZeroHelper,
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.mdOnSurfaceVariant,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -371,16 +416,33 @@ class _ExtraAmountPageState extends State<ExtraAmountPage> {
     );
   }
 
-  void _bumpExtra(int amountDollars, {required List<Debt> trackedDebts}) {
-    _setExtraAmount(
-      (_extraAmount + amountDollars).clamp(0, 1000).toDouble(),
-      trackedDebts: trackedDebts,
-    );
+  void _setExtraAmount(double value, {required List<Debt> trackedDebts}) {
+    setState(() {
+      _extraAmount = value.clamp(0, 1000).toDouble();
+      _syncExtraAmountController();
+    });
+    _schedulePreview(trackedDebts);
   }
 
-  void _setExtraAmount(double value, {required List<Debt> trackedDebts}) {
-    setState(() => _extraAmount = value);
+  void _setExtraAmountFromInput(
+    String value, {
+    required List<Debt> trackedDebts,
+  }) {
+    final stripped = CurrencyInputFormatter.strip(value);
+    final parsed = double.tryParse(stripped);
+    setState(() => _extraAmount = (parsed ?? 0).clamp(0, 1000).toDouble());
     _schedulePreview(trackedDebts);
+  }
+
+  void _syncExtraAmountController() {
+    final next = _extraAmount == _extraAmount.roundToDouble()
+        ? _extraAmount.round().toString()
+        : _extraAmount.toStringAsFixed(2);
+    if (_extraAmountController.text == next) return;
+    _extraAmountController.value = TextEditingValue(
+      text: next,
+      selection: TextSelection.collapsed(offset: next.length),
+    );
   }
 
   void _maybeSchedulePreview(List<Debt> trackedDebts) {

@@ -118,6 +118,15 @@ class DebtFormFields extends StatelessWidget {
       selectedDebtType,
     );
 
+    if (mode == DebtFormMode.onboarding) {
+      return _buildOnboardingMinimalFields(
+        context: context,
+        content: content,
+        l10n: l10n,
+        recommendedInterest: recommendedInterest,
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -504,6 +513,301 @@ class DebtFormFields extends StatelessWidget {
         ],
       ),
     ];
+  }
+
+  Widget _buildOnboardingMinimalFields({
+    required BuildContext context,
+    required _DebtTypeFormContent content,
+    required AppLocalizations l10n,
+    required InterestMethod recommendedInterest,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          l10n.onboardingDebtDetailsTitle(
+            debtTypeDisplayName(selectedDebtType, l10n),
+          ),
+          style: AppTextStyles.headlineSmall,
+        ),
+        const SizedBox(height: AppDimensions.sm),
+        Text(
+          l10n.onboardingDebtDetailsSubtitle,
+          style: AppTextStyles.bodyMedium.copyWith(
+            color: AppColors.mdOnSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: AppDimensions.lg),
+        AppTextField(
+          key: AppTestKeys.debtFormName,
+          label: l10n.debtFormNameLabel,
+          controller: nameController,
+          hint: content.nameHint,
+          helperText: content.nameHelper,
+          prefixIcon: debtTypeIcon(selectedDebtType),
+          errorText: nameError,
+          required: true,
+          onChanged: (_) => onCoreFieldChanged(),
+        ),
+        const SizedBox(height: AppDimensions.md),
+        AppTextField.currency(
+          key: AppTestKeys.debtFormCurrentBalance,
+          label: l10n.debtFormCurrentBalanceLabel,
+          controller: currentBalanceController,
+          helperText: l10n.onboardingDebtBalanceHelper,
+          errorText: currentBalanceError,
+          required: true,
+          onChanged: (_) => onCoreFieldChanged(),
+        ),
+        const SizedBox(height: AppDimensions.md),
+        AppTextField.percentage(
+          key: AppTestKeys.debtFormApr,
+          label: l10n.debtFormAprLabel,
+          controller: aprController,
+          helperText: l10n.onboardingDebtAprHelper,
+          errorText: aprError,
+          required: true,
+          onChanged: (_) => onCoreFieldChanged(),
+        ),
+        const SizedBox(height: AppDimensions.md),
+        AppTextField.currency(
+          key: AppTestKeys.debtFormMinimumPayment,
+          label: content.minimumPaymentLabel,
+          controller: minPaymentController,
+          helperText: l10n.onboardingDebtMinimumPaymentHelper,
+          errorText: minPaymentError,
+          required: true,
+          onChanged: (_) => onCoreFieldChanged(),
+        ),
+        if (warnings.isNotEmpty) ...[
+          const SizedBox(height: AppDimensions.md),
+          ...warnings.map((warning) => _buildWarningCard(warning, l10n)),
+        ],
+        if (inlineError != null) ...[
+          const SizedBox(height: AppDimensions.md),
+          Semantics(
+            container: true,
+            liveRegion: true,
+            label: l10n.debtFormInlineErrorSemantic(inlineError!),
+            child: Container(
+              padding: const EdgeInsets.all(AppDimensions.md),
+              decoration: BoxDecoration(
+                color: AppColors.mdErrorContainer,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+              ),
+              child: Text(
+                inlineError!,
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.mdOnErrorContainer,
+                ),
+              ),
+            ),
+          ),
+        ],
+        const SizedBox(height: AppDimensions.lg),
+        Semantics(
+          button: true,
+          toggled: showAdvanced,
+          label: l10n.onboardingDebtOptionalDetails,
+          child: InkWell(
+            key: AppTestKeys.onboardingDebtOptionalDetails,
+            onTap: onToggleAdvanced,
+            borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+            child: Container(
+              padding: const EdgeInsets.all(AppDimensions.md),
+              decoration: BoxDecoration(
+                color: AppColors.mdSurfaceContainerLow,
+                borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+                border: Border.all(color: AppColors.mdOutlineVariant),
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    LucideIcons.slidersHorizontal,
+                    size: AppDimensions.iconSm,
+                    color: AppColors.mdOnSurfaceVariant,
+                  ),
+                  const SizedBox(width: AppDimensions.sm),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.onboardingDebtOptionalDetails,
+                          style: AppTextStyles.titleSmall,
+                        ),
+                        const SizedBox(height: AppDimensions.xs),
+                        Text(
+                          l10n.onboardingDebtOptionalDetailsSubtitle,
+                          style: AppTextStyles.bodySmall.copyWith(
+                            color: AppColors.mdOnSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    showAdvanced
+                        ? LucideIcons.chevronUp
+                        : LucideIcons.chevronDown,
+                    size: AppDimensions.iconSm,
+                    color: AppColors.mdOnSurfaceVariant,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        if (showAdvanced) ...[
+          const SizedBox(height: AppDimensions.md),
+          AppTextField.currency(
+            key: AppTestKeys.debtFormOriginalPrincipal,
+            label: content.originalPrincipalLabel,
+            controller: originalPrincipalController,
+            helperText: content.originalPrincipalHelper,
+            errorText: originalPrincipalError,
+            onChanged: (_) => onCoreFieldChanged(),
+          ),
+          const SizedBox(height: AppDimensions.md),
+          _buildDueDayField(content),
+          const SizedBox(height: AppDimensions.md),
+          _buildDefaultsCard(
+            content: content,
+            recommendedInterest: recommendedInterest,
+            l10n: l10n,
+          ),
+          const SizedBox(height: AppDimensions.md),
+          _buildEnumSection<InterestMethod>(
+            title: l10n.debtFormInterestMethodSection,
+            values: InterestMethod.values,
+            selected: interestMethod,
+            labelBuilder: (method) => _interestMethodLabel(method, l10n),
+            onSelected: onInterestMethodChanged,
+          ),
+          const SizedBox(height: AppDimensions.md),
+          _buildEnumSection<MinPaymentType>(
+            title: l10n.debtFormMinimumPaymentMethodSection,
+            values: MinPaymentType.values,
+            selected: minimumPaymentType,
+            labelBuilder: (type) => _minimumPaymentTypeLabel(type, l10n),
+            onSelected: onMinimumPaymentTypeChanged,
+          ),
+          if (minimumPaymentType != MinPaymentType.fixed) ...[
+            const SizedBox(height: AppDimensions.md),
+            AppTextField.percentage(
+              label: l10n.debtFormMinimumPercentLabel,
+              controller: minimumPaymentPercentController,
+              errorText: minimumPaymentPercentError,
+              onChanged: (_) => onCoreFieldChanged(),
+            ),
+            const SizedBox(height: AppDimensions.md),
+            AppTextField.currency(
+              label: l10n.debtFormMinimumFloorLabel,
+              controller: minimumPaymentFloorController,
+              errorText: minimumPaymentFloorError,
+              onChanged: (_) => onCoreFieldChanged(),
+            ),
+          ],
+          const SizedBox(height: AppDimensions.md),
+          _buildEnumSection<PaymentCadence>(
+            title: l10n.debtFormPaymentCadenceSection,
+            values: PaymentCadence.values,
+            selected: paymentCadence,
+            labelBuilder: (cadence) => _paymentCadenceLabel(cadence, l10n),
+            onSelected: onPaymentCadenceChanged,
+          ),
+          const SizedBox(height: AppDimensions.md),
+          _buildEnumSection<DebtStatus>(
+            title: l10n.debtFormStatusSection,
+            values: _statusValues,
+            selected: status,
+            labelBuilder: (status) => _statusLabel(status, l10n),
+            onSelected: onStatusChanged,
+          ),
+          if (status == DebtStatus.paused) ...[
+            const SizedBox(height: AppDimensions.md),
+            Semantics(
+              container: true,
+              label: pausedUntil == null
+                  ? l10n.debtFormPausedNoDateSemantic
+                  : l10n.debtFormPausedUntilSemantic(
+                      AppFormatters.formatDate(pausedUntil!),
+                    ),
+              child: Container(
+                padding: const EdgeInsets.all(AppDimensions.md),
+                decoration: BoxDecoration(
+                  color: AppColors.mdSurfaceContainerLow,
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+                  border: Border.all(color: AppColors.mdOutlineVariant),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      l10n.debtFormPausedUntilLabel,
+                      style: AppTextStyles.labelMedium.copyWith(
+                        color: AppColors.mdOnSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.sm),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            pausedUntil == null
+                                ? l10n.debtFormNoDateSelected
+                                : AppFormatters.formatDate(pausedUntil!),
+                            style: AppTextStyles.titleSmall,
+                          ),
+                        ),
+                        AppChip.assist(
+                          label: l10n.debtFormChooseDate,
+                          icon: LucideIcons.calendar,
+                          onTap: onSelectPausedUntil,
+                        ),
+                        if (pausedUntil != null) ...[
+                          const SizedBox(width: AppDimensions.sm),
+                          AppChip.assist(
+                            label: l10n.commonDelete,
+                            icon: LucideIcons.x,
+                            onTap: onClearPausedUntil,
+                          ),
+                        ],
+                      ],
+                    ),
+                    if (pausedUntilError != null) ...[
+                      const SizedBox(height: AppDimensions.sm),
+                      Text(
+                        pausedUntilError!,
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.mdError,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          ],
+          const SizedBox(height: AppDimensions.md),
+          SwitchListTile(
+            value: excludeFromStrategy,
+            contentPadding: EdgeInsets.zero,
+            title: Text(
+              l10n.debtFormExcludeFromStrategyTitle,
+              style: AppTextStyles.bodyLarge,
+            ),
+            subtitle: Text(
+              l10n.debtFormExcludeFromStrategySubtitle,
+              style: AppTextStyles.bodySmall,
+            ),
+            onChanged: onExcludeFromStrategyChanged,
+            activeThumbColor: AppColors.mdPrimary,
+            activeTrackColor: AppColors.mdPrimary.withValues(alpha: 0.24),
+          ),
+        ],
+      ],
+    );
   }
 
   Widget _buildDueDayField(_DebtTypeFormContent content) {
@@ -929,6 +1233,226 @@ class DebtFormFields extends StatelessWidget {
             l10n.debtFormTipAprCanBeZero,
             l10n.debtFormTipPaymentPlan,
             l10n.debtFormTipNoFixedDate,
+          ],
+        );
+      case DebtType.paydayLoan:
+        return _DebtTypeFormContent(
+          displayName: l10n.debtTypePaydayLoan,
+          headline: l10n.debtFormOtherHeadline,
+          summary: l10n.debtFormOtherSummary,
+          nameHint: l10n.debtFormOtherNameHint,
+          nameHelper: l10n.debtFormOtherNameHelper,
+          balanceLabel: l10n.debtFormRemainingBalanceLabel,
+          balanceHelper: l10n.debtFormOtherBalanceHelper,
+          originalPrincipalLabel: l10n.debtFormOriginalPrincipalLabel,
+          originalPrincipalHelper: l10n.debtFormOtherOriginalPrincipalHelper,
+          deferredPrincipalHint: l10n.debtFormOtherDeferredPrincipalHint,
+          aprHelper: l10n.debtFormOtherAprHelper,
+          minimumPaymentLabel: l10n.debtFormMinimumPaymentLabel,
+          minimumPaymentHelper: l10n.debtFormOtherMinimumPaymentHelper,
+          dueDayLabel: l10n.debtFormDueDayLabel,
+          dueDayHint: l10n.debtFormOtherDueDayHint,
+          dueDayHelper: l10n.debtFormOtherDueDayHelper,
+          advancedGuidance: l10n.debtFormOtherAdvancedGuidance,
+          minimumPaymentChip: l10n.debtFormFlexiblePaymentChip,
+          cadenceChip: l10n.debtFormVariableCadenceChip,
+          quickTips: [
+            l10n.debtFormTipAccurateApr,
+            l10n.debtFormTipDueDate,
+            l10n.debtFormTipAdjustLater,
+          ],
+        );
+      case DebtType.buyNowPayLater:
+        return _DebtTypeFormContent(
+          displayName: l10n.debtTypeBuyNowPayLater,
+          headline: l10n.debtFormPersonalLoanHeadline,
+          summary: l10n.debtFormPersonalLoanSummary,
+          nameHint: l10n.debtFormOtherNameHint,
+          nameHelper: l10n.debtFormOtherNameHelper,
+          balanceLabel: l10n.debtFormRemainingBalanceLabel,
+          balanceHelper: l10n.debtFormPersonalLoanBalanceHelper,
+          originalPrincipalLabel: l10n.debtFormOriginalPrincipalLabel,
+          originalPrincipalHelper:
+              l10n.debtFormPersonalLoanOriginalPrincipalHelper,
+          deferredPrincipalHint: null,
+          aprHelper: l10n.debtFormOtherAprHelper,
+          minimumPaymentLabel: l10n.debtFormMinimumPaymentLabel,
+          minimumPaymentHelper: l10n.debtFormPersonalLoanMinimumPaymentHelper,
+          dueDayLabel: l10n.debtFormDueDayLabel,
+          dueDayHint: l10n.debtFormOtherDueDayHint,
+          dueDayHelper: l10n.debtFormOtherDueDayHelper,
+          advancedGuidance: l10n.debtFormPersonalLoanAdvancedGuidance,
+          minimumPaymentChip: l10n.debtFormFixedPaymentChip,
+          cadenceChip: l10n.debtFormFlexibleCadenceChip,
+          quickTips: [
+            l10n.debtFormTipFixedPayment,
+            l10n.debtFormTipAprCanBeZero,
+            l10n.debtFormTipDueDate,
+          ],
+        );
+      case DebtType.storeFinancing:
+        return _DebtTypeFormContent(
+          displayName: l10n.debtTypeStoreFinancing,
+          headline: l10n.debtFormPersonalLoanHeadline,
+          summary: l10n.debtFormPersonalLoanSummary,
+          nameHint: l10n.debtFormOtherNameHint,
+          nameHelper: l10n.debtFormOtherNameHelper,
+          balanceLabel: l10n.debtFormRemainingBalanceLabel,
+          balanceHelper: l10n.debtFormPersonalLoanBalanceHelper,
+          originalPrincipalLabel: l10n.debtFormOriginalLoanAmountLabel,
+          originalPrincipalHelper:
+              l10n.debtFormPersonalLoanOriginalPrincipalHelper,
+          deferredPrincipalHint: null,
+          aprHelper: l10n.debtFormPersonalLoanAprHelper,
+          minimumPaymentLabel: l10n.debtFormMinimumPaymentLabel,
+          minimumPaymentHelper: l10n.debtFormPersonalLoanMinimumPaymentHelper,
+          dueDayLabel: l10n.debtFormDueDayLabel,
+          dueDayHint: l10n.debtFormOtherDueDayHint,
+          dueDayHelper: l10n.debtFormOtherDueDayHelper,
+          advancedGuidance: l10n.debtFormPersonalLoanAdvancedGuidance,
+          minimumPaymentChip: l10n.debtFormFixedPaymentChip,
+          cadenceChip: l10n.debtFormMonthlyCadenceChip,
+          quickTips: [
+            l10n.debtFormTipFixedPayment,
+            l10n.debtFormTipLenderApr,
+            l10n.debtFormTipDueDate,
+          ],
+        );
+      case DebtType.lineOfCredit:
+        return _DebtTypeFormContent(
+          displayName: l10n.debtTypeLineOfCredit,
+          headline: l10n.debtFormCreditCardHeadline,
+          summary: l10n.debtFormCreditCardSummary,
+          nameHint: l10n.debtFormOtherNameHint,
+          nameHelper: l10n.debtFormOtherNameHelper,
+          balanceLabel: l10n.debtFormRemainingBalanceLabel,
+          balanceHelper: l10n.debtFormCreditCardBalanceHelper,
+          originalPrincipalLabel: l10n.debtFormCreditCardOriginalPrincipalLabel,
+          originalPrincipalHelper:
+              l10n.debtFormCreditCardOriginalPrincipalHelper,
+          deferredPrincipalHint: l10n.debtFormCreditCardDeferredPrincipalHint,
+          aprHelper: l10n.debtFormCreditCardAprHelper,
+          minimumPaymentLabel: l10n.debtFormMinimumPaymentLabel,
+          minimumPaymentHelper: l10n.debtFormCreditCardMinimumPaymentHelper,
+          dueDayLabel: l10n.debtFormDueDayLabel,
+          dueDayHint: l10n.debtFormOtherDueDayHint,
+          dueDayHelper: l10n.debtFormOtherDueDayHelper,
+          advancedGuidance: l10n.debtFormCreditCardAdvancedGuidance,
+          minimumPaymentChip: l10n.debtFormStatementPriorityChip,
+          cadenceChip: l10n.debtFormMonthlyCadenceChip,
+          quickTips: [
+            l10n.debtFormTipAccurateApr,
+            l10n.debtFormTipDueDate,
+            l10n.debtFormTipAdjustLater,
+          ],
+        );
+      case DebtType.taxDebt:
+        return _DebtTypeFormContent(
+          displayName: l10n.debtTypeTaxDebt,
+          headline: l10n.debtFormPersonalLoanHeadline,
+          summary: l10n.debtFormPersonalLoanSummary,
+          nameHint: l10n.debtFormOtherNameHint,
+          nameHelper: l10n.debtFormOtherNameHelper,
+          balanceLabel: l10n.debtFormRemainingBalanceLabel,
+          balanceHelper: l10n.debtFormPersonalLoanBalanceHelper,
+          originalPrincipalLabel: l10n.debtFormOriginalPrincipalLabel,
+          originalPrincipalHelper:
+              l10n.debtFormPersonalLoanOriginalPrincipalHelper,
+          deferredPrincipalHint: null,
+          aprHelper: l10n.debtFormOtherAprHelper,
+          minimumPaymentLabel: l10n.debtFormMinimumPaymentLabel,
+          minimumPaymentHelper: l10n.debtFormPersonalLoanMinimumPaymentHelper,
+          dueDayLabel: l10n.debtFormDueDayLabel,
+          dueDayHint: l10n.debtFormOtherDueDayHint,
+          dueDayHelper: l10n.debtFormOtherDueDayHelper,
+          advancedGuidance: l10n.debtFormPersonalLoanAdvancedGuidance,
+          minimumPaymentChip: l10n.debtFormAgreementPaymentChip,
+          cadenceChip: l10n.debtFormMonthlyCadenceChip,
+          quickTips: [
+            l10n.debtFormTipPaymentPlan,
+            l10n.debtFormTipAccurateApr,
+            l10n.debtFormTipDueDate,
+          ],
+        );
+      case DebtType.collections:
+        return _DebtTypeFormContent(
+          displayName: l10n.debtTypeCollections,
+          headline: l10n.debtFormMedicalHeadline,
+          summary: l10n.debtFormMedicalSummary,
+          nameHint: l10n.debtFormOtherNameHint,
+          nameHelper: l10n.debtFormMedicalNameHelper,
+          balanceLabel: l10n.debtFormMedicalBalanceLabel,
+          balanceHelper: l10n.debtFormMedicalBalanceHelper,
+          originalPrincipalLabel: l10n.debtFormOriginalPrincipalLabel,
+          originalPrincipalHelper: l10n.debtFormMedicalOriginalPrincipalHelper,
+          deferredPrincipalHint: l10n.debtFormMedicalDeferredPrincipalHint,
+          aprHelper: l10n.debtFormMedicalAprHelper,
+          minimumPaymentLabel: l10n.debtFormMedicalMinimumPaymentLabel,
+          minimumPaymentHelper: l10n.debtFormMedicalMinimumPaymentHelper,
+          dueDayLabel: l10n.debtFormDueDayLabel,
+          dueDayHint: l10n.debtFormOtherDueDayHint,
+          dueDayHelper: l10n.debtFormOtherDueDayHelper,
+          advancedGuidance: l10n.debtFormMedicalAdvancedGuidance,
+          minimumPaymentChip: l10n.debtFormAgreementPaymentChip,
+          cadenceChip: l10n.debtFormMonthlyCadenceChip,
+          quickTips: [
+            l10n.debtFormTipPaymentPlan,
+            l10n.debtFormTipAprCanBeZero,
+            l10n.debtFormTipAdjustLater,
+          ],
+        );
+      case DebtType.familyLoan:
+        return _DebtTypeFormContent(
+          displayName: l10n.debtTypeFamilyLoan,
+          headline: l10n.debtFormOtherHeadline,
+          summary: l10n.debtFormOtherSummary,
+          nameHint: l10n.debtFormOtherNameHint,
+          nameHelper: l10n.debtFormOtherNameHelper,
+          balanceLabel: l10n.debtFormRemainingBalanceLabel,
+          balanceHelper: l10n.debtFormOtherBalanceHelper,
+          originalPrincipalLabel: l10n.debtFormOriginalPrincipalLabel,
+          originalPrincipalHelper: l10n.debtFormOtherOriginalPrincipalHelper,
+          deferredPrincipalHint: l10n.debtFormOtherDeferredPrincipalHint,
+          aprHelper: l10n.debtFormOtherAprHelper,
+          minimumPaymentLabel: l10n.debtFormMinimumPaymentLabel,
+          minimumPaymentHelper: l10n.debtFormOtherMinimumPaymentHelper,
+          dueDayLabel: l10n.debtFormDueDayLabel,
+          dueDayHint: l10n.debtFormOtherDueDayHint,
+          dueDayHelper: l10n.debtFormOtherDueDayHelper,
+          advancedGuidance: l10n.debtFormOtherAdvancedGuidance,
+          minimumPaymentChip: l10n.debtFormFlexiblePaymentChip,
+          cadenceChip: l10n.debtFormVariableCadenceChip,
+          quickTips: [
+            l10n.debtFormTipAprCanBeZero,
+            l10n.debtFormTipFlexible,
+            l10n.debtFormTipAdjustLater,
+          ],
+        );
+      case DebtType.homeEquity:
+        return _DebtTypeFormContent(
+          displayName: l10n.debtTypeHomeEquity,
+          headline: l10n.debtFormMortgageHeadline,
+          summary: l10n.debtFormMortgageSummary,
+          nameHint: l10n.debtFormMortgageNameHint,
+          nameHelper: l10n.debtFormMortgageNameHelper,
+          balanceLabel: l10n.debtFormRemainingPrincipalLabel,
+          balanceHelper: l10n.debtFormMortgageBalanceHelper,
+          originalPrincipalLabel: l10n.debtFormOriginalLoanAmountLabel,
+          originalPrincipalHelper: l10n.debtFormMortgageOriginalPrincipalHelper,
+          deferredPrincipalHint: null,
+          aprHelper: l10n.debtFormMortgageAprHelper,
+          minimumPaymentLabel: l10n.debtFormMinimumPaymentLabel,
+          minimumPaymentHelper: l10n.debtFormMortgageMinimumPaymentHelper,
+          dueDayLabel: l10n.debtFormMortgageDueDayLabel,
+          dueDayHint: l10n.debtFormMortgageDueDayHint,
+          dueDayHelper: l10n.debtFormMortgageDueDayHelper,
+          advancedGuidance: l10n.debtFormMortgageAdvancedGuidance,
+          minimumPaymentChip: l10n.debtFormFixedPaymentChip,
+          cadenceChip: l10n.debtFormMonthlyCadenceChip,
+          quickTips: [
+            l10n.debtFormTipPrincipalOnly,
+            l10n.debtFormTipLenderApr,
+            l10n.debtFormTipExtraLater,
           ],
         );
       case DebtType.other:

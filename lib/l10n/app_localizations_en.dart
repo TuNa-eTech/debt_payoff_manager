@@ -1105,6 +1105,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Build a personalized payoff plan in 3 minutes.\nNo account. No bank connection.';
 
   @override
+  String get welcomeValuePreview =>
+      'In a few minutes, you will see your debt-free date and first monthly action.';
+
+  @override
   String get welcomeTitle => 'Take control of debt,\nfree your future.';
 
   @override
@@ -1221,6 +1225,104 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingDebtEntrySave => 'Save Debt';
 
   @override
+  String get onboardingDebtTypeTitle => 'What type of debt is this?';
+
+  @override
+  String get onboardingDebtTypeSubtitle =>
+      'Start with one debt. You can add the rest after this.';
+
+  @override
+  String get onboardingDebtTypeContinue => 'Continue';
+
+  @override
+  String get onboardingDebtTypeCreditCardDescription =>
+      'Cards, store cards, or revolving balances.';
+
+  @override
+  String get onboardingDebtTypeStudentLoanDescription =>
+      'Federal, private, or education loans.';
+
+  @override
+  String get onboardingDebtTypeCarLoanDescription =>
+      'Auto loans with a regular monthly payment.';
+
+  @override
+  String get onboardingDebtTypeMortgageDescription =>
+      'Home loans you want in the payoff plan.';
+
+  @override
+  String get onboardingDebtTypePersonalDescription =>
+      'Personal loans, installment loans, or fixed loans.';
+
+  @override
+  String get onboardingDebtTypeMedicalDescription =>
+      'Medical bills or payment plans.';
+
+  @override
+  String get onboardingDebtTypePaydayLoanDescription =>
+      'Short-term loans or cash advances.';
+
+  @override
+  String get onboardingDebtTypeBuyNowPayLaterDescription =>
+      'Affirm, Klarna, Afterpay, or pay-in-4 balances.';
+
+  @override
+  String get onboardingDebtTypeStoreFinancingDescription =>
+      'Retail, furniture, appliance, or promo financing.';
+
+  @override
+  String get onboardingDebtTypeLineOfCreditDescription =>
+      'Personal, bank, or overdraft credit lines.';
+
+  @override
+  String get onboardingDebtTypeTaxDebtDescription =>
+      'IRS, state tax, or payment-plan balances.';
+
+  @override
+  String get onboardingDebtTypeCollectionsDescription =>
+      'Accounts with a collection agency.';
+
+  @override
+  String get onboardingDebtTypeFamilyLoanDescription =>
+      'Money owed to family or friends.';
+
+  @override
+  String get onboardingDebtTypeHomeEquityDescription =>
+      'Home equity loans or HELOC balances.';
+
+  @override
+  String get onboardingDebtTypeOtherDescription =>
+      'Any debt that does not fit the presets.';
+
+  @override
+  String onboardingDebtDetailsTitle(String type) {
+    return 'Add $type details';
+  }
+
+  @override
+  String get onboardingDebtDetailsSubtitle =>
+      'Enter the four numbers the plan needs first.';
+
+  @override
+  String get onboardingDebtBalanceHelper =>
+      'Use the remaining balance from your latest statement.';
+
+  @override
+  String get onboardingDebtAprHelper =>
+      'Find this on your statement. Enter 0 if there is no interest.';
+
+  @override
+  String get onboardingDebtMinimumPaymentHelper =>
+      'Find this on your statement. You can update it later.';
+
+  @override
+  String get onboardingDebtOptionalDetails => 'Optional details';
+
+  @override
+  String get onboardingDebtOptionalDetailsSubtitle =>
+      'Due day, original balance, and advanced plan settings.';
+
+  @override
   String get onboardingStep1 => 'Step 1/4';
 
   @override
@@ -1234,7 +1336,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String onboardingAddAnotherCount(int count) {
-    return 'You have saved $count debts. You can add more or continue to strategy selection.';
+    return 'You have saved $count debts. Edit anything that looks off, add another debt, or see your plan.';
   }
 
   @override
@@ -1242,10 +1344,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please add at least 1 debt to continue onboarding.';
 
   @override
-  String get onboardingAddAnotherContinue => 'Choose Strategy';
+  String get onboardingAddAnotherContinue => 'Choose payoff plan';
 
   @override
   String get onboardingAddAnotherAddMore => 'Add Another Debt';
+
+  @override
+  String get onboardingAddAnotherEditDebt => 'Edit debt';
 
   @override
   String get onboardingStrategyTitle => 'Choose Strategy';
@@ -1263,7 +1368,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingStrategyDescription =>
-      'The app is comparing live projections of Snowball and Avalanche based on your current debts.';
+      'The app is comparing Snowball and Avalanche based on your debt numbers.';
 
   @override
   String get onboardingStrategyEmptyTitle => 'No debts to apply strategy';
@@ -1284,11 +1389,17 @@ class AppLocalizationsEn extends AppLocalizations {
       'Prioritize the highest APR to reduce interest.';
 
   @override
-  String get onboardingStrategyChangeNote =>
-      'You can change your strategy anytime after onboarding. The plan summary and timeline will recast automatically.';
+  String get onboardingStrategySnowballRecommendation => 'Fastest early win';
 
   @override
-  String get onboardingStrategyContinue => 'Save Strategy & Continue';
+  String get onboardingStrategyAvalancheRecommendation => 'Lower interest';
+
+  @override
+  String get onboardingStrategyChangeNote =>
+      'You can change your strategy anytime after onboarding. Your plan will update with the new choice.';
+
+  @override
+  String get onboardingStrategyContinue => 'Save plan choice';
 
   @override
   String get onboardingStrategyTopPriorityExcluded =>
@@ -1301,10 +1412,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingStrategyPreviewCalculating =>
-      'Calculating payoff date and projected interest from current data...';
+      'Calculating payoff date and interest from your numbers...';
 
   @override
-  String get onboardingStrategyPreviewRecasting => 'Recasting';
+  String get onboardingStrategyPreviewRecasting => 'Updating';
 
   @override
   String onboardingStrategyPreviewSummary(
@@ -1342,7 +1453,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingExtraDescription =>
-      'Default is \$0. Preview will live recast after 300ms to show your actual debt-free date and saved interest.';
+      'Start with \$0 if that is realistic. The preview updates as you change the amount.';
 
   @override
   String get onboardingExtraMonthlyLabel => 'Extra payment per month';
@@ -1353,20 +1464,23 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get onboardingExtraMaxLabel => 'Max';
+  String get onboardingExtraAmountInputLabel => 'Amount';
 
   @override
   String get onboardingExtraWhatsNextTitle => 'What happens next?';
 
   @override
   String get onboardingExtraWhatsNextDescription =>
-      'This extra amount will be used as additional budget each month. When you save, your plan summary and timeline cache will recast immediately.';
+      'This amount becomes your planned extra budget each month. You can change it later from the plan.';
 
   @override
   String get onboardingExtraSave => 'Save and view summary';
 
   @override
   String get onboardingExtraUseZero => 'Use \$0 for now';
+
+  @override
+  String get onboardingExtraUseZeroHelper => 'You can change this later.';
 
   @override
   String get onboardingExtraError =>
@@ -1380,7 +1494,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingExtraPreviewTitle => 'Live preview';
 
   @override
-  String get onboardingExtraPreviewRecasting => 'Recasting...';
+  String get onboardingExtraPreviewRecasting => 'Updating...';
 
   @override
   String onboardingExtraPreviewDebtFree(String extraAmount) {
@@ -1397,7 +1511,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingAhaEmpty => 'You have no debts in your plan yet.';
 
   @override
-  String get onboardingAhaRecasting => 'Your plan is recasting.';
+  String get onboardingAhaRecasting => 'Your plan is updating.';
 
   @override
   String onboardingAhaDebtFree(String date) {
@@ -1410,7 +1524,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingAhaReadySubtitle =>
-      'Plan has been recast. Your monthly checklist is ready.';
+      'Your payoff plan is ready. The first monthly checklist is next.';
 
   @override
   String get onboardingAhaSummaryTitle => 'Current Summary';
@@ -1427,7 +1541,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingAhaDataFull =>
-      'Your data is saved locally on your device. From here you can open the Monthly Action View to check off actual payments and watch the timeline recast instantly.';
+      'Your data is saved locally on your device. From here you can open the Monthly Action View to check off real payments and keep the plan current.';
 
   @override
   String get onboardingAhaBackToAdd => 'Go back to add debt';
@@ -1436,7 +1550,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingAhaOpenMonthly => 'Open Monthly Action View';
 
   @override
-  String get onboardingAhaRecastingShort => 'Recasting';
+  String get onboardingAhaNextActionTitle =>
+      'Next: make this month\'s payments visible';
+
+  @override
+  String get onboardingAhaNextActionDescription =>
+      'Monthly Action shows the minimums and extra payment to check off first.';
+
+  @override
+  String get onboardingAhaRecastingShort => 'Updating';
 
   @override
   String get onboardingAhaDebtFreeDate => 'Debt-free date';
@@ -2525,6 +2647,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get debtTypeMedical => 'Medical debt';
+
+  @override
+  String get debtTypePaydayLoan => 'Payday loan';
+
+  @override
+  String get debtTypeBuyNowPayLater => 'Buy now, pay later';
+
+  @override
+  String get debtTypeStoreFinancing => 'Store financing';
+
+  @override
+  String get debtTypeLineOfCredit => 'Line of credit';
+
+  @override
+  String get debtTypeTaxDebt => 'Tax debt';
+
+  @override
+  String get debtTypeCollections => 'Collection account';
+
+  @override
+  String get debtTypeFamilyLoan => 'Family loan';
+
+  @override
+  String get debtTypeHomeEquity => 'Home equity / HELOC';
 
   @override
   String get debtTypeOther => 'Other debt';
