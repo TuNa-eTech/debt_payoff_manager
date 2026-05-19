@@ -79,7 +79,7 @@ Access 904k tokens of past work via get_observations([IDs]) or mem-search skill.
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **debt_payoff_manager** (576 symbols, 592 relationships, 0 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **debt_payoff_manager** (592 symbols, 610 relationships, 0 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
